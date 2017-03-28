@@ -1,0 +1,19 @@
+#%RAML 1.0
+title: Your Service Documentation
+description: Your Service Description
+version: 1.0.0
+baseUri: http://localhost
+mediaType:
+  - application/json
+protocols:
+  - http
+  - https
+
+types: !include schemas/index.raml
+traits:
+    acceptLanguage: !include traits/acceptLanguage.raml
+    sendNotFound: !include traits/sendNotFound.raml
+
+/countries: !include resourceTypes/country.raml
+/currencies: !include resourceTypes/currency.raml
+/languages: !include resourceTypes/language.raml

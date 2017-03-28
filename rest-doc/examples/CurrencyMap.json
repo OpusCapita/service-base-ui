@@ -1,0 +1,16 @@
+{
+  "EUR": {
+      "id": "EUR",
+      "name": "Euro",
+      "number": 978,
+      "exponent": 2,
+      "symbol": "€"
+  },
+  "USD": {
+      "id": "USD",
+      "name": "US Dollar",
+      "number": 840,
+      "exponent": 2,
+      "symbol": "$"
+  }
+}

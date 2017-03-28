@@ -1,0 +1,22 @@
+type: object
+displayName: Country
+description: Object representing a single country item.
+properties:
+    id:
+        type: string
+        description: Two character country codes.
+        pattern: \w{2}
+    alpha3Code:
+        type: string
+        description: Alpha-3-Code
+        pattern: \w{3}
+    number:
+        type: integer
+        description: Number
+    name:
+        type: string
+        description: Translated name of a country.
+    countryCode:
+        type: string
+        description: Internation phone dial country code.
+example: !include ../examples/Country.json

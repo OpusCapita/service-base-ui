@@ -1,0 +1,40 @@
+machine:
+  pre:
+   - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+   - pip install --force-reinstall -U docker-compose==1.10.0
+   - cd user ; rm -Rf wiki ; git clone https://github.com/OpusCapitaBusinessNetwork/user.wiki.git && mv user.wiki wiki
+  services:
+    - docker
+
+dependencies:
+  pre:
+    - docker info
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
+    - >
+      if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
+        echo "Building base image..." ; docker build --rm=false -t ocbesbn/user-base:latest -f Dockerfile.base .
+      fi
+    - docker build --rm=false -t ocbesbn/user:latest .
+
+test:
+  override:
+    - >
+      sudo service mysql stop ;
+      export HOST_IP=$(ifconfig | grep "docker0" -A1 | grep -o -P "inet addr:.*? " | grep -o -P "\d+\.\d+\.\d+\.\d+") ;
+      docker-compose run main npm run test
+    - docker-compose run main npm run doc
+  post:
+    - sudo mkdir $CIRCLE_TEST_REPORTS/junit
+    - sudo cp test-results.xml $CIRCLE_TEST_REPORTS/junit
+
+deployment:
+ hub:
+   branch: master
+   commands:
+     - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
+     - >
+       if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
+         echo "Deploying base image..." ; docker push ocbesbn/user-base
+       fi
+     -  docker push ocbesbn/user:latest
+     - cd wiki ; git add --all . ; git commit -am 'Updated documentation.' ; git push ; (exit 0)

@@ -1,0 +1,16 @@
+FROM gr4per/node-react-base
+MAINTAINER kwierchris
+
+# Set the working directory for any RUN, CMD, ENTRYPOINT, COPY and ADD instructions that follow.
+# If the directory does not exists, it will be created automatically.
+WORKDIR /var/tmp/base
+
+COPY package.json .
+
+# Setting NODE_ENV is necessary for "npm install" below. It contains a workaround
+# for a npm error saying: EXDEV: cross-device link not permitted
+ENV NODE_ENV=development
+
+RUN apk add --no-cache rsync curl ; npm set progress=false && npm install && npm cache clean
+
+# NOTE: "node" user and corresponding "/home/node" dir are created by "node:6-alpine" image.

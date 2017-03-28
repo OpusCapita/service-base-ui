@@ -1,0 +1,16 @@
+{
+  "DE": {
+      "id": "DE",
+      "alpha3Code": "DEU",
+      "number": 276,
+      "name": "Euro",
+      "countryCode": "49"
+  },
+  "US": {
+      "id": "US",
+      "alpha3Code": "USA",
+      "number": 840,
+      "name": "United States of America",
+      "countryCode": "1"
+  }
+}

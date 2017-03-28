@@ -1,0 +1,27 @@
+displayName: Countries
+description: Work with `Country` objects for all countries in the system. All `name` properties get automatically translated by the service depending on a request's `accept-language` header.
+get:
+    description: List of `Country` objects index by the id of a country.
+    is:
+        acceptLanguage
+    responses:
+        200:
+            body:
+                application/json:
+                    type: CountryMap
+/{id}:
+    uriParameters:
+        id:
+            type: string
+            description: Identifier of a country.
+            pattern: \w{3}
+    get:
+        description: Single `Country` object.
+        is:
+            - acceptLanguage
+            - sendNotFound
+        responses:
+          200:
+            body:
+                application/json:
+                    type: Country

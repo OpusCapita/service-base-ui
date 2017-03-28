@@ -1,0 +1,28 @@
+displayName: Languages
+description:  Work with `Language` objects for all languages in the system. All `name` properties get automatically translated by the service depending on a request's `accept-language` header.
+get:
+    description: List of `Language` objects index by the id of a language.
+    is:
+        - acceptLanguage
+    responses:
+      200:
+        body:
+          application/json:
+            type: LanguageMap
+
+/{id}:
+    uriParameters:
+        id:
+            type: string
+            description: Identifier of a currency.
+            pattern: \w{2,3}
+    get:
+        description: Single `Language` object.
+        is:
+            - acceptLanguage
+            - sendNotFound
+        responses:
+            200:
+                body:
+                    application/json:
+                        type: Language

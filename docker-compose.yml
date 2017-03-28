@@ -1,0 +1,50 @@
+version: '2'
+services:
+  main:
+    build: .
+    depends_on:
+     - mysql
+     - consul
+     - registrator
+    volumes:
+     - .:/home/node/user
+    labels:
+      SERVICE_NAME: 'user'
+    extra_hosts:
+     - 'consul:${HOST_IP}'
+    environment:
+      PORT: ${PORT}
+      HOST_IP: ${HOST_IP}
+    ports:
+     - '${PORT}:${PORT}'
+    command: "npm run dev"
+
+  mysql:
+    image: "mysql:5.6"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "notSecurePa55w0rd"
+      MYSQL_DATABASE: "bnp"
+    depends_on:
+      - registrator
+
+  registrator:
+    image: gliderlabs/registrator:latest
+    network_mode: host
+    depends_on:
+     - consul
+    volumes:
+     - /var/run/docker.sock:/tmp/docker.sock
+    command: ['consul://${HOST_IP}:8500']
+
+  consul:
+    image: consul:latest
+    network_mode: host
+    ports:
+      - '8400:8400'
+      - '8500:8500'
+      - '8600:53/udp'
+    labels:
+      SERVICE_IGNORE: 'true'  # Do not add any of Consul's services to Consul's service discovery registry.
+    command: [agent, '-server', '-ui', '-bootstrap-expect=1', '-bind=${HOST_IP}', '-client=0.0.0.0']

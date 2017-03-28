@@ -1,0 +1,27 @@
+displayName: Currencies
+description:  Work with `Currency` objects for all currencies in the system. All `name` properties get automatically translated by the service depending on a request's `accept-language` header.
+get:
+    description: List of `Currency` objects index by the id of a currency.
+    is:
+        acceptLanguage
+    responses:
+        200:
+            body:
+                application/json:
+                    type: CurrencyMap
+/{id}:
+    uriParameters:
+        id:
+            type: string
+            description: Identifier of a currency.
+            pattern: \w{3}
+    get:
+        description: Single `Currency` object.
+        is:
+            - acceptLanguage
+            - sendNotFound
+        responses:
+          200:
+            body:
+              application/json:
+                  type: Currency

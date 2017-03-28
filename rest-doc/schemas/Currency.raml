@@ -1,0 +1,21 @@
+type: object
+displayName: Currency
+description: Object representing a single currency item.
+properties:
+    id:
+        type: string
+        description: Three character identifier of a currency.
+        pattern: \w{3}
+    name:
+        type: string
+        description: Translated name of a currency.
+    number:
+        type: integer
+        description: Unique numeric representation of a currency.
+    exponent:
+        type: integer
+        description: Number of digits after a decimal point.
+    symbol:
+        type: string
+        description: UTF-8 symbol of a currency.
+example: !include ../examples/Currency.json
