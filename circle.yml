@@ -2,7 +2,7 @@ machine:
   pre:
    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
    - pip install --force-reinstall -U docker-compose==1.10.0
-   - cd user ; rm -Rf wiki ; git clone https://github.com/OpusCapitaBusinessNetwork/user.wiki.git && mv user.wiki wiki
+   - cd user ; rm -Rf wiki ; git clone https://github.com/OpusCapita/user.wiki.git && mv user.wiki wiki
   services:
     - docker
 
