@@ -1,6 +1,7 @@
 'use strict'
 
 const Promise = require('bluebird');
+const Users = require('../api/users.js')
 
 /**
  * Initializes all routes for RESTful access.
@@ -13,11 +14,79 @@ const Promise = require('bluebird');
  */
 module.exports.init = function(app, db, config)
 {
-    // Register routes here.
-    // Use the passed db parameter in order to use Epilogue auto-routes.
-    // Use require in order to separate routes into multiple js files.
-    app.get('/', (req, res) => res.send('Hello world!'));
+    return Users.init(db, config).then(() =>
+    {
+        var self = this;
 
-    // Always return a promise.
-    return Promise.resolve();
+        app.get('/users', (req, res) => self.sendUsers(req, res));
+        app.post('/users', (req, res) => self.addUser(req, res));
+
+        app.get('/users/:id', (req, res) => self.sendUser(req, res));
+        app.put('/users/:id', (req, res) => self.updateUser(req, res));
+
+        app.get('/users/:id/profile', (req, res) => self.sendUserProfile(req, res));
+        app.put('/users/:id/profile', (req, res) => self.addOrUpdateUserProfile(req, res));
+    });
+}
+
+module.exports.addUser = function(req, res)
+{
+    var self = this;
+    
+    Users.userExists(req.body.id).then(exists =>
+    {
+        if(exists)
+            res.status('409').json({ message : 'A user with this ID does already exist.' });
+        else
+            Users.addUser(req.body, true).then(user => res.json(user));
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
+}
+
+module.exports.updateUser = function(req, res)
+{
+    Users.userExists(req.params.id).then(exists =>
+    {
+        if(exists)
+            Users.updateUser(req.params.id, req.body, true).then(user => res.json(user));
+        else
+            res.status('404').json({ message : 'A user with this ID does not exist.' });
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
+}
+
+module.exports.addOrUpdateUserProfile = function(req, res)
+{
+    Users.userExists(req.params.id).then(exists =>
+    {
+        if(exists)
+            Users.addOrUpdateUserProfile(req.params.id, req.body, true).then(profile => res.json(profile));
+        else
+            res.status('404').json({ message : 'A user with this ID does not exist.' });
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
+}
+
+module.exports.sendUsers = function(req, res)
+{
+    Users.getUsers().then(users =>
+    {
+        res.json(users);
+    });
+}
+
+module.exports.sendUser = function(req, res)
+{
+    Users.getUser(req.params.id).then(user =>
+    {
+        (user && res.json(user)) || res.status('404').json({ message : 'Not found!' });
+    });
+}
+
+module.exports.sendUserProfile = function(req, res)
+{
+    Users.getUserProfile(req.params.id).then(user =>
+    {
+        (user && res.json(user)) || res.status('404').json({ message : 'Not found!' });
+    });
 }

@@ -1,0 +1,26 @@
+type: object
+displayName: User
+description: Object representing a single user item.
+properties:
+    id:
+        type: string
+        description: Unique user identifier, usually concatenated of federation id ':' and user id to ensure unique user names.
+    federationId:
+        type: string
+    status:
+        type: string
+    mayChangeSupplier:
+        type: boolean
+    mayChangeCustomer:
+        type: boolean
+    createdBy:
+        type: string
+    changedBy:
+        type: string
+        required: false
+    createdOn:
+        type: string
+    changedOn:
+        type: string
+        required: false
+example: !include ../examples/User.json

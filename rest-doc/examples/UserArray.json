@@ -1,0 +1,21 @@
+[{
+    "id": "abc:user",
+    "federationId": "abc",
+    "status": "firstLogin",
+    "mayChangeSupplier": true,
+    "mayChangeCustomer": true,
+    "createdBy": "the doctor",
+    "changedBy": "",
+    "createdOn": "2017-03-28T12:24:52.000Z",
+    "changedOn": null
+}, {
+    "id": "def:user",
+    "federationId": "def",
+    "status": "firstLogin",
+    "mayChangeSupplier": false,
+    "mayChangeCustomer": false,
+    "createdBy": "the doctor",
+    "changedBy": "",
+    "createdOn": "2017-03-28T13:10:50.000Z",
+    "changedOn": null
+}]

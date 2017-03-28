@@ -1,0 +1,63 @@
+type: object
+displayName: UserProfile
+description: Object representing a user's profile.
+properties:
+    userId:
+        type: string
+    email:
+        type: string
+    supplierId:
+        type: string
+        required: false
+    customerId:
+        type: string
+        required: false
+    languageId:
+        type: string
+        required: false
+    countryId:
+        type: string
+        required: false
+    timeZoneId:
+        type: string
+    salutation:
+        type: string
+    firstName:
+        type: string
+    lastName:
+        type: string
+    birthday:
+        type: string
+        required: false
+    degree:
+        type: string
+        required: false
+    phoneNo:
+        type: string
+        required: false
+    faxNo:
+        type: string
+        required: false
+    department:
+        type: string
+        required: false
+    building:
+        type: string
+        required: false
+    floor:
+        type: string
+        required: false
+    room:
+        type: string
+        required: false
+    createdBy:
+        type: string
+    changedBy:
+        type: string
+        required: false
+    createdOn:
+        type: string
+    changedOn:
+        type: string
+        required: false
+example: !include ../examples/UserProfile.json

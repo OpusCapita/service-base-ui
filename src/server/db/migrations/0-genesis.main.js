@@ -15,11 +15,7 @@ const Promise = require('bluebird');
  */
 module.exports.up = function(db, config)
 {
-    // Add all structure and data migrations here.
-    // You may use db.getQueryInterface() for structures and config.models for working with data.
-
-    // Always return a promise.
-    return Promise.resolve();
+    return db.sync();
 }
 
 /**
@@ -33,6 +29,8 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    // Always return a promise.
-    return Promise.resolve();
+    var modelNames = [ 'User', 'UserProfile' ];
+    var qi = db.getQueryInterface();
+
+    return Promise.all(modelNames.map(key => qi.dropTable(db.models[key].getTableName())));
 }

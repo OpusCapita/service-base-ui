@@ -1,0 +1,64 @@
+displayName: Users
+description: Work with `User` objects.
+get:
+    description: List of `Users` objects.
+    responses:
+        200:
+            body:
+                application/json:
+                    type: UserArray
+post:
+    description: Creates a new user.
+        - sendConflict
+        - sendGeneralError
+    body:
+        application/json:
+            type: User
+    responses:
+        200:
+            body:
+                application/json:
+                    type: User
+/{id}:
+    uriParameters:
+        id:
+            type: string
+            description: Unique identifier of a user.
+    get:
+        description: Returns a single `User` object.
+            - sendNotFound
+        responses:
+          200:
+            body:
+                application/json:
+                    type: User
+
+    put:
+        description: Updates a user but changes only the values passed.
+            - sendNotFound
+            - sendGeneralError
+        body:
+            application/json:
+                type: User
+
+/{id}/profile:
+    uriParameters:
+        id:
+            type: string
+            description: Unique identifier of a user.
+            pattern: \w{3}
+    get:
+        description: A single user's profile.
+            - sendNotFound
+        responses:
+          200:
+            body:
+                application/json:
+                    type: UserProfile
+    put:
+        description: Updates a user's profile but changes only the values passed.
+            - sendNotFound
+            - sendGeneralError
+        body:
+            application/json:
+                type: UserProfile

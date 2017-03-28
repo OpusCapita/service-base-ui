@@ -15,11 +15,41 @@ const Promise = require('bluebird');
  */
 module.exports.up = function(db, config)
 {
-    // Add all structual and data migrations here.
-    // You may use db.getQueryInterface() for structures and config.models for working with data.
+    var users = [
+        {
+            id : 'abc:user',
+            federationId : 'abc',
+            status : 'firstLogin',
+            mayChangeSupplier : true,
+            mayChangeCustomer : true,
+            createdBy : 'the doctor'
+        }
+    ];
 
-    // Always return a promise.
-    return Promise.resolve();
+    var profiles = [
+        {
+            userId : 'abc:user',
+            email : 'user@domain.com',
+            supplierId : '42',
+            languageId : 'de',
+            countryId : 'DE',
+            timeZoneId : 'CET',
+            salutation : 'Mr',
+            firstName : 'Foo',
+            lastName : 'Bar',
+            birthday : '01.01.1971',
+            phoneNo : '+49123456789',
+            department : 'Foobar',
+            floor : '1st',
+            room : '88',
+            createdBy : 'the doctor'
+        }
+    ];
+
+    var allUsers = users.map(user => db.models.User.upsert(user));
+    var allProfiles = profiles.map(user => db.models.UserProfile.upsert(user));
+
+    return Promise.all(allUsers.concat(allProfiles));
 }
 
 /**
@@ -33,6 +63,7 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    // Always return a promise.
-    return Promise.resolve();
+    var userIds = [ 'abc:user' ];
+
+    return Promise.all(userIds.map(userId => db.models.User.destroy({  where : { id : userId }})));
 }

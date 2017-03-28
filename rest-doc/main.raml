@@ -1,6 +1,6 @@
 #%RAML 1.0
-title: Your Service Documentation
-description: Your Service Description
+title: User Service (user)
+description: Service for reading and writing user specific data and configurations.
 version: 1.0.0
 baseUri: http://localhost
 mediaType:
@@ -11,9 +11,8 @@ protocols:
 
 types: !include schemas/index.raml
 traits:
-    acceptLanguage: !include traits/acceptLanguage.raml
+    sendConflict: !include traits/sendConflict.raml
+    sendGeneralError: !include traits/sendGeneralError.raml
     sendNotFound: !include traits/sendNotFound.raml
 
-/countries: !include resourceTypes/country.raml
-/currencies: !include resourceTypes/currency.raml
-/languages: !include resourceTypes/language.raml
+/users: !include resourceTypes/users.raml
