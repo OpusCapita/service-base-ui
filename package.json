@@ -1,7 +1,7 @@
 {
-  "name": "ocbesbn-service-template",
-  "version": "0.1.0",
-  "description": "Provides a sekeleton template for OpusCapita Business Network services.",
+  "name": "ocbesbn-user",
+  "version": "1.0.0",
+  "description": "User service",
   "author": "Christian Drengenberg <Christian.Drengenberg@opuscapita.com>",
   "license": "Apache-2.0",
   "repository": {
