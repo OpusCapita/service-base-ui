@@ -9,6 +9,7 @@ get:
                     type: UserArray
 post:
     description: Creates a new user.
+    is:
         - sendConflict
         - sendGeneralError
     body:
@@ -26,6 +27,7 @@ post:
             description: Unique identifier of a user.
     get:
         description: Returns a single `User` object.
+        is:
             - sendNotFound
         responses:
           200:
@@ -35,6 +37,7 @@ post:
 
     put:
         description: Updates a user but changes only the values passed.
+        is:
             - sendNotFound
             - sendGeneralError
         body:
@@ -49,6 +52,7 @@ post:
             pattern: \w{3}
     get:
         description: A single user's profile.
+        is:
             - sendNotFound
         responses:
           200:
@@ -57,6 +61,7 @@ post:
                     type: UserProfile
     put:
         description: Updates a user's profile but changes only the values passed.
+        is:
             - sendNotFound
             - sendGeneralError
         body:

@@ -1,25 +1,37 @@
 type: object
 displayName: UserProfile
 description: Object representing a user's profile.
+
 properties:
     userId:
         type: string
+        description: Unique user identifier, usually conisting of federation id ':' and user id to ensure unique user names.
     email:
         type: string
+        description: A user's email address.
     supplierId:
         type: string
+        description: Unique identifier of a supplier a user is assigned to.
         required: false
     customerId:
         type: string
+        description: Unique identifier of a customer a user is assigned to.
         required: false
     languageId:
         type: string
+        description: Language preferred by a user as in ISO 639-1/2.
         required: false
+        default: 'en'
     countryId:
         type: string
+        description: Country preferred by a user as in ISO 3166-1 alpha2.
         required: false
+        default: 'EU'
     timeZoneId:
         type: string
+        description: Identifier of a user's time zone.
+        required: false
+        default: 'CET'
     salutation:
         type: string
     firstName:
@@ -28,6 +40,7 @@ properties:
         type: string
     birthday:
         type: string
+        description: Timestamp representing a user's birthday.
         required: false
     degree:
         type: string
@@ -52,12 +65,16 @@ properties:
         required: false
     createdBy:
         type: string
+        description: Unique identifier of the user who created a data entry.
     changedBy:
         type: string
+        description: Unique identifier of the user who lastly changed a data entry.
         required: false
     createdOn:
         type: string
+        description: Timestamp of the creation of a data entry.
     changedOn:
         type: string
+        description: Timestamp of the last change date of a data entry.
         required: false
 example: !include ../examples/UserProfile.json

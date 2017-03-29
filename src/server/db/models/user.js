@@ -109,7 +109,7 @@ module.exports.init = function(db, config)
         timeZoneId : {
             type : DataTypes.STRING(50),
             allowNull : false,
-            defaultValue : 'en'
+            defaultValue : 'CET'
         },
         salutation : {
             type : DataTypes.STRING(20),

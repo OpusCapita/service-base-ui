@@ -1,26 +1,34 @@
 type: object
 displayName: User
-description: Object representing a single user item.
+description: Usually not editable by the user directly but possibly by user administrators.
 properties:
     id:
         type: string
-        description: Unique user identifier, usually concatenated of federation id ':' and user id to ensure unique user names.
+        description: Unique user identifier, usually conisting of federation id ':' and user id to ensure unique user names.
     federationId:
         type: string
+        description: Id of federation owning this identity. It is also used to prefix the id field to make it unique. Non federated users will start with empty federation id, e.g. *:arne.graeper@opuscapita.com*.
     status:
         type: string
+        description: User lifecycle e.g. emailVerification, firstLogin, active, failedLogin, locked, deleted
     mayChangeSupplier:
         type: boolean
+        description: Used to enable cross tenant access.
     mayChangeCustomer:
         type: boolean
+        description: Used to enable cross tenant access.
     createdBy:
         type: string
+        description: Unique identifier of the user who created a data entry.
     changedBy:
         type: string
+        description: Unique identifier of the user who lastly changed a data entry.
         required: false
     createdOn:
         type: string
+        description: Timestamp of the creation of a data entry.
     changedOn:
         type: string
+        description: Timestamp of the last change date of a data entry.
         required: false
 example: !include ../examples/User.json
