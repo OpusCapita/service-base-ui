@@ -24,6 +24,16 @@ module.exports.init = function(db, config)
             allowNull : false,
             defaultValue : ''
         },
+        /** Identifier of supplier a user is assigned to. */
+        supplierId : {
+            type : DataTypes.STRING(30),
+            allowNull : true
+        },
+        /** Identifier of customer a user is assigned to. */
+        customerId : {
+            type : DataTypes.STRING(30),
+            allowNull : true
+        },
         /**  Representing the current lifecycle status of a user. */
         status : {
             type : DataTypes.STRING(100),
@@ -82,16 +92,6 @@ module.exports.init = function(db, config)
         email : {
             type : DataTypes.STRING(100),
             allowNull : false
-        },
-        /** Identifier of supplier a user is assigned to. */
-        supplierId : {
-            type : DataTypes.STRING(30),
-            allowNull : true
-        },
-        /** Identifier of customer a user is assigned to. */
-        customerId : {
-            type : DataTypes.STRING(30),
-            allowNull : true
         },
         /** A user's language preference in as in ISO 639-1/2 */
         languageId : {

@@ -1,8 +1,6 @@
 {
     "userId": "abc:user",
     "email": "user@domain.com",
-    "supplierId": "42",
-    "customerId": null,
     "languageId": "de",
     "countryId": "DE",
     "timeZoneId": "CET",

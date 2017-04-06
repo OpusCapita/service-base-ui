@@ -2,6 +2,8 @@ version: '2'
 services:
   main:
     build: .
+    image: ocbesbn/user
+    network_mode: host
     depends_on:
      - mysql
      - consul
@@ -17,7 +19,7 @@ services:
       HOST_IP: ${HOST_IP}
     ports:
      - '${PORT}:${PORT}'
-    command: "npm run dev"
+    command: "npm start"
 
   mysql:
     image: "mysql:5.6"

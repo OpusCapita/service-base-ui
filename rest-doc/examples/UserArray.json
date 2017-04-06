@@ -1,6 +1,8 @@
 [{
     "id": "abc:user",
     "federationId": "abc",
+    "supplierId": "42",
+    "customerId": null,
     "status": "firstLogin",
     "mayChangeSupplier": true,
     "mayChangeCustomer": true,
@@ -11,6 +13,8 @@
 }, {
     "id": "def:user",
     "federationId": "def",
+    "supplierId": null,
+    "customerId": "69",
     "status": "firstLogin",
     "mayChangeSupplier": false,
     "mayChangeCustomer": false,

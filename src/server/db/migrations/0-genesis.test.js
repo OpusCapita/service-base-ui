@@ -19,6 +19,7 @@ module.exports.up = function(db, config)
         {
             id : 'abc:user',
             federationId : 'abc',
+            supplierId : '42',
             status : 'firstLogin',
             mayChangeSupplier : true,
             mayChangeCustomer : true,
@@ -30,7 +31,6 @@ module.exports.up = function(db, config)
         {
             userId : 'abc:user',
             email : 'user@domain.com',
-            supplierId : '42',
             languageId : 'de',
             countryId : 'DE',
             timeZoneId : 'CET',
@@ -46,10 +46,8 @@ module.exports.up = function(db, config)
         }
     ];
 
-    var allUsers = users.map(user => db.models.User.upsert(user));
-    var allProfiles = profiles.map(user => db.models.UserProfile.upsert(user));
-
-    return Promise.all(allUsers.concat(allProfiles));
+    return Promise.all(users.map(user => db.models.User.upsert(user)))
+        .then(() => Promise.all(profiles.map(user => db.models.UserProfile.upsert(user))));
 }
 
 /**
