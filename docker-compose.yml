@@ -3,7 +3,6 @@ services:
   main:
     build: .
     image: ocbesbn/user
-    network_mode: host
     depends_on:
      - mysql
      - consul
