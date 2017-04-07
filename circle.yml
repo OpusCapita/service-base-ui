@@ -28,25 +28,25 @@ test:
     - sudo cp test-results.xml $CIRCLE_TEST_REPORTS/junit
 
 deployment:
- development:
-   branch: develop
-   commands:
-     - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
-     - >
-       if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
-         echo "Deploying base image..." ; docker tag opuscapita/user-base:latest opuscapita/user-base:dev ; docker push opuscapita/user-base:dev
-       fi
-     - docker push opuscapita/user:dev
-     - curl https://raw.githubusercontent.com/gr4per/azureswarm/master/deploy_service.sh > deploy_service.sh
-     - chmod +x deploy_service.sh
-     - ./deploy_service.sh dm 52.233.155.169 opuscapita/user dev
- production:
-  branch: master
-   commands:
-     - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
-     - >
-       if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
-         echo "Deploying base image..." ; docker push opuscapita/user-base:latest
-       fi
-     - docker push opuscapita/user:latest
-     - cd wiki ; git add --all . ; git commit -am 'Updated documentation.' ; git push ; (exit 0)
+  development:
+    branch: develop
+    commands:
+      - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
+      - >
+        if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
+          echo "Deploying base image..." ; docker tag opuscapita/user-base:latest opuscapita/user-base:dev ; docker push opuscapita/user-base:dev
+        fi
+      - docker push opuscapita/user:dev
+      - curl https://raw.githubusercontent.com/gr4per/azureswarm/master/deploy_service.sh > deploy_service.sh
+      - chmod +x deploy_service.sh
+      - ./deploy_service.sh dm 52.233.155.169 opuscapita/user dev
+  production:
+    branch: master
+    commands:
+      - docker login -u $DOCKER_USER -p $DOCKER_PASS -e $DOCKER_EMAIL
+      - >
+        if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
+          echo "Deploying base image..." ; docker push opuscapita/user-base:latest
+        fi
+      - docker push opuscapita/user:latest
+      - cd wiki ; git add --all . ; git commit -am 'Updated documentation.' ; git push ; (exit 0)
