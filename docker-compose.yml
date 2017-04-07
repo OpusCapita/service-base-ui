@@ -2,11 +2,7 @@ version: '2'
 services:
   main:
     build: .
-<<<<<<< HEAD
-    image: ocbesbn/user
-=======
     image: opuscapita/user:latest
->>>>>>> 5a488ccc0e6f7ba3c811daf7012289c33c889b49
     depends_on:
      - mysql
      - consul
