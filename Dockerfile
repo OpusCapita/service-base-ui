@@ -1,4 +1,4 @@
-FROM ocbesbn/user-base
+FROM opuscapita/user-base
 MAINTAINER kwierchris
 
 # NOTE: "node" user and corresponding "/home/node" dir are created by "node:6-alpine" image.
