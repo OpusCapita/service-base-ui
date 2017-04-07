@@ -14,7 +14,7 @@ dependencies:
       if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
         echo "Building base image..." ; docker build --rm=false -t opuscapita/user-base:latest -f Dockerfile.base .
       fi
-    - docker build --rm=false -t ocbesbn/user:latest .
+    - docker build --rm=false -t opuscapita/user:latest .
 
 test:
   override:
