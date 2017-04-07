@@ -17,31 +17,56 @@ module.exports.up = function(db, config)
 {
     var users = [
         {
-            id : 'abc:user',
-            federationId : 'abc',
-            supplierId : '42',
+            id : 'scott.tiger@example.com',
+            federationId : '',
+            supplierId : 'hard001',
             status : 'firstLogin',
-            mayChangeSupplier : true,
-            mayChangeCustomer : true,
+            mayChangeSupplier : false,
+            mayChangeCustomer : false,
+            createdBy : 'the doctor'
+        },
+        {
+            id : 'john.doe@ncc.com',
+            federationId : '',
+            customerId : 'ncc',
+            status : 'firstLogin',
+            mayChangeSupplier : false,
+            mayChangeCustomer : false,
             createdBy : 'the doctor'
         }
     ];
 
     var profiles = [
         {
-            userId : 'abc:user',
-            email : 'user@domain.com',
+            userId : 'scott.tiger@example.com',
+            email : 'scott.tiger@example.com',
             languageId : 'de',
             countryId : 'DE',
             timeZoneId : 'CET',
             salutation : 'Mr',
-            firstName : 'Foo',
-            lastName : 'Bar',
-            birthday : '01.01.1971',
+            firstName : 'Scott',
+            lastName : 'Tiger',
+            birthday : '01.02.1980',
             phoneNo : '+49123456789',
-            department : 'Foobar',
+            department : 'Tiger Store',
             floor : '1st',
             room : '88',
+            createdBy : 'the doctor'
+        },
+        {
+            userId : 'john.doe@ncc.com',
+            email : 'john.doe@ncc.com',
+            languageId : 'de',
+            countryId : 'DE',
+            timeZoneId : 'CET',
+            salutation : 'Mr',
+            firstName : 'John',
+            lastName : 'Doe',
+            birthday : '02.03.1983',
+            phoneNo : '+49123456789',
+            department : 'Doe Management',
+            floor : '3rd',
+            room : '42',
             createdBy : 'the doctor'
         }
     ];
@@ -61,7 +86,7 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    var userIds = [ 'abc:user' ];
+    var userIds = [ 'scott.tiger@example.com', 'john.doe@ncc.com' ];
 
     return Promise.all(userIds.map(userId => db.models.User.destroy({  where : { id : userId }})));
 }

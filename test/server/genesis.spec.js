@@ -8,6 +8,7 @@ require(process.cwd() + '/src/server/index.js');
 
 describe("main", () =>
 {
+    /*
     const clientConfig = { consul : { host : 'consul' } };
     var client = new ServiceClient(clientConfig);
 
