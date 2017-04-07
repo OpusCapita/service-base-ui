@@ -1,4 +1,4 @@
-FROM ocbesbn/user-base
+FROM opuscapita/user-base
 MAINTAINER kwierchris
 
 WORKDIR /var/tmp/base
