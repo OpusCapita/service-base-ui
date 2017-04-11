@@ -33,7 +33,15 @@ module.exports.up = function(db, config)
             mayChangeSupplier : false,
             mayChangeCustomer : false,
             createdBy : 'the doctor'
-        }
+        },
+        {
+            id : 'supplier@example.com',
+            federationId : '',
+            status : 'firstLogin',
+            mayChangeSupplier : false,
+            mayChangeCustomer : false,
+            createdBy : 'the doctor'
+        }        
     ];
 
     var profiles = [
