@@ -1,6 +1,7 @@
 'use strict'
 
 const Promise = require('bluebird');
+const ServiceClient = require('ocbesbn-service-client');
 const Users = require('../api/users.js')
 
 /**
@@ -32,7 +33,7 @@ module.exports.init = function(app, db, config)
 module.exports.addUser = function(req, res)
 {
     var self = this;
-    
+
     Users.userExists(req.body.id).then(exists =>
     {
         if(exists)
@@ -48,9 +49,24 @@ module.exports.updateUser = function(req, res)
     Users.userExists(req.params.id).then(exists =>
     {
         if(exists)
-            Users.updateUser(req.params.id, req.body, true).then(user => res.json(user));
+        {
+            Users.updateUser(req.params.id, req.body, true).then(user =>
+            {
+                if(req.query.tokenUpdate == "true")
+                {
+                    return doUserCacheUpdate(user).then(() => res.json(user))
+                        .catch(e => res.status('424').json({ message : e.message }))
+                }
+                else
+                {
+                    res.json(user);
+                }
+            })
+        }
         else
+        {
             res.status('404').json({ message : 'A user with this ID does not exist.' });
+        }
     })
     .catch(e => res.status('400').json({ message : e.message }));
 }
@@ -60,9 +76,27 @@ module.exports.addOrUpdateUserProfile = function(req, res)
     Users.userExists(req.params.id).then(exists =>
     {
         if(exists)
-            Users.addOrUpdateUserProfile(req.params.id, req.body, true).then(profile => res.json(profile));
+        {
+            Users.addOrUpdateUserProfile(req.params.id, req.body, true).then(profile =>
+            {
+                if(req.query.tokenUpdate == "true")
+                {
+                    Users.getUserProfile(req.params.id).then(user =>
+                    {
+                        return doUserCacheUpdate(user).then(() => res.json(profile))
+                            .catch(e => res.status('424').json({ message : e.message }))
+                    });
+                }
+                else
+                {
+                    res.json(profile);
+                }
+            });
+        }
         else
+        {
             res.status('404').json({ message : 'A user with this ID does not exist.' });
+        }
     })
     .catch(e => res.status('400').json({ message : e.message }));
 }
@@ -89,4 +123,12 @@ module.exports.sendUserProfile = function(req, res)
     {
         (user && res.json(user)) || res.status('404').json({ message : 'Not found!' });
     });
+}
+
+function doUserCacheUpdate(userObj, requestHeaders)
+{
+    var client = new ServiceClient({ consul : { host : 'consul' } });
+    client.contextify({ headers : requestHeaders });
+
+    return client.put('kong', '/refreshIdToken', userObj);
 }

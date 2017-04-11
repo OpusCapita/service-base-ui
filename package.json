@@ -1,6 +1,6 @@
 {
   "name": "ocbesbn-user",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "User service",
   "author": "Christian Drengenberg <Christian.Drengenberg@opuscapita.com>",
   "license": "Apache-2.0",
@@ -16,11 +16,12 @@
     "exclude": []
   },
   "dependencies": {
-    "ocbesbn-config": "^2.2.5",
-    "ocbesbn-db-init": "^1.1.5",
-    "ocbesbn-web-init": "^1.0.3",
     "bluebird": "^3.0.5",
     "epilogue": "^0.7.0",
+    "ocbesbn-config": "^2.2.5",
+    "ocbesbn-db-init": "^1.1.5",
+    "ocbesbn-service-client": "^0.1.10",
+    "ocbesbn-web-init": "^1.0.3",
     "sequelize": "^3.24.7"
   },
   "devDependencies": {
