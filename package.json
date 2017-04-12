@@ -1,6 +1,6 @@
 {
   "name": "ocbesbn-user",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "User service",
   "author": "Christian Drengenberg <Christian.Drengenberg@opuscapita.com>",
   "license": "Apache-2.0",

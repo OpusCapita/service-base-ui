@@ -54,7 +54,7 @@ module.exports.updateUser = function(req, res)
             {
                 if(req.query.tokenUpdate == "true")
                 {
-                    return doUserCacheUpdate(user).then(() => res.json(user))
+                    return doUserCacheUpdate(user, req.headers).then(() => res.json(user))
                         .catch(e => res.status('424').json({ message : e.message }))
                 }
                 else
@@ -83,7 +83,7 @@ module.exports.addOrUpdateUserProfile = function(req, res)
                 {
                     Users.getUserProfile(req.params.id).then(user =>
                     {
-                        return doUserCacheUpdate(user).then(() => res.json(profile))
+                        return doUserCacheUpdate(user, req.headers).then(() => res.json(profile))
                             .catch(e => res.status('424').json({ message : e.message }))
                     });
                 }
