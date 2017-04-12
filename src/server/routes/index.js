@@ -132,7 +132,7 @@ function doUserCacheUpdate(userObj, requestHeaders)
     var client = new ServiceClient({ consul : { host : 'consul' } });
     client.contextify({ headers : requestHeaders });
 
-    return client.put('kong', '/refreshIdToken', userObj);
+    return client.post('kong', '/refreshIdToken', userObj);
 }
 
 function checkContentType(req, res, next)
