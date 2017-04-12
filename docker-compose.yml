@@ -25,7 +25,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: "notSecurePa55w0rd"
+      MYSQL_ROOT_PASSWORD: "notSecureP455w0rd"
       MYSQL_DATABASE: "bnp"
     depends_on:
       - registrator

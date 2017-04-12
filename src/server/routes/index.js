@@ -19,6 +19,8 @@ module.exports.init = function(app, db, config)
     {
         var self = this;
 
+        app.use(checkContentType);
+
         app.get('/users', (req, res) => self.sendUsers(req, res));
         app.post('/users', (req, res) => self.addUser(req, res));
 
@@ -39,7 +41,7 @@ module.exports.addUser = function(req, res)
         if(exists)
             res.status('409').json({ message : 'A user with this ID does already exist.' });
         else
-            Users.addUser(req.body, true).then(user => res.json(user));
+            return Users.addUser(req.body, true).then(user => res.json(user));
     })
     .catch(e => res.status('400').json({ message : e.message }));
 }
@@ -50,7 +52,7 @@ module.exports.updateUser = function(req, res)
     {
         if(exists)
         {
-            Users.updateUser(req.params.id, req.body, true).then(user =>
+            return Users.updateUser(req.params.id, req.body, true).then(user =>
             {
                 if(req.query.tokenUpdate == "true")
                 {
@@ -77,11 +79,11 @@ module.exports.addOrUpdateUserProfile = function(req, res)
     {
         if(exists)
         {
-            Users.addOrUpdateUserProfile(req.params.id, req.body, true).then(profile =>
+            return Users.addOrUpdateUserProfile(req.params.id, req.body, true).then(profile =>
             {
                 if(req.query.tokenUpdate == "true")
                 {
-                    Users.getUserProfile(req.params.id).then(user =>
+                    return Users.getUserProfile(req.params.id).then(user =>
                     {
                         return doUserCacheUpdate(user, req.headers).then(() => res.json(profile))
                             .catch(e => res.status('424').json({ message : e.message }))
@@ -131,4 +133,15 @@ function doUserCacheUpdate(userObj, requestHeaders)
     client.contextify({ headers : requestHeaders });
 
     return client.put('kong', '/refreshIdToken', userObj);
+}
+
+function checkContentType(req, res, next)
+{
+    var method = req.method.toLowerCase();
+    var contentType = req.headers['content-type'] && req.headers['content-type'].toLowerCase();
+
+    if(method !== 'get' && contentType !== 'application/json')
+        res.status(400).json({ message : 'Invalid content type. Has to be "application/json".' });
+    else
+        next();
 }
