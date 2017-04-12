@@ -41,7 +41,7 @@ module.exports.addUser = function(req, res)
         if(exists)
             res.status('409').json({ message : 'A user with this ID does already exist.' });
         else
-            return Users.addUser(req.body, true).then(user => res.json(user));
+            return Users.addUser(req.body, true).then(user => res.status('202').json(user));
     })
     .catch(e => res.status('400').json({ message : e.message }));
 }
@@ -56,12 +56,12 @@ module.exports.updateUser = function(req, res)
             {
                 if(req.query.tokenUpdate == "true")
                 {
-                    return doUserCacheUpdate(user, req.headers).then(() => res.json(user))
+                    return doUserCacheUpdate(user, req.headers).then(() =>  res.status('202').json(user))
                         .catch(e => res.status('424').json({ message : e.message }))
                 }
                 else
                 {
-                    res.json(user);
+                    res.status('202').json(user);
                 }
             })
         }
@@ -85,13 +85,13 @@ module.exports.addOrUpdateUserProfile = function(req, res)
                 {
                     return Users.getUserProfile(req.params.id).then(user =>
                     {
-                        return doUserCacheUpdate(user, req.headers).then(() => res.json(profile))
+                        return doUserCacheUpdate(user, req.headers).then(() => res.status('202').json(profile))
                             .catch(e => res.status('424').json({ message : e.message }))
                     });
                 }
                 else
                 {
-                    res.json(profile);
+                    res.status('202').json(profile);
                 }
             });
         }
@@ -115,15 +115,15 @@ module.exports.sendUser = function(req, res)
 {
     Users.getUser(req.params.id).then(user =>
     {
-        (user && res.json(user)) || res.status('404').json({ message : 'Not found!' });
+        (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
     });
 }
 
 module.exports.sendUserProfile = function(req, res)
 {
-    Users.getUserProfile(req.params.id).then(user =>
+    Users.getUserProfile(req.params.id).then(profile =>
     {
-        (user && res.json(user)) || res.status('404').json({ message : 'Not found!' });
+        (profile && res.json(profile)) || res.status('404').json({ message : 'Profile does not exist!' });
     });
 }
 

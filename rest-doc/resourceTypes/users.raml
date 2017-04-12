@@ -16,7 +16,7 @@ post:
         application/json:
             type: User
     responses:
-        200:
+        202:
             body:
                 application/json:
                     type: User
@@ -47,9 +47,11 @@ post:
                 required: false
                 description: Forces the service to synchronously updated cached user tokens.
                 example: tokeUpdate=true
-        body:
-            application/json:
-                type: User
+        responses:
+            202:
+                body:
+                    application/json:
+                        type: User
 
 /{id}/profile:
     uriParameters:
@@ -78,6 +80,8 @@ post:
                 required: false
                 description: Forces the service to synchronously updated cached user tokens.
                 example: tokeUpdate=true
-        body:
-            application/json:
-                type: UserProfile
+        responses:
+            202:
+                body:
+                    application/json:
+                        type: UserProfile
