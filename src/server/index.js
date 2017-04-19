@@ -9,7 +9,8 @@ const db = require('ocbesbn-db-init'); // Database
 db.init({
     consul: {
         host: 'consul'
-    }
+    },
+    retryCount: 50
 })
 .then((db) => server.init({
     routes: {
