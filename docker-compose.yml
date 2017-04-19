@@ -16,6 +16,7 @@ services:
     environment:
       PORT: ${PORT}
       HOST_IP: ${HOST_IP}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
      - '${PORT}:${PORT}'
     command: "npm start"
@@ -26,7 +27,7 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: "notSecureP455w0rd"
-      MYSQL_DATABASE: "bnp"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     depends_on:
       - registrator
 
