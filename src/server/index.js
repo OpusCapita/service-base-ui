@@ -3,8 +3,6 @@
 const server = require('ocbesbn-web-init'); // Web server
 const db = require('ocbesbn-db-init'); // Database
 
-const ejsLayouts = require("express-ejs-layouts"); // ejs layout
-
 // Basic database and web server initialization.
 // See database : https://github.com/OpusCapitaBusinessNetwork/db-init
 // See web server: https://github.com/OpusCapitaBusinessNetwork/web-init
