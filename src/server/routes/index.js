@@ -2,7 +2,10 @@
 
 const Promise = require('bluebird');
 const ServiceClient = require('ocbesbn-service-client');
-const Users = require('../api/users.js')
+const Users = require('../api/users.js');
+
+// client added
+const client = new ServiceClient({ consul : { host : 'consul' } });
 
 /**
  * Initializes all routes for RESTful access.
@@ -21,6 +24,12 @@ module.exports.init = function(app, db, config)
 
         app.use(checkContentType);
 
+        app.get('/register/verify/:email', (req, res) => self.verifyRegister(req, res));
+        app.post('/register/verify', (req, res) => self.postVerifyRegister(req, res));
+
+        app.get('/register', (req, res) => self.registerUser(req, res));
+        app.post('/register', (req, res) => self.postRegister(req, res));
+
         app.get('/users', (req, res) => self.sendUsers(req, res));
         app.post('/users', (req, res) => self.addUser(req, res));
 
@@ -30,6 +39,104 @@ module.exports.init = function(app, db, config)
         app.get('/users/:id/profile', (req, res) => self.sendUserProfile(req, res));
         app.put('/users/:id/profile', (req, res) => self.addOrUpdateUserProfile(req, res));
     });
+}
+
+module.exports.registerUser = function(req, res)
+{
+  res.render('registration', {
+    email: '',
+    password: '',
+    errMessage: '',
+    userDetails: '',
+    tradingPartnerDetails: ''
+  })
+}
+
+module.exports.postRegister = function(req, res)
+{
+  var msg = {
+    email: req.body.email,
+    password: req.body.password,
+    errMessage: '',
+    userDetails: '',
+    tradingPartnerDetails: ''
+  }
+
+  client.contextify({ headers : {
+    'x-api-token': req.headers['x-api-token']
+  } });
+
+  function validateUser() {
+    return new Promise((resolve, reject) => {
+      Users.userExists(req.body.email).then((exists) => {
+        if(exists) {
+          msg.errMessage = 'User already exists';
+          return reject();
+        }
+
+        return resolve({statusCode: 200, message: ''});
+      })
+    });
+  }
+
+  validateUser()
+  .then(() => {
+    return client.post('kong', '/auth/credentials', {
+      email: req.body.email,
+      password: req.body.password
+    });
+  })
+  .then((data) => {
+    let userData = req.body;
+
+    return Users.addUser({
+      id: req.body.email,
+      status: 'emailVerification'
+    }, true);
+  })
+  .then(() => {
+    res.redirect('/user/register/verify/' + req.body.email);
+  })
+  .catch((err) => {
+    if (err.message)
+      msg.errMessage = err.message;
+    else
+      msg.errMessage = 'Oops!, something went wrong';
+
+    res.render('registration', msg);
+  });
+}
+
+module.exports.verifyRegister = function(req, res)
+{
+  res.render('registration-confirm', {
+    invalidCode: '',
+    userId: req.params.email,
+    email: req.params.email
+  });
+}
+
+module.exports.postVerifyRegister = function(req, res)
+{
+  client.contextify({ headers : {
+    'x-api-token': req.headers['x-api-token']
+  } });
+
+  client.post('kong', '/auth/credentials/verify/email', {
+    email: req.body.email,
+    code: req.body.code
+  }).then(() => {
+    res.render('registration-valid', {
+      userId: req.body.email
+    })
+  }).catch((err) => {
+    res.render('registration-confirm', {
+      invalidCode: err.message,
+      userId: req.body.email,
+      email: req.body.email
+    });
+  })
+
 }
 
 module.exports.addUser = function(req, res)
@@ -129,7 +236,6 @@ module.exports.sendUserProfile = function(req, res)
 
 function doUserCacheUpdate(userObj, requestHeaders)
 {
-    var client = new ServiceClient({ consul : { host : 'consul' } });
     client.contextify({ headers : requestHeaders });
 
     return client.post('kong', '/refreshIdToken', userObj);
@@ -140,7 +246,7 @@ function checkContentType(req, res, next)
     var method = req.method.toLowerCase();
     var contentType = req.headers['content-type'] && req.headers['content-type'].toLowerCase();
 
-    if(method !== 'get' && contentType !== 'application/json')
+    if(method !== 'get' && contentType !== 'application/json' && contentType !== 'application/x-www-form-urlencoded')
         res.status(400).json({ message : 'Invalid content type. Has to be "application/json".' });
     else
         next();

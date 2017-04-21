@@ -53,12 +53,13 @@ module.exports.init = function(db, config)
         },
         createdBy : {
             type : DataTypes.STRING(60),
-            allowNull : false
+            allowNull : false,
+            defaultValue: 'Opuscapita user'
         },
         changedBy : {
             type : DataTypes.STRING(60),
             allowNull : false,
-            defaultValue : ''
+            defaultValue : 'Opuscapita user'
         },
         createdOn : {
             type : DataTypes.DATE(),
