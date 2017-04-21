@@ -3,6 +3,7 @@
 const Promise = require('bluebird');
 const ServiceClient = require('ocbesbn-service-client');
 const Users = require('../api/users.js');
+const UserOnboardData = require('../api/userOnboardData.js');
 
 // client added
 const client = new ServiceClient({ consul : { host : 'consul' } });
@@ -18,7 +19,10 @@ const client = new ServiceClient({ consul : { host : 'consul' } });
  */
 module.exports.init = function(app, db, config)
 {
-    return Users.init(db, config).then(() =>
+    return Users.init(db, config)
+    .then(() => {
+      return UserOnboardData.init(db, config);
+    }).then(() =>
     {
         var self = this;
 
@@ -43,12 +47,13 @@ module.exports.init = function(app, db, config)
 
 module.exports.registerUser = function(req, res)
 {
+  let userDetail = (req.query.userDetail) ? JSON.parse(req.query.userDetail) : {};
   res.render('registration', {
-    email: '',
     password: '',
     errMessage: '',
-    userDetails: '',
-    tradingPartnerDetails: ''
+    email: userDetail.email || '',
+    userDetails: req.query.userDetail || '',
+    tradingPartnerDetails: req.query.tradingPartnerDetails || ''
   })
 }
 
@@ -58,8 +63,8 @@ module.exports.postRegister = function(req, res)
     email: req.body.email,
     password: req.body.password,
     errMessage: '',
-    userDetails: '',
-    tradingPartnerDetails: ''
+    userDetails: req.body.userDetails || '',
+    tradingPartnerDetails: req.body.tradingPartnerDetails || ''
   }
 
   client.contextify({ headers : {
@@ -70,8 +75,7 @@ module.exports.postRegister = function(req, res)
     return new Promise((resolve, reject) => {
       Users.userExists(req.body.email).then((exists) => {
         if(exists) {
-          msg.errMessage = 'User already exists';
-          return reject();
+          return reject({message: 'User already exists'});
         }
 
         return resolve({statusCode: 200, message: ''});
@@ -95,10 +99,20 @@ module.exports.postRegister = function(req, res)
     }, true);
   })
   .then(() => {
+    if(req.body.userDetails) {
+      return UserOnboardData.create({
+        userId: req.body.email || '',
+        userDetails: req.body.userDetails || '',
+        tradingPartnerDetails: req.body.tradingPartnerDetails || ''
+      });
+    }
+    return new Promise.resolve();
+  })
+  .then(() => {
     res.redirect('/user/register/verify/' + req.body.email);
   })
   .catch((err) => {
-    if (err.message)
+    if (err && err.message)
       msg.errMessage = err.message;
     else
       msg.errMessage = 'Oops!, something went wrong';
