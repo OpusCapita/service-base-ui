@@ -18,7 +18,7 @@ module.exports.up = function(db, config)
   const path = pathjs.resolve(__dirname + '/../data');
 
   // Load data.
-  const userOnboardData = require(path + '/userOnboard.20161102132311.json');
+  const userOnboardData = require(path + '/userOnboard.json');
   // Get database models.
   const UserOnboard = db.models.UserOnboardData;
 

@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 const Promise = require('bluebird');
 
 /**
- * Applies migrations for databse tables and data.
+ * Inserts test data into existing database structures.
  * If all migrations were successul, this method will never be executed again.
  * To identify which migrations have successfully been processed, a migration's filename is used.
  *
@@ -15,7 +15,10 @@ const Promise = require('bluebird');
  */
 module.exports.up = function(db, config)
 {
-    return db.sync();
+
+    var profiles = require('../data/userProfile.json');
+
+    return Promise.all(profiles.map(user => db.models.UserProfile.upsert(user)))
 }
 
 /**
@@ -29,8 +32,7 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    var modelNames = [ 'User', 'UserProfile' ];
-    var qi = db.getQueryInterface();
+    var userIds = [ 'scott.tiger@example.com', 'john.doe@ncc.com' ];
 
-    return Promise.all(modelNames.map(key => qi.dropTable(db.models[key].getTableName())));
+    return Promise.all(userIds.map(userId => db.models.UserProfile.destroy({  where : { userId : userId }})));
 }

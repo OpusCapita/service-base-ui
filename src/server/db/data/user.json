@@ -1,0 +1,28 @@
+[
+    {
+        "id" : "scott.tiger@example.com",
+        "federationId" : "",
+        "supplierId" : "hard001",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
+        "createdBy" : "the doctor"
+    },
+    {
+        "id" : "john.doe@ncc.com",
+        "federationId" : "",
+        "customerId" : "ncc",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
+        "createdBy" : "the doctor"
+    },
+    {
+        "id" : "supplier@example.com",
+        "federationId" : "",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
+        "createdBy" : "the doctor"
+    }
+]

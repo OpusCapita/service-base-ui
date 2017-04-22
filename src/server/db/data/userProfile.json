@@ -1,0 +1,34 @@
+[
+    {
+        "userId" : "scott.tiger@example.com",
+        "email" : "scott.tiger@example.com",
+        "languageId" : "de",
+        "countryId" : "DE",
+        "timeZoneId" : "CET",
+        "salutation" : "Mr",
+        "firstName" : "Scott",
+        "lastName" : "Tiger",
+        "birthday" : "01.02.1980",
+        "phoneNo" : "+49123456789",
+        "department" : "Tiger Store",
+        "floor" : "1st",
+        "room" : "88",
+        "createdBy" : "the doctor"
+    },
+    {
+        "userId" : "john.doe@ncc.com",
+        "email" : "john.doe@ncc.com",
+        "languageId" : "de",
+        "countryId" : "DE",
+        "timeZoneId" : "CET",
+        "salutation" : "Mr",
+        "firstName" : "John",
+        "lastName" : "Doe",
+        "birthday" : "02.03.1983",
+        "phoneNo" : "+49123456789",
+        "department" : "Doe Management",
+        "floor" : "3rd",
+        "room" : "42",
+        "createdBy" : "the doctor"
+    }
+]

@@ -73,7 +73,8 @@ module.exports.init = function(db, config)
     }, {
         hooks : {
             beforeValidate : (a, b, next) => { a.changedOn = DataTypes.fn('NOW'); next(); }
-        }
+        },
+        freezeTableName: true
     });
 
     /**
@@ -181,6 +182,9 @@ module.exports.init = function(db, config)
             type : DataTypes.DATE(),
             allowNull : true
         }
+      },
+      {
+        freezeTableName: true
     });
 
     User.hasOne(UserProfile, { foreignKey : 'userId', as : 'profile', constraints: true });

@@ -1,7 +1,7 @@
 'use strict'
 
+const Sequelize = require('sequelize');
 const Promise = require('bluebird');
-const pathjs = require('path');
 
 /**
  * Inserts test data into existing database structures.
@@ -13,15 +13,11 @@ const pathjs = require('path');
  * @returns {Promise} [Promise]{@link http://bluebirdjs.com/docs/api-reference.html}
  * @see [Applying data migrations]{@link https://github.com/OpusCapitaBusinessNetwork/db-init#applying-data-migrations}
  */
-module.exports.up = function(db, config){
-  const path = pathjs.resolve(__dirname + '/../data');
+module.exports.up = function(db, config)
+{
+    var users = require('../data/user.json');
 
-  // Load data.
-  const userOnboardData = require(path + '/userOnboard.json');
-  // Get database models.
-  const UserOnboard = db.models.UserOnboardData;
-
-  return Promise.all(userOnboardData.map(cur => UserOnboard.upsert(cur)));
+    return Promise.all(users.map(user => db.models.User.upsert(user)))
 }
 
 /**
@@ -33,6 +29,9 @@ module.exports.up = function(db, config){
  * @returns {Promise} [Promise]{@link http://bluebirdjs.com/docs/api-reference.html}
  * @see [Applying data migrations]{@link https://github.com/OpusCapitaBusinessNetwork/db-init#applying-data-migrations}
  */
-module.exports.down = function(db, config){
-  return Promise.all(db.models.UserOnboardData.destroy({ truncate: true }));
+module.exports.down = function(db, config)
+{
+    var userIds = [ 'scott.tiger@example.com', 'john.doe@ncc.com', 'supplier@example.com' ];
+
+    return Promise.all(userIds.map(userId => db.models.User.destroy({  where : { id : userId }})));
 }

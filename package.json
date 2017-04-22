@@ -38,7 +38,7 @@
     "sequelize-to-markdown": "^1.x"
   },
   "scripts": {
-    "start": "node src/server/index.js",
+    "start": "npm run setup-consul && node src/server/index.js",
     "dev": "npm run setup-consul ; ${NODE_PATH}/.bin/nodemon --watch src/server src/server/index.js",
     "test": "npm run clean ; npm run setup-consul ; ${NODE_PATH}/.bin/nyc ${NODE_PATH}/.bin/mocha --timeout 30000 --recursive -R mocha-junit-reporter",
     "test-raw": "npm run clean ; npm run setup-consul ; ${NODE_PATH}/.bin/nyc ${NODE_PATH}/.bin/mocha --timeout 30000 --recursive",
