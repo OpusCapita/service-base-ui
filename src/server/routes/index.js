@@ -48,10 +48,12 @@ module.exports.init = function(app, db, config)
 module.exports.registerUser = function(req, res)
 {
   let userDetail = (req.query.userDetail) ? JSON.parse(req.query.userDetail) : {};
+  console.log('--->', req.query.serviceName ? req.query.serviceName : (userDetail ? userDetail.serviceName : ''));
   res.render('registration', {
     password: '',
     errMessage: '',
     email: userDetail.email || '',
+    serviceName: req.query.serviceName ? req.query.serviceName : (userDetail ? userDetail.serviceName : ''),
     userDetails: req.query.userDetail || '',
     tradingPartnerDetails: req.query.tradingPartnerDetails || ''
   })
@@ -59,10 +61,12 @@ module.exports.registerUser = function(req, res)
 
 module.exports.postRegister = function(req, res)
 {
+  console.log('--->', req.body);
   var msg = {
     email: req.body.email,
     password: req.body.password,
     errMessage: '',
+    serviceName: req.body.serviceName,
     userDetails: req.body.userDetails || '',
     tradingPartnerDetails: req.body.tradingPartnerDetails || ''
   }
@@ -103,6 +107,7 @@ module.exports.postRegister = function(req, res)
       return UserOnboardData.create({
         userId: req.body.email || '',
         userDetails: req.body.userDetails || '',
+        serviceName: req.body.serviceName || '',
         tradingPartnerDetails: req.body.tradingPartnerDetails || ''
       });
     }
