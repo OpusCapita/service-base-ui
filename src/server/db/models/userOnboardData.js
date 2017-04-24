@@ -3,6 +3,9 @@ var Sequelize = require('sequelize');
 
 module.exports.init = function(db, config) {
   const UserOnboardData = db.define('UserOnboardData', {
+    /**
+     * Unique identifier of the user
+     */
     userId: {
       type:Sequelize.STRING(100),
       primaryKey: true,
@@ -12,15 +15,43 @@ module.exports.init = function(db, config) {
       }
     },
 
-    tradingPartnerDetails:
-    {
+    /**
+     * details of trading partner
+     */
+    tradingPartnerDetails: {
       type:Sequelize.STRING(300),
       allowNull:true
     },
 
-    userDetails:
-    {
-      type:Sequelize.STRING(300),
+    /**
+     * Name of the service, which does the campaing
+     */
+    serviceName: {
+      type: Sequelize.STRING(100),
+      allowNull: true
+    },
+
+    /**
+     * Name of the campaing tool used
+     */
+    campaignTool: {
+      type: Sequelize.STRING(100),
+      allowNull: true
+    },
+
+    /**
+     * JSON details about the campaing, will be used by other services
+     */
+    campaignDetails: {
+      type :Sequelize.STRING(300),
+      allowNull:true
+    },
+
+    /**
+     * JSON details about the user
+     */
+    userDetails: {
+      type: Sequelize.STRING(300),
       allowNull:true
     }
   },

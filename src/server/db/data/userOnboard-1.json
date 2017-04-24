@@ -1,0 +1,8 @@
+[
+  {
+    "userId": "supplier@example.com",
+    "serviceName": "eInvoiceSend",
+    "userDetails": "{\"email\":\"supplier@example.com\",\"firstName\":\"Bruce\",\"lastName\":\"Wayne\",\"campaignId\":\"ncc-sob-w1\"}",
+    "tradingPartnerDetails": "{\"name\":\"Test AG\",\"vatIdentNo\":\"DE72342359\",\"taxIdentNo\":\"123-343-12\",\"dunsNo\":\"12345\",\"commercialRegisterNo\":\"HRB 12873243\",\"city\":\"Hamburg\",\"country\":\"DE\"}"
+  }
+]
