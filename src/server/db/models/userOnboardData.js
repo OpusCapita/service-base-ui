@@ -2,7 +2,13 @@
 var Sequelize = require('sequelize');
 
 module.exports.init = function(db, config) {
-  const UserOnboardData = db.define('UserOnboardData', {
+  /**
+   * Data model representing a single user item.
+   * @class UserOnboardData
+   */
+  const UserOnboardData = db.define('UserOnboardData',
+  /** @lends UserOnboardData */
+  {
     /**
      * Unique identifier of the user
      */
