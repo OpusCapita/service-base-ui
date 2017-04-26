@@ -48,7 +48,6 @@ module.exports.init = function(app, db, config)
 module.exports.registerUser = function(req, res)
 {
   let userDetail = (req.query.userDetail) ? JSON.parse(req.query.userDetail) : {};
-  console.log('--->', req.query.serviceName ? req.query.serviceName : (userDetail ? userDetail.serviceName : ''));
   res.render('registration', {
     password: '',
     errMessage: '',
@@ -61,7 +60,6 @@ module.exports.registerUser = function(req, res)
 
 module.exports.postRegister = function(req, res)
 {
-  console.log('--->', req.body);
   var msg = {
     email: req.body.email,
     password: req.body.password,
