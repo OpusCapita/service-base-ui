@@ -16,8 +16,7 @@ const Promise = require('bluebird');
 module.exports.up = function(db, config)
 {
     var users = require('../data/user.json');
-
-    return Promise.all(users.map(user => db.models.User.upsert(user)))
+    return db.queryInterface.bulkInsert('User', users);
 }
 
 /**
@@ -32,6 +31,10 @@ module.exports.up = function(db, config)
 module.exports.down = function(db, config)
 {
     var userIds = [ 'scott.tiger@example.com', 'john.doe@ncc.com', 'supplier@example.com' ];
-
-    return Promise.all(userIds.map(userId => db.models.User.destroy({  where : { id : userId }})));
+    
+    return db.queryInterface.bulkDelete('User', {
+        id : {
+            $in : userIds
+        }
+    });
 }

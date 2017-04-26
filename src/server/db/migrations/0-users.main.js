@@ -15,70 +15,59 @@ const Promise = require('bluebird');
  */
 module.exports.up = function(db, config)
 {
-  const queryInterface = db.getQueryInterface();
-
-  return Promise.all([
-    queryInterface.createTable('User', {
-      /** Unique identifier usually concatenated of federation id ':' and user id to ensure unique user names. */
-      id : {
-          type : Sequelize.STRING(100),
-          allowNull : false,
-          primaryKey : true
-      },
-      /**  Id of the federation owning a user identity. */
-      federationId : {
-          type : Sequelize.STRING(50),
-          allowNull : false,
-          defaultValue : ''
-      },
-      /** Identifier of supplier a user is assigned to. */
-      supplierId : {
-          type : Sequelize.STRING(30),
-          allowNull : true
-      },
-      /** Identifier of customer a user is assigned to. */
-      customerId : {
-          type : Sequelize.STRING(30),
-          allowNull : true
-      },
-      /**  Representing the current lifecycle status of a user. */
-      status : {
-          type : Sequelize.STRING(100),
-          allowNull : false
-      },
-      /** Whenever to enable cross tenant access. */
-      mayChangeSupplier : {
-          type : Sequelize.BOOLEAN(),
-          allowNull : false,
-          defaultValue : false
-      },
-      /** Whenever to enable cross tenant access. */
-      mayChangeCustomer : {
-          type : Sequelize.BOOLEAN(),
-          allowNull : false,
-          defaultValue : false
-      },
-      createdBy : {
-          type : Sequelize.STRING(60),
-          allowNull : false,
-          defaultValue: 'Opuscapita user'
-      },
-      changedBy : {
-          type : Sequelize.STRING(60),
-          allowNull : false,
-          defaultValue : 'Opuscapita user'
-      },
-      createdOn : {
-          type : Sequelize.DATE(),
-          allowNull : false,
-          defaultValue : Sequelize.NOW
-      },
-      changedOn : {
-          type : Sequelize.DATE(),
-          allowNull : true
-      }
-    })
-  ]);
+    db.queryInterface.createTable('User', {
+        id: {
+            type: Sequelize.STRING(100),
+            allowNull: false,
+            primaryKey: true
+        },
+        federationId: {
+            type: Sequelize.STRING(50),
+            allowNull: false,
+            defaultValue: ''
+        },
+        supplierId: {
+            type: Sequelize.STRING(30),
+            allowNull: true
+        },
+        customerId: {
+            type: Sequelize.STRING(30),
+            allowNull: true
+        },
+        status: {
+            type: Sequelize.STRING(100),
+            allowNull: false
+        },
+        mayChangeSupplier: {
+            type: Sequelize.BOOLEAN(),
+            allowNull: false,
+            defaultValue: false
+        },
+        mayChangeCustomer: {
+            type: Sequelize.BOOLEAN(),
+            allowNull: false,
+            defaultValue: false
+        },
+        createdBy: {
+            type: Sequelize.STRING(60),
+            allowNull: false,
+            defaultValue: 'Opuscapita user'
+        },
+        changedBy: {
+            type: Sequelize.STRING(60),
+            allowNull: false,
+            defaultValue: 'Opuscapita user'
+        },
+        createdOn: {
+            type: Sequelize.DATE(),
+            allowNull: false,
+            defaultValue: Sequelize.NOW
+        },
+        changedOn: {
+            type: Sequelize.DATE(),
+            allowNull: true
+        }
+    });
 }
 
 /**
@@ -92,8 +81,5 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    var modelNames = [ 'User' ];
-    var qi = db.getQueryInterface();
-
-    return Promise.all(modelNames.map(key => qi.dropTable(db.models[key].getTableName())));
+    return db.queryInterface.dropTable('User');
 }

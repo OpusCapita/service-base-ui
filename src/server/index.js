@@ -19,7 +19,13 @@ db.init({
     server : {
         port : process.env.PORT || 3008,
         staticFilePath: __dirname + '/static',
-        middlewares: [require("express-ejs-layouts")]
+        middlewares: [ require("express-ejs-layouts") ]
+    },
+    serviceClient : {
+        injectIntoRequest : true,
+        consul : {
+            host : 'consul'
+        }
     }
 }))
 .then((app) => {

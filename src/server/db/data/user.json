@@ -1,5 +1,13 @@
 [
     {
+        "id" : "ocadmin",
+        "federationId" : "",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : true,
+        "mayChangeCustomer" : true,
+        "createdBy" : "the doctor"
+    },
+    {
         "id" : "scott.tiger@example.com",
         "federationId" : "",
         "supplierId" : "hard001",

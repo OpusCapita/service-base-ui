@@ -62,10 +62,8 @@ module.exports.init = function(db, config) {
     }
   },
    {
-      tableName: 'UserOnboardData',
       freezeTableName: true
-
-    });
+  });
 
   return Promise.resolve(UserOnboardData);
 };

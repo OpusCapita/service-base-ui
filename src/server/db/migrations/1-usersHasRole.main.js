@@ -1,10 +1,10 @@
 'use strict'
 
-const Sequelize = require('sequelize');
+const DataTypes = require('sequelize');
 const Promise = require('bluebird');
 
 /**
- * Inserts test data into existing database structures.
+ * Applies migrations for databse tables and data.
  * If all migrations were successul, this method will never be executed again.
  * To identify which migrations have successfully been processed, a migration's filename is used.
  *
@@ -15,10 +15,44 @@ const Promise = require('bluebird');
  */
 module.exports.up = function(db, config)
 {
-    var profiles = require('../data/userProfile.json');
-    profiles.forEach(profile => profile.createdOn = new Date());
-    
-    return db.queryInterface.bulkInsert('UserProfile', profiles);
+    return db.queryInterface.createTable('UserHasRole', {
+        userId : {
+            type : DataTypes.STRING(100),
+            allowNull : false,
+            primaryKey : true,
+            references : {
+                model : 'User',
+                key : 'id'
+            }
+        },
+        roleId : {
+            type : DataTypes.STRING(100),
+            allowNull : false,
+            primaryKey : true,
+            references : {
+                model : 'UserRole',
+                key : 'id'
+            }
+        },
+        createdBy : {
+            type : DataTypes.STRING(60),
+            allowNull : false
+        },
+        changedBy : {
+            type : DataTypes.STRING(60),
+            allowNull : false,
+            defaultValue : ''
+        },
+        createdOn : {
+            type : DataTypes.DATE(),
+            allowNull : false,
+            defaultValue : DataTypes.NOW
+        },
+        changedOn : {
+            type : DataTypes.DATE(),
+            allowNull : true
+        }
+    });
 }
 
 /**
@@ -32,11 +66,5 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    var userIds = [ 'scott.tiger@example.com', 'john.doe@ncc.com' ];
-
-    return db.queryInterface.bulkDelete('UserProfile', {
-        userId : {
-            $in : userIds
-        }
-    });
+    return db.queryInterface.dropTable('UserHasRole');
 }

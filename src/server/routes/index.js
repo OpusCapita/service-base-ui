@@ -5,9 +5,6 @@ const ServiceClient = require('ocbesbn-service-client');
 const Users = require('../api/users.js');
 const UserOnboardData = require('../api/userOnboardData.js');
 
-// client added
-const client = new ServiceClient({ consul : { host : 'consul' } });
-
 /**
  * Initializes all routes for RESTful access.
  *
@@ -20,9 +17,11 @@ const client = new ServiceClient({ consul : { host : 'consul' } });
 module.exports.init = function(app, db, config)
 {
     return Users.init(db, config)
-    .then(() => {
-      return UserOnboardData.init(db, config);
-    }).then(() =>
+    .then(() =>
+    {
+        return UserOnboardData.init(db, config);
+    })
+    .then(() =>
     {
         var self = this;
 
@@ -71,10 +70,6 @@ module.exports.postRegister = function(req, res)
     tradingPartnerDetails: req.body.tradingPartnerDetails || ''
   }
 
-  client.contextify({ headers : {
-    'x-api-token': req.headers['x-api-token']
-  } });
-
   function validateUser() {
     return new Promise((resolve, reject) => {
       Users.userExists(req.body.email).then((exists) => {
@@ -89,7 +84,7 @@ module.exports.postRegister = function(req, res)
 
   validateUser()
   .then(() => {
-    return client.post('kong', '/auth/credentials', {
+    return req.ocbesbn.serviceClient.post('kong', '/auth/credentials', {
       email: req.body.email,
       password: req.body.password
     });
@@ -137,11 +132,7 @@ module.exports.verifyRegister = function(req, res)
 
 module.exports.postVerifyRegister = function(req, res)
 {
-  client.contextify({ headers : {
-    'x-api-token': req.headers['x-api-token']
-  } });
-
-  client.post('kong', '/auth/credentials/verify/email', {
+  req.ocbesbn.serviceClient.post('kong', '/auth/credentials/verify/email', {
     email: req.body.email,
     code: req.body.code
   }).then(() => {
@@ -182,7 +173,7 @@ module.exports.updateUser = function(req, res)
             {
                 if(req.query.tokenUpdate == "true")
                 {
-                    return doUserCacheUpdate(user, req.headers).then(() =>  res.status('202').json(user))
+                    return doUserCacheUpdate(user, req.ocbesbn.serviceClient).then(() =>  res.status('202').json(user))
                         .catch(e => res.status('424').json({ message : e.message }))
                 }
                 else
@@ -211,7 +202,7 @@ module.exports.addOrUpdateUserProfile = function(req, res)
                 {
                     return Users.getUserProfile(req.params.id).then(user =>
                     {
-                        return doUserCacheUpdate(user, req.headers).then(() => res.status('202').json(profile))
+                        return doUserCacheUpdate(user, req.ocbesbn.serviceClient).then(() => res.status('202').json(profile))
                             .catch(e => res.status('424').json({ message : e.message }))
                     });
                 }
@@ -253,11 +244,9 @@ module.exports.sendUserProfile = function(req, res)
     });
 }
 
-function doUserCacheUpdate(userObj, requestHeaders)
+function doUserCacheUpdate(userObj, serviceClient)
 {
-    client.contextify({ headers : requestHeaders });
-
-    return client.post('kong', '/refreshIdToken', userObj);
+    return serviceClient.post('kong', '/refreshIdToken', userObj);
 }
 
 function checkContentType(req, res, next)
@@ -266,7 +255,7 @@ function checkContentType(req, res, next)
     var contentType = req.headers['content-type'] && req.headers['content-type'].toLowerCase();
 
     if(method !== 'get' && contentType !== 'application/json' && contentType !== 'application/x-www-form-urlencoded')
-        res.status(400).json({ message : 'Invalid content type. Has to be "application/json".' });
+        res.status(400).json({ message : 'Invalid content type. Has to be "application/json" or "application/x-www-form-urlencoded".' });
     else
         next();
 }

@@ -1,6 +1,6 @@
 'use strict'
 
-const Sequelize = require('sequelize');
+const DataTypes = require('sequelize');
 const Promise = require('bluebird');
 
 /**
@@ -15,110 +15,101 @@ const Promise = require('bluebird');
  */
 module.exports.up = function(db, config)
 {
-  const queryInterface = db.getQueryInterface();
-
-  return Promise.all([
-    queryInterface.createTable('UserProfile', {
-          /** Unique identifier usually concatenated of federation id ':' and user id to ensure unique user names. */
-          userId : {
-              type : Sequelize.STRING(100),
-              allowNull : false,
-              primaryKey : true
-          },
-          /** A user's email address. */
-          email : {
-              type : Sequelize.STRING(100),
-              allowNull : false
-          },
-          /** A user's language preference in as in ISO 639-1/2 */
-          languageId : {
-              type : Sequelize.STRING(3),
-              allowNull : false,
-              defaultValue : 'en'
-          },
-          /** A user's country preference in as in ISO 3166-1 alpha2 */
-          countryId : {
-              type : Sequelize.STRING(2),
-              allowNull : false,
-              defaultValue : 'EU'
-          },
-          /** Identifier of a user's time zone. */
-          timeZoneId : {
-              type : Sequelize.STRING(50),
-              allowNull : false,
-              defaultValue : 'CET'
-          },
-          salutation : {
-              type : Sequelize.STRING(20),
-              allowNull : false
-          },
-          firstName : {
-              type : Sequelize.STRING(50),
-              allowNull : false
-          },
-          lastName : {
-              type : Sequelize.STRING(50),
-              allowNull : false
-          },
-          birthday : {
-              type : Sequelize.DATE(),
-              allowNull : true
-          },
-          degree : {
-              type : Sequelize.STRING(20),
-              allowNull : false,
-              defaultValue : ''
-          },
-          phoneNo : {
-              type : Sequelize.STRING(20),
-              allowNull : false,
-              defaultValue : ''
-          },
-          faxNo : {
-              type : Sequelize.STRING(100),
-              allowNull : false,
-              defaultValue : ''
-          },
-          department : {
-              type : Sequelize.STRING(40),
-              allowNull : false,
-              defaultValue : ''
-          },
-          building : {
-              type : Sequelize.STRING(40),
-              allowNull : false,
-              defaultValue : ''
-          },
-          floor : {
-              type : Sequelize.STRING(40),
-              allowNull : false,
-              defaultValue : ''
-          },
-          room : {
-              type : Sequelize.STRING(40),
-              allowNull : false,
-              defaultValue : ''
-          },
-          createdBy : {
-              type : Sequelize.STRING(60),
-              allowNull : false
-          },
-          changedBy : {
-              type : Sequelize.STRING(60),
-              allowNull : false,
-              defaultValue : ''
-          },
-          createdOn : {
-              type : Sequelize.DATE(),
-              allowNull : false,
-              defaultValue : Sequelize.NOW
-          },
-          changedOn : {
-              type : Sequelize.DATE(),
-              allowNull : true
-          }
-    })
-  ]);
+    return db.queryInterface.createTable('UserProfile', {
+        userId: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+            primaryKey: true
+        },
+        email: {
+            type: DataTypes.STRING(100),
+            allowNull: false
+        },
+        languageId: {
+            type: DataTypes.STRING(3),
+            allowNull: false,
+            defaultValue: 'en'
+        },
+        countryId: {
+            type: DataTypes.STRING(2),
+            allowNull: false,
+            defaultValue: 'EU'
+        },
+        timeZoneId: {
+            type: DataTypes.STRING(50),
+            allowNull: false,
+            defaultValue: 'CET'
+        },
+        salutation: {
+            type: DataTypes.STRING(20),
+            allowNull: false
+        },
+        firstName: {
+            type: DataTypes.STRING(50),
+            allowNull: false
+        },
+        lastName: {
+            type: DataTypes.STRING(50),
+            allowNull: false
+        },
+        birthday: {
+            type: DataTypes.DATE(),
+            allowNull: true
+        },
+        degree: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+            defaultValue: ''
+        },
+        phoneNo: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+            defaultValue: ''
+        },
+        faxNo: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+            defaultValue: ''
+        },
+        department: {
+            type: DataTypes.STRING(40),
+            allowNull: false,
+            defaultValue: ''
+        },
+        building: {
+            type: DataTypes.STRING(40),
+            allowNull: false,
+            defaultValue: ''
+        },
+        floor: {
+            type: DataTypes.STRING(40),
+            allowNull: false,
+            defaultValue: ''
+        },
+        room: {
+            type: DataTypes.STRING(40),
+            allowNull: false,
+            defaultValue: ''
+        },
+        createdBy: {
+            type: DataTypes.STRING(60),
+            allowNull: false
+        },
+        changedBy: {
+            type: DataTypes.STRING(60),
+            allowNull: false,
+            defaultValue: ''
+        },
+        createdOn: {
+            type: DataTypes.DATE(),
+            allowNull: false,
+            defaultValue: DataTypes.NOW
+        },
+        changedOn: {
+            type: DataTypes.DATE(),
+            allowNull: true
+        }
+    });
 }
 
 /**
@@ -132,8 +123,5 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    var modelNames = [ 'UserProfile' ];
-    var qi = db.getQueryInterface();
-
-    return Promise.all(modelNames.map(key => qi.dropTable(db.models[key].getTableName())));
+    return db.queryInterface.dropTable('UserProfile');
 }
