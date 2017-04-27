@@ -24,7 +24,7 @@ module.exports.init = function(app, db, config)
     .then(() =>
     {
         this.events = new RedisEvents({ consul : { host : 'consul' } });
-
+        
         app.use(checkContentType);
 
         app.get('/register/verify/:email', (req, res) => this.verifyRegister(req, res));
@@ -91,12 +91,11 @@ module.exports.postRegister = function(req, res)
     });
   })
   .then((data) => {
-    let userData = req.body;
-
     return Users.addUser({
       id: req.body.email,
       status: 'emailVerification'
-    }, true);
+    }, true)
+    .then(user => this.events.emit(user, 'user.added'));
   })
   .then(() => {
     if(req.body.userDetails) {
@@ -163,7 +162,7 @@ module.exports.addUser = function(req, res)
         else
         {
             return Users.addUser(req.body, true)
-                .then(user => this.events.emit(user, 'user/added').then(() => user))
+                .then(user => this.events.emit(user, 'user.added').then(() => user))
                 .then(user => res.status('202').json(user));
         }
     })
@@ -180,12 +179,15 @@ module.exports.updateUser = function(req, res)
             {
                 if(req.query.tokenUpdate == "true")
                 {
-                    return doUserCacheUpdate(user, req.ocbesbn.serviceClient).then(() =>  res.status('202').json(user))
+                    return doUserCacheUpdate(user, req.ocbesbn.serviceClient)
+                        .then(() => this.events.emit(user, 'user.updated'))
+                        .then(() =>  res.status('202').json(user))
                         .catch(e => res.status('424').json({ message : e.message }))
                 }
                 else
                 {
-                    res.status('202').json(user);
+                    return this.events.emit(user, 'user.updated')
+                        .then(() => res.status('202').json(user));
                 }
             })
         }
@@ -209,13 +211,16 @@ module.exports.addOrUpdateUserProfile = function(req, res)
                 {
                     return Users.getUserProfile(req.params.id).then(user =>
                     {
-                        return doUserCacheUpdate(user, req.ocbesbn.serviceClient).then(() => res.status('202').json(profile))
+                        return doUserCacheUpdate(user, req.ocbesbn.serviceClient)
+                            .then(() => this.events.emit(profile, 'user/profile.updated'))
+                            .then(() => res.status('202').json(profile))
                             .catch(e => res.status('424').json({ message : e.message }))
                     });
                 }
                 else
                 {
-                    res.status('202').json(profile);
+                    return this.events.emit(profile, 'user/profile.updated')
+                        .then(() => res.status('202').json(profile));
                 }
             });
         }

@@ -19,7 +19,7 @@ module.exports.getUsers = function()
         user.dataValues.roles = user.UserRoles.map(role => role.id);
         delete user.dataValues.UserRoles;
 
-        return user;
+        return user.dataValues;
     });
 }
 
@@ -35,14 +35,14 @@ module.exports.getUser = function(userId)
             user.dataValues.roles = user.UserRoles.map(role => role.id);
             delete user.dataValues.UserRoles;
 
-            return user;
+            return user.dataValues;
         }
     });
 }
 
 module.exports.getUserProfile = function(userId)
 {
-    return this.db.models.UserProfile.findById(userId);
+    return this.db.models.UserProfile.findById(userId).then(profile => profile.dataValues);
 }
 
 module.exports.userExists = function(userId)
@@ -142,10 +142,10 @@ module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
 
 module.exports.getUserRoles = function()
 {
-    return this.db.models.UserRole.findAll();
+    return this.db.models.UserRole.findAll().map(role => role.dataValues);
 }
 
 module.exports.getUserRole = function(roleId)
 {
-    return this.db.models.UserRole.findById(roleId);
+    return this.db.models.UserRole.findById(roleId).then(role => role.dataValues);
 }
