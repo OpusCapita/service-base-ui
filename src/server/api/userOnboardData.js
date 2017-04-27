@@ -13,3 +13,8 @@ module.exports.create = function(data)
 {
     return this.db.models.UserOnboardData.create(data);
 }
+
+module.exports.find = function(id)
+{
+    return this.db.models.UserOnboardData.findById(id);
+}

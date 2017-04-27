@@ -24,7 +24,7 @@ module.exports.init = function(app, db, config)
     .then(() =>
     {
         this.events = new RedisEvents({ consul : { host : 'consul' } });
-        
+
         app.use(checkContentType);
 
         app.get('/register/verify/:email', (req, res) => this.verifyRegister(req, res));
@@ -32,6 +32,8 @@ module.exports.init = function(app, db, config)
 
         app.get('/register', (req, res) => this.registerUser(req, res));
         app.post('/register', (req, res) => this.postRegister(req, res));
+
+        app.get('/onboardData/:id', (req, res) => this.getOnboardData(req, res));
 
         app.get('/users', (req, res) => this.sendUsers(req, res));
         app.post('/users', (req, res) => this.addUser(req, res));
@@ -149,6 +151,24 @@ module.exports.postVerifyRegister = function(req, res)
     });
   })
 
+}
+
+module.exports.getOnboardData = function(req, res)
+{
+  UserOnboardData.find(req.params.id).then((userData) => {
+    if (userData) {
+    let onboardData = userData;
+      onboardData.userDetails = JSON.parse(userData.userDetails);
+      onboardData.campaignDetails = JSON.parse(userData.campaignDetails);
+      onboardData.tradingPartnerDetails = JSON.parse(userData.tradingPartnerDetails);
+
+      res.json(onboardData);
+    } else {
+      res.status(404).json({message: 'No record found'})
+    }
+  }).catch((err) => {
+    res.status(500).json({message: 'Unexpected error: ' + err});
+  });
 }
 
 module.exports.addUser = function(req, res)
