@@ -25,15 +25,18 @@ module.exports.getUsers = function()
 
 module.exports.getUser = function(userId)
 {
-    return this.db.models.User.findById(userId,{
+    return this.db.models.User.findById(userId, {
         include : this.db.models.UserRole
     })
     .then(user =>
     {
-        user.dataValues.roles = user.UserRoles.map(role => role.id);
-        delete user.dataValues.UserRoles;
+        if(user)
+        {
+            user.dataValues.roles = user.UserRoles.map(role => role.id);
+            delete user.dataValues.UserRoles;
 
-        return user;
+            return user;
+        }
     });
 }
 
@@ -135,4 +138,14 @@ module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
             throw new Error('A user with this ID does not exist.');
         }
     })
+}
+
+module.exports.getUserRoles = function()
+{
+    return this.db.models.UserRole.findAll();
+}
+
+module.exports.getUserRole = function(roleId)
+{
+    return this.db.models.UserRole.findById(roleId);
 }

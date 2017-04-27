@@ -41,6 +41,9 @@ module.exports.init = function(app, db, config)
 
         app.get('/users/:id/profile', (req, res) => self.sendUserProfile(req, res));
         app.put('/users/:id/profile', (req, res) => self.addOrUpdateUserProfile(req, res));
+
+        app.get('/roles', (req, res) => self.sendRoles(req, res));
+        app.get('/roles/:id', (req, res) => self.sendRole(req, res));
     });
 }
 
@@ -241,6 +244,22 @@ module.exports.sendUserProfile = function(req, res)
     Users.getUserProfile(req.params.id).then(profile =>
     {
         (profile && res.json(profile)) || res.status('404').json({ message : 'Profile does not exist!' });
+    });
+}
+
+module.exports.sendRoles = function(req, res)
+{
+    Users.getUserRoles().then(roles =>
+    {
+        res.json(roles);
+    });
+}
+
+module.exports.sendRole = function(req, res)
+{
+    Users.getUserRole(req.params.id).then(role =>
+    {
+        (role && res.json(role)) || res.status('404').json({ message : 'Role does not exist!' });
     });
 }
 

@@ -192,10 +192,10 @@ module.exports.init = function(db, config)
 
     /**
      * Data model representing a single user's profile.
-     * @class UserProfile
+     * @class UserRole
      */
     var UserRole = db.define('UserRole',
-    /** @lends UserProfile */
+    /** @lends UserRole */
     {
         id : {
             type : DataTypes.STRING(100),
@@ -228,10 +228,10 @@ module.exports.init = function(db, config)
 
     /**
      * Data model representing a single user's profile.
-     * @class UserProfile
+     * @class UserHasRole
      */
     var UserHasRole = db.define('UserHasRole',
-    /** @lends UserProfile */
+    /** @lends UserHasRole */
     {
         userId : {
             type : DataTypes.STRING(100),
