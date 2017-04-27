@@ -22,6 +22,7 @@ module.exports.up = function(db, config)
             assignedRoles.push({
                 userId : item.userId,
                 roleId : roleId,
+                createdBy : item.createdBy,
                 createdOn : new Date()
             })
         });

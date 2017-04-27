@@ -1,18 +1,22 @@
 [
     {
         "userId": "ocadmin",
-        "roleIds": ["xtenant"]
+        "roleIds": ["xtenant"],
+        "createdBy": "The Doctor"
     },
     {
         "userId": "scott.tiger@example.com",
-        "roleIds": ["admin", "user"]
+        "roleIds": ["admin", "user"],
+        "createdBy": "The Doctor"
     },
     {
         "userId": "john.doe@ncc.com",
-        "roleIds": ["user"]
+        "roleIds": ["user"],
+        "createdBy": "The Doctor"
     },
     {
         "userId": "supplier@example.com",
-        "roleIds": ["user", "supplier"]
+        "roleIds": ["user", "supplier"],
+        "createdBy": "The Doctor"
     }
 ]

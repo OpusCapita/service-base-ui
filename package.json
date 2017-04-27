@@ -21,6 +21,7 @@
     "express-ejs-layouts": "^2.3.0",
     "ocbesbn-config": "^2.2.5",
     "ocbesbn-db-init": "^1.1.7",
+    "ocbesbn-redis-events": "^1.0.3",
     "ocbesbn-service-client": "^1.0.1",
     "ocbesbn-web-init": "^1.1.3",
     "sequelize": "^3.24.7"
