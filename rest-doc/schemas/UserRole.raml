@@ -1,0 +1,22 @@
+type: object
+displayName: UserRole
+description: Object representing a user access role.
+
+properties:
+    id:
+        type: string
+        description: Unique identifier of a user security role.
+    createdBy:
+        type: string
+        description: Unique identifier of the user who created a data entry.
+    changedBy:
+        type: string
+        description: Unique identifier of the user who lastly changed a data entry.
+        required: false
+    createdOn:
+        type: string
+        description: Timestamp of the creation of a data entry.
+    changedOn:
+        type: string
+        description: Timestamp of the last change date of a data entry.
+        required: false

@@ -1,8 +1,5 @@
 'use strict'
 
-const Sequelize = require('sequelize');
-const Promise = require('bluebird');
-
 /**
  * Inserts test data into existing database structures.
  * If all migrations were successul, this method will never be executed again.
@@ -15,10 +12,22 @@ const Promise = require('bluebird');
  */
 module.exports.up = function(db, config)
 {
-    var profiles = require('../data/userProfile.json');
-    profiles.forEach(profile => profile.createdOn = new Date());
-    
-    return db.queryInterface.bulkInsert('UserProfile', profiles);
+    var data = require('../data/userHasRole.json');
+    var assignedRoles = [ ];
+
+    data.forEach(item =>
+    {
+        item.roleIds.forEach(roleId =>
+        {
+            assignedRoles.push({
+                userId : item.userId,
+                roleId : roleId,
+                createdOn : new Date()
+            })
+        });
+    })
+
+    return db.queryInterface.bulkInsert('UserHasRole', assignedRoles);
 }
 
 /**
@@ -32,10 +41,10 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    var userIds = [ 'scott.tiger@example.com', 'john.doe@ncc.com' ];
+    var userIds = require('../data/userHasRole.json').map(item => item.userId);
 
-    return db.queryInterface.bulkDelete('UserProfile', {
-        userId : {
+    return db.queryInterface.bulkDelete('UserHasRole', {
+        id : {
             $in : userIds
         }
     });

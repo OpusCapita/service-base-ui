@@ -1,0 +1,23 @@
+displayName: Roles
+description: Work with `UserRole` objects.
+get:
+    description: List of `UserRole` objects.
+    responses:
+        200:
+            body:
+                application/json:
+                    type: UserRoleArray
+/{id}:
+    uriParameters:
+        id:
+            type: string
+            description: Unique identifier of a user role.
+    get:
+        description: Returns a single `UserRole` object.
+        is:
+            - sendNotFound
+        responses:
+          200:
+            body:
+                application/json:
+                    type: UserRole
