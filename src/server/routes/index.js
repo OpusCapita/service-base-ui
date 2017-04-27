@@ -1,7 +1,7 @@
 'use strict'
 
 const Promise = require('bluebird');
-const ServiceClient = require('ocbesbn-service-client');
+const RedisEvents = require('ocbesbn-redis-events');
 const Users = require('../api/users.js');
 const UserOnboardData = require('../api/userOnboardData.js');
 
@@ -23,27 +23,27 @@ module.exports.init = function(app, db, config)
     })
     .then(() =>
     {
-        var self = this;
-
+        this.events = new RedisEvents({ consul : { host : 'consul' } });
+        
         app.use(checkContentType);
 
-        app.get('/register/verify/:email', (req, res) => self.verifyRegister(req, res));
-        app.post('/register/verify', (req, res) => self.postVerifyRegister(req, res));
+        app.get('/register/verify/:email', (req, res) => this.verifyRegister(req, res));
+        app.post('/register/verify', (req, res) => this.postVerifyRegister(req, res));
 
-        app.get('/register', (req, res) => self.registerUser(req, res));
-        app.post('/register', (req, res) => self.postRegister(req, res));
+        app.get('/register', (req, res) => this.registerUser(req, res));
+        app.post('/register', (req, res) => this.postRegister(req, res));
 
-        app.get('/users', (req, res) => self.sendUsers(req, res));
-        app.post('/users', (req, res) => self.addUser(req, res));
+        app.get('/users', (req, res) => this.sendUsers(req, res));
+        app.post('/users', (req, res) => this.addUser(req, res));
 
-        app.get('/users/:id', (req, res) => self.sendUser(req, res));
-        app.put('/users/:id', (req, res) => self.updateUser(req, res));
+        app.get('/users/:id', (req, res) => this.sendUser(req, res));
+        app.put('/users/:id', (req, res) => this.updateUser(req, res));
 
-        app.get('/users/:id/profile', (req, res) => self.sendUserProfile(req, res));
-        app.put('/users/:id/profile', (req, res) => self.addOrUpdateUserProfile(req, res));
+        app.get('/users/:id/profile', (req, res) => this.sendUserProfile(req, res));
+        app.put('/users/:id/profile', (req, res) => this.addOrUpdateUserProfile(req, res));
 
-        app.get('/roles', (req, res) => self.sendRoles(req, res));
-        app.get('/roles/:id', (req, res) => self.sendRole(req, res));
+        app.get('/roles', (req, res) => this.sendRoles(req, res));
+        app.get('/roles/:id', (req, res) => this.sendRole(req, res));
     });
 }
 
@@ -91,12 +91,11 @@ module.exports.postRegister = function(req, res)
     });
   })
   .then((data) => {
-    let userData = req.body;
-
     return Users.addUser({
       id: req.body.email,
       status: 'emailVerification'
-    }, true);
+    }, true)
+    .then(user => this.events.emit(user, 'user.added'));
   })
   .then(() => {
     if(req.body.userDetails) {
@@ -154,14 +153,18 @@ module.exports.postVerifyRegister = function(req, res)
 
 module.exports.addUser = function(req, res)
 {
-    var self = this;
-
     Users.userExists(req.body.id).then(exists =>
     {
         if(exists)
+        {
             res.status('409').json({ message : 'A user with this ID does already exist.' });
+        }
         else
-            return Users.addUser(req.body, true).then(user => res.status('202').json(user));
+        {
+            return Users.addUser(req.body, true)
+                .then(user => this.events.emit(user, 'user.added').then(() => user))
+                .then(user => res.status('202').json(user));
+        }
     })
     .catch(e => res.status('400').json({ message : e.message }));
 }
@@ -176,12 +179,15 @@ module.exports.updateUser = function(req, res)
             {
                 if(req.query.tokenUpdate == "true")
                 {
-                    return doUserCacheUpdate(user, req.ocbesbn.serviceClient).then(() =>  res.status('202').json(user))
+                    return doUserCacheUpdate(user, req.ocbesbn.serviceClient)
+                        .then(() => this.events.emit(user, 'user.updated'))
+                        .then(() =>  res.status('202').json(user))
                         .catch(e => res.status('424').json({ message : e.message }))
                 }
                 else
                 {
-                    res.status('202').json(user);
+                    return this.events.emit(user, 'user.updated')
+                        .then(() => res.status('202').json(user));
                 }
             })
         }
@@ -205,13 +211,16 @@ module.exports.addOrUpdateUserProfile = function(req, res)
                 {
                     return Users.getUserProfile(req.params.id).then(user =>
                     {
-                        return doUserCacheUpdate(user, req.ocbesbn.serviceClient).then(() => res.status('202').json(profile))
+                        return doUserCacheUpdate(user, req.ocbesbn.serviceClient)
+                            .then(() => this.events.emit(profile, 'user/profile.updated'))
+                            .then(() => res.status('202').json(profile))
                             .catch(e => res.status('424').json({ message : e.message }))
                     });
                 }
                 else
                 {
-                    res.status('202').json(profile);
+                    return this.events.emit(profile, 'user/profile.updated')
+                        .then(() => res.status('202').json(profile));
                 }
             });
         }
