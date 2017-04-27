@@ -20,7 +20,13 @@ module.exports.init = function(db, config) {
         notEmpty: true
       }
     },
-
+    /**
+     * Unique invitation code
+     */
+    invitationCode: {
+        type: Sequelize.UUID,
+        allowNull: true
+    },
     /**
      * details of trading partner
      */

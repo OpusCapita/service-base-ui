@@ -100,9 +100,11 @@ module.exports.postRegister = function(req, res)
   })
   .then(() => {
     if(req.body.userDetails) {
+      let userDetails = JSON.parse(req.body.userDetails);
       return UserOnboardData.create({
         userId: req.body.email || '',
         userDetails: req.body.userDetails || '',
+        invitationCode: userDetails.invitationCode || null,
         serviceName: req.body.serviceName || '',
         tradingPartnerDetails: req.body.tradingPartnerDetails || ''
       });
