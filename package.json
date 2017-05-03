@@ -23,7 +23,7 @@
     "ocbesbn-db-init": "^1.1.7",
     "ocbesbn-redis-events": "^1.0.3",
     "ocbesbn-service-client": "^1.0.1",
-    "ocbesbn-web-init": "^1.1.3",
+    "ocbesbn-web-init": "^1.1.4",
     "sequelize": "^3.24.7"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "test": "npm run clean ; npm run setup-consul ; ${NODE_PATH}/.bin/nyc ${NODE_PATH}/.bin/mocha --timeout 30000 --recursive -R mocha-junit-reporter",
     "test-raw": "npm run clean ; npm run setup-consul ; ${NODE_PATH}/.bin/nyc ${NODE_PATH}/.bin/mocha --timeout 30000 --recursive",
     "clean": "${NODE_PATH}/.bin/rimraf .nyc_output coverage test-results.xml",
-    "setup-consul": "curl -X PUT -d ${MYSQL_DATABASE} http://${HOST_IP}:8500/v1/kv/user/db-init/database ; curl -X PUT -d 'root' http://${HOST_IP}:8500/v1/kv/user/db-init/user ; curl -X PUT -d 'notSecureP455w0rd' http://${HOST_IP}:8500/v1/kv/user/db-init/password; curl -X PUT -d 'true' http://${HOST_IP}:8500/v1/kv/user/db-init/populate-test-data ",
+    "setup-consul": "curl -X PUT -d ${MYSQL_DATABASE} http://${HOST_IP}:8500/v1/kv/user/db-init/database ; curl -X PUT -d 'root' http://${HOST_IP}:8500/v1/kv/user/db-init/user ; curl -X PUT -d 'notSecureP455w0rd' http://${HOST_IP}:8500/v1/kv/user/db-init/password; curl -X PUT -d 'true' http://${HOST_IP}:8500/v1/kv/user/db-init/populate-test-data; curl -X PUT -d ${REDIS_AUTH} http://${HOST_IP}:8500/v1/kv/user/redis/password",
     "rest-doc": "mkdir -p wiki/rest-doc ; ${NODE_PATH}/.bin/raml2md -o file-per-resource -p wiki/rest-doc --output-ext=.endpoint.md rest-doc/main.raml",
     "domain-doc": "mkdir -p wiki/domain-doc ; ${NODE_PATH}/.bin/sq2md -o file-per-src -p wiki/domain-doc --init=init --field-bl=createdAt,updatedAt --output-ext=.model.md src/server/db/models",
     "doc": "npm run rest-doc ; npm run domain-doc"

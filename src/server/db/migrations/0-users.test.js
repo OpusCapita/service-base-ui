@@ -16,6 +16,8 @@ const Promise = require('bluebird');
 module.exports.up = function(db, config)
 {
     var users = require('../data/user.json');
+    users.forEach(user => user.createdOn = new Date());
+
     return db.queryInterface.bulkInsert('User', users);
 }
 
@@ -31,7 +33,7 @@ module.exports.up = function(db, config)
 module.exports.down = function(db, config)
 {
     var userIds = [ 'scott.tiger@example.com', 'john.doe@ncc.com', 'supplier@example.com' ];
-    
+
     return db.queryInterface.bulkDelete('User', {
         id : {
             $in : userIds
