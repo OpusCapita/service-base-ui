@@ -36,6 +36,9 @@ module.exports.init = function(app, db, config)
         app.get('/users', (req, res) => self.sendUsers(req, res));
         app.post('/users', (req, res) => self.addUser(req, res));
 
+        app.get('/onboardingdata/:invitationcode', (req, res) => self.sendOnboardingData(req, res));
+        app.post('/onboardingdata', (req, res) => self.addOnboardingData(req, res));
+
         app.get('/users/:id', (req, res) => self.sendUser(req, res));
         app.put('/users/:id', (req, res) => self.updateUser(req, res));
 
@@ -260,6 +263,36 @@ module.exports.sendRole = function(req, res)
     Users.getUserRole(req.params.id).then(role =>
     {
         (role && res.json(role)) || res.status('404').json({ message : 'Role does not exist!' });
+    });
+}
+
+module.exports.addOnboardingData = function(req, res)
+{
+    let userDetails = {
+        firstName: req.body.contactFirstName,
+        lastName: req.body.contactLastName,
+        email: req.body.email,
+        campaignId: req.body.campaignId
+    };
+    let tradingPartnerDetails = {
+        name: req.body.companyName,
+        vatIdentNo: req.body.vatIdentNo,
+        taxIdentNo: req.body.taxIdentNo,
+        dunsNo: req.body.dunsNo,
+        commercialRegisterNo: req.body.commercialRegisterNo,
+        city: req.body.city,
+        country: req.body.country
+    };
+    return UserOnboardData.create(userDetails, tradingPartnerDetails)
+        .then(onboardingdata => res.status('202').json(onboardingdata))
+        .catch(e => res.status('400').json({ message : e.message }));
+}
+
+module.exports.sendOnboardingData = function(req, res)
+{
+    UserOnboardData.findByInvitationCode(req.params.invitationcode).then(onboardingdata =>
+    {
+        (onboardingdata && res.json(onboardingdata)) || res.status('404').json({ message : 'Onboarding data does not exist!' });
     });
 }
 

@@ -9,7 +9,15 @@ module.exports.init = function(db, config)
     return Promise.resolve(this);
 }
 
-module.exports.create = function(data)
+module.exports.create = function(userDetails, tradingPartnerDetails)
 {
-    return this.db.models.UserOnboardData.create(data);
+    return this.db.models.UserOnboardData.create({
+        userDetails: JSON.stringify(userDetails),
+        tradingPartnerDetails: JSON.stringify(tradingPartnerDetails)
+    });
+}
+
+module.exports.findByInvitationCode = function(invitationCode)
+{
+    return this.db.models.UserOnboardData.findOne({where: {invitationCode: invitationCode}});
 }

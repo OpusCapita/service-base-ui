@@ -14,17 +14,14 @@ module.exports.init = function(db, config) {
      */
     userId: {
       type:Sequelize.STRING(100),
-      primaryKey: true,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      allowNull: true
     },
     /**
      * Unique invitation code
      */
     invitationCode: {
         type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         allowNull: true
     },
     /**
