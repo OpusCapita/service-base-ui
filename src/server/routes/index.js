@@ -33,12 +33,13 @@ module.exports.init = function(app, db, config)
         app.get('/register', (req, res) => this.registerUser(req, res));
         app.post('/register', (req, res) => this.postRegister(req, res));
 
-        app.get('/onboardData/:id', (req, res) => this.getOnboardData(req, res));
+        /* duplicate endpoint for backwards compatibility */
+        app.get(['/onboardData/:id', '/onboardingdata/:id'], (req, res) => this.getOnboardData(req, res));
 
-        app.get('/onboardingdata/:invitationcode', (req, res) => self.sendOnboardingData(req, res));
-        app.post('/onboardingdata', (req, res) => self.addOnboardingData(req, res));
+        app.get('/onboardingdata/:invitationcode', (req, res) => thus.sendOnboardingData(req, res));
+        app.post('/onboardingdata', (req, res) => this.addOnboardingData(req, res));
 
-app.get('/users', (req, res) => this.sendUsers(req, res));
+        app.get('/users', (req, res) => this.sendUsers(req, res));
         app.post('/users', (req, res) => this.addUser(req, res));
 
         app.get('/users/:id', (req, res) => this.sendUser(req, res));
@@ -55,14 +56,31 @@ app.get('/users', (req, res) => this.sendUsers(req, res));
 module.exports.registerUser = function(req, res)
 {
   let userDetail = (req.query.userDetail) ? JSON.parse(req.query.userDetail) : {};
-  res.render('registration', {
-    password: '',
-    errMessage: '',
-    email: userDetail.email || '',
-    serviceName: req.query.serviceName ? req.query.serviceName : (userDetail ? userDetail.serviceName : ''),
-    userDetails: req.query.userDetail || '',
-    tradingPartnerDetails: req.query.tradingPartnerDetails || ''
-  })
+  let invitationCode = req.query.invitationCode;
+
+  if (invitationCode) {
+      UserOnboardData.findByInvitationCode(invitationCode).then((onboardData) => {
+          let userDetails = JSON.parse(onboardData.userDetails);
+
+          res.render('registration', {
+              password: '',
+              errMessage: '',
+              email: userDetails.email || '',
+              serviceName: userDetails.serviceName || '',
+              userDetails: onboardData.userDetails || '',
+              tradingPartnerDetails: onboardData.tradingPartnerDetails || ''
+          })
+      })
+  } else {
+      res.render('registration', {
+          password: '',
+          errMessage: '',
+          email: userDetail.email || '',
+          serviceName: req.query.serviceName ? req.query.serviceName : (userDetail ? userDetail.serviceName : ''),
+          userDetails: req.query.userDetail || '',
+          tradingPartnerDetails: req.query.tradingPartnerDetails || ''
+      })
+  }
 }
 
 module.exports.postRegister = function(req, res)
