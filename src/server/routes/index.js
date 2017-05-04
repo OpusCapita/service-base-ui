@@ -33,7 +33,11 @@ module.exports.init = function(app, db, config)
         app.get('/register', (req, res) => this.registerUser(req, res));
         app.post('/register', (req, res) => this.postRegister(req, res));
 
-        app.get('/onboardData/:id', (req, res) => this.getOnboardData(req, res));
+        /* duplicate endpoint for backwards compatibility */
+        app.get(['/onboardData/:id', '/onboardingdata/:id'], (req, res) => this.getOnboardData(req, res));
+
+        app.get('/onboardingdata/:invitationcode', (req, res) => this.sendOnboardingData(req, res));
+        app.post('/onboardingdata', (req, res) => this.addOnboardingData(req, res));
 
         app.get('/users', (req, res) => this.sendUsers(req, res));
         app.post('/users', (req, res) => this.addUser(req, res));
@@ -52,14 +56,31 @@ module.exports.init = function(app, db, config)
 module.exports.registerUser = function(req, res)
 {
   let userDetail = (req.query.userDetail) ? JSON.parse(req.query.userDetail) : {};
-  res.render('registration', {
-    password: '',
-    errMessage: '',
-    email: userDetail.email || '',
-    serviceName: req.query.serviceName ? req.query.serviceName : (userDetail ? userDetail.serviceName : ''),
-    userDetails: req.query.userDetail || '',
-    tradingPartnerDetails: req.query.tradingPartnerDetails || ''
-  })
+  let invitationCode = req.query.invitationCode;
+
+  if (invitationCode) {
+      UserOnboardData.findByInvitationCode(invitationCode).then((onboardData) => {
+          let userDetails = JSON.parse(onboardData.userDetails);
+
+          res.render('registration', {
+              password: '',
+              errMessage: '',
+              email: userDetails.email || '',
+              serviceName: userDetails.serviceName || '',
+              userDetails: onboardData.userDetails || '',
+              tradingPartnerDetails: onboardData.tradingPartnerDetails || ''
+          })
+      })
+  } else {
+      res.render('registration', {
+          password: '',
+          errMessage: '',
+          email: userDetail.email || '',
+          serviceName: req.query.serviceName ? req.query.serviceName : (userDetail ? userDetail.serviceName : ''),
+          userDetails: req.query.userDetail || '',
+          tradingPartnerDetails: req.query.tradingPartnerDetails || ''
+      })
+  }
 }
 
 module.exports.postRegister = function(req, res)
@@ -289,6 +310,36 @@ module.exports.sendRole = function(req, res)
     Users.getUserRole(req.params.id).then(role =>
     {
         (role && res.json(role)) || res.status('404').json({ message : 'Role does not exist!' });
+    });
+}
+
+module.exports.addOnboardingData = function(req, res)
+{
+    let userDetails = {
+        firstName: req.body.contactFirstName,
+        lastName: req.body.contactLastName,
+        email: req.body.email,
+        campaignId: req.body.campaignId
+    };
+    let tradingPartnerDetails = {
+        name: req.body.companyName,
+        vatIdentNo: req.body.vatIdentNo,
+        taxIdentNo: req.body.taxIdentNo,
+        dunsNo: req.body.dunsNo,
+        commercialRegisterNo: req.body.commercialRegisterNo,
+        city: req.body.city,
+        country: req.body.country
+    };
+    return UserOnboardData.create(userDetails, tradingPartnerDetails)
+        .then(onboardingdata => res.status('202').json(onboardingdata))
+        .catch(e => res.status('400').json({ message : e.message }));
+}
+
+module.exports.sendOnboardingData = function(req, res)
+{
+    UserOnboardData.findByInvitationCode(req.params.invitationcode).then(onboardingdata =>
+    {
+        (onboardingdata && res.json(onboardingdata)) || res.status('404').json({ message : 'Onboarding data does not exist!' });
     });
 }
 
