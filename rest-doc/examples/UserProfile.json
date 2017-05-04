@@ -15,6 +15,7 @@
     "building": "",
     "floor": "1st",
     "room": "88",
+    "showWelcomePage": true,
     "createdBy": "the doctor",
     "changedBy": "",
     "createdOn": "2017-03-28T12:24:52.000Z",
