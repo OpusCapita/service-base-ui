@@ -36,7 +36,7 @@ module.exports.init = function(app, db, config)
         /* duplicate endpoint for backwards compatibility */
         app.get(['/onboardData/:id', '/onboardingdata/:id'], (req, res) => this.getOnboardData(req, res));
 
-        app.get('/onboardingdata/:invitationcode', (req, res) => thus.sendOnboardingData(req, res));
+        app.get('/onboardingdata/:invitationcode', (req, res) => this.sendOnboardingData(req, res));
         app.post('/onboardingdata', (req, res) => this.addOnboardingData(req, res));
 
         app.get('/users', (req, res) => this.sendUsers(req, res));
