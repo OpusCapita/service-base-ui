@@ -19,10 +19,8 @@ module.exports.up = function(db, config)
 
   // Load data.
   const userOnboardData = require(path + '/userOnboard.json');
-  // Get database models.
-  const UserOnboard = db.models.UserOnboardData;
 
-  return Promise.all(userOnboardData.map(cur => UserOnboard.upsert(cur)));
+  return db.queryInterface.bulkInsert('UserOnboardData', userOnboardData);
 }
 
 /**
@@ -36,5 +34,11 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-  return Promise.all(db.models.UserOnboardData.destroy({ truncate: true }));
+  const userOnboardData = require(path + '/userOnboard.json').map(data => ({ userId : data.userId }));
+
+  return db.queryInterface.bulkDelete('UserOnboardData', {
+      id : {
+          $in : userIds
+      }
+  })
 }

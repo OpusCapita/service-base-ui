@@ -22,7 +22,7 @@ module.exports.up = function(db, config)
   // Get database models.
   const UserOnboard = db.models.UserOnboardData;
 
-  return Promise.all(userOnboardData.map(cur => UserOnboard.upsert(cur)));
+  return Promise.all(userOnboardData.map(cur => UserOnboard.update(cur, { where : { userId : cur.userId } })));
 }
 
 /**
@@ -36,5 +36,5 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-  return Promise.all(db.models.UserOnboardData.destroy({ truncate: true }));
+  return Promise.resolve();
 }
