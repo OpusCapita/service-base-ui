@@ -1,10 +1,10 @@
 'use strict'
 
+const DataTypes = require('sequelize');
 const Promise = require('bluebird');
-const pathjs = require('path');
 
 /**
- * Inserts test data into existing database structures.
+ * Applies migrations for databse tables and data.
  * If all migrations were successul, this method will never be executed again.
  * To identify which migrations have successfully been processed, a migration's filename is used.
  *
@@ -15,14 +15,12 @@ const pathjs = require('path');
  */
 module.exports.up = function(db, config)
 {
-  const path = pathjs.resolve(__dirname + '/../data');
-
-  // Load data.
-  const userOnboardData = require(path + '/userOnboard-1.json');
-  // Get database models.
-  const UserOnboard = db.models.UserOnboardData;
-
-  return Promise.all(userOnboardData.map(cur => UserOnboard.update(cur, { where : { userId : cur.userId } })));
+    return db.queryInterface.addColumn('UserProfile', 'showWelcomePage', {
+        type : DataTypes.BOOLEAN(),
+        allowNull : false,
+        defaultValue : true,
+        after : 'room'
+    });
 }
 
 /**
@@ -36,5 +34,5 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-  return Promise.resolve();
+    return db.queryInterface.dropColumn('UserProfile', 'showWelcomePage');
 }

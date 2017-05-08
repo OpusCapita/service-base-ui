@@ -166,6 +166,11 @@ module.exports.init = function(db, config)
             allowNull : false,
             defaultValue : ''
         },
+        showWelcomePage : {
+            type : DataTypes.BOOLEAN(),
+            allowNull : false,
+            defaultValue : true
+        },
         createdBy : {
             type : DataTypes.STRING(60),
             allowNull : false
