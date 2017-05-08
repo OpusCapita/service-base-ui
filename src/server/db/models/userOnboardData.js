@@ -28,7 +28,7 @@ module.exports.init = function(db, config) {
      * details of trading partner
      */
     tradingPartnerDetails: {
-      type:Sequelize.STRING(300),
+      type: Sequelize.TEXT('medium'),
       allowNull:true
     },
 
@@ -52,7 +52,7 @@ module.exports.init = function(db, config) {
      * JSON details about the campaing, will be used by other services
      */
     campaignDetails: {
-      type :Sequelize.STRING(300),
+        type: Sequelize.STRING(300),
       allowNull:true
     },
 
@@ -60,7 +60,7 @@ module.exports.init = function(db, config) {
      * JSON details about the user
      */
     userDetails: {
-      type: Sequelize.STRING(300),
+      type: Sequelize.TEXT('medium'),
       allowNull:true
     }
   },
