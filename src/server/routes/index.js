@@ -60,16 +60,21 @@ module.exports.registerUser = function(req, res)
 
   if (invitationCode) {
       UserOnboardData.findByInvitationCode(invitationCode).then((onboardData) => {
-          let userDetails = JSON.parse(onboardData.userDetails);
+          if (!onboardData) {
+            let msg = {errMessage: "No invitation found."};
+            res.render('registration', msg);
+          } else {
+              let userDetails = JSON.parse(onboardData.userDetails);
 
-          res.render('registration', {
-              password: '',
-              errMessage: '',
-              email: userDetails.email || '',
-              serviceName: userDetails.serviceName || '',
-              userDetails: onboardData.userDetails || '',
-              tradingPartnerDetails: onboardData.tradingPartnerDetails || ''
-          })
+              res.render('registration', {
+                  password: '',
+                  errMessage: '',
+                  email: userDetails.email || '',
+                  serviceName: userDetails.serviceName || '',
+                  userDetails: onboardData.userDetails || '',
+                  tradingPartnerDetails: onboardData.tradingPartnerDetails || ''
+              })
+          }
       })
   } else {
       res.render('registration', {
