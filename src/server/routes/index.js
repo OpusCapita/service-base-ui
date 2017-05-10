@@ -34,7 +34,7 @@ module.exports.init = function(app, db, config)
         app.post('/register', (req, res) => this.postRegister(req, res));
 
         /* duplicate endpoint for backwards compatibility */
-        app.get(['/onboardData/:id', '/onboardingdata/:id'], (req, res) => this.getOnboardData(req, res));
+        app.get(['/onboardData/:userId', '/onboardingdata/:userId'], (req, res) => this.getOnboardData(req, res));
 
         app.get('/onboardingdata/:invitationcode', (req, res) => this.sendOnboardingData(req, res));
         app.post('/onboardingdata', (req, res) => this.addOnboardingData(req, res));
@@ -130,7 +130,7 @@ module.exports.postRegister = function(req, res)
       return UserOnboardData.findByInvitationCode(req.query.invitationCode)
       .then((onboardData) => {
           if (onboardData) {
-              return onboardData.update({userId: req.body.email});
+              return UserOnboardData.update(req.body.email, onboardData);
           }
       })
     } else if(req.body.userDetails) {
@@ -189,7 +189,7 @@ module.exports.postVerifyRegister = function(req, res)
 
 module.exports.getOnboardData = function(req, res)
 {
-  UserOnboardData.find(req.params.id).then((userData) => {
+  UserOnboardData.find(req.params.userId).then((userData) => {
     if (userData) {
     let onboardData = userData;
       onboardData.userDetails = JSON.parse(userData.userDetails);
