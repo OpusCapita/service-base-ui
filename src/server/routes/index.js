@@ -130,7 +130,7 @@ module.exports.postRegister = function(req, res)
       return UserOnboardData.findByInvitationCode(req.query.invitationCode)
       .then((onboardData) => {
           if (onboardData) {
-              return onboardData.update({userId: req.body.email});
+              return UserOnboardData.update(req.body.email, onboardData);
           }
       })
     } else if(req.body.userDetails) {

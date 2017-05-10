@@ -26,3 +26,8 @@ module.exports.find = function(id)
 {
     return this.db.models.UserOnboardData.findById(id);
 }
+
+module.exports.update = function(userId, data)
+{
+    return this.db.models.UserOnboardData.update(data.dataValues || data, {userId: userId});
+}
