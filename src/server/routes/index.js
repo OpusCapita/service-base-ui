@@ -126,7 +126,14 @@ module.exports.postRegister = function(req, res)
     .then(user => this.events.emit(user, 'user.added'));
   })
   .then(() => {
-    if(req.body.userDetails) {
+    if (req.query.invitationCode) {
+      return UserOnboardData.findByInvitationCode(req.query.invitationCode)
+      .then((onboardData) => {
+          if (onboardData) {
+              return UserOnboardData.update(req.body.email, onboardData);
+          }
+      })
+    } else if(req.body.userDetails) {
       let userDetails = JSON.parse(req.body.userDetails);
       return UserOnboardData.create({
         userId: req.body.email || '',
@@ -135,8 +142,9 @@ module.exports.postRegister = function(req, res)
         serviceName: req.body.serviceName || '',
         tradingPartnerDetails: req.body.tradingPartnerDetails || ''
       });
+    } else {
+      return new Promise.resolve();
     }
-    return new Promise.resolve();
   })
   .then(() => {
     res.redirect('/user/register/verify/' + req.body.email);
