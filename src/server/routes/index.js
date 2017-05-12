@@ -42,22 +42,20 @@ module.exports.init = function(app, db, config)
         app.get('/users', (req, res) => this.sendUsers(req, res));
         app.post('/users', (req, res) => this.addUser(req, res));
 
-        app.get('/users/current', (req, res) => this.sendUser(req, res, req.ocbesbn.userData('id')));
+        app.get('/users/current', (req, res) => this.sendUser(req, res, true));
         app.get('/users/:id', (req, res) => this.sendUser(req, res));
 
-        app.put('/users/current', (req, res) => this.updateUser(req, res, req.ocbesbn.userData('id')));
+        app.put('/users/current', (req, res) => this.updateUser(req, res, true));
         app.put('/users/:id', (req, res) => this.updateUser(req, res));
 
-        app.get('/users/current/profile', (req, res) => this.sendUserProfile(req, res, req.ocbesbn.userData('id')));
+        app.get('/users/current/profile', (req, res) => this.sendUserProfile(req, res, true));
         app.get('/users/:id/profile', (req, res) => this.sendUserProfile(req, res));
 
-        app.put('/users/current/profile', (req, res) => this.addOrUpdateUserProfile(req, res, req.ocbesbn.userData('id')));
+        app.put('/users/current/profile', (req, res) => this.addOrUpdateUserProfile(req, res, true));
         app.put('/users/:id/profile', (req, res) => this.addOrUpdateUserProfile(req, res));
 
         app.get('/roles', (req, res) => this.sendRoles(req, res));
         app.get('/roles/:id', (req, res) => this.sendRole(req, res));
-
-        app.get('/test', (req, res) => res.json(req.ocbesbn.userData('id')));
     });
 }
 
@@ -233,9 +231,9 @@ module.exports.addUser = function(req, res)
     .catch(e => res.status('400').json({ message : e.message }));
 }
 
-module.exports.updateUser = function(req, res, userIdOverride)
+module.exports.updateUser = function(req, res, useCurrentUser)
 {
-    var userId = userIdOverride || req.params.id;
+    var userId = useCurrentUser ? req.ocbesbn.userData('id') : req.params.id;
 
     Users.userExists(userId).then(exists =>
     {
@@ -265,9 +263,9 @@ module.exports.updateUser = function(req, res, userIdOverride)
     .catch(e => res.status('400').json({ message : e.message }));
 }
 
-module.exports.addOrUpdateUserProfile = function(req, res, userIdOverride)
+module.exports.addOrUpdateUserProfile = function(req, res, useCurrentUser)
 {
-    var userId = userIdOverride || req.params.id;
+    var userId = useCurrentUser ? req.ocbesbn.userData('id') : req.params.id;
 
     Users.userExists(userId).then(exists =>
     {
@@ -312,17 +310,21 @@ module.exports.sendUsers = function(req, res)
     Users.getUsers(searchObj).then(users => res.json(users));
 }
 
-module.exports.sendUser = function(req, res, userIdOverride)
+module.exports.sendUser = function(req, res, useCurrentUser)
 {
-    Users.getUser(userIdOverride || req.params.id).then(user =>
+    var userId = useCurrentUser ? req.ocbesbn.userData('id') : req.params.id;
+
+    Users.getUser(userId).then(user =>
     {
         (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
     });
 }
 
-module.exports.sendUserProfile = function(req, res, userIdOverride)
+module.exports.sendUserProfile = function(req, res, useCurrentUser)
 {
-    Users.getUserProfile(userIdOverride || req.params.id).then(profile =>
+    var userId = useCurrentUser ? req.ocbesbn.userData('id') : req.params.id;
+
+    Users.getUserProfile(userId).then(profile =>
     {
         (profile && res.json(profile)) || res.status('404').json({ message : 'Profile does not exist!' });
     });
