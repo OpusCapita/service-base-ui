@@ -45,14 +45,14 @@ module.exports.init = function(app, db, config)
         app.get('/users/:id', (req, res) => this.sendUser(req, res));
         app.get('/users/current', (req, res) => this.sendUser(req, res, req.ocbesbn.userData('id')));
 
-        app.put('/users/:id', (req, res) => this.updateUser(req, res));
         app.put('/users/current', (req, res) => this.updateUser(req, res, req.ocbesbn.userData('id')));
+        app.put('/users/:id', (req, res) => this.updateUser(req, res));
 
-        app.get('/users/:id/profile', (req, res) => this.sendUserProfile(req, res));
         app.get('/users/current/profile', (req, res) => this.sendUserProfile(req, res, req.ocbesbn.userData('id')));
+        app.get('/users/:id/profile', (req, res) => this.sendUserProfile(req, res));
 
-        app.put('/users/:id/profile', (req, res) => this.addOrUpdateUserProfile(req, res));
         app.put('/users/current/profile', (req, res) => this.addOrUpdateUserProfile(req, res, req.ocbesbn.userData('id')));
+        app.put('/users/:id/profile', (req, res) => this.addOrUpdateUserProfile(req, res));
 
         app.get('/roles', (req, res) => this.sendRoles(req, res));
         app.get('/roles/:id', (req, res) => this.sendRole(req, res));
