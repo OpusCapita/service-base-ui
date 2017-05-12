@@ -57,7 +57,7 @@ module.exports.init = function(app, db, config)
         app.get('/roles', (req, res) => this.sendRoles(req, res));
         app.get('/roles/:id', (req, res) => this.sendRole(req, res));
 
-        app.get('/test', (req, res) => res.json(req.ocbesbn.userData()));
+        app.get('/test', (req, res) => res.json(req.ocbesbn.userData('id')));
     });
 }
 
