@@ -43,10 +43,16 @@ module.exports.init = function(app, db, config)
         app.post('/users', (req, res) => this.addUser(req, res));
 
         app.get('/users/:id', (req, res) => this.sendUser(req, res));
+        app.get('/users/current', (req, res) => this.sendUser(req, res, req.ocbesbn.userData('id')));
+
         app.put('/users/:id', (req, res) => this.updateUser(req, res));
+        app.put('/users/current', (req, res) => this.updateUser(req, res, req.ocbesbn.userData('id')));
 
         app.get('/users/:id/profile', (req, res) => this.sendUserProfile(req, res));
+        app.get('/users/current/profile', (req, res) => this.sendUserProfile(req, res, req.ocbesbn.userData('id')));
+
         app.put('/users/:id/profile', (req, res) => this.addOrUpdateUserProfile(req, res));
+        app.put('/users/current/profile', (req, res) => this.addOrUpdateUserProfile(req, res, req.ocbesbn.userData('id')));
 
         app.get('/roles', (req, res) => this.sendRoles(req, res));
         app.get('/roles/:id', (req, res) => this.sendRole(req, res));
@@ -225,13 +231,15 @@ module.exports.addUser = function(req, res)
     .catch(e => res.status('400').json({ message : e.message }));
 }
 
-module.exports.updateUser = function(req, res)
+module.exports.updateUser = function(req, res, userIdOverride)
 {
-    Users.userExists(req.params.id).then(exists =>
+    var userId = userIdOverride || req.params.id;
+
+    Users.userExists(userId).then(exists =>
     {
         if(exists)
         {
-            return Users.updateUser(req.params.id, req.body, true).then(user =>
+            return Users.updateUser(userId, req.body, true).then(user =>
             {
                 if(req.query.tokenUpdate == "true")
                 {
@@ -255,17 +263,19 @@ module.exports.updateUser = function(req, res)
     .catch(e => res.status('400').json({ message : e.message }));
 }
 
-module.exports.addOrUpdateUserProfile = function(req, res)
+module.exports.addOrUpdateUserProfile = function(req, res, userIdOverride)
 {
-    Users.userExists(req.params.id).then(exists =>
+    var userId = userIdOverride || req.params.id;
+
+    Users.userExists(userId).then(exists =>
     {
         if(exists)
         {
-            return Users.addOrUpdateUserProfile(req.params.id, req.body, true).then(profile =>
+            return Users.addOrUpdateUserProfile(userId, req.body, true).then(profile =>
             {
                 if(req.query.tokenUpdate == "true")
                 {
-                    return Users.getUserProfile(req.params.id).then(user =>
+                    return Users.getUserProfile(userId).then(user =>
                     {
                         return doUserCacheUpdate(user, req.ocbesbn.serviceClient)
                             .then(() => this.events.emit(profile, 'user/profile.updated'))
@@ -290,23 +300,27 @@ module.exports.addOrUpdateUserProfile = function(req, res)
 
 module.exports.sendUsers = function(req, res)
 {
-    Users.getUsers().then(users =>
-    {
-        res.json(users);
-    });
+    var searchObj = { };
+
+    if(req.query.customerId)
+        searchObj.customerId = req.query.customerId;
+    if(req.query.supplierId)
+        searchObj.supplierId = req.query.supplierId;
+
+    Users.getUsers(searchObj).then(users => res.json(users));
 }
 
-module.exports.sendUser = function(req, res)
+module.exports.sendUser = function(req, res, userIdOverride)
 {
-    Users.getUser(req.params.id).then(user =>
+    Users.getUser(userIdOverride || req.params.id).then(user =>
     {
         (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
     });
 }
 
-module.exports.sendUserProfile = function(req, res)
+module.exports.sendUserProfile = function(req, res, userIdOverride)
 {
-    Users.getUserProfile(req.params.id).then(profile =>
+    Users.getUserProfile(userIdOverride || req.params.id).then(profile =>
     {
         (profile && res.json(profile)) || res.status('404').json({ message : 'Profile does not exist!' });
     });

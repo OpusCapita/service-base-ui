@@ -9,10 +9,15 @@ module.exports.init = function(db, config)
     return Promise.resolve(this);
 }
 
-module.exports.getUsers = function()
+module.exports.getUsers = function(searchObj)
 {
+    for(var key in searchObj)
+        if(Array.isArray(searchObj[key]))
+            searchObj[key] = { '$in' : searchObj[key] };
+
     return this.db.models.User.findAll({
-        include : this.db.models.UserRole
+        include : this.db.models.UserRole,
+        where : searchObj
     })
     .map(user =>
     {
@@ -42,7 +47,7 @@ module.exports.getUser = function(userId)
 
 module.exports.getUserProfile = function(userId)
 {
-    return this.db.models.UserProfile.findById(userId).then(profile => profile.dataValues);
+    return this.db.models.UserProfile.findById(userId).then(profile => profile && profile.dataValues);
 }
 
 module.exports.userExists = function(userId)
@@ -124,14 +129,25 @@ module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
 {
     [ 'userId', 'createdOn', 'updatedOn', 'updatedBy' ].forEach(key => delete profile[key]);
 
-    profile.userId = userId;
-
     return this.userExists(userId).then(exists =>
     {
         if(exists)
         {
-            return this.db.models.UserProfile.upsert(profile)
-                .then(() => returnProfile ? this.getUserProfile(userId) : userId);
+            return this.getUserProfile(userId).then(p =>
+            {
+                if(p)
+                {
+                    return this.db.models.UserProfile.update(profile,  { where : { userId : userId } })
+                        .then(() => returnProfile ? this.getUserProfile(userId) : userId);
+                }
+                else
+                {
+                    profile.userId = userId;
+
+                    return this.db.models.UserProfile.insert(profile)
+                        .then(() => returnProfile ? this.getUserProfile(userId) : userId);
+                }
+            });
         }
         else
         {
@@ -147,5 +163,5 @@ module.exports.getUserRoles = function()
 
 module.exports.getUserRole = function(roleId)
 {
-    return this.db.models.UserRole.findById(roleId).then(role => role.dataValues);
+    return this.db.models.UserRole.findById(roleId).then(role => role && role.dataValues);
 }
