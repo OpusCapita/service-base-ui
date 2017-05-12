@@ -42,7 +42,10 @@ module.exports.init = function(app, db, config)
         app.get('/users', (req, res) => this.sendUsers(req, res));
         app.post('/users', (req, res) => this.addUser(req, res));
 
-        app.get('/users/current', (req, res) => this.sendUser(req, res, true));
+        app.get('/users/current', (req, res) => {
+            req.ocbesbn.userData = blupp => 'scott.tiger@example.com';
+            this.sendUser(req, res, true)
+        });
         app.get('/users/:id', (req, res) => this.sendUser(req, res));
 
         app.put('/users/current', (req, res) => this.updateUser(req, res, true));
