@@ -42,10 +42,7 @@ module.exports.init = function(app, db, config)
         app.get('/users', (req, res) => this.sendUsers(req, res));
         app.post('/users', (req, res) => this.addUser(req, res));
 
-        app.get('/users/current', (req, res) => {
-            req.ocbesbn.userData = blupp => 'scott.tiger@example.com';
-            this.sendUser(req, res, true)
-        });
+        app.get('/users/current', (req, res) => this.sendUser(req, res, true));
         app.get('/users/:id', (req, res) => this.sendUser(req, res));
 
         app.put('/users/current', (req, res) => this.updateUser(req, res, true));
@@ -317,10 +314,17 @@ module.exports.sendUser = function(req, res, useCurrentUser)
 {
     var userId = useCurrentUser ? req.ocbesbn.userData('id') : req.params.id;
 
-    Users.getUser(userId).then(user =>
+    if(useCurrentUser)
     {
-        (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
-    });
+        res.json({ userId : userId, data : req.ocbesbn.userData() });
+    }
+    else
+    {
+        Users.getUser(userId).then(user =>
+        {
+            (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
+        });
+    }
 }
 
 module.exports.sendUserProfile = function(req, res, useCurrentUser)
