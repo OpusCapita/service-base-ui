@@ -42,8 +42,8 @@ module.exports.init = function(app, db, config)
         app.get('/users', (req, res) => this.sendUsers(req, res));
         app.post('/users', (req, res) => this.addUser(req, res));
 
-        app.get('/users/:id', (req, res) => this.sendUser(req, res));
         app.get('/users/current', (req, res) => this.sendUser(req, res, req.ocbesbn.userData('id')));
+        app.get('/users/:id', (req, res) => this.sendUser(req, res));
 
         app.put('/users/current', (req, res) => this.updateUser(req, res, req.ocbesbn.userData('id')));
         app.put('/users/:id', (req, res) => this.updateUser(req, res));
@@ -56,6 +56,8 @@ module.exports.init = function(app, db, config)
 
         app.get('/roles', (req, res) => this.sendRoles(req, res));
         app.get('/roles/:id', (req, res) => this.sendRole(req, res));
+
+        app.get('/test', (req, res) => res.json(req.ocbesbn.userData()));
     });
 }
 
