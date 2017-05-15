@@ -316,7 +316,7 @@ module.exports.sendUser = function(req, res, useCurrentUser)
 
     if(useCurrentUser)
     {
-        res.json({ userId : userId, data : req.ocbesbn.userData() });
+        res.json({ test : true, userId : userId, data : req.ocbesbn.userData() });
     }
     else
     {
