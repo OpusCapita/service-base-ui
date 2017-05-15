@@ -57,10 +57,7 @@ module.exports.userExists = function(userId)
 
 module.exports.addUser = function(user, returnUser)
 {
-    var roles = (user.roles && user.roles.map(roleId =>
-    {
-        return { userId : user.id, roleId : roleId, createdBy : user.createdBy };
-    })) || [ ];
+    var roles = (user.roles && user.roles.map(roleId => ({ userId : user.id, roleId : roleId, createdBy : user.createdBy }))) || [ ];
 
     delete user.createdOn;
     delete user.updatedOn;

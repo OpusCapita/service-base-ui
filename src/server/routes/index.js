@@ -1,6 +1,7 @@
 'use strict'
 
 const Promise = require('bluebird');
+const extend = require('extend');
 const RedisEvents = require('ocbesbn-redis-events');
 const Users = require('../api/users.js');
 const UserOnboardData = require('../api/userOnboardData.js');
@@ -129,7 +130,15 @@ module.exports.postRegister = function(req, res)
       id: req.body.email,
       status: 'emailVerification'
     }, true)
-    .then(user => this.events.emit(user, 'user.added'));
+    .then(user => {
+        UserOnboardData.findByUserId(req.body.email).then((data) => {
+            return (data && data.invitationCode) || req.query.invitationCode;
+        })
+        .then(invitationCode => {
+            var eventUserObj = extend(true, {}, user, {invitationCode: invitationCode});
+            return this.events.emit(eventUserObj, 'user.added');
+        });
+    });
   })
   .then(() => {
     if (req.query.invitationCode) {
@@ -223,9 +232,18 @@ module.exports.addUser = function(req, res)
         }
         else
         {
-            return Users.addUser(req.body, true)
-                .then(user => this.events.emit(user, 'user.added').then(() => user))
-                .then(user => res.status('202').json(user));
+            return Promise.all([
+                Users.addUser(req.body, true),
+                UserOnboardData.findByUserId(req.body.id)
+            ])
+            .spread((user, data) =>
+            {
+                var invitationCode = (data && data.invitationCode);
+                var eventUserObj = extend(true, { }, user, { invitationCode : invitationCode });
+
+                return this.events.emit(eventUserObj, 'user.added').then(() => user);
+            })
+            .then(user => res.status('202').json(user));
         }
     })
     .catch(e => res.status('400').json({ message : e.message }));

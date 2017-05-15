@@ -22,6 +22,11 @@ module.exports.findByInvitationCode = function(invitationCode)
     return this.db.models.UserOnboardData.findOne({where: {invitationCode: invitationCode}});
 }
 
+module.exports.findByUserId = function(userId)
+{
+    return this.db.models.UserOnboardData.findOne({where: {userId: userId}});
+}
+
 module.exports.find = function(userId)
 {
     return this.db.models.UserOnboardData.findOne({where: {userId: userId} });
