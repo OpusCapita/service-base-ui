@@ -314,17 +314,10 @@ module.exports.sendUser = function(req, res, useCurrentUser)
 {
     var userId = useCurrentUser ? req.ocbesbn.userData('id') : req.params.id;
 
-    if(useCurrentUser)
+    Users.getUser(userId).then(user =>
     {
-        res.json({ test : true, userId : userId, data : req.ocbesbn.userData() });
-    }
-    else
-    {
-        Users.getUser(userId).then(user =>
-        {
-            (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
-        });
-    }
+        (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
+    });
 }
 
 module.exports.sendUserProfile = function(req, res, useCurrentUser)
