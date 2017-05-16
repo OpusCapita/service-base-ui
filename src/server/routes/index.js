@@ -120,7 +120,7 @@ module.exports.postRegister = function(req, res)
 
   validateUser()
   .then(() => {
-    return req.ocbesbn.serviceClient.post('kong', '/auth/credentials', {
+    return req.opuscapita.serviceClient.post('kong', '/auth/credentials', {
       email: req.body.email,
       password: req.body.password
     });
@@ -187,7 +187,7 @@ module.exports.verifyRegister = function(req, res)
 
 module.exports.postVerifyRegister = function(req, res)
 {
-  req.ocbesbn.serviceClient.post('kong', '/auth/credentials/verify/email', {
+  req.opuscapita.serviceClient.post('kong', '/auth/credentials/verify/email', {
     email: req.body.email,
     code: req.body.code
   })
@@ -254,7 +254,7 @@ module.exports.addUser = function(req, res)
 
 module.exports.updateUser = function(req, res, useCurrentUser)
 {
-    var userId = useCurrentUser ? req.ocbesbn.userData('id') : req.params.id;
+    var userId = useCurrentUser ? req.opuscapita.userData('id') : req.params.id;
 
     Users.userExists(userId).then(exists =>
     {
@@ -264,7 +264,7 @@ module.exports.updateUser = function(req, res, useCurrentUser)
             {
                 if(req.query.tokenUpdate == "true")
                 {
-                    return doUserCacheUpdate(user, req.ocbesbn.serviceClient)
+                    return doUserCacheUpdate(user, req.opuscapita.serviceClient)
                         .then(() => this.events.emit(user, 'user.updated'))
                         .then(() =>  res.status('202').json(user))
                         .catch(e => res.status('424').json({ message : e.message }))
@@ -286,7 +286,7 @@ module.exports.updateUser = function(req, res, useCurrentUser)
 
 module.exports.addOrUpdateUserProfile = function(req, res, useCurrentUser)
 {
-    var userId = useCurrentUser ? req.ocbesbn.userData('id') : req.params.id;
+    var userId = useCurrentUser ? req.opuscapita.userData('id') : req.params.id;
 
     Users.userExists(userId).then(exists =>
     {
@@ -298,7 +298,7 @@ module.exports.addOrUpdateUserProfile = function(req, res, useCurrentUser)
                 {
                     return Users.getUserProfile(userId).then(user =>
                     {
-                        return doUserCacheUpdate(user, req.ocbesbn.serviceClient)
+                        return doUserCacheUpdate(user, req.opuscapita.serviceClient)
                             .then(() => this.events.emit(profile, 'user/profile.updated'))
                             .then(() => res.status('202').json(profile))
                             .catch(e => res.status('424').json({ message : e.message }))
@@ -333,7 +333,7 @@ module.exports.sendUsers = function(req, res)
 
 module.exports.sendUser = function(req, res, useCurrentUser)
 {
-    var userId = useCurrentUser ? req.ocbesbn.userData('id') : req.params.id;
+    var userId = useCurrentUser ? req.opuscapita.userData('id') : req.params.id;
 
     Users.getUser(userId).then(user =>
     {
@@ -343,7 +343,7 @@ module.exports.sendUser = function(req, res, useCurrentUser)
 
 module.exports.sendUserProfile = function(req, res, useCurrentUser)
 {
-    var userId = useCurrentUser ? req.ocbesbn.userData('id') : req.params.id;
+    var userId = useCurrentUser ? req.opuscapita.userData('id') : req.params.id;
 
     Users.getUserProfile(userId).then(profile =>
     {
