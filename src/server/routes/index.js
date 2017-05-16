@@ -190,7 +190,9 @@ module.exports.postVerifyRegister = function(req, res)
   req.ocbesbn.serviceClient.post('kong', '/auth/credentials/verify/email', {
     email: req.body.email,
     code: req.body.code
-  }).then(() => {
+  })
+  .then(() => this.events.emit(req.body.email, 'user.verified'))
+  .then(() => {
     res.render('registration-valid', {
       userId: req.body.email
     })
