@@ -191,7 +191,8 @@ module.exports.postVerifyRegister = function(req, res)
     email: req.body.email,
     code: req.body.code
   })
-  .then(() => this.events.emit(req.body.email, 'user.verified'))
+  .then(() => Users.getUser(req.body.email))
+  .then((user) => this.events.emit(user, 'user.updated'))
   .then(() => {
     res.render('registration-valid', {
       userId: req.body.email
