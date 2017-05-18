@@ -384,7 +384,7 @@ module.exports.addOnboardingData = function(req, res)
         city: req.body.city,
         country: req.body.country
     };
-    return UserOnboardData.create(userDetails, tradingPartnerDetails)
+    return UserOnboardData.create(userDetails, tradingPartnerDetails, req.body.campaignTool || "")
         .then(onboardingdata => res.status('202').json(onboardingdata))
         .catch(e => res.status('400').json({ message : e.message }));
 }
