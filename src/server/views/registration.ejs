@@ -16,30 +16,52 @@
                   <p>Wouldn't it be nice if we could explain what this is and why you want to do this?</p>
                 </div>
 
-                <!-- SimpleInput -->
+                <!-- Email -->
                 <div class="form-group required">
                   <label class="col-sm-3 control-label">eMail</label>
                   <div class="col-sm-9">
                     <input type="text" class="form-control" name="email" placeholder="Your eMail" value="<%=email %>">
                     <small>Please enter a valid eMail address, you will be required to confirm an eMail sent to this address.</small>
                   </div>
-                </div><!-- /form-group -->
+                </div>
+                <!-- /Email -->
 
-                <!-- SimpleInput -->
+                <!-- Password -->
                 <div class="form-group required">
                   <label class="col-sm-3 control-label">Password</label>
                   <div class="col-sm-9">
                     <input type="password" class="form-control" name="password" placeholder="Choose a Password" value="<%=password %>">
                     <small>Your password has to be at least 8 characters long and needs to contain at least 1 letter and 1 figure.</small>
                   </div>
-                </div><!-- /form-group -->
+                </div>
+                <!-- /Password -->
+
+                <!-- Re-Password -->
+                <div class="form-group required">
+                  <label class="col-sm-3 control-label">Password Confirmation</label>
+                  <div class="col-sm-9">
+                    <input type="password" class="form-control" name="passwordConfirmation" placeholder="Re-type Password" value="<%=passwordConfirmation %>">
+                    <small>Re-type the above password</small>
+                  </div>
+                </div>
+                <!-- /Re-Password  -->
+
+
+                <!-- CAPTCHA  -->
+                <div class="form-group required">
+                  <label class="col-sm-3 control-label"></label>
+                  <div class="col-sm-9" id="registrationCAPTCHA">
+
+                  </div>
+                </div>
+                <!-- /CAPTCHA  -->
+
                 <small class="has-error"><span class="form-control-feedback"><%=errMessage %></span></small>
                 <div class="form-submit text-right">
-                  <input type="hidden" class="form-control" name="serviceName" placeholder="serviceName" value="<%=serviceName %>">
-                  <input type="hidden" class="form-control" name="userDetails" placeholder="userDetails" value="<%=userDetails %>">
-                  <input type="hidden" class="form-control" name="tradingPartnerDetails" value="<%=tradingPartnerDetails %>">
                   <input type="submit" class="btn btn-primary" value="Register" name="submit">
                 </div>
+
+                <script src="/auth/public/captcha/snippet/registrationCAPTCHA" />
 
                 <footer>
                   <div class="copyright text-center">
