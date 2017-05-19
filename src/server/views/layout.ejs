@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="/user/static/css/jcatalog-bootstrap-bundle.css" type="text/css" media="screen" title="no title" charset="utf-8">
   <link rel="stylesheet" href="/user/static/vendor/font-awsome/css/font-awesome.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
+  <%if (locals.renderCaptcha) { %>
+    <script src="/auth/public/captcha/api" />
+  <% } %>
+
   <!-- This ressource is replaced on most machines by bundle.less.css
   stylesheet.css is included for jcatalog users who can not access bundle.less.css
 -->
