@@ -342,8 +342,9 @@ module.exports.sendUsers = function(req, res)
 module.exports.sendUser = function(req, res, useCurrentUser)
 {
     var userId = useCurrentUser ? req.opuscapita.userData('id') : req.params.id;
+    var includes = req.query.include ? req.query.include.replace(/\s/g, '').toLowerCase().split(',') : [];
 
-    Users.getUser(userId).then(user =>
+    Users.getUser(userId, includes).then(user =>
     {
         (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
     });

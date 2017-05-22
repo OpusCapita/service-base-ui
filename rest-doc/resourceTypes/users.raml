@@ -40,6 +40,12 @@ post:
         description: Returns a single `User` object.
         is:
             - sendNotFound
+        queryParameters:
+            include:
+                type: string
+                required: false
+                description: Endpoint will return the included comma seperated models
+                example: include=profile
         responses:
           200:
             body:
