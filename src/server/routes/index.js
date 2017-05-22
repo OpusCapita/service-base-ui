@@ -75,22 +75,20 @@ module.exports.registerUser = function(req, res)
 
               res.render('registration', {
                   password: '',
+                  passwordConfirmation: '',
                   errMessage: '',
                   email: userDetails.email || '',
-                  serviceName: userDetails.serviceName || '',
-                  userDetails: onboardData.userDetails || '',
-                  tradingPartnerDetails: onboardData.tradingPartnerDetails || ''
+                  renderCaptcha: true
               })
           }
       })
   } else {
       res.render('registration', {
           password: '',
+          passwordConfirmation: '',
           errMessage: '',
           email: userDetail.email || '',
-          serviceName: req.query.serviceName ? req.query.serviceName : (userDetail ? userDetail.serviceName : ''),
-          userDetails: req.query.userDetail || '',
-          tradingPartnerDetails: req.query.tradingPartnerDetails || ''
+          renderCaptcha: true
       })
   }
 }
@@ -100,14 +98,22 @@ module.exports.postRegister = function(req, res)
   var msg = {
     email: req.body.email,
     password: req.body.password,
+    passwordConfirmation: req.body.passwordConfirmation,
     errMessage: '',
-    serviceName: req.body.serviceName,
-    userDetails: req.body.userDetails || '',
-    tradingPartnerDetails: req.body.tradingPartnerDetails || ''
+    renderCaptcha: true
   }
 
   function validateUser() {
     return new Promise((resolve, reject) => {
+
+      if (!req.body.email) {
+        return reject({message: 'Email is required'});
+      } else if (!req.body.password) {
+        return reject({message: 'Password is required'});
+      } else if (req.body.passwordConfirmation !== req.body.password) {
+        return reject({message: 'Password confirmation is incorrect'});
+      }
+
       Users.userExists(req.body.email).then((exists) => {
         if(exists) {
           return reject({message: 'User already exists'});
@@ -115,14 +121,23 @@ module.exports.postRegister = function(req, res)
 
         return resolve({statusCode: 200, message: ''});
       })
+
+    });
+  }
+
+  function validateCaptcha() {
+    return req.opuscapita.serviceClient.post('auth', '/public/captcha/verify', {
+      'g-recaptcha-response': req.body['g-recaptcha-response']
     });
   }
 
   validateUser()
+  .then(() => validateCaptcha())
   .then(() => {
-    return req.opuscapita.serviceClient.post('kong', '/auth/credentials', {
+    return req.opuscapita.serviceClient.post('auth', '/credentials', {
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      passwordConfirmation: req.body.passwordConfirmation
     });
   })
   .then((data) => {
@@ -132,7 +147,7 @@ module.exports.postRegister = function(req, res)
     }, true)
     .then(user => {
         UserOnboardData.findByUserId(req.body.email).then((data) => {
-            return (data && data.invitationCode) || req.query.invitationCode;
+            return data && data.invitationCode ? data.invitationCode : '';
         })
         .then(invitationCode => {
             var eventUserObj = extend(true, {}, user, {invitationCode: invitationCode});
@@ -150,15 +165,6 @@ module.exports.postRegister = function(req, res)
               });
           }
       })
-    } else if(req.body.userDetails) {
-      let userDetails = JSON.parse(req.body.userDetails);
-      return UserOnboardData.create({
-        userId: req.body.email || '',
-        userDetails: req.body.userDetails || '',
-        invitationCode: userDetails.invitationCode || null,
-        serviceName: req.body.serviceName || '',
-        tradingPartnerDetails: req.body.tradingPartnerDetails || ''
-      });
     } else {
       return new Promise.resolve();
     }
@@ -167,8 +173,10 @@ module.exports.postRegister = function(req, res)
     res.redirect('/user/register/verify/' + req.body.email);
   })
   .catch((err) => {
-    if (err && err.message)
-      msg.errMessage = err.message;
+    if (err && err.response && err.response.result && err.response.result.message)
+      msg.errMessage = err.response.result.message;
+    else if (err.message)
+      msg.errMessage = err.message
     else
       msg.errMessage = 'Oops!, something went wrong';
 
