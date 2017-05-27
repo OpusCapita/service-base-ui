@@ -28,17 +28,11 @@ module.exports.init = function(app, db, config)
 
         app.use(checkContentType);
 
-        app.get('/register/verify/:email', (req, res) => this.verifyRegister(req, res));
-        app.post('/register/verify', (req, res) => this.postVerifyRegister(req, res));
-
-        app.get('/register', (req, res) => this.registerUser(req, res));
-        app.post('/register', (req, res) => this.postRegister(req, res));
-
         /* duplicate endpoint for backwards compatibility */
         app.get(['/onboardData/:userId', '/onboardingdata/:userId'], (req, res) => this.getOnboardData(req, res));
-
-        app.get('/onboardingdata/:invitationcode', (req, res) => this.sendOnboardingData(req, res));
+        app.get('/onboardingdata', (req, res) => this.getOnboardingData(req, res));
         app.post('/onboardingdata', (req, res) => this.addOnboardingData(req, res));
+        app.put('/onboardingdata/:invitationCode', (req, res) => this.updateOnboarddataUseridByInvitationcode(req, res));
 
         app.get('/users', (req, res) => this.sendUsers(req, res));
         app.post('/users', (req, res) => this.addUser(req, res));
@@ -60,160 +54,6 @@ module.exports.init = function(app, db, config)
     });
 }
 
-module.exports.registerUser = function(req, res)
-{
-  let userDetail = (req.query.userDetail) ? JSON.parse(req.query.userDetail) : {};
-  let invitationCode = req.query.invitationCode;
-
-  if (invitationCode) {
-      UserOnboardData.findByInvitationCode(invitationCode).then((onboardData) => {
-          if (!onboardData) {
-            let msg = {errMessage: "No invitation found."};
-            res.render('registration', msg);
-          } else {
-              let userDetails = JSON.parse(onboardData.userDetails);
-
-              res.render('registration', {
-                  password: '',
-                  passwordConfirmation: '',
-                  errMessage: '',
-                  email: userDetails.email || '',
-                  renderCaptcha: true
-              })
-          }
-      })
-  } else {
-      res.render('registration', {
-          password: '',
-          passwordConfirmation: '',
-          errMessage: '',
-          email: userDetail.email || '',
-          renderCaptcha: true
-      })
-  }
-}
-
-module.exports.postRegister = function(req, res)
-{
-  var msg = {
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirmation: req.body.passwordConfirmation,
-    errMessage: '',
-    renderCaptcha: true
-  }
-
-  function validateUser() {
-    return new Promise((resolve, reject) => {
-
-      if (!req.body.email) {
-        return reject({message: 'Email is required'});
-      } else if (!req.body.password) {
-        return reject({message: 'Password is required'});
-      } else if (req.body.passwordConfirmation !== req.body.password) {
-        return reject({message: 'Password confirmation is incorrect'});
-      }
-
-      Users.userExists(req.body.email).then((exists) => {
-        if(exists) {
-          return reject({message: 'User already exists'});
-        }
-
-        return resolve({statusCode: 200, message: ''});
-      })
-
-    });
-  }
-
-  function validateCaptcha() {
-    return req.opuscapita.serviceClient.post('auth', '/public/captcha/verify', {
-      'g-recaptcha-response': req.body['g-recaptcha-response']
-    });
-  }
-
-  validateUser()
-  .then(() => validateCaptcha())
-  .then(() => {
-    return req.opuscapita.serviceClient.post('auth', '/credentials', {
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirmation: req.body.passwordConfirmation
-    });
-  })
-  .then((data) => {
-    return Users.addUser({
-      id: req.body.email,
-      status: 'emailVerification'
-    }, true)
-    .then(user => {
-        UserOnboardData.findByUserId(req.body.email).then((data) => {
-            return data && data.invitationCode ? data.invitationCode : '';
-        })
-        .then(invitationCode => {
-            var eventUserObj = extend(true, {}, user, {invitationCode: invitationCode});
-            return this.events.emit(eventUserObj, 'user.added');
-        });
-    });
-  })
-  .then(() => {
-    if (req.query.invitationCode) {
-      return UserOnboardData.findByInvitationCode(req.query.invitationCode)
-      .then((onboardData) => {
-          if (onboardData) {
-              return UserOnboardData.updateByInvitationCode(req.query.invitationCode, {
-                  userId: req.body.email
-              });
-          }
-      })
-    } else {
-      return new Promise.resolve();
-    }
-  })
-  .then(() => {
-    res.redirect('/user/register/verify/' + req.body.email);
-  })
-  .catch((err) => {
-    if (err && err.response && err.response.result && err.response.result.message)
-      msg.errMessage = err.response.result.message;
-    else if (err.message)
-      msg.errMessage = err.message
-    else
-      msg.errMessage = 'Oops!, something went wrong';
-
-    res.render('registration', msg);
-  });
-}
-
-module.exports.verifyRegister = function(req, res)
-{
-  res.render('registration-confirm', {
-    invalidCode: '',
-    userId: req.params.email,
-    email: req.params.email
-  });
-}
-
-module.exports.postVerifyRegister = function(req, res)
-{
-  req.opuscapita.serviceClient.post('kong', '/auth/credentials/verify/email', {
-    email: req.body.email,
-    code: req.body.code
-  })
-  .then(() => Users.updateUser(req.body.email, {status: 'emailVerified'}, true))
-  .then((user) => this.events.emit(user, 'user.updated'))
-  .then(() => {
-    res.render('registration-valid', {
-      userId: req.body.email
-    })
-  }).catch((err) => {
-    res.render('registration-confirm', {
-      invalidCode: err.message,
-      userId: req.body.email,
-      email: req.body.email
-    });
-  })
-
-}
 
 module.exports.getOnboardData = function(req, res)
 {
@@ -249,6 +89,8 @@ module.exports.addUser = function(req, res)
             ])
             .spread((user, data) =>
             {
+                // TODO: ??? Return data with invitationCode - Shall we really do it here? Should be done on caller side if needed.
+                // ??? Check with Onboarding-Service -> Patrick / Darius
                 var invitationCode = (data && data.invitationCode);
                 var eventUserObj = extend(true, { }, user, { invitationCode : invitationCode });
 
@@ -274,7 +116,7 @@ module.exports.updateUser = function(req, res, useCurrentUser)
                 {
                     return doUserCacheUpdate(user, req.opuscapita.serviceClient)
                         .then(() => this.events.emit(user, 'user.updated'))
-                        .then(() =>  res.status('202').json(user))
+                        .then(() => res.status('202').json(user))
                         .catch(e => res.status('424').json({ message : e.message }))
                 }
                 else
@@ -399,11 +241,95 @@ module.exports.addOnboardingData = function(req, res)
 
 module.exports.sendOnboardingData = function(req, res)
 {
-    UserOnboardData.findByInvitationCode(req.params.invitationcode).then(onboardingdata =>
+console.log (">> sendOnboardingData invitationCode:", req.query.invitationCode)
+
+    UserOnboardData.findByInvitationCode(req.query.invitationCode).then(onboardingdata =>
     {
         (onboardingdata && res.json(onboardingdata)) || res.status('404').json({ message : 'Onboarding data does not exist!' });
     });
 }
+
+/**
+ * We want to support a query langauge like:
+ *   "filter=<fieldname> <operator> <restriction>"
+ * Currently supported operator: eq
+ * Example: Filter=invitationCode eq <value>
+ *
+ * ToDo move to another module and enhance
+ * TODO: Supported operators: eq, lt, gt, ...
+ * TODO: additional query paramter: &pagesize=x&pageno=y
+ *
+ * @param  {object} req [Express] {@link http://expressjs.com/de/api.html#req}]
+ *                      - req.query.filter - required
+ * @param  {object} res [Express] {@link http://expressjs.com/de/api.html#res}
+ */
+module.exports.getOnboardingData = function (req, res) {
+  try {
+      let filter = parseFilter(req.query.filter, ["invitationCode", "userId"], ["eq"])
+      let fieldName = filter[0]
+      let value = filter[2]
+
+      if (fieldName == "invitationCode") {
+          UserOnboardData.findByInvitationCode(value)
+          .then(onboardingdata => {
+              (onboardingdata && res.json(onboardingdata)) || res.status(404).json({message: 'No record found for InvitationCode = "' + value})
+          });
+      }
+      else {
+          UserOnboardData.findByUserId(value)
+          .then(onboardingdata => {
+              (onboardingdata && res.json(onboardingdata)) || res.status(404).json({message: 'No record found for UserId = "' + value})
+          });
+      }
+  }
+  catch(err) {
+    res.status('400').json({ message : 'A valid query parameter "filter" is required.'});
+  }
+}
+
+module.exports.updateOnboarddataUseridByInvitationcode = function(req, res)
+{
+  let invitationCode = req.params.invitationCode;
+  let data = {
+    userId: req.body.userId
+  };
+
+  return UserOnboardData.updateByInvitationCode(invitationCode, data)
+  .then(onboardingdata => res.status('202').json(onboardingdata))
+  .catch(e => res.status('400').json({ message : e.message }));
+}
+
+/**
+ * Restrictions: Only single filter condition
+ * examples:
+ * - invitationCode eq 12345
+ * - userId eq abc@de.com
+ *
+ * TODO: Move to another module and enhance error handling (which fields or operator are valid) and functionality (between, AND, OR, ...)
+ * TODO: An additonal method to generate Sequalize queries directly from the filter Array.
+ *
+ * @param  {string} filter          Template: filter=<fieldname> <op> <value>
+ * @param  {array} allowedFields    List of allowed fields for the filter string.
+ * @param  {array} allowedOperators List of allowed operators for the filter string.
+ * @return {array}
+ */
+function parseFilter(filter, allowedFields, allowedOperators) {
+
+    if (filter) {
+        let filterArray = filter.split([' '])
+
+        if (filterArray.length == 3 && allowedFields.includes(filterArray[0]) && allowedOperators.includes(filterArray[1])) {
+            return filterArray
+        }
+        else {
+            throw new Error("Filter not of required format.")
+        }
+    }
+    else {
+        throw new Error("Filter is missing")
+    }
+}
+
 
 function doUserCacheUpdate(userObj, serviceClient)
 {
