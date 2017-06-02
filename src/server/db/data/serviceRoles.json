@@ -1,0 +1,26 @@
+[
+    {
+        "id": "authRole",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "bnpRole",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "userRole",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "onboardingRole",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "kongRole",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "invoiceRole",
+        "createdBy": "The Doctor"
+    }
+]
