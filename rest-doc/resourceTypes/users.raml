@@ -159,3 +159,15 @@ post:
                 body:
                     application/json:
                         type: UserProfile
+
+/{userId}/roles/{roleId}:
+    put:
+        description: Adds the role with roleId to the the user with userId
+        is:
+            - sendNotFound
+            - sendGeneralError
+        responses:
+            201:
+                body:
+                    application/json:
+                        type: UserHasRole
