@@ -184,8 +184,9 @@ module.exports.sendUsers = function(req, res)
 module.exports.sendUser = function(req, res, useCurrentUser)
 {
     var userId = useCurrentUser ? req.opuscapita.userData('id') : req.params.id;
+    var includes = req.query.include ? req.query.include.replace(/\s/g, '').toLowerCase().split(',') : [];
 
-    Users.getUser(userId).then(user =>
+    Users.getUser(userId, includes).then(user =>
     {
         (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
     });
@@ -234,9 +235,13 @@ module.exports.addOnboardingData = function(req, res)
         city: req.body.city,
         country: req.body.country
     };
-    return UserOnboardData.create(userDetails, tradingPartnerDetails)
-        .then(onboardingdata => res.status('202').json(onboardingdata))
-        .catch(e => res.status('400').json({ message : e.message }));
+    if (!req.body.campaignTool) {
+        res.status('400').json({ message : "campaignTool field not specified" })
+    } else {
+        return UserOnboardData.create(userDetails, tradingPartnerDetails, req.body.campaignTool)
+            .then(onboardingdata => res.status('202').json(onboardingdata))
+            .catch(e => res.status('400').json({ message : e.message }));
+    }
 }
 
 module.exports.sendOnboardingData = function(req, res)

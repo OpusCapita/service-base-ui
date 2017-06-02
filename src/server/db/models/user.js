@@ -272,7 +272,7 @@ module.exports.init = function(db, config)
         createdAt : 'createdOn'
     });
 
-    User.hasOne(UserProfile, { foreignKey : 'userId', as : 'profile', constraints : true });
+    User.hasOne(UserProfile, { foreignKey : 'userId', targetKey: 'id' });
     User.belongsToMany(UserRole, { through : 'UserHasRole', foreignKey : 'userId', constraints : true });
     UserRole.belongsToMany(User, { through : 'UserHasRole', foreignKey : 'roleId', constraints : true });
 

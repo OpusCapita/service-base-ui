@@ -9,11 +9,12 @@ module.exports.init = function(db, config)
     return Promise.resolve(this);
 }
 
-module.exports.create = function(userDetails, tradingPartnerDetails)
+module.exports.create = function(userDetails, tradingPartnerDetails, campaignTool)
 {
     return this.db.models.UserOnboardData.create({
         userDetails: JSON.stringify(userDetails),
-        tradingPartnerDetails: JSON.stringify(tradingPartnerDetails)
+        tradingPartnerDetails: JSON.stringify(tradingPartnerDetails),
+        campaignTool: campaignTool
     });
 }
 

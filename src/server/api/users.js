@@ -28,10 +28,21 @@ module.exports.getUsers = function(searchObj)
     });
 }
 
-module.exports.getUser = function(userId)
+module.exports.getUser = function(userId, includes)
 {
+    var includeModels = [
+      this.db.models.UserRole
+    ];
+
+    includes = [].concat(includes)
+
+    if (includes.indexOf('profile') > -1)
+    {
+      includeModels.push(this.db.models.UserProfile);
+    }
+
     return this.db.models.User.findById(userId, {
-        include : this.db.models.UserRole
+        include : includeModels
     })
     .then(user =>
     {
