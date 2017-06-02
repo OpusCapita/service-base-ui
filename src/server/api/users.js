@@ -181,8 +181,8 @@ module.exports.userRoleExists = function(roleId)
 
 module.exports.addUserHasRole = function(userId, roleId)
 {
-    const options = { userId: userId, roleId: roleId };
-    return this.db.models.UserHasRole.findOrCreate({ where: options }).spread((userHasRole, created) => {
+    const options = { where: { userId: userId, roleId: roleId }, defaults: { createdBy: userId } };
+    return this.db.models.UserHasRole.findOrCreate(options).spread((userHasRole, created) => {
         return userHasRole.dataValues;
     });
 }
