@@ -173,3 +173,16 @@ module.exports.getUserRole = function(roleId)
 {
     return this.db.models.UserRole.findById(roleId).then(role => role && role.dataValues);
 }
+
+module.exports.userRoleExists = function(roleId)
+{
+    return this.db.models.UserRole.findById(roleId).then(role => role && role.id === roleId);
+}
+
+module.exports.addUserHasRole = function(userId, roleId)
+{
+    const options = { userId: userId, roleId: roleId };
+    return this.db.models.UserHasRole.findOrCreate({ where: options }).spread((userHasRole, created) => {
+        return userHasRole.dataValues;
+    });
+}

@@ -57,6 +57,8 @@ module.exports.init = function(app, db, config)
 
         app.get('/roles', (req, res) => this.sendRoles(req, res));
         app.get('/roles/:id', (req, res) => this.sendRole(req, res));
+
+        app.put('/users/:userId/roles/:roleId', (req, res) => this.addUserRole(req, res));
     });
 }
 
@@ -374,6 +376,28 @@ module.exports.sendRole = function(req, res)
     {
         (role && res.json(role)) || res.status('404').json({ message : 'Role does not exist!' });
     });
+}
+
+module.exports.addUserRole = function(req, res)
+{
+  const userId = req.params.userId;
+  const roleId = req.params.roleId;
+
+  Users.userExists(userId).then(exists => {
+    if(exists) {
+      Users.userRoleExists(roleId).then(roleExists => {
+        if(roleExists) {
+          Users.addUserHasRole(userId, roleId).then(userHasRole => res.status('201').json(userHasRole));
+        }
+        else {
+          res.status('404').json({ message : 'A role with this ID does not exist.' });
+        }
+      }).catch(e => res.status('400').json({ message : e.message }));
+    }
+    else {
+      res.status('404').json({ message : 'A user with this ID does not exist.' });
+    }
+  }).catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.addOnboardingData = function(req, res)
