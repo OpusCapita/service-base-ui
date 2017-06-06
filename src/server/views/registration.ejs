@@ -1,0 +1,85 @@
+<script type="text/javascript">
+
+</script>
+<body style="background: url(/user/static/img/oc-register-bg.jpg) top center; background-size: 100% auto; background-attachment: fixed;">
+
+  <div class="container">
+    <form class="form-horizontal" method="post">
+      <div class="row" style="margin-top: 3em;">
+        <div class="col-md-6 col-md-offset-3" style="background: #fff; box-shadow: 0px 0px 20px rgba(0,0,0,.25); padding: 1em 0 6em;">
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <h2>Register as New User</h1>
+
+                <div class="bs-callout bs-callout-info">
+                  <h4>This is why you are doing this</h4>
+                  <p>Wouldn't it be nice if we could explain what this is and why you want to do this?</p>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group required">
+                  <label class="col-sm-3 control-label">eMail</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" name="email" placeholder="Your eMail" value="<%=email %>">
+                    <small>Please enter a valid eMail address, you will be required to confirm an eMail sent to this address.</small>
+                  </div>
+                </div>
+                <!-- /Email -->
+
+                <!-- Password -->
+                <div class="form-group required">
+                  <label class="col-sm-3 control-label">Password</label>
+                  <div class="col-sm-9">
+                    <input type="password" class="form-control" name="password" placeholder="Choose a Password" value="<%=password %>">
+                    <small>Your password has to be at least 8 characters long and needs to contain at least 1 letter and 1 figure.</small>
+                  </div>
+                </div>
+                <!-- /Password -->
+
+                <!-- Re-Password -->
+                <div class="form-group required">
+                  <label class="col-sm-3 control-label">Password Confirmation</label>
+                  <div class="col-sm-9">
+                    <input type="password" class="form-control" name="passwordConfirmation" placeholder="Re-type Password" value="<%=passwordConfirmation %>">
+                    <small>Re-type the above password</small>
+                  </div>
+                </div>
+                <!-- /Re-Password  -->
+
+
+                <!-- CAPTCHA  -->
+                <div class="form-group required">
+                  <label class="col-sm-3 control-label"></label>
+                  <div class="col-sm-9" id="registrationCAPTCHA">
+
+                  </div>
+                </div>
+                <!-- /CAPTCHA  -->
+
+                <small class="has-error"><span class="form-control-feedback"><%=errMessage %></span></small>
+                <div class="form-submit text-right">
+                  <input type="submit" class="btn btn-primary" value="Register" name="submit">
+                </div>
+
+                <script src="/auth/public/captcha/snippet/registrationCAPTCHA" />
+
+                <footer>
+                  <div class="copyright text-center">
+                    &copy; 2001 &mdash; 2016&nbsp;&nbsp;
+                    <a href="http://www.opuscapita.com/">
+                      <img src="/user/static/img/oc-logo-rgb.svg" style="height: 1.2em;">
+                    </a>
+                  </a></div>
+                </footer>
+              </div><!-- /col -->
+            </div><!-- /row -->
+
+
+          </div><!-- /col -->
+        </div><!-- /row -->
+      </form>
+
+
+    </div>
+
+  </body>
