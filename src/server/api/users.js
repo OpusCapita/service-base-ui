@@ -180,7 +180,7 @@ module.exports.userRoleExists = function(roleId)
     return this.db.models.UserRole.findById(roleId).then(role => role && role.id === roleId);
 }
 
-module.exports.getRolesOfUser(userId)
+module.exports.getRolesOfUser = function(userId)
 {
     return this.db.models.UserHasRole.findAll({ where : { userId : userId } }).map(role => role.roleId);
 }
