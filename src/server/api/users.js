@@ -37,9 +37,7 @@ module.exports.getUser = function(userId, includes)
     includes = [].concat(includes)
 
     if (includes.indexOf('profile') > -1)
-    {
-      includeModels.push(this.db.models.UserProfile);
-    }
+        includeModels.push(this.db.models.UserProfile);
 
     return this.db.models.User.findById(userId, {
         include : includeModels
@@ -49,7 +47,10 @@ module.exports.getUser = function(userId, includes)
         if(user)
         {
             user.dataValues.roles = user.UserRoles.map(role => role.id);
+            user.dataValues.profile = user.UserProfile && user.UserProfile.dataValues;
+
             delete user.dataValues.UserRoles;
+            delete user.dataValues.UserProfile;
 
             return user.dataValues;
         }
@@ -179,10 +180,17 @@ module.exports.userRoleExists = function(roleId)
     return this.db.models.UserRole.findById(roleId).then(role => role && role.id === roleId);
 }
 
-module.exports.addUserHasRole = function(userId, roleId)
+module.exports.getRolesOfUser(userId)
+{
+    return this.db.models.UserHasRole.findAll({ where : { userId : userId } }).map(role => role.roleId);
+}
+
+module.exports.addUserToRole = function(userId, roleId, returnRoles)
 {
     const options = { where: { userId: userId, roleId: roleId }, defaults: { createdBy: userId } };
-    return this.db.models.UserHasRole.findOrCreate(options).spread((userHasRole, created) => {
-        return userHasRole.dataValues;
+
+    return this.db.models.UserHasRole.findOrCreate(options).spread((userHasRole, created) =>
+    {
+        return returnRoles ? this.getRolesOfUser(userId) : roleId;
     });
 }

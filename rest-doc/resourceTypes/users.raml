@@ -36,6 +36,10 @@ post:
         id:
             type: string
             description: Unique identifier of a user.
+        include:
+            type: string
+            description: Additional, comma separated user properties to include.
+            example: include=user
     get:
         description: Returns a single `User` object.
         is:
@@ -162,7 +166,7 @@ post:
 
 /{userId}/roles/{roleId}:
     put:
-        description: Adds the role with roleId to the the user with userId
+        description: Adds the role with roleId to the the user with userId.
         is:
             - sendNotFound
             - sendGeneralError
@@ -170,4 +174,6 @@ post:
             201:
                 body:
                     application/json:
-                        type: UserHasRole
+                        type: array
+                        example: |
+                            ["admin", "xtenant"]
