@@ -1,0 +1,26 @@
+type: object
+displayName: UserHasRole
+description: Object representing a user to role relationship.
+
+properties:
+    userId:
+        type: string
+        description: Unique user identifier, usually conisting of federation id ':' and user id to ensure unique user names.
+    roleId:
+        type: string
+        description: Unique identifier of a user security role.
+    createdBy:
+        type: string
+        description: Unique identifier of the user who created a data entry.
+    changedBy:
+        type: string
+        description: Unique identifier of the user who lastly changed a data entry.
+        required: false
+    createdOn:
+        type: string
+        description: Timestamp of the creation of a data entry.
+    changedOn:
+        type: string
+        description: Timestamp of the last change date of a data entry.
+        required: false
+example: !include ../examples/UserHasRole.json
