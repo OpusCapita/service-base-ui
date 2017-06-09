@@ -36,9 +36,9 @@ module.exports.init = function(app, db, config)
 
         /* duplicate endpoint for backwards compatibility */
         app.get(['/onboardData/:userId', '/onboardingdata/:userId'], (req, res) => this.getOnboardData(req, res));
-
-        app.get('/onboardingdata/:invitationcode', (req, res) => this.sendOnboardingData(req, res));
+        app.get('/onboardingdata', (req, res) => this.getOnboardingData(req, res));
         app.post('/onboardingdata', (req, res) => this.addOnboardingData(req, res));
+        app.put('/onboardingdata/:invitationCode', (req, res) => this.updateOnboarddataUseridByInvitationcode(req, res));
 
         app.get('/users', (req, res) => this.sendUsers(req, res));
         app.post('/users', (req, res) => this.addUser(req, res));
@@ -57,6 +57,8 @@ module.exports.init = function(app, db, config)
 
         app.get('/roles', (req, res) => this.sendRoles(req, res));
         app.get('/roles/:id', (req, res) => this.sendRole(req, res));
+
+        app.put('/users/:userId/roles/:roleId', (req, res) => this.addUserToRole(req, res));
     });
 }
 
@@ -243,16 +245,9 @@ module.exports.addUser = function(req, res)
         }
         else
         {
-            return Promise.all([
-                Users.addUser(req.body, true),
-                UserOnboardData.findByUserId(req.body.id)
-            ])
-            .spread((user, data) =>
-            {
-                var invitationCode = (data && data.invitationCode);
-                var eventUserObj = extend(true, { }, user, { invitationCode : invitationCode });
-
-                return this.events.emit(eventUserObj, 'user.added').then(() => user);
+            return Users.addUser(req.body, true)
+            .then((user) => {
+                return this.events.emit(user, 'user.added').then(() => user);
             })
             .then(user => res.status('202').json(user));
         }
@@ -274,7 +269,7 @@ module.exports.updateUser = function(req, res, useCurrentUser)
                 {
                     return doUserCacheUpdate(user, req.opuscapita.serviceClient)
                         .then(() => this.events.emit(user, 'user.updated'))
-                        .then(() =>  res.status('202').json(user))
+                        .then(() => res.status('202').json(user))
                         .catch(e => res.status('424').json({ message : e.message }))
                 }
                 else
@@ -376,6 +371,32 @@ module.exports.sendRole = function(req, res)
     });
 }
 
+module.exports.addUserToRole = function(req, res)
+{
+    const userId = req.params.userId;
+    const roleId = req.params.roleId;
+
+    Users.userExists(userId).then(exists =>
+    {
+        if(exists)
+        {
+            Users.userRoleExists(roleId).then(roleExists =>
+            {
+                if(roleExists)
+                    Users.addUserToRole(userId, roleId, true).then(roles => res.status('201').json(roles));
+                else
+                    res.status('404').json({ message : 'A role with this ID does not exist.' });
+            })
+            .catch(e => res.status('400').json({ message : e.message }));
+        }
+        else
+        {
+            res.status('404').json({ message : 'A user with this ID does not exist.' });
+        }
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
+}
+
 module.exports.addOnboardingData = function(req, res)
 {
     let userDetails = {
@@ -402,13 +423,88 @@ module.exports.addOnboardingData = function(req, res)
     }
 }
 
-module.exports.sendOnboardingData = function(req, res)
-{
-    UserOnboardData.findByInvitationCode(req.params.invitationcode).then(onboardingdata =>
-    {
-        (onboardingdata && res.json(onboardingdata)) || res.status('404').json({ message : 'Onboarding data does not exist!' });
-    });
+
+/**
+ * We want to support a query langauge like:
+ *   "filter=<fieldname> <operator> <restriction>"
+ * Currently supported operator: eq
+ * Example: Filter=invitationCode eq <value>
+ *
+ * ToDo move to another module and enhance
+ * TODO: Supported operators: eq, lt, gt, ...
+ * TODO: additional query paramter: &pagesize=x&pageno=y
+ *
+ * @param  {object} req [Express] {@link http://expressjs.com/de/api.html#req}]
+ *                      - req.query.filter - required
+ * @param  {object} res [Express] {@link http://expressjs.com/de/api.html#res}
+ */
+module.exports.getOnboardingData = function (req, res) {
+  try {
+      let filter = parseFilter(req.query.filter, ["invitationCode", "userId"], ["eq"])
+      let fieldName = filter[0]
+      let value = filter[2]
+
+      if (fieldName == "invitationCode") {
+          UserOnboardData.findByInvitationCode(value)
+          .then(onboardingdata => {
+              (onboardingdata && res.json(onboardingdata)) || res.status(404).json({message: 'No record found for InvitationCode = "' + value})
+          });
+      }
+      else {
+          UserOnboardData.findByUserId(value)
+          .then(onboardingdata => {
+              (onboardingdata && res.json(onboardingdata)) || res.status(404).json({message: 'No record found for UserId = "' + value})
+          });
+      }
+  }
+  catch(err) {
+    res.status('400').json({ message : 'A valid query parameter "filter" is required.'});
+  }
 }
+
+module.exports.updateOnboarddataUseridByInvitationcode = function(req, res)
+{
+  let invitationCode = req.params.invitationCode;
+  let data = {
+    userId: req.body.userId
+  };
+
+  return UserOnboardData.updateByInvitationCode(invitationCode, data)
+  .then(onboardingdata => res.status('202').json(onboardingdata))
+  .catch(e => res.status('400').json({ message : e.message }));
+}
+
+/**
+ * Restrictions: Only single filter condition
+ * examples:
+ * - invitationCode eq 12345
+ * - userId eq abc@de.com
+ *
+ * TODO: Move to another module and enhance error handling (which fields or operator are valid) and functionality (between, AND, OR, ...)
+ * TODO: An additonal method to generate Sequalize queries directly from the filter Array.
+ *
+ * @param  {string} filter          Template: filter=<fieldname> <op> <value>
+ * @param  {array} allowedFields    List of allowed fields for the filter string.
+ * @param  {array} allowedOperators List of allowed operators for the filter string.
+ * @return {array}
+ */
+function parseFilter(filter, allowedFields, allowedOperators) {
+
+    if (filter) {
+        let filterArray = filter.split([' '])
+
+        if (filterArray.length == 3 && allowedFields.includes(filterArray[0]) && allowedOperators.includes(filterArray[1])) {
+            return filterArray
+        }
+        else {
+            throw new Error("Filter not of required format.")
+        }
+    }
+    else {
+        throw new Error("Filter is missing")
+    }
+}
+
 
 function doUserCacheUpdate(userObj, serviceClient)
 {
