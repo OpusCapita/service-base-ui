@@ -1,12 +1,12 @@
 [
     {
-        "id" : "svc_user",
+        "id" : "user",
         "federationId" : "",
         "status" : "firstLogin",
         "createdBy" : "the doctor"
     },
     {
-        "id" : "svc_onboarding",
+        "id" : "onboarding",
         "federationId" : "",
         "supplierId" : "hard001",
         "status" : "firstLogin",
@@ -15,7 +15,7 @@
         "createdBy" : "the doctor"
     },
     {
-        "id" : "svc_kong",
+        "id" : "kong",
         "federationId" : "",
         "customerId" : "ncc",
         "status" : "firstLogin",
@@ -24,7 +24,7 @@
         "createdBy" : "the doctor"
     },
     {
-        "id" : "svc_invoice",
+        "id" : "invoice",
         "federationId" : "",
         "status" : "firstLogin",
         "mayChangeSupplier" : false,
@@ -32,7 +32,7 @@
         "createdBy" : "the doctor"
     },
     {
-        "id" : "svc_bnp",
+        "id" : "bnp",
         "federationId" : "",
         "status" : "firstLogin",
         "mayChangeSupplier" : false,
@@ -40,7 +40,7 @@
         "createdBy" : "the doctor"
     },
     {
-        "id" : "svc_auth",
+        "id" : "auth",
         "federationId" : "",
         "status" : "firstLogin",
         "mayChangeSupplier" : false,

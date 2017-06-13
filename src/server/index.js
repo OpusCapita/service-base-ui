@@ -2,6 +2,7 @@
 
 const server = require('ocbesbn-web-init'); // Web server
 const db = require('ocbesbn-db-init'); // Database
+const bouncer = require('ocbesbn-bouncer') // ACL bouncer
 
 // Basic database and web server initialization.
 // See database : https://github.com/OpusCapitaBusinessNetwork/db-init
@@ -19,7 +20,12 @@ db.init({
     server : {
         port : process.env.PORT || 3008,
         staticFilePath: __dirname + '/static',
-        middlewares: [ require("express-ejs-layouts") ]
+        middlewares: [ require("express-ejs-layouts"), bouncer({
+          host: 'consul',
+          serviceName: 'user',
+          acl: require('./acl.json'),
+          aclServiceName: 'acl'
+        }).Middleware]
     },
     serviceClient : {
         injectIntoRequest : true,

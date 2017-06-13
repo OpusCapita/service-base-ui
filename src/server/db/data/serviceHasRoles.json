@@ -1,32 +1,32 @@
 [
     {
-        "userId": "svc_bnp",
-        "roleIds": ["bnpRole"],
+        "userId": "bnp",
+        "roleIds": ["svc_bnp"],
         "createdBy": "The Doctor"
     },
     {
-        "userId": "svc_onboarding",
-        "roleIds": ["onboardingRole"],
+        "userId": "onboarding",
+        "roleIds": ["svc_onboarding"],
         "createdBy": "The Doctor"
     },
     {
-        "userId": "svc_invoice",
-        "roleIds": ["invoiceRole"],
+        "userId": "invoice",
+        "roleIds": ["svc_invoice"],
         "createdBy": "The Doctor"
     },
     {
-        "userId": "svc_kong",
-        "roleIds": ["kongRole"],
+        "userId": "kong",
+        "roleIds": ["svc_kong"],
         "createdBy": "The Doctor"
     },
     {
-        "userId": "svc_auth",
-        "roleIds": ["authRole"],
+        "userId": "auth",
+        "roleIds": ["svc_auth"],
         "createdBy": "The Doctor"
     },
     {
-        "userId": "svc_user",
-        "roleIds": ["userRole"],
+        "userId": "user",
+        "roleIds": ["svc_user"],
         "createdBy": "The Doctor"
     }
 ]

@@ -1,0 +1,21 @@
+{
+  "user/userInfo": {
+    "translations": {
+      "name" : {
+        "en": "User Information",
+        "de": ""
+      },
+      "description": {
+        "en": "User Information resources",
+        "de": ""
+      }
+    },
+    "resources": [
+      {
+        "type": "rest",
+        "resourceId": "/users/[%w | %p]*",
+        "actions": ["create", "view", "edit"]
+      }
+    ]
+  }
+}

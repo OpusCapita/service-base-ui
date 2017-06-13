@@ -1,26 +1,26 @@
 [
     {
-        "id": "authRole",
+        "id": "svc_auth",
         "createdBy": "The Doctor"
     },
     {
-        "id": "bnpRole",
+        "id": "svc_bnp",
         "createdBy": "The Doctor"
     },
     {
-        "id": "userRole",
+        "id": "svc_user",
         "createdBy": "The Doctor"
     },
     {
-        "id": "onboardingRole",
+        "id": "svc_onboarding",
         "createdBy": "The Doctor"
     },
     {
-        "id": "kongRole",
+        "id": "svc_kong",
         "createdBy": "The Doctor"
     },
     {
-        "id": "invoiceRole",
+        "id": "svc_invoice",
         "createdBy": "The Doctor"
     }
 ]
