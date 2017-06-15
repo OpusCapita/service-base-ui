@@ -36,10 +36,20 @@ post:
         id:
             type: string
             description: Unique identifier of a user.
+        include:
+            type: string
+            description: Additional, comma separated user properties to include.
+            example: include=user
     get:
         description: Returns a single `User` object.
         is:
             - sendNotFound
+        queryParameters:
+            include:
+                type: string
+                required: false
+                description: Endpoint will return the included comma seperated models
+                example: include=profile
         responses:
           200:
             body:
@@ -153,3 +163,17 @@ post:
                 body:
                     application/json:
                         type: UserProfile
+
+/{userId}/roles/{roleId}:
+    put:
+        description: Adds the role with roleId to the the user with userId.
+        is:
+            - sendNotFound
+            - sendGeneralError
+        responses:
+            201:
+                body:
+                    application/json:
+                        type: array
+                        example: |
+                            ["admin", "xtenant"]

@@ -14,7 +14,22 @@
       {
         "type": "rest",
         "resourceId": "/users/[%w | %p]*",
-        "actions": ["create", "view", "edit"]
+        "actions": ["view", "edit"]
+      },
+      {
+        "type": "rest",
+        "resourceId": "/users",
+        "actions": ["create"]
+      },
+      {
+        "type": "rest",
+        "resourceId": "/onboardingdata",
+        "actions": ["view", "create"]
+      },
+      {
+        "type": "rest",
+        "resourceId": "/onboardingdata/[%w | %p]*",
+        "actions": ["edit"]
       }
     ]
   }

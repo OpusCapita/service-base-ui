@@ -28,17 +28,29 @@ module.exports.getUsers = function(searchObj)
     });
 }
 
-module.exports.getUser = function(userId)
+module.exports.getUser = function(userId, includes)
 {
+    var includeModels = [
+      this.db.models.UserRole
+    ];
+
+    includes = [].concat(includes)
+
+    if (includes.indexOf('profile') > -1)
+        includeModels.push(this.db.models.UserProfile);
+
     return this.db.models.User.findById(userId, {
-        include : this.db.models.UserRole
+        include : includeModels
     })
     .then(user =>
     {
         if(user)
         {
             user.dataValues.roles = user.UserRoles.map(role => role.id);
+            user.dataValues.profile = user.UserProfile && user.UserProfile.dataValues;
+
             delete user.dataValues.UserRoles;
+            delete user.dataValues.UserProfile;
 
             return user.dataValues;
         }
@@ -161,4 +173,24 @@ module.exports.getUserRoles = function()
 module.exports.getUserRole = function(roleId)
 {
     return this.db.models.UserRole.findById(roleId).then(role => role && role.dataValues);
+}
+
+module.exports.userRoleExists = function(roleId)
+{
+    return this.db.models.UserRole.findById(roleId).then(role => role && role.id === roleId);
+}
+
+module.exports.getRolesOfUser = function(userId)
+{
+    return this.db.models.UserHasRole.findAll({ where : { userId : userId } }).map(role => role.roleId);
+}
+
+module.exports.addUserToRole = function(userId, roleId, returnRoles)
+{
+    const options = { where: { userId: userId, roleId: roleId }, defaults: { createdBy: userId } };
+
+    return this.db.models.UserHasRole.findOrCreate(options).spread((userHasRole, created) =>
+    {
+        return returnRoles ? this.getRolesOfUser(userId) : roleId;
+    });
 }
