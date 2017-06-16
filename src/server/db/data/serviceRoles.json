@@ -1,0 +1,26 @@
+[
+    {
+        "id": "svc_auth",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "svc_bnp",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "svc_user",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "svc_onboarding",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "svc_kong",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "svc_invoice",
+        "createdBy": "The Doctor"
+    }
+]
