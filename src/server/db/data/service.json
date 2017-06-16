@@ -3,6 +3,8 @@
         "id" : "user",
         "federationId" : "",
         "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
         "createdBy" : "the doctor"
     },
     {

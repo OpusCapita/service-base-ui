@@ -17,12 +17,10 @@ module.exports.up = function(db, config)
 {
   const path = pathjs.resolve(__dirname + '/../data');
 
-  // Load data.
-  const serviceData = require(path + '/service.json');
-  // Get database models.
-  const Service = db.models.User;
+  var services = require('../data/service.json');
+  services.forEach(service => service.createdOn = new Date());
 
-  return Promise.all(serviceData.map(cur => Service.upsert(cur)));
+  return db.queryInterface.bulkInsert('User', services);
 }
 
 /**
