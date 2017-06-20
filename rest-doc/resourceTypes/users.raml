@@ -2,6 +2,17 @@ displayName: Users
 description: Work with `User` objects.
 get:
     description: List of `Users` objects.
+    queryParameters:
+        customerId:
+            type: string
+            required: false
+            description: Output only user objects that have the passed customer assigned.
+            example: customerId=abc
+        supplierId:
+            type: string
+            required: false
+            description: Output only user objects that have the passed supplier assigned.
+            example: supplierId=abc
     responses:
         200:
             body:
@@ -16,7 +27,7 @@ post:
         application/json:
             type: User
     responses:
-        200:
+        202:
             body:
                 application/json:
                     type: User
@@ -25,10 +36,20 @@ post:
         id:
             type: string
             description: Unique identifier of a user.
+        include:
+            type: string
+            description: Additional, comma separated user properties to include.
+            example: include=user
     get:
         description: Returns a single `User` object.
         is:
             - sendNotFound
+        queryParameters:
+            include:
+                type: string
+                required: false
+                description: Endpoint will return the included comma seperated models
+                example: include=profile
         responses:
           200:
             body:
@@ -47,9 +68,40 @@ post:
                 required: false
                 description: Forces the service to synchronously updated cached user tokens.
                 example: tokeUpdate=true
-        body:
-            application/json:
-                type: User
+        responses:
+            202:
+                body:
+                    application/json:
+                        type: User
+
+/current:
+    get:
+        description: Returns a single `User` object for the user currently logged in.
+        is:
+            - sendNotFound
+        responses:
+          200:
+            body:
+                application/json:
+                    type: User
+
+    put:
+        description: Updates the user currently logged in but changes only the values passed.
+        is:
+            - sendNotFound
+            - sendGeneralError
+            - sendFailedDependency
+        queryParameters:
+            tokenUpdate:
+                type: string
+                required: false
+                description: Forces the service to synchronously updated cached user tokens.
+                example: tokeUpdate=true
+        responses:
+            202:
+                body:
+                    application/json:
+                        type: User
 
 /{id}/profile:
     uriParameters:
@@ -58,7 +110,7 @@ post:
             description: Unique identifier of a user.
             pattern: \w{3}
     get:
-        description: A single user's profile.
+        description: Resturns a single user's profile.
         is:
             - sendNotFound
         responses:
@@ -78,6 +130,50 @@ post:
                 required: false
                 description: Forces the service to synchronously updated cached user tokens.
                 example: tokeUpdate=true
-        body:
-            application/json:
-                type: UserProfile
+        responses:
+            202:
+                body:
+                    application/json:
+                        type: UserProfile
+
+/current/profile:
+    get:
+        description: Returns the profile of the user currently logged in.
+        is:
+            - sendNotFound
+        responses:
+          200:
+            body:
+                application/json:
+                    type: UserProfile
+    put:
+        description: Updates the profile of the user currently logged in but changes only the values passed.
+        is:
+            - sendNotFound
+            - sendGeneralError
+            - sendFailedDependency
+        queryParameters:
+            tokenUpdate:
+                type: string
+                required: false
+                description: Forces the service to synchronously updated cached user tokens.
+                example: tokeUpdate=true
+        responses:
+            202:
+                body:
+                    application/json:
+                        type: UserProfile
+
+/{userId}/roles/{roleId}:
+    put:
+        description: Adds the role with roleId to the the user with userId.
+        is:
+            - sendNotFound
+            - sendGeneralError
+        responses:
+            201:
+                body:
+                    application/json:
+                        type: array
+                        example: |
+                            ["admin", "xtenant"]

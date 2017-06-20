@@ -1,6 +1,6 @@
 {
   "name": "ocbesbn-user",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "User service",
   "author": "Christian Drengenberg <Christian.Drengenberg@opuscapita.com>",
   "license": "Apache-2.0",
@@ -16,13 +16,17 @@
     "exclude": []
   },
   "dependencies": {
-    "bluebird": "^3.0.5",
-    "epilogue": "^0.7.0",
-    "ocbesbn-config": "^2.2.5",
-    "ocbesbn-db-init": "^1.1.5",
-    "ocbesbn-service-client": "^0.1.10",
-    "ocbesbn-web-init": "^1.0.3",
-    "sequelize": "^3.24.7"
+    "bluebird": "^3.5.0",
+    "ejs": "^2.5.6",
+    "express-ejs-layouts": "^2.3.0",
+    "extend": "^3.0.1",
+    "ocbesbn-bouncer": "^0.2.2",
+    "ocbesbn-config": "^2.2.7",
+    "ocbesbn-db-init": "^1.1.9",
+    "ocbesbn-redis-events": "^1.0.4",
+    "ocbesbn-service-client": "^1.0.16",
+    "ocbesbn-web-init": "^2.0.0",
+    "sequelize": "^3.30.4"
   },
   "devDependencies": {
     "jsdoc-to-markdown": "^3.0.0",
@@ -30,7 +34,6 @@
     "mocha-junit-reporter": "^1.12.1",
     "nodemon": "^1.11.0",
     "nyc": "^10.1.2",
-    "ocbesbn-service-client": "^0.1.10",
     "raml-to-markdown": "^1.x",
     "rimraf": "^2.6.0",
     "sequelize-to-markdown": "^1.x"
@@ -41,7 +44,7 @@
     "test": "npm run clean ; npm run setup-consul ; ${NODE_PATH}/.bin/nyc ${NODE_PATH}/.bin/mocha --timeout 30000 --recursive -R mocha-junit-reporter",
     "test-raw": "npm run clean ; npm run setup-consul ; ${NODE_PATH}/.bin/nyc ${NODE_PATH}/.bin/mocha --timeout 30000 --recursive",
     "clean": "${NODE_PATH}/.bin/rimraf .nyc_output coverage test-results.xml",
-    "setup-consul": "curl -X PUT -d 'bnp' http://${HOST_IP}:8500/v1/kv/user/db-init/database ; curl -X PUT -d 'root' http://${HOST_IP}:8500/v1/kv/user/db-init/user ; curl -X PUT -d 'notSecureP455w0rd' http://${HOST_IP}:8500/v1/kv/user/db-init/password; curl -X PUT -d 'true' http://${HOST_IP}:8500/v1/kv/user/db-init/populate-test-data ",
+    "setup-consul": "curl -X PUT -d ${MYSQL_DATABASE} http://${HOST_IP}:8500/v1/kv/user/db-init/database ; curl -X PUT -d 'root' http://${HOST_IP}:8500/v1/kv/user/db-init/user ; curl -X PUT -d 'notSecureP455w0rd' http://${HOST_IP}:8500/v1/kv/user/db-init/password; curl -X PUT -d 'true' http://${HOST_IP}:8500/v1/kv/user/db-init/populate-test-data; curl -X PUT -d ${REDIS_AUTH} http://${HOST_IP}:8500/v1/kv/user/redis/password; curl -X PUT -d ${USER_NAME} http://${HOST_IP}:8500/v1/kv/user/username; curl -X PUT -d ${PASSWORD} http://${HOST_IP}:8500/v1/kv/user/password; curl -X PUT -d ${CLIENT_KEY} http://${HOST_IP}:8500/v1/kv/user/originService/clientKey; curl -X PUT -d ${CLIENT_SECRET} http://${HOST_IP}:8500/v1/kv/user/originService/clientSecret ; curl -X PUT -d ${SCOPE} http://${HOST_IP}:8500/v1/kv/user/scope",
     "rest-doc": "mkdir -p wiki/rest-doc ; ${NODE_PATH}/.bin/raml2md -o file-per-resource -p wiki/rest-doc --output-ext=.endpoint.md rest-doc/main.raml",
     "domain-doc": "mkdir -p wiki/domain-doc ; ${NODE_PATH}/.bin/sq2md -o file-per-src -p wiki/domain-doc --init=init --field-bl=createdAt,updatedAt --output-ext=.model.md src/server/db/models",
     "doc": "npm run rest-doc ; npm run domain-doc"

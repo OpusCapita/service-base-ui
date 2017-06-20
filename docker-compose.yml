@@ -7,6 +7,7 @@ services:
      - mysql
      - consul
      - registrator
+     - redis
     volumes:
      - .:/home/node/user
     labels:
@@ -16,6 +17,14 @@ services:
     environment:
       PORT: ${PORT}
       HOST_IP: ${HOST_IP}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      REDIS_AUTH: ${REDIS_AUTH}
+      USER_NAME: ${USER_NAME}
+      PASSWORD: ${PASSWORD}
+      CLIENT_KEY: ${CLIENT_KEY}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      SCOPE: ${SCOPE}
     ports:
      - '${PORT}:${PORT}'
     command: "npm start"
@@ -25,8 +34,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: "notSecureP455w0rd"
-      MYSQL_DATABASE: "bnp"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     depends_on:
       - registrator
 
@@ -38,6 +47,15 @@ services:
     volumes:
      - /var/run/docker.sock:/tmp/docker.sock
     command: ['consul://${HOST_IP}:8500']
+
+  redis:
+    image: ocbesbn/redis:latest
+    ports:
+      - '6379:6379'
+    environment:
+      REDIS_AUTH: ${REDIS_AUTH}
+    depends_on:
+      - registrator
 
   consul:
     image: consul:latest

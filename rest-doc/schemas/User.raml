@@ -31,4 +31,12 @@ properties:
         type: string
         description: Timestamp of the last change date of a data entry.
         required: false
+    roles:
+        type: array
+        description: List of role IDs a user is assigned to.
+        required: false
+    profile:
+        type: object
+        description: Optional user profile object.
+        required: false
 example: !include ../examples/User.json

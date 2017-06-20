@@ -53,12 +53,13 @@ module.exports.init = function(db, config)
         },
         createdBy : {
             type : DataTypes.STRING(60),
-            allowNull : false
+            allowNull : false,
+            defaultValue: 'Opuscapita user'
         },
         changedBy : {
             type : DataTypes.STRING(60),
             allowNull : false,
-            defaultValue : ''
+            defaultValue : 'Opuscapita user'
         },
         createdOn : {
             type : DataTypes.DATE(),
@@ -71,8 +72,11 @@ module.exports.init = function(db, config)
         }
     }, {
         hooks : {
-            beforeValidate : (a, b, next) => { a.changedOn = DataTypes.fn('NOW'); next(); }
-        }
+            beforeValidate : (a, b, next) => { a.changedOn = new Date(); next(); }
+        },
+        freezeTableName: true,
+        updatedAt : 'changedOn',
+        createdAt : 'createdOn',
     });
 
     /**
@@ -162,6 +166,11 @@ module.exports.init = function(db, config)
             allowNull : false,
             defaultValue : ''
         },
+        showWelcomePage : {
+            type : DataTypes.BOOLEAN(),
+            allowNull : false,
+            defaultValue : true
+        },
         createdBy : {
             type : DataTypes.STRING(60),
             allowNull : false
@@ -180,9 +189,92 @@ module.exports.init = function(db, config)
             type : DataTypes.DATE(),
             allowNull : true
         }
+      }, {
+        freezeTableName: true,
+        updatedAt : 'changedOn',
+        createdAt : 'createdOn',
     });
 
-    User.hasOne(UserProfile, { foreignKey : 'userId', as : 'profile', constraints: true });
+    /**
+     * Data model representing a single user's profile.
+     * @class UserRole
+     */
+    var UserRole = db.define('UserRole',
+    /** @lends UserRole */
+    {
+        id : {
+            type : DataTypes.STRING(100),
+            allowNull : false,
+            primaryKey : true
+        },
+        createdBy : {
+            type : DataTypes.STRING(60),
+            allowNull : false
+        },
+        changedBy : {
+            type : DataTypes.STRING(60),
+            allowNull : false,
+            defaultValue : ''
+        },
+        createdOn : {
+            type : DataTypes.DATE(),
+            allowNull : false,
+            defaultValue : DataTypes.NOW
+        },
+        changedOn : {
+            type : DataTypes.DATE(),
+            allowNull : true
+        }
+      }, {
+        freezeTableName: true,
+        updatedAt : 'changedOn',
+        createdAt : 'createdOn',
+    });
+
+    /**
+     * Data model representing a single user's profile.
+     * @class UserHasRole
+     */
+    var UserHasRole = db.define('UserHasRole',
+    /** @lends UserHasRole */
+    {
+        userId : {
+            type : DataTypes.STRING(100),
+            allowNull : false,
+            primaryKey : true
+        },
+        roleId : {
+            type : DataTypes.STRING(100),
+            allowNull : false,
+            primaryKey : true
+        },
+        createdBy : {
+            type : DataTypes.STRING(60),
+            allowNull : false
+        },
+        changedBy : {
+            type : DataTypes.STRING(60),
+            allowNull : false,
+            defaultValue : ''
+        },
+        createdOn : {
+            type : DataTypes.DATE(),
+            allowNull : false,
+            defaultValue : DataTypes.NOW
+        },
+        changedOn : {
+            type : DataTypes.DATE(),
+            allowNull : true
+        }
+      }, {
+        freezeTableName: true,
+        updatedAt : 'changedOn',
+        createdAt : 'createdOn'
+    });
+
+    User.hasOne(UserProfile, { foreignKey : 'userId', targetKey: 'id' });
+    User.belongsToMany(UserRole, { through : 'UserHasRole', foreignKey : 'userId', constraints : true });
+    UserRole.belongsToMany(User, { through : 'UserHasRole', foreignKey : 'roleId', constraints : true });
 
     return Promise.resolve();
 }

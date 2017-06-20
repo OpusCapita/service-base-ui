@@ -9,19 +9,57 @@ module.exports.init = function(db, config)
     return Promise.resolve(this);
 }
 
-module.exports.getUsers = function()
+module.exports.getUsers = function(searchObj)
 {
-    return this.db.models.User.findAll();
+    for(var key in searchObj)
+        if(Array.isArray(searchObj[key]))
+            searchObj[key] = { '$in' : searchObj[key] };
+
+    return this.db.models.User.findAll({
+        include : this.db.models.UserRole,
+        where : searchObj
+    })
+    .map(user =>
+    {
+        user.dataValues.roles = user.UserRoles.map(role => role.id);
+        delete user.dataValues.UserRoles;
+
+        return user.dataValues;
+    });
 }
 
-module.exports.getUser = function(userId)
+module.exports.getUser = function(userId, includes)
 {
-    return this.db.models.User.findById(userId);
+    var includeModels = [
+      this.db.models.UserRole
+    ];
+
+    includes = [].concat(includes)
+
+    if (includes.indexOf('profile') > -1)
+        includeModels.push(this.db.models.UserProfile);
+
+    return this.db.models.User.findById(userId, {
+        include : includeModels
+    })
+    .then(user =>
+    {
+        if(user)
+        {
+            user.dataValues.roles = user.UserRoles.map(role => role.id);
+            user.dataValues.profile = user.UserProfile && user.UserProfile.dataValues;
+
+            delete user.dataValues.UserRoles;
+            delete user.dataValues.UserProfile;
+
+            return user.dataValues;
+        }
+    });
 }
 
 module.exports.getUserProfile = function(userId)
 {
-    return this.db.models.UserProfile.findById(userId);
+    return this.db.models.UserProfile.findById(userId).then(profile => profile && profile.dataValues);
 }
 
 module.exports.userExists = function(userId)
@@ -31,43 +69,128 @@ module.exports.userExists = function(userId)
 
 module.exports.addUser = function(user, returnUser)
 {
-    var self = this;
+    var roles = (user.roles && user.roles.map(roleId => ({ userId : user.id, roleId : roleId, createdBy : user.createdBy }))) || [ ];
 
     delete user.createdOn;
     delete user.updatedOn;
+    delete user.roles;
 
-    return this.db.models.User.create(user).then(() => returnUser ? self.getUser(user.id) : user.id);
+    return this.db.transaction(trans =>
+    {
+        var transaction = { transaction : trans };
+
+        return this.db.models.User.create(user, transaction).then(() =>
+        {
+            if(roles.length > 0)
+                return Promise.all(roles.map(role => this.db.models.UserHasRole.create(role, transaction)));
+        });
+    })
+    .then(() => returnUser ? this.getUser(user.id) : user.id);
+
 }
 
 module.exports.updateUser = function(userId, user, returnUser)
 {
-    [ 'id', 'createdOn', 'updatedOn', 'createdBy', 'updatedBy' ].forEach(key => delete user[key]);
+    var roles = (user.roles && user.roles.map(roleId => ({ userId : userId, roleId : roleId }))) || [ ];
+
+    [ 'id', 'createdOn', 'updatedOn', 'createdBy', 'updatedBy', 'roles' ].forEach(key => delete user[key]);
 
     user.id = userId;
 
-    var self = this;
+    return this.db.transaction(trans =>
+    {
+        var transaction = { transaction : trans };
 
-    return this.db.models.User.update(user, { where : { id : userId } }).then(() => returnUser ? self.getUser(userId) : userId);
+        return this.db.models.User.update(user, {
+            where : {
+                id : userId
+            },
+            transaction : trans
+        })
+        .then(() =>
+        {
+            if(roles.length > 0)
+            {
+                return this.getUser(userId).then(user =>
+                {
+                    return Promise.all(roles.map(role =>
+                    {
+                        return this.db.models.UserHasRole.destroy({
+                            where : {
+                                userId : userId
+                            },
+                            transaction : trans
+                        })
+                        .then(() =>
+                        {
+                            role.createdBy = user.createdBy;
+                            return this.db.models.UserHasRole.upsert(role, transaction);
+                        })
+                    }));
+                });
+            }
+        });
+    })
+    .then(() => returnUser ? this.getUser(userId) : userId);
 }
 
 module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
 {
     [ 'userId', 'createdOn', 'updatedOn', 'updatedBy' ].forEach(key => delete profile[key]);
 
-    profile.userId = userId;
-
-    var self = this;
-
     return this.userExists(userId).then(exists =>
     {
         if(exists)
         {
-            return self.db.models.UserProfile.upsert(profile)
-                .then(() => returnProfile ? self.getUserProfile(userId) : userId);
+            return this.getUserProfile(userId).then(p =>
+            {
+                if(p)
+                {
+                    return this.db.models.UserProfile.update(profile,  { where : { userId : userId } })
+                        .then(() => returnProfile ? this.getUserProfile(userId) : userId);
+                }
+                else
+                {
+                    profile.userId = userId;
+
+                    return this.db.models.UserProfile.insert(profile)
+                        .then(() => returnProfile ? this.getUserProfile(userId) : userId);
+                }
+            });
         }
         else
         {
             throw new Error('A user with this ID does not exist.');
         }
     })
+}
+
+module.exports.getUserRoles = function()
+{
+    return this.db.models.UserRole.findAll().map(role => role.dataValues);
+}
+
+module.exports.getUserRole = function(roleId)
+{
+    return this.db.models.UserRole.findById(roleId).then(role => role && role.dataValues);
+}
+
+module.exports.userRoleExists = function(roleId)
+{
+    return this.db.models.UserRole.findById(roleId).then(role => role && role.id === roleId);
+}
+
+module.exports.getRolesOfUser = function(userId)
+{
+    return this.db.models.UserHasRole.findAll({ where : { userId : userId } }).map(role => role.roleId);
+}
+
+module.exports.addUserToRole = function(userId, roleId, returnRoles)
+{
+    const options = { where: { userId: userId, roleId: roleId }, defaults: { createdBy: userId } };
+
+    return this.db.models.UserHasRole.findOrCreate(options).spread((userHasRole, created) =>
+    {
+        return returnRoles ? this.getRolesOfUser(userId) : roleId;
+    });
 }

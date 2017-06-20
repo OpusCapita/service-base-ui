@@ -1,0 +1,36 @@
+{
+  "user/userInfo": {
+    "translations": {
+      "name" : {
+        "en": "User Information",
+        "de": ""
+      },
+      "description": {
+        "en": "User Information resources",
+        "de": ""
+      }
+    },
+    "resources": [
+      {
+        "type": "rest",
+        "resourceId": "/users/[%w | %p]*",
+        "actions": ["view", "edit"]
+      },
+      {
+        "type": "rest",
+        "resourceId": "/users",
+        "actions": ["create"]
+      },
+      {
+        "type": "rest",
+        "resourceId": "/onboardingdata",
+        "actions": ["view", "create"]
+      },
+      {
+        "type": "rest",
+        "resourceId": "/onboardingdata/[%w | %p]*",
+        "actions": ["edit"]
+      }
+    ]
+  }
+}

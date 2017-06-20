@@ -14,6 +14,7 @@ const Sequelize = require('sequelize');
 module.exports.init = function(db, config)
 {
     return Promise.all([
-        require('./user.js').init(db, config)
+        require('./user.js').init(db, config),
+        require('./userOnboardData.js').init(db, config)
     ]);
 }

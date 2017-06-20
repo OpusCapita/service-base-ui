@@ -1,0 +1,22 @@
+[
+    {
+        "id": "admin",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "user",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "supplier",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "xtenant",
+        "createdBy": "The Doctor"
+    },
+    {
+        "id": "supplier-admin",
+        "createdBy": "The Doctor"
+    }
+]

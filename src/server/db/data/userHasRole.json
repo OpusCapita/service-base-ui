@@ -1,0 +1,22 @@
+[
+    {
+        "userId": "ocadmin",
+        "roleIds": ["xtenant"],
+        "createdBy": "The Doctor"
+    },
+    {
+        "userId": "scott.tiger@example.com",
+        "roleIds": ["admin", "user"],
+        "createdBy": "The Doctor"
+    },
+    {
+        "userId": "john.doe@ncc.com",
+        "roleIds": ["user"],
+        "createdBy": "The Doctor"
+    },
+    {
+        "userId": "supplier@example.com",
+        "roleIds": ["user", "supplier"],
+        "createdBy": "The Doctor"
+    }
+]

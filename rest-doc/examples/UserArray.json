@@ -9,7 +9,8 @@
     "createdBy": "the doctor",
     "changedBy": "",
     "createdOn": "2017-03-28T12:24:52.000Z",
-    "changedOn": null
+    "changedOn": null,
+    "roles": ["admin"]
 }, {
     "id": "def:user",
     "federationId": "def",
@@ -21,5 +22,6 @@
     "createdBy": "the doctor",
     "changedBy": "",
     "createdOn": "2017-03-28T13:10:50.000Z",
-    "changedOn": null
+    "changedOn": null,
+    "roles": ["admin", "user"]
 }]
