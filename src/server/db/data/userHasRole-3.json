@@ -1,0 +1,12 @@
+[
+    {
+        "userId": "scott.tiger@example.com",
+        "roleIds": ["supplier-admin"],
+        "createdBy": "The Doctor"
+    },
+    {
+        "userId": "john.doe@ncc.com",
+        "roleIds": ["customer-admin"],
+        "createdBy": "The Doctor"
+    }
+]
