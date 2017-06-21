@@ -45,7 +45,7 @@ module.exports.down = function(db, config)
   var data = require('../data/userHasRole-3.json')
 
   return data.map(item => {
-      return db.models.UserHasRole.delete({
+      return db.models.UserHasRole.destroy({
           where: {
               userId : item.userId,
               roleId : {
