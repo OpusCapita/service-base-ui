@@ -20,7 +20,7 @@
     "ejs": "^2.5.6",
     "express-ejs-layouts": "^2.3.0",
     "extend": "^3.0.1",
-    "ocbesbn-bouncer": "^0.2.2",
+    "ocbesbn-bouncer": "^0.2.3",
     "ocbesbn-config": "^2.2.7",
     "ocbesbn-db-init": "^1.1.9",
     "ocbesbn-redis-events": "^1.0.4",
