@@ -1,0 +1,32 @@
+[
+    {
+        "userId": "svc_bnp",
+        "roleIds": ["svc_bnp"],
+        "createdBy": "The Doctor"
+    },
+    {
+        "userId": "svc_onboarding",
+        "roleIds": ["svc_onboarding"],
+        "createdBy": "The Doctor"
+    },
+    {
+        "userId": "svc_invoice",
+        "roleIds": ["svc_invoice"],
+        "createdBy": "The Doctor"
+    },
+    {
+        "userId": "svc_kong",
+        "roleIds": ["svc_kong"],
+        "createdBy": "The Doctor"
+    },
+    {
+        "userId": "svc_auth",
+        "roleIds": ["svc_auth"],
+        "createdBy": "The Doctor"
+    },
+    {
+        "userId": "svc_user",
+        "roleIds": ["svc_user"],
+        "createdBy": "The Doctor"
+    }
+]

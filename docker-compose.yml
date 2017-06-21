@@ -20,11 +20,6 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       REDIS_AUTH: ${REDIS_AUTH}
-      USER_NAME: ${USER_NAME}
-      PASSWORD: ${PASSWORD}
-      CLIENT_KEY: ${CLIENT_KEY}
-      CLIENT_SECRET: ${CLIENT_SECRET}
-      SCOPE: ${SCOPE}
     ports:
      - '${PORT}:${PORT}'
     command: "npm start"

@@ -45,10 +45,12 @@ module.exports.down = function(db, config)
   var data = require('../data/userHasRole-3.json')
 
   return data.map(item => {
-      return db.queryInterface.delete('UserHasRole', {
-          id : item.userId,
-          roleId : {
-              $in : item.roleIds
+      return db.models.UserHasRole.delete({
+          where: {
+              userId : item.userId,
+              roleId : {
+                  $in : item.roleIds
+              }
           }
       })
   })

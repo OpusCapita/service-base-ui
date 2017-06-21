@@ -1,13 +1,13 @@
 {
-  "userInfo": {
+  "x-tenant-user-mgmt": {
     "translations": {
       "name" : {
-        "en": "User Information",
-        "de": ""
+        "en": "User management for x-tenant",
+        "de": "Benutzerverwaltung für x-tenant"
       },
       "description": {
-        "en": "User Information resources",
-        "de": ""
+        "en": "Includes new user, updating userdata and also the onboard data, high privilege completely for the x-tenant",
+        "de": "Enthält neuen Benutzer, Aktualisierung von userdata und auch die Onboard-Daten, hohe Privileg komplett für den x-tenant"
       }
     },
     "resources": [
