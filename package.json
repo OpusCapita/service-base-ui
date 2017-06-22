@@ -24,7 +24,7 @@
     "ocbesbn-config": "^2.2.7",
     "ocbesbn-db-init": "^1.1.9",
     "ocbesbn-redis-events": "^1.0.4",
-    "ocbesbn-service-client": "^1.0.16",
+    "ocbesbn-service-client": "^1.0.21",
     "ocbesbn-web-init": "^2.0.0",
     "sequelize": "^3.30.4"
   },
