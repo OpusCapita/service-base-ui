@@ -42,16 +42,12 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-  var data = require('../data/userHasRole-3.json')
+    var data = require('../data/userHasRole-3.json')
 
-  return data.map(item => {
-      return db.models.UserHasRole.destroy({
-          where: {
-              userId : item.userId,
-              roleId : {
-                  $in : item.roleIds
-              }
-          }
-      })
-  })
+    return Promise.all(
+        data.map(item => {
+            var query = "DELETE FROM UserHasRole where userId='" + item.userId + "' AND roleId IN " + "(" + "'" + item.roleIds.join("', '") + "'" + ")";
+            return db.queryInterface.sequelize.query(query);
+        })
+    );
 }
