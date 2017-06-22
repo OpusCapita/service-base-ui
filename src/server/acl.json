@@ -18,6 +18,16 @@
       },
       {
         "type": "rest",
+        "resourceId": "/roles/[%w | %p]*",
+        "actions": ["view", "edit", "create"]
+      },
+      {
+        "type": "rest",
+        "resourceId": "/roles/",
+        "actions": ["create"]
+      },
+      {
+        "type": "rest",
         "resourceId": "/users",
         "actions": ["create"]
       },
