@@ -12,23 +12,10 @@
  */
 module.exports.up = function(db, config)
 {
-    var data = require('../data/serviceHasRoles.json');
-    var assignedRoles = [ ];
+    var roles = require('../data/userRoles-2.json');
+    roles.forEach(role => role.createdOn = new Date());
 
-    data.forEach(item =>
-    {
-        item.roleIds.forEach(roleId =>
-        {
-            assignedRoles.push({
-                userId : item.userId,
-                roleId : roleId,
-                createdBy : item.createdBy,
-                createdOn : new Date()
-            })
-        });
-    })
-
-    return db.queryInterface.bulkInsert('UserHasRole', assignedRoles);
+    return db.queryInterface.bulkInsert('UserRole', roles);
 }
 
 /**
@@ -42,11 +29,11 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    var userIds = require('../data/serviceHasRoles.json').map(item => item.userId);
+    var roleIds = require('../data/userRoles-2.json').map(role => role.id);
 
-    return db.queryInterface.bulkDelete('UserHasRole', {
-        userId : {
-            $in : userIds
+    return db.queryInterface.bulkDelete('UserRole', {
+        id : {
+            $in : roleIds
         }
     });
 }

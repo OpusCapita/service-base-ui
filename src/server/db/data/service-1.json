@@ -1,0 +1,52 @@
+[
+    {
+        "id" : "svc_user",
+        "federationId" : "",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
+        "createdBy" : "the doctor"
+    },
+    {
+        "id" : "svc_onboarding",
+        "federationId" : "",
+        "supplierId" : "hard001",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
+        "createdBy" : "the doctor"
+    },
+    {
+        "id" : "svc_kong",
+        "federationId" : "",
+        "customerId" : "ncc",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
+        "createdBy" : "the doctor"
+    },
+    {
+        "id" : "svc_invoice",
+        "federationId" : "",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
+        "createdBy" : "the doctor"
+    },
+    {
+        "id" : "svc_bnp",
+        "federationId" : "",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
+        "createdBy" : "the doctor"
+    },
+    {
+        "id" : "svc_auth",
+        "federationId" : "",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
+        "createdBy" : "the doctor"
+    }
+]

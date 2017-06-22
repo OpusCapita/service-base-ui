@@ -1,5 +1,8 @@
 'use strict'
 
+const Promise = require('bluebird');
+const pathjs = require('path');
+
 /**
  * Inserts test data into existing database structures.
  * If all migrations were successul, this method will never be executed again.
@@ -12,23 +15,18 @@
  */
 module.exports.up = function(db, config)
 {
-    var data = require('../data/serviceHasRoles.json');
-    var assignedRoles = [ ];
+  const serviceIds = require('../data/service.json').map(item => item.id);
+  var services = require('../data/service-1.json');
 
-    data.forEach(item =>
-    {
-        item.roleIds.forEach(roleId =>
-        {
-            assignedRoles.push({
-                userId : item.userId,
-                roleId : roleId,
-                createdBy : item.createdBy,
-                createdOn : new Date()
-            })
-        });
-    })
+  services.forEach(service => service.createdOn = new Date());
 
-    return db.queryInterface.bulkInsert('UserHasRole', assignedRoles);
+  return db.queryInterface.bulkDelete('User', {
+          id : {
+              $in : serviceIds
+          }
+      }).then(() => {
+        return db.queryInterface.bulkInsert('User', services);
+      })
 }
 
 /**
@@ -42,11 +40,11 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    var userIds = require('../data/serviceHasRoles.json').map(item => item.userId);
+  const serviceIds = require('../data/service-1.json').map(item => item.id);
 
-    return db.queryInterface.bulkDelete('UserHasRole', {
-        userId : {
-            $in : userIds
-        }
-    });
+  return db.queryInterface.bulkDelete('User', {
+          id : {
+              $in : serviceIds
+          }
+      });
 }

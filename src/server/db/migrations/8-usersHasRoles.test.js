@@ -12,7 +12,7 @@
  */
 module.exports.up = function(db, config)
 {
-    var data = require('../data/serviceHasRoles.json');
+    var data = require('../data/serviceHasRoles-1.json');
     var assignedRoles = [ ];
 
     data.forEach(item =>
@@ -42,11 +42,16 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    var userIds = require('../data/serviceHasRoles.json').map(item => item.userId);
+    var data = require('../data/serviceHasRoles-1.json');
 
-    return db.queryInterface.bulkDelete('UserHasRole', {
-        userId : {
-            $in : userIds
-        }
-    });
+    return Promise.all(
+        data.map(item => {
+            return db.queryInterface.bulkDelete('UserHasRole', {
+                userId : item.userId,
+                roleId: {
+                  $in: item.roleIds
+                }
+            })
+        })
+    );
 }
