@@ -46,8 +46,12 @@ module.exports.down = function(db, config)
 
     return Promise.all(
         data.map(item => {
-            var query = "DELETE FROM UserHasRole where userId='" + item.userId + "' AND roleId IN " + "(" + "'" + item.roleIds.join("', '") + "'" + ")";
-            return db.queryInterface.sequelize.query(query);
+            return db.queryInterface.bulkDelete('UserHasRole', {
+                userId : item.userId,
+                roleId: {
+                  $in: item.roleIds
+                }
+            })
         })
     );
 }
