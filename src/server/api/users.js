@@ -165,8 +165,21 @@ module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
     })
 }
 
-module.exports.getUserRoles = function()
+module.exports.addUserToRole = function(userId, roleId, returnRoles)
 {
+    const options = { where: { userId : userId, roleId : roleId }, defaults : { createdBy : userId } };
+
+    return this.db.models.UserHasRole.findOrCreate(options).spread((userHasRole, created) =>
+    {
+        return returnRoles ? this.getRolesOfUser(userId) : roleId;
+    });
+}
+
+module.exports.getUserRoles = function(ids)
+{
+    if(Array.isArray(ids))
+        return this.db.models.UserRole.findAll({ where : { id : { '$in' : ids } } }).map(role => role.dataValues);
+
     return this.db.models.UserRole.findAll().map(role => role.dataValues);
 }
 
@@ -180,17 +193,23 @@ module.exports.userRoleExists = function(roleId)
     return this.db.models.UserRole.findById(roleId).then(role => role && role.id === roleId);
 }
 
+module.exports.addUserRoles = function(roles, returnRoles)
+{
+    var localRules = Array.isArray(roles) ? roles : [ roles ];
+    localRules = localRules.map(role => ({ id : role.id, createdBy : role.createdBy }));
+
+    return this.db.models.UserRole.bulkCreate(localRules).then(() =>
+    {
+        var idsOnly = localRules.map(role => role.id);
+
+        if(returnRoles)
+            return this.getUserRoles(idsOnly);
+        else
+            return idsOnly
+    });
+}
+
 module.exports.getRolesOfUser = function(userId)
 {
     return this.db.models.UserHasRole.findAll({ where : { userId : userId } }).map(role => role.roleId);
-}
-
-module.exports.addUserToRole = function(userId, roleId, returnRoles)
-{
-    const options = { where: { userId: userId, roleId: roleId }, defaults: { createdBy: userId } };
-
-    return this.db.models.UserHasRole.findOrCreate(options).spread((userHasRole, created) =>
-    {
-        return returnRoles ? this.getRolesOfUser(userId) : roleId;
-    });
 }
