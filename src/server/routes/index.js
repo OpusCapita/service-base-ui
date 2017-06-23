@@ -4,7 +4,6 @@ const Promise = require('bluebird');
 const extend = require('extend');
 const RedisEvents = require('ocbesbn-redis-events');
 const Users = require('../api/users.js');
-const Roles = require('../api/roles.js');
 const UserOnboardData = require('../api/userOnboardData.js');
 
 /**
@@ -19,9 +18,8 @@ const UserOnboardData = require('../api/userOnboardData.js');
 module.exports.init = function(app, db, config)
 {
     return Promise.all([
-      Users.init(db, config),
-      UserOnboardData.init(db, config),
-      Roles.init(db, config)
+        Users.init(db, config),
+        UserOnboardData.init(db, config)
     ])
     .then(() =>
     {
@@ -58,7 +56,8 @@ module.exports.init = function(app, db, config)
 
         app.get('/roles', (req, res) => this.sendRoles(req, res));
         app.get('/roles/:id', (req, res) => this.sendRole(req, res));
-        app.post('/roles', (req, res) => this.addRoles(req, res));
+
+        app.post('/roles', (req, res) => this.addUserRoles(req, res));
 
         app.put('/users/:userId/roles/:roleId', (req, res) => this.addUserToRole(req, res));
     });
@@ -373,11 +372,11 @@ module.exports.sendRole = function(req, res)
     });
 }
 
-module.exports.addRoles = function(req, res)
+module.exports.addUserRoles = function(req, res)
 {
-    Roles.addRoles(req.body.roles).then(roles =>
+    Users.addUserRoles(req.body, true).then(roles =>
     {
-      res.json(roles)
+        res.json(roles)
     })
     .catch(e => res.status('400').json({ message : e.message }));
 }
