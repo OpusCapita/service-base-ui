@@ -1,5 +1,5 @@
 {
-  "self-info": {
+  "userInfo": {
     "translations": {
       "name" : {
         "en": "Access user profile and onboard data",
@@ -13,7 +13,7 @@
     "resources": [
       { 
         "type": "rest",
-        "resourceId": "/onboardData/_current_user_id",
+        "resourceId": "/onboardData/${_current_user_id}",
         "actions": ["view"]
       },
       {
