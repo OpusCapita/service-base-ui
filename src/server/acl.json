@@ -1,4 +1,28 @@
 {
+  "self-info": {
+    "translations": {
+      "name" : {
+        "en": "Access user profile and onboard data",
+        "de": "Zugriff auf eigene Benutzerdaten"
+      },
+      "description": {
+        "en": "Allows to view user profile and onboard data",
+        "de": "Erlaubt Zugriff auf eigenene Benutzerdaten wie Profil und Kampagnen-Info"
+      }
+    },
+    "resources": [
+      { 
+        "type": "rest",
+        "resourceId": "/onboardData/_current_user_id",
+        "actions": ["view"]
+      },
+      {
+        "type": "rest",
+        "resourceId": "/users/${_current_user_id}/profile",
+        "actions": ["view", "edit"]
+      }
+    ]
+  },
   "x-tenant-user-mgmt": {
     "translations": {
       "name" : {
