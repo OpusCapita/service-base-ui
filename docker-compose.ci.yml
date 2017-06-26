@@ -1,0 +1,5 @@
+version: '3'
+services:
+  main:
+    image: opuscapita/user:dev
+    command: 'npm run dev'
