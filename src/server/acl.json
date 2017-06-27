@@ -1,70 +1,68 @@
 {
-  "userInfo": {
-    "translations": {
-      "name" : {
-        "en": "Access user profile and onboard data",
-        "de": "Zugriff auf eigene Benutzerdaten"
-      },
-      "description": {
-        "en": "Allows to view user profile and onboard data",
-        "de": "Erlaubt Zugriff auf eigenene Benutzerdaten wie Profil und Kampagnen-Info"
-      }
+    "userInfo": {
+        "translations": {
+            "name": {
+                "en": "Access user profile and onboard data",
+                "de": "Zugriff auf eigene Benutzerdaten"
+            },
+            "description": {
+                "en": "Allows to view user profile and onboard data",
+                "de": "Erlaubt Zugriff auf eigenene Benutzerdaten wie Profil und Kampagnen-Info"
+            }
+        },
+        "resources": [{
+                "type": "rest",
+                "resourceId": "/onboardData/${_current_user_id}$",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "/users/${_current_user_id}/profile",
+                "actions": ["view", "edit"]
+            }
+        ]
     },
-    "resources": [
-      {
-        "type": "rest",
-        "resourceId": "/onboardData/${_current_user_id}$",
-        "actions": ["view"]
-      },
-      {
-        "type": "rest",
-        "resourceId": "/users/${_current_user_id}/profile",
-        "actions": ["view", "edit"]
-      }
-    ]
-  },
-  "x-tenant-user-mgmt": {
-    "translations": {
-      "name" : {
-        "en": "User management for x-tenant",
-        "de": "Benutzerverwaltung für x-tenant"
-      },
-      "description": {
-        "en": "Includes new user, updating userdata and also the onboard data, high privilege completely for the x-tenant",
-        "de": "Enthält neuen Benutzer, Aktualisierung von userdata und auch die Onboard-Daten, hohe Privileg komplett für den x-tenant"
-      }
-    },
-    "resources": [
-      {
-        "type": "rest",
-        "resourceId": "/users/[%w | %p]*",
-        "actions": ["view", "edit"]
-      },
-      {
-        "type": "rest",
-        "resourceId": "/roles/[%w | %p]*",
-        "actions": ["view", "edit", "create"]
-      },
-      {
-        "type": "rest",
-        "resourceId": "/roles/",
-        "actions": ["create"]
-      },
-      {
-        "type": "rest",
-        "resourceId": "/users",
-        "actions": ["create"]
-      },
-      {
-        "type": "rest",
-        "resourceId": "/onboardingdata",
-        "actions": ["view", "create"]
-      },
-      {
-        "type": "rest",
-        "resourceId": "/onboardingdata/[%w | %p]*",
-        "actions": ["edit"]
-      }
-    ]
-  }
+    "x-tenant-user-mgmt": {
+        "translations": {
+            "name": {
+                "en": "User management for x-tenant",
+                "de": "Benutzerverwaltung für x-tenant"
+            },
+            "description": {
+                "en": "Includes new user, updating userdata and also the onboard data, high privilege completely for the x-tenant",
+                "de": "Enthält neuen Benutzer, Aktualisierung von userdata und auch die Onboard-Daten, hohe Privileg komplett für den x-tenant"
+            }
+        },
+        "resources": [{
+                "type": "rest",
+                "resourceId": "/users/[%w | %p]*",
+                "actions": ["view", "edit"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "/users",
+                "actions": ["create", "view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "/roles",
+                "actions": ["view", "create"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "/roles/[%w | %p]*",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "/onboardingdata",
+                "actions": ["view", "create"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "/onboardingdata/[%w | %p]*",
+                "actions": ["edit"]
+            }
+        ]
+    }
 }

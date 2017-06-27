@@ -27,12 +27,6 @@ module.exports.init = function(app, db, config)
 
         app.use(checkContentType);
 
-        app.get('/register/verify/:email', (req, res) => this.verifyRegister(req, res));
-        app.post('/register/verify', (req, res) => this.postVerifyRegister(req, res));
-
-        app.get('/register', (req, res) => this.registerUser(req, res));
-        app.post('/register', (req, res) => this.postRegister(req, res));
-
         /* duplicate endpoint for backwards compatibility */
         app.get(['/onboardData/:userId', '/onboardingdata/:userId'], (req, res) => this.getOnboardData(req, res));
         app.get('/onboardingdata', (req, res) => this.getOnboardingData(req, res));
@@ -63,160 +57,7 @@ module.exports.init = function(app, db, config)
     });
 }
 
-module.exports.registerUser = function(req, res)
-{
-  let userDetail = (req.query.userDetail) ? JSON.parse(req.query.userDetail) : {};
-  let invitationCode = req.query.invitationCode;
 
-  if (invitationCode) {
-      UserOnboardData.findByInvitationCode(invitationCode).then((onboardData) => {
-          if (!onboardData) {
-            let msg = {errMessage: "No invitation found."};
-            res.render('registration', msg);
-          } else {
-              let userDetails = JSON.parse(onboardData.userDetails);
-
-              res.render('registration', {
-                  password: '',
-                  passwordConfirmation: '',
-                  errMessage: '',
-                  email: userDetails.email || '',
-                  renderCaptcha: true
-              })
-          }
-      })
-  } else {
-      res.render('registration', {
-          password: '',
-          passwordConfirmation: '',
-          errMessage: '',
-          email: userDetail.email || '',
-          renderCaptcha: true
-      })
-  }
-}
-
-module.exports.postRegister = function(req, res)
-{
-  var msg = {
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirmation: req.body.passwordConfirmation,
-    errMessage: '',
-    renderCaptcha: true
-  }
-
-  function validateUser() {
-    return new Promise((resolve, reject) => {
-
-      if (!req.body.email) {
-        return reject({message: 'Email is required'});
-      } else if (!req.body.password) {
-        return reject({message: 'Password is required'});
-      } else if (req.body.passwordConfirmation !== req.body.password) {
-        return reject({message: 'Password confirmation is incorrect'});
-      }
-
-      Users.userExists(req.body.email).then((exists) => {
-        if(exists) {
-          return reject({message: 'User already exists'});
-        }
-
-        return resolve({statusCode: 200, message: ''});
-      })
-
-    });
-  }
-
-  function validateCaptcha() {
-    return req.opuscapita.serviceClient.post('auth', '/public/captcha/verify', {
-      'g-recaptcha-response': req.body['g-recaptcha-response']
-    });
-  }
-
-  validateUser()
-  .then(() => validateCaptcha())
-  .then(() => {
-    return req.opuscapita.serviceClient.post('auth', '/credentials', {
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirmation: req.body.passwordConfirmation
-    });
-  })
-  .then((data) => {
-    return Users.addUser({
-      id: req.body.email,
-      status: 'emailVerification'
-    }, true)
-    .then(user => {
-        UserOnboardData.findByUserId(req.body.email).then((data) => {
-            return data && data.invitationCode ? data.invitationCode : '';
-        })
-        .then(invitationCode => {
-            var eventUserObj = extend(true, {}, user, {invitationCode: invitationCode});
-            return this.events.emit(eventUserObj, 'user.added');
-        });
-    });
-  })
-  .then(() => {
-    if (req.query.invitationCode) {
-      return UserOnboardData.findByInvitationCode(req.query.invitationCode)
-      .then((onboardData) => {
-          if (onboardData) {
-              return UserOnboardData.updateByInvitationCode(req.query.invitationCode, {
-                  userId: req.body.email
-              });
-          }
-      })
-    } else {
-      return new Promise.resolve();
-    }
-  })
-  .then(() => {
-    res.redirect('/user/register/verify/' + req.body.email);
-  })
-  .catch((err) => {
-    if (err && err.response && err.response.result && err.response.result.message)
-      msg.errMessage = err.response.result.message;
-    else if (err.message)
-      msg.errMessage = err.message
-    else
-      msg.errMessage = 'Oops!, something went wrong';
-
-    res.render('registration', msg);
-  });
-}
-
-module.exports.verifyRegister = function(req, res)
-{
-  res.render('registration-confirm', {
-    invalidCode: '',
-    userId: req.params.email,
-    email: req.params.email
-  });
-}
-
-module.exports.postVerifyRegister = function(req, res)
-{
-  req.opuscapita.serviceClient.post('kong', '/auth/credentials/verify/email', {
-    email: req.body.email,
-    code: req.body.code
-  })
-  .then(() => Users.updateUser(req.body.email, {status: 'emailVerified'}, true))
-  .then((user) => this.events.emit(user, 'user.updated'))
-  .then(() => {
-    res.render('registration-valid', {
-      userId: req.body.email
-    })
-  }).catch((err) => {
-    res.render('registration-confirm', {
-      invalidCode: err.message,
-      userId: req.body.email,
-      email: req.body.email
-    });
-  })
-
-}
 
 module.exports.getOnboardData = function(req, res)
 {
@@ -468,20 +309,20 @@ module.exports.getOnboardingData = function (req, res) {
       }
   }
   catch(err) {
-    res.status('400').json({ message : 'A valid query parameter "filter" is required.'});
+      res.status('400').json({ message : 'A valid query parameter "filter" is required.'});
   }
 }
 
 module.exports.updateOnboarddataUseridByInvitationcode = function(req, res)
 {
-  let invitationCode = req.params.invitationCode;
-  let data = {
-    userId: req.body.userId
-  };
+    let invitationCode = req.params.invitationCode;
+    let data = {
+        userId: req.body.userId
+    };
 
   return UserOnboardData.updateByInvitationCode(invitationCode, data)
-  .then(onboardingdata => res.status('202').json(onboardingdata))
-  .catch(e => res.status('400').json({ message : e.message }));
+    .then(onboardingdata => res.status('202').json(onboardingdata))
+    .catch(e => res.status('400').json({ message : e.message }));
 }
 
 /**
@@ -501,7 +342,7 @@ module.exports.updateOnboarddataUseridByInvitationcode = function(req, res)
 function parseFilter(filter, allowedFields, allowedOperators) {
 
     if (filter) {
-        let filterArray = filter.split([' '])
+        var filterArray = filter.split([' '])
 
         if (filterArray.length == 3 && allowedFields.includes(filterArray[0]) && allowedOperators.includes(filterArray[1])) {
             return filterArray
@@ -526,8 +367,8 @@ function checkContentType(req, res, next)
     var method = req.method.toLowerCase();
     var contentType = req.headers['content-type'] && req.headers['content-type'].toLowerCase();
 
-    if(method !== 'get' && contentType !== 'application/json' && contentType !== 'application/x-www-form-urlencoded')
-        res.status(400).json({ message : 'Invalid content type. Has to be "application/json" or "application/x-www-form-urlencoded".' });
+    if(method !== 'get' && contentType !== 'application/json')
+        res.status(400).json({ message : 'Invalid content type. Has to be "application/json".' });
     else
         next();
 }
