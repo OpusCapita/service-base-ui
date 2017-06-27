@@ -11,9 +11,9 @@
       }
     },
     "resources": [
-      { 
+      {
         "type": "rest",
-        "resourceId": "/onboardData/${_current_user_id}",
+        "resourceId": "/onboardData/${_current_user_id}$",
         "actions": ["view"]
       },
       {
