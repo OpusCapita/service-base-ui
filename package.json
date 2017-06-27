@@ -20,12 +20,12 @@
     "ejs": "^2.5.6",
     "express-ejs-layouts": "^2.3.0",
     "extend": "^3.0.1",
-    "ocbesbn-bouncer": "^0.2.3",
+    "ocbesbn-bouncer": "^0.2.5",
     "ocbesbn-config": "^2.2.8",
     "ocbesbn-db-init": "^1.1.9",
     "ocbesbn-redis-events": "^1.0.4",
     "ocbesbn-service-client": "^1.0.26",
-    "ocbesbn-web-init": "^2.0.0",
+    "ocbesbn-web-init": "^2.1.6",
     "sequelize": "^3.30.4"
   },
   "devDependencies": {
