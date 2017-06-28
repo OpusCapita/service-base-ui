@@ -90,6 +90,11 @@ module.exports.addUser = function(req, res)
             var user = req.body;
             user.createdBy = req.opuscapita.userData('id');
 
+            if(!Array.isArray(user.roles))
+                user.roles = [ ];
+
+            user.roles.push('user');
+
             return Users.addUser(user, true)
                 .then(user => this.events.emit(user, 'user.added').then(() => user))
                 .then(user => res.status('202').json(user));
