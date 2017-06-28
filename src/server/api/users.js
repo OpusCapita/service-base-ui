@@ -80,7 +80,7 @@ module.exports.addUser = function(user, returnUser)
         return this.db.models.User.create(user, transaction).then(() =>
         {
             if(roles.length > 0)
-                return Promise.all(roles.map(role => this.db.models.UserHasRole.create(role, transaction)));
+                return Promise.all(roles.map(role => this.db.models.UserHasRole.upsert(role, transaction)));
         });
     })
     .then(() => returnUser ? this.getUser(user.id) : user.id);
