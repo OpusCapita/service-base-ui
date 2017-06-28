@@ -87,11 +87,12 @@ module.exports.addUser = function(req, res)
         }
         else
         {
-            return Users.addUser(req.body, true)
-            .then((user) => {
-                return this.events.emit(user, 'user.added').then(() => user);
-            })
-            .then(user => res.status('202').json(user));
+            var user = req.body;
+            user.createdBy = req.opuscapita.userData('id');
+
+            return Users.addUser(user, true)
+                .then(user => this.events.emit(user, 'user.added').then(() => user))
+                .then(user => res.status('202').json(user));
         }
     })
     .catch(e => res.status('400').json({ message : e.message }));
@@ -105,7 +106,10 @@ module.exports.updateUser = function(req, res, useCurrentUser)
     {
         if(exists)
         {
-            return Users.updateUser(userId, req.body, true).then(user =>
+            var user = req.body;
+            user.changedBy = req.opuscapita.userData('id');
+
+            return Users.updateUser(userId, user, true).then(user =>
             {
                 if(req.query.tokenUpdate == "true")
                 {
@@ -137,7 +141,11 @@ module.exports.addOrUpdateUserProfile = function(req, res, useCurrentUser)
     {
         if(exists)
         {
-            return Users.addOrUpdateUserProfile(userId, req.body, true).then(profile =>
+            var profile = req.body;
+            profile.createdBy = req.opuscapita.userData('id');
+            profile.changedBy = profile.createdBy;
+
+            return Users.addOrUpdateUserProfile(userId, profile, true).then(profile =>
             {
                 if(req.query.tokenUpdate == "true")
                 {
@@ -215,7 +223,10 @@ module.exports.sendRole = function(req, res)
 
 module.exports.addUserRoles = function(req, res)
 {
-    Users.addUserRoles(req.body, true).then(roles =>
+    var userId = req.opuscapita.userData('id');
+    var roles = req.body.map(role => role.createdBy = userId);
+
+    Users.addUserRoles(roles, true).then(roles =>
     {
         res.json(roles)
     })
@@ -226,6 +237,7 @@ module.exports.addUserToRole = function(req, res)
 {
     const userId = req.params.userId;
     const roleId = req.params.roleId;
+    const creatorId = req.opuscapita.userData('id');
 
     Users.userExists(userId).then(exists =>
     {
@@ -234,7 +246,7 @@ module.exports.addUserToRole = function(req, res)
             Users.userRoleExists(roleId).then(roleExists =>
             {
                 if(roleExists)
-                    Users.addUserToRole(userId, roleId, true).then(roles => res.status('201').json(roles));
+                    Users.addUserToRole(userId, roleId, creatorId, true).then(roles => res.status('201').json(roles));
                 else
                     res.status('404').json({ message : 'A role with this ID does not exist.' });
             })

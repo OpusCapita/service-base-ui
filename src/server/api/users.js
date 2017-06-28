@@ -71,9 +71,7 @@ module.exports.addUser = function(user, returnUser)
 {
     var roles = (user.roles && user.roles.map(roleId => ({ userId : user.id, roleId : roleId, createdBy : user.createdBy }))) || [ ];
 
-    delete user.createdOn;
-    delete user.updatedOn;
-    delete user.roles;
+    [ 'createdOn', 'changedOn', 'changedBy', 'roles' ].forEach(key => delete user[key]);
 
     return this.db.transaction(trans =>
     {
@@ -91,9 +89,9 @@ module.exports.addUser = function(user, returnUser)
 
 module.exports.updateUser = function(userId, user, returnUser)
 {
-    var roles = (user.roles && user.roles.map(roleId => ({ userId : userId, roleId : roleId }))) || [ ];
+    var roles = (user.roles && user.roles.map(roleId => ({ userId : userId, roleId : roleId, createdBy : user.createdBy }))) || [ ];
 
-    [ 'id', 'createdOn', 'updatedOn', 'createdBy', 'updatedBy', 'roles' ].forEach(key => delete user[key]);
+    [ 'createdOn', 'changedOn', 'createdBy', 'roles' ].forEach(key => delete user[key]);
 
     user.id = userId;
 
@@ -116,16 +114,10 @@ module.exports.updateUser = function(userId, user, returnUser)
                     return Promise.all(roles.map(role =>
                     {
                         return this.db.models.UserHasRole.destroy({
-                            where : {
-                                userId : userId
-                            },
+                            where : { userId : userId },
                             transaction : trans
                         })
-                        .then(() =>
-                        {
-                            role.createdBy = user.createdBy;
-                            return this.db.models.UserHasRole.upsert(role, transaction);
-                        })
+                        .then(() => this.db.models.UserHasRole.upsert(role, transaction))
                     }));
                 });
             }
@@ -136,22 +128,24 @@ module.exports.updateUser = function(userId, user, returnUser)
 
 module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
 {
-    [ 'userId', 'createdOn', 'updatedOn', 'updatedBy' ].forEach(key => delete profile[key]);
-
     return this.userExists(userId).then(exists =>
     {
         if(exists)
         {
             return this.getUserProfile(userId).then(p =>
             {
+                profile.userId = userId;
+
                 if(p)
                 {
+                    [ 'createdOn', 'changedOn', 'changedBy' ].forEach(key => delete profile[key]);
+
                     return this.db.models.UserProfile.update(profile,  { where : { userId : userId } })
                         .then(() => returnProfile ? this.getUserProfile(userId) : userId);
                 }
                 else
                 {
-                    profile.userId = userId;
+                    [ 'createdOn', 'changedOn', 'createdBy' ].forEach(key => delete profile[key]);
 
                     return this.db.models.UserProfile.insert(profile)
                         .then(() => returnProfile ? this.getUserProfile(userId) : userId);
@@ -165,9 +159,9 @@ module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
     })
 }
 
-module.exports.addUserToRole = function(userId, roleId, returnRoles)
+module.exports.addUserToRole = function(userId, roleId, createdBy, returnRoles)
 {
-    const options = { where: { userId : userId, roleId : roleId }, defaults : { createdBy : userId } };
+    const options = { where: { userId : userId, roleId : roleId }, defaults : { createdBy : createdBy } };
 
     return this.db.models.UserHasRole.findOrCreate(options).spread((userHasRole, created) =>
     {
