@@ -36,7 +36,7 @@ services:
       - registrator
 
   redis:
-    image: ocbesbn/redis:dev
+    image: opuscapita/redis:dev
     ports:
       - '6379:6379'
     environment:

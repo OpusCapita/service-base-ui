@@ -19,13 +19,12 @@ db.init({
     },
     server : {
         port : process.env.PORT || 3008,
-        staticFilePath : __dirname + '/static',
-        middlewares : [ require("express-ejs-layouts" ), bouncer({
+        middlewares : [ bouncer({
             host : 'consul',
             serviceName : 'user',
             acl : require('./acl.json'),
             aclServiceName : 'acl'
-        }).Middleware]
+        }).Middleware ]
     },
     serviceClient : {
         injectIntoRequest : true,
@@ -34,11 +33,6 @@ db.init({
         }
     }
 }))
-.then((app) =>
-{
-    app.set('view engine', 'ejs');
-    app.set('views', __dirname + '/views');
-})
 .catch((e) =>
 {
     server.end();
