@@ -88,7 +88,7 @@ module.exports.addUser = function(req, res)
         else
         {
             var user = req.body;
-            user.createdBy = req.opuscapita.userData('id');
+            user.createdBy = req.opuscapita.userData('id') || 'The Doctor';
 
             if(!Array.isArray(user.roles))
                 user.roles = [ ];
