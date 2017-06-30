@@ -147,7 +147,7 @@ module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
                 {
                     [ 'createdOn', 'changedOn', 'createdBy' ].forEach(key => delete profile[key]);
 
-                    return this.db.models.UserProfile.insert(profile)
+                    return this.db.models.UserProfile.create(profile)
                         .then(() => returnProfile ? this.getUserProfile(userId) : userId);
                 }
             });
