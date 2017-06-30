@@ -112,7 +112,7 @@ module.exports.updateUser = function(req, res, useCurrentUser)
         if(exists)
         {
             var user = req.body;
-            user.changedBy = req.opuscapita.userData('id');
+            user.changedBy = req.opuscapita.userData('id') || 'The Doctor';
 
             return Users.updateUser(userId, user, true).then(user =>
             {
