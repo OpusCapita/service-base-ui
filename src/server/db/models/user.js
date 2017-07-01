@@ -95,7 +95,7 @@ module.exports.init = function(db, config)
         /** A user's email address. */
         email : {
             type : DataTypes.STRING(100),
-            allowNull : false
+            allowNull : true
         },
         /** A user's language preference in as in ISO 639-1/2 */
         languageId : {
@@ -117,15 +117,18 @@ module.exports.init = function(db, config)
         },
         salutation : {
             type : DataTypes.STRING(20),
-            allowNull : false
+            allowNull : false,
+            defaultValue : ''
         },
         firstName : {
             type : DataTypes.STRING(50),
-            allowNull : false
+            allowNull : false,
+            defaultValue : ''
         },
         lastName : {
             type : DataTypes.STRING(50),
-            allowNull : false
+            allowNull : false,
+            defaultValue : ''
         },
         birthday : {
             type : DataTypes.DATE(),

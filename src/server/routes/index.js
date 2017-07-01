@@ -95,9 +95,17 @@ module.exports.addUser = function(req, res)
 
             user.roles.push('user');
 
+            var resultUser;
+            var emptyProfile = {
+                userId : user.id,
+                createdBy : user.createdBy
+            };
+
             return Users.addUser(user, true)
-                .then(user => this.events.emit(user, 'user.added').then(() => user))
-                .then(user => res.status('202').json(user));
+                .then(user => resultUser = user)
+                .then(() => Users.addOrUpdateUserProfile(user.id, emptyProfile))
+                .then(() => this.events.emit(resultUser, 'user.added'))
+                .then(() => res.status('202').json(resultUser));
         }
     })
     .catch(e => res.status('400').json({ message : e.message }));
