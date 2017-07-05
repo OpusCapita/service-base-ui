@@ -93,7 +93,8 @@ module.exports.addUser = function(req, res)
             if(!Array.isArray(user.roles))
                 user.roles = [ ];
 
-            user.roles.push('user');
+            if(user.roles.indexOf('user') === -1)
+                user.roles.push('user');
 
             var resultUser;
             var emptyProfile = {
@@ -121,6 +122,12 @@ module.exports.updateUser = function(req, res, useCurrentUser)
         {
             var user = req.body;
             user.changedBy = req.opuscapita.userData('id') || 'The Doctor';
+
+            if(!Array.isArray(user.roles))
+                user.roles = [ ];
+
+            if(user.roles.indexOf('user') === -1)
+                user.roles.push('user');
 
             return Users.updateUser(userId, user, true).then(user =>
             {

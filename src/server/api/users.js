@@ -89,7 +89,7 @@ module.exports.addUser = function(user, returnUser)
 
 module.exports.updateUser = function(userId, user, returnUser)
 {
-    var roles = (user.roles && user.roles.map(roleId => ({ userId : userId, roleId : roleId, createdBy : user.createdBy }))) || [ ];
+    var roles = (user.roles && user.roles.map(roleId => ({ userId : userId, roleId : roleId, createdBy : user.changedBy }))) || [ ];
 
     [ 'createdOn', 'changedOn', 'createdBy', 'roles' ].forEach(key => delete user[key]);
 
