@@ -97,14 +97,26 @@ module.exports.addUser = function(req, res)
                 user.roles.push('user');
 
             var resultUser;
-            var emptyProfile = {
-                userId : user.id,
-                createdBy : user.createdBy
-            };
+            var userProfile;
+
+            if(typeof user.profile === 'object')
+            {
+                userProfile = user.profile;
+                userProfile.createdBy = user.createdBy;
+
+                delete user.profile;
+            }
+            else
+            {
+                userProfile = {
+                    userId : user.id,
+                    createdBy : user.createdBy
+                };
+            }
 
             return Users.addUser(user, true)
                 .then(user => resultUser = user)
-                .then(() => Users.addOrUpdateUserProfile(user.id, emptyProfile))
+                .then(() => Users.addOrUpdateUserProfile(user.id, userProfile))
                 .then(() => this.events.emit(resultUser, 'user.added'))
                 .then(() => res.status('202').json(resultUser));
         }
@@ -123,26 +135,40 @@ module.exports.updateUser = function(req, res, useCurrentUser)
             var user = req.body;
             user.changedBy = req.opuscapita.userData('id') || 'The Doctor';
 
-            if(!Array.isArray(user.roles))
-                user.roles = [ ];
-
-            if(user.roles.indexOf('user') === -1)
+            if(Array.isArray(user.roles) && user.roles.indexOf('user') === -1)
                 user.roles.push('user');
+
+            var userProfile;
+
+            if(typeof user.profile === 'object')
+            {
+                userProfile = user.profile;
+                userProfile.userId = userId;
+                userProfile.changedBy = user.changedBy;
+
+                delete user.profile;
+            }
 
             return Users.updateUser(userId, user, true).then(user =>
             {
-                if(req.query.tokenUpdate == "true")
+                var preCond = userProfile ? Users.addOrUpdateUserProfile(userId, userProfile)
+                    : Promise.resolve();
+
+                return preCond.then(() =>
                 {
-                    return doUserCacheUpdate(user, req.opuscapita.serviceClient)
-                        .then(() => this.events.emit(user, 'user.updated'))
-                        .then(() => res.status('202').json(user))
-                        .catch(e => res.status('424').json({ message : e.message }))
-                }
-                else
-                {
-                    return this.events.emit(user, 'user.updated')
-                        .then(() => res.status('202').json(user));
-                }
+                    if(req.query.tokenUpdate == "true")
+                    {
+                        return doUserCacheUpdate(user, req.opuscapita.serviceClient)
+                            .then(() => this.events.emit(user, 'user.updated'))
+                            .then(() => res.status('202').json(user))
+                            .catch(e => res.status('424').json({ message : e.message }))
+                    }
+                    else
+                    {
+                        return this.events.emit(user, 'user.updated')
+                            .then(() => res.status('202').json(user));
+                    }
+                });
             })
         }
         else
