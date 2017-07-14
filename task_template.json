@@ -3,7 +3,7 @@
     "name":"${serviceName}",
     "log-driver":"gelf",
     "log-opt":["gelf-address=udp://${logstash_ip}:12201", "tag=\"${serviceName}\""],
-    "constraint":["node.role==worker"],
+    "constraint":["engine.labels.nodetype==worker"],
     "publish":["mode=host,target=3008,published=3008,protocol=tcp"],
     "host":["consul:172.17.0.1"],
     "env":[
