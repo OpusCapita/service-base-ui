@@ -10,7 +10,8 @@ module.exports.up = function(db, config)
             status : 'firstLogin',
             mayChangeSupplier : false,
             mayChangeCustomer : false,
-            createdBy : 'The Doctor'
+            createdBy : 'The Doctor',
+            createdOn : new Date()
         },
         {
             id : 'indy.inspector@ncc.com',
@@ -19,7 +20,8 @@ module.exports.up = function(db, config)
             status : 'firstLogin',
             mayChangeSupplier : false,
             mayChangeCustomer : false,
-            createdBy : 'The Doctor'
+            createdBy : 'The Doctor',
+            createdOn : new Date()
         }
     ];
 
