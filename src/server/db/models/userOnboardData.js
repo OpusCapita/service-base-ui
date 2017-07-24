@@ -73,6 +73,14 @@ module.exports.init = function(db, config)
         userDetails: {
             type: Sequelize.TEXT('medium'),
             allowNull: true
+        },
+
+        /**
+         * JSON details for service specific configuration.
+         */
+        serviceDetails: {
+            type: Sequelize.TEXT('medium'),
+            allowNull: true
         }
     }, {
         freezeTableName: true
