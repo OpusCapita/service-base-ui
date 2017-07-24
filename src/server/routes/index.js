@@ -364,29 +364,34 @@ module.exports.updateOnboardingData = function(req, res)
 
     return UserOnboardData.find({ invitationCode : invitationCode, userId : null }).then(found =>
     {
-        if(found && found.type === 'singleUse')
+        if(found)
         {
-            return UserOnboardData.updateByInvitationCode(invitationCode, input).then(data =>
+            delete found.id;
+
+            if(found.type === 'singleUse')
             {
-                return this.events.emit(data, 'onboardingdata.updated')
-                    .then(() => res.status('202').json(data));
-            });
-        }
-        else if(found && found.type === 'multipleUse')
-        {
-            return UserOnboardData.updateByInvitationCode(invitationCode, input).then(data =>
+                return UserOnboardData.updateByInvitationCode(invitationCode, input).then(data =>
+                {
+                    return this.events.emit(data, 'onboardingdata.updated')
+                        .then(() => res.status('202').json(data));
+                });
+            }
+            else if(found.type === 'multipleUse')
             {
-                return UserOnboardData.create(found)
-                    .then(() => this.events.emit(found, 'onboardingdata.created'))
-                    .then(() => res.status('202').json(data))
-            });
+                return UserOnboardData.updateByInvitationCode(invitationCode, input).then(data =>
+                {
+                    return UserOnboardData.create(found)
+                        .then(() => this.events.emit(found, 'onboardingdata.created'))
+                        .then(() => res.status('202').json(data))
+                });
+            }
         }
         else
         {
             res.status('404').json({ message : 'Invitation code could not be found.' });
         }
     })
-    .catch(e => res.status('400').json({ message : e.message }));
+    .catch(e => console.log(e) || res.status('400').json({ message : e.message }));
 }
 
 /**
