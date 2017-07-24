@@ -31,7 +31,7 @@ module.exports.init = function(app, db, config)
         app.get(['/onboardData/:userId', '/onboardingdata/:userId'], (req, res) => this.getOnboardData(req, res));
         app.get('/onboardingdata', (req, res) => this.getOnboardingData(req, res));
         app.post('/onboardingdata', (req, res) => this.addOnboardingData(req, res));
-        app.put('/onboardingdata/:invitationCode', (req, res) => this.updateOnboarddataUseridByInvitationcode(req, res));
+        app.put('/onboardingdata/:invitationCode', (req, res) => this.updateOnboardingData(req, res));
 
         app.get('/users', (req, res) => this.sendUsers(req, res));
         app.post('/users', (req, res) => this.addUser(req, res));
@@ -61,20 +61,22 @@ module.exports.init = function(app, db, config)
 
 module.exports.getOnboardData = function(req, res)
 {
-  UserOnboardData.find(req.params.userId).then((userData) => {
-    if (userData) {
-    let onboardData = userData;
-      onboardData.userDetails = JSON.parse(userData.userDetails);
-      onboardData.campaignDetails = JSON.parse(userData.campaignDetails);
-      onboardData.tradingPartnerDetails = JSON.parse(userData.tradingPartnerDetails);
+    UserOnboardData.find({ userId : req.params.userId }).then(onboardData =>
+    {
+        if(onboardData)
+        {
+            onboardData.userDetails = JSON.parse(onboardData.userDetails);
+            onboardData.campaignDetails = JSON.parse(onboardData.campaignDetails);
+            onboardData.tradingPartnerDetails = JSON.parse(onboardData.tradingPartnerDetails);
 
-      res.json(onboardData);
-    } else {
-      res.status(404).json({message: 'No record found'})
-    }
-  }).catch((err) => {
-    res.status(500).json({message: 'Unexpected error: ' + err});
-  });
+            res.json(onboardData);
+        }
+        else
+        {
+            res.status(404).json({ message: 'No Onboarding-Data was found for this user ID.' });
+        }
+    })
+    .catch(err => res.status(500).json({ message : err.message }));
 }
 
 module.exports.addUser = function(req, res)
@@ -156,18 +158,8 @@ module.exports.updateUser = function(req, res, useCurrentUser)
 
                 return preCond.then(() =>
                 {
-                    if(req.query.tokenUpdate == "true")
-                    {
-                        return doUserCacheUpdate(user, req.opuscapita.serviceClient)
-                            .then(() => this.events.emit(user, 'user.updated'))
-                            .then(() => res.status('202').json(user))
-                            .catch(e => res.status('424').json({ message : e.message }))
-                    }
-                    else
-                    {
-                        return this.events.emit(user, 'user.updated')
-                            .then(() => res.status('202').json(user));
-                    }
+                    return this.events.emit(user, 'user.updated')
+                        .then(() => res.status('202').json(user));
                 });
             })
         }
@@ -193,21 +185,8 @@ module.exports.addOrUpdateUserProfile = function(req, res, useCurrentUser)
 
             return Users.addOrUpdateUserProfile(userId, profile, true).then(profile =>
             {
-                if(req.query.tokenUpdate == "true")
-                {
-                    return Users.getUserProfile(userId).then(user =>
-                    {
-                        return doUserCacheUpdate(user, req.opuscapita.serviceClient)
-                            .then(() => this.events.emit(profile, 'user/profile.updated'))
-                            .then(() => res.status('202').json(profile))
-                            .catch(e => res.status('424').json({ message : e.message }))
-                    });
-                }
-                else
-                {
-                    return this.events.emit(profile, 'user/profile.updated')
-                        .then(() => res.status('202').json(profile));
-                }
+                return this.events.emit(profile, 'user/profile.updated')
+                    .then(() => res.status('202').json(profile));
             });
         }
         else
@@ -278,11 +257,8 @@ module.exports.addUserRoles = function(req, res)
     var userId = req.opuscapita.userData('id');
     var roles = req.body.map(role => role.createdBy = userId);
 
-    Users.addUserRoles(roles, true).then(roles =>
-    {
-        res.json(roles)
-    })
-    .catch(e => res.status('400').json({ message : e.message }));
+    Users.addUserRoles(roles, true).then(roles => res.json(roles))
+        .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.addUserToRole = function(req, res)
@@ -314,28 +290,23 @@ module.exports.addUserToRole = function(req, res)
 
 module.exports.addOnboardingData = function(req, res)
 {
-    let userDetails = {
-        firstName: req.body.contactFirstName,
-        lastName: req.body.contactLastName,
-        email: req.body.email,
-        campaignId: req.body.campaignId
-    };
-    let tradingPartnerDetails = {
-        name: req.body.companyName,
-        vatIdentNo: req.body.vatIdentNo,
-        taxIdentNo: req.body.taxIdentNo,
-        dunsNo: req.body.dunsNo,
-        commercialRegisterNo: req.body.commercialRegisterNo,
-        city: req.body.city,
-        country: req.body.country
-    };
-    if (!req.body.campaignTool) {
-        res.status('400').json({ message : "campaignTool field not specified" })
-    } else {
-        return UserOnboardData.create(userDetails, tradingPartnerDetails, req.body.campaignTool)
-            .then(onboardingdata => res.status('202').json(onboardingdata))
-            .catch(e => res.status('400').json({ message : e.message }));
-    }
+    UserOnboardData.find({ userId : req.userId }).then(data =>
+    {
+        if(data && data.type === 'singleUse')
+        {
+            res.status('409').json({ message : 'Onboarding-Data does already exist for the passed user ID.' });
+        }
+        else
+        {
+            return UserOnboardData.create(req.body).then(result =>
+            {
+                return this.events.emit(result, 'onboardingdata.created')
+                    .then(() => res.status('202').json(result));
+            });
+        }
+
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
 }
 
 
@@ -353,39 +324,68 @@ module.exports.addOnboardingData = function(req, res)
  *                      - req.query.filter - required
  * @param  {object} res [Express] {@link http://expressjs.com/de/api.html#res}
  */
-module.exports.getOnboardingData = function (req, res) {
-  try {
-      let filter = parseFilter(req.query.filter, ["invitationCode", "userId"], ["eq"])
-      let fieldName = filter[0]
-      let value = filter[2]
+module.exports.getOnboardingData = function (req, res)
+{
+    try
+    {
+        var filter = parseFilter(req.query.filter, ["invitationCode", "userId"], ["eq"])
+        var fieldName = filter[0]
+        var value = filter[2]
 
-      if (fieldName == "invitationCode") {
-          UserOnboardData.findByInvitationCode(value)
-          .then(onboardingdata => {
-              (onboardingdata && res.json(onboardingdata)) || res.status(404).json({message: 'No record found for InvitationCode = "' + value})
-          });
-      }
-      else {
-          UserOnboardData.findByUserId(value)
-          .then(onboardingdata => {
-              (onboardingdata && res.json(onboardingdata)) || res.status(404).json({message: 'No record found for UserId = "' + value})
-          });
-      }
-  }
-  catch(err) {
-      res.status('400').json({ message : 'A valid query parameter "filter" is required.'});
-  }
+        if(fieldName == "invitationCode")
+        {
+            UserOnboardData.find({ invitationCode : value, userId : null }).then(onboardingdata =>
+            {
+                (onboardingdata && res.json(onboardingdata))
+                    || res.status(404).json({ message: 'No record found for InvitationCode = "' + value });
+            })
+            .catch(err => res.status('400').json({ message : err.message }));
+        }
+        else
+        {
+            UserOnboardData.find({ userId : value }).then(onboardingdata =>
+            {
+                (onboardingdata && res.json(onboardingdata))
+                    || res.status(404).json({ message: 'No record found for UserId = "' + value });
+            })
+            .catch(err => res.status('400').json({ message : err.message }));
+        }
+    }
+    catch(err)
+    {
+        res.status('400').json({ message : 'A valid query parameter "filter" is required.'});
+    }
 }
 
-module.exports.updateOnboarddataUseridByInvitationcode = function(req, res)
+module.exports.updateOnboardingData = function(req, res)
 {
-    let invitationCode = req.params.invitationCode;
-    let data = {
-        userId: req.body.userId
-    };
+    var invitationCode = req.params.invitationCode;
+    var input = { userId: req.body.userId };
 
-  return UserOnboardData.updateByInvitationCode(invitationCode, data)
-    .then(onboardingdata => res.status('202').json(onboardingdata))
+    return UserOnboardData.find({ invitationCode : invitationCode, userId : null }).then(found =>
+    {
+        if(found && found.type === 'singleUse')
+        {
+            return UserOnboardData.updateByInvitationCode(invitationCode, input).then(data =>
+            {
+                return this.events.emit(data, 'onboardingdata.updated')
+                    .then(() => res.status('202').json(data));
+            });
+        }
+        else if(found && found.type === 'multipleUse')
+        {
+            return UserOnboardData.updateByInvitationCode(invitationCode, input).then(data =>
+            {
+                return UserOnboardData.create(found)
+                    .then(() => this.events.emit(found, 'onboardingdata.created'))
+                    .then(() => res.status('202').json(data))
+            });
+        }
+        else
+        {
+            res.status('404').json({ message : 'Invitation code could not be found.' });
+        }
+    })
     .catch(e => res.status('400').json({ message : e.message }));
 }
 
@@ -403,27 +403,21 @@ module.exports.updateOnboarddataUseridByInvitationcode = function(req, res)
  * @param  {array} allowedOperators List of allowed operators for the filter string.
  * @return {array}
  */
-function parseFilter(filter, allowedFields, allowedOperators) {
-
-    if (filter) {
+function parseFilter(filter, allowedFields, allowedOperators)
+{
+    if(filter)
+    {
         var filterArray = filter.split([' '])
 
-        if (filterArray.length == 3 && allowedFields.includes(filterArray[0]) && allowedOperators.includes(filterArray[1])) {
+        if (filterArray.length == 3 && allowedFields.includes(filterArray[0]) && allowedOperators.includes(filterArray[1]))
             return filterArray
-        }
-        else {
+        else
             throw new Error("Filter not of required format.")
-        }
     }
-    else {
-        throw new Error("Filter is missing")
+    else
+    {
+        throw new Error("Filter is missing");
     }
-}
-
-
-function doUserCacheUpdate(userObj, serviceClient)
-{
-    return serviceClient.post('kong', '/refreshIdToken', userObj);
 }
 
 function checkContentType(req, res, next)

@@ -9,31 +9,26 @@ module.exports.init = function(db, config)
     return Promise.resolve(this);
 }
 
-module.exports.create = function(userDetails, tradingPartnerDetails, campaignTool)
+module.exports.create = function(data)
 {
-    return this.db.models.UserOnboardData.create({
-        userDetails: JSON.stringify(userDetails),
-        tradingPartnerDetails: JSON.stringify(tradingPartnerDetails),
-        campaignTool: campaignTool
-    });
+    delete data.invitationCode;
+
+    if(data.campaignDetails)
+        data.campaignDetails = JSON.stringify(data.campaignDetails);
+    if(data.tradingPartnerDetails)
+        data.tradingPartnerDetails = JSON.stringify(data.tradingPartnerDetails);
+    if(data.userDetails)
+        data.userDetails = JSON.stringify(data.userDetails);
+
+    return this.db.models.UserOnboardData.create(data).then(data => data && data.Values);
 }
 
-module.exports.findByInvitationCode = function(invitationCode)
+module.exports.find = function(search)
 {
-    return this.db.models.UserOnboardData.findOne({where: {invitationCode: invitationCode}});
-}
-
-module.exports.findByUserId = function(userId)
-{
-    return this.db.models.UserOnboardData.findOne({where: {userId: userId}});
-}
-
-module.exports.find = function(userId)
-{
-    return this.db.models.UserOnboardData.findOne({where: {userId: userId} });
+    return this.db.models.UserOnboardData.findOne({ where : search }).then(data => data && data.Values);
 }
 
 module.exports.updateByInvitationCode = function(invitationCode, data)
 {
-    return this.db.models.UserOnboardData.update(data.dataValues || data, {where: {invitationCode: invitationCode}});
+    return this.db.models.UserOnboardData.update(data.dataValues || data, { where : { invitationCode : invitationCode }});
 }
