@@ -19,12 +19,12 @@ db.init({
     },
     server : {
         port : process.env.PORT || 3008,
-        middlewares : [ bouncer({
+        /*middlewares : [ bouncer({
             host : 'consul',
             serviceName : 'user',
             acl : require('./acl.json'),
             aclServiceName : 'acl'
-        }).Middleware ]
+        }).Middleware ]*/
     },
     serviceClient : {
         injectIntoRequest : true,

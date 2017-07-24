@@ -227,6 +227,12 @@ module.exports.sendUsers = function(req, res)
     if(req.query.supplierId)
         searchObj.supplierId = req.query.supplierId;
 
+    if(req.query.ids)
+    {
+        searchObj.id = Array.isArray(req.query.ids) ? req.query.ids
+            : req.query.ids.replace(/\s/g, '').toLowerCase().split(',');
+    }
+
     Users.getUsers(searchObj).then(users => res.json(users));
 }
 

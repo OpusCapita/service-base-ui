@@ -13,6 +13,12 @@ get:
             required: false
             description: Output only user objects that have the passed supplier assigned.
             example: supplierId=abc
+        ids:
+            type: string|array
+            required: false
+            description: Limits the output to the passed user IDs.
+            example: ids=ocadmin,svc_supplier,svc_auth
+            example: ids[]=ocadmin&ids[]=svc_supplier&ids[]=svc_auth
     responses:
         200:
             body:
