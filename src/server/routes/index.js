@@ -65,9 +65,9 @@ module.exports.getOnboardData = function(req, res)
     {
         if(onboardData)
         {
-            onboardData.userDetails = JSON.parse(onboardData.userDetails);
-            onboardData.campaignDetails = JSON.parse(onboardData.campaignDetails);
-            onboardData.tradingPartnerDetails = JSON.parse(onboardData.tradingPartnerDetails);
+            onboardData.userDetails = onboardData.userDetails && JSON.parse(onboardData.userDetails);
+            onboardData.campaignDetails = onboardData.campaignDetails && JSON.parse(onboardData.campaignDetails);
+            onboardData.tradingPartnerDetails = onboardData.tradingPartnerDetails && JSON.parse(onboardData.tradingPartnerDetails);
 
             res.json(onboardData);
         }
@@ -303,6 +303,10 @@ module.exports.addOnboardingData = function(req, res)
         {
             return UserOnboardData.create(req.body).then(result =>
             {
+                result.userDetails = result.userDetails && JSON.parse(result.userDetails);
+                result.campaignDetails = result.campaignDetails && JSON.parse(result.campaignDetails);
+                result.tradingPartnerDetails = result.tradingPartnerDetails && JSON.parse(result.tradingPartnerDetails);
+
                 return this.events.emit(result, 'onboardingdata.created')
                     .then(() => res.status('202').json(result));
             });
