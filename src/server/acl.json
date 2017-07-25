@@ -20,7 +20,7 @@
                 "resourceId": "/users/${_current_user_id}/profile",
                 "actions": ["view", "edit"]
             },
-            {   
+            {
                 "type": "rest",
                 "resourceId": "/users/current/profile",
                 "actions": ["view", "edit"]
@@ -66,7 +66,7 @@
             {
                 "type": "rest",
                 "resourceId": "/onboardingdata/[%w | %p]*",
-                "actions": ["edit"]
+                "actions": ["view", "edit"]
             }
         ]
     }
