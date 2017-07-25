@@ -64,17 +64,9 @@ module.exports.getOnboardData = function(req, res)
     UserOnboardData.find({ userId : req.params.userId }).then(onboardData =>
     {
         if(onboardData)
-        {
-            onboardData.userDetails = onboardData.userDetails && JSON.parse(onboardData.userDetails);
-            onboardData.campaignDetails = onboardData.campaignDetails && JSON.parse(onboardData.campaignDetails);
-            onboardData.tradingPartnerDetails = onboardData.tradingPartnerDetails && JSON.parse(onboardData.tradingPartnerDetails);
-
             res.json(onboardData);
-        }
         else
-        {
             res.status(404).json({ message: 'No Onboarding-Data was found for this user ID.' });
-        }
     })
     .catch(err => res.status(500).json({ message : err.message }));
 }
@@ -303,10 +295,6 @@ module.exports.addOnboardingData = function(req, res)
         {
             return UserOnboardData.create(req.body).then(result =>
             {
-                result.userDetails = result.userDetails && JSON.parse(result.userDetails);
-                result.campaignDetails = result.campaignDetails && JSON.parse(result.campaignDetails);
-                result.tradingPartnerDetails = result.tradingPartnerDetails && JSON.parse(result.tradingPartnerDetails);
-
                 return this.events.emit(result, 'onboardingdata.created')
                     .then(() => res.status('202').json(result));
             });
