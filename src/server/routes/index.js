@@ -197,7 +197,7 @@ module.exports.sendUsers = function(req, res)
     var includes = req.query.include ? req.query.include.replace(/\s/g, '').toLowerCase().split(',') : [ ];
 
     if(customerId)
-        searchObj.customerId = supplierId;
+        searchObj.customerId = customerId;
     if(supplierId)
         searchObj.supplierId = supplierId;
 
