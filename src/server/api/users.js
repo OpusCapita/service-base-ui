@@ -9,20 +9,30 @@ module.exports.init = function(db, config)
     return Promise.resolve(this);
 }
 
-module.exports.getUsers = function(searchObj)
+module.exports.getUsers = function(searchObj, includes)
 {
     for(var key in searchObj)
         if(Array.isArray(searchObj[key]))
             searchObj[key] = { '$in' : searchObj[key] };
 
+    var includeModels = [
+        this.db.models.UserRole
+    ];
+
+    if(Array.isArray(includes) && includes.indexOf('profile') > -1)
+        includeModels.push(this.db.models.UserProfile);
+
     return this.db.models.User.findAll({
-        include : this.db.models.UserRole,
+        include : includeModels,
         where : searchObj
     })
     .map(user =>
     {
         user.dataValues.roles = user.UserRoles.map(role => role.id);
+        user.dataValues.profile = user.UserProfile && user.UserProfile.dataValues;
+
         delete user.dataValues.UserRoles;
+        delete user.dataValues.UserProfile;
 
         return user.dataValues;
     });
@@ -34,9 +44,7 @@ module.exports.getUser = function(userId, includes)
       this.db.models.UserRole
     ];
 
-    includes = [].concat(includes)
-
-    if (includes.indexOf('profile') > -1)
+    if(Array.isArray(includes) && includes.indexOf('profile') > -1)
         includeModels.push(this.db.models.UserProfile);
 
     return this.db.models.User.findById(userId, {

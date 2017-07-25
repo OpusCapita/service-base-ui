@@ -19,6 +19,10 @@ get:
             description: Limits the output to the passed user IDs.
             example: ids=ocadmin,svc_supplier,svc_auth
             example: ids[]=ocadmin&ids[]=svc_supplier&ids[]=svc_auth
+        include:
+            type: string
+            description: Additional, comma separated user properties to include.
+            example: include=user,profile
     responses:
         200:
             body:
@@ -45,7 +49,7 @@ post:
         include:
             type: string
             description: Additional, comma separated user properties to include.
-            example: include=user
+            example: include=user,profile
     get:
         description: Returns a single `User` object.
         is:

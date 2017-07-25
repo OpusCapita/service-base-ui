@@ -200,6 +200,7 @@ module.exports.addOrUpdateUserProfile = function(req, res, useCurrentUser)
 module.exports.sendUsers = function(req, res)
 {
     var searchObj = { };
+    var includes = req.query.include ? req.query.include.replace(/\s/g, '').toLowerCase().split(',') : [ ];
 
     if(req.query.customerId)
         searchObj.customerId = req.query.customerId;
@@ -212,7 +213,7 @@ module.exports.sendUsers = function(req, res)
             : req.query.ids.replace(/\s/g, '').toLowerCase().split(',');
     }
 
-    Users.getUsers(searchObj).then(users => res.json(users));
+    Users.getUsers(searchObj, includes).then(users => res.json(users));
 }
 
 module.exports.sendUser = function(req, res, useCurrentUser)
