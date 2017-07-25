@@ -200,12 +200,14 @@ module.exports.addOrUpdateUserProfile = function(req, res, useCurrentUser)
 module.exports.sendUsers = function(req, res)
 {
     var searchObj = { };
+    var customerId = req.query.customerId ? req.query.customerId.replace(/\s/g, '').toLowerCase().split(',') : null;
+    var supplierId = req.query.supplierId ? req.query.supplierId.replace(/\s/g, '').toLowerCase().split(',') : null;
     var includes = req.query.include ? req.query.include.replace(/\s/g, '').toLowerCase().split(',') : [ ];
 
-    if(req.query.customerId)
-        searchObj.customerId = req.query.customerId;
-    if(req.query.supplierId)
-        searchObj.supplierId = req.query.supplierId;
+    if(customerId)
+        searchObj.customerId = supplierId;
+    if(supplierId)
+        searchObj.supplierId = supplierId;
 
     if(req.query.ids)
     {
