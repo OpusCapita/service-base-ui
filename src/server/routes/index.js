@@ -285,7 +285,7 @@ module.exports.addUserToRole = function(req, res)
 
 module.exports.addOnboardingData = function(req, res)
 {
-    UserOnboardData.find({ userId : req.userId }).then(data =>
+    UserOnboardData.find({ userId : req.body.userId }).then(data =>
     {
         if(data && data.type === 'singleUse')
         {
