@@ -4,9 +4,12 @@ const Promise = require('bluebird');
 
 function parseSubProperties(data)
 {
-    data.userDetails = data.userDetails && JSON.parse(data.userDetails);
-    data.campaignDetails = data.campaignDetails && JSON.parse(data.campaignDetails);
-    data.tradingPartnerDetails = data.tradingPartnerDetails && JSON.parse(data.tradingPartnerDetails);
+    if(data)
+    {
+        data.userDetails = data.userDetails && JSON.parse(data.userDetails);
+        data.campaignDetails = data.campaignDetails && JSON.parse(data.campaignDetails);
+        data.tradingPartnerDetails = data.tradingPartnerDetails && JSON.parse(data.tradingPartnerDetails);
+    }
 
     return data;
 }
@@ -20,6 +23,8 @@ module.exports.init = function(db, config)
 
 module.exports.create = function(data)
 {
+    delete data.userId;
+
     if(data.campaignDetails)
         data.campaignDetails = JSON.stringify(data.campaignDetails);
     if(data.tradingPartnerDetails)
@@ -27,7 +32,8 @@ module.exports.create = function(data)
     if(data.userDetails)
         data.userDetails = JSON.stringify(data.userDetails);
 
-    return this.db.models.UserOnboardData.create(data).then(data => data && data.dataValues)
+    return this.db.models.UserOnboardData.create(data)
+        .then(data => data && data.dataValues)
         .then(parseSubProperties);
 }
 
@@ -40,7 +46,7 @@ module.exports.find = function(search)
 module.exports.updateByInvitationCode = function(invitationCode, data)
 {
     delete data.invitationCode;
-    
+
     return this.db.models.UserOnboardData.update(data.dataValues || data, { where : { invitationCode : invitationCode }})
         .then(() => this.find({ invitationCode : invitationCode, userId : data.userId }));
 }
