@@ -39,6 +39,8 @@ module.exports.find = function(search)
 
 module.exports.updateByInvitationCode = function(invitationCode, data)
 {
+    delete data.invitationCode;
+    
     return this.db.models.UserOnboardData.update(data.dataValues || data, { where : { invitationCode : invitationCode }})
         .then(() => this.find({ invitationCode : invitationCode, userId : data.userId }));
 }
