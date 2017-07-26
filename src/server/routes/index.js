@@ -375,9 +375,17 @@ module.exports.updateOnboardingData = function(req, res)
             {
                 return UserOnboardData.updateByInvitationCode(invitationCode, input).then(data =>
                 {
-                    return UserOnboardData.create(found)
-                        .then(() => this.events.emit(found, 'onboardingdata.created'))
-                        .then(() => res.status('202').json(data))
+                    if(input.userId)
+                    {
+                        return UserOnboardData.create(found)
+                            .then(() => this.events.emit(found, 'onboardingdata.created'))
+                            .then(() => res.status('202').json(data))
+                    }
+                    else
+                    {
+                        return this.events.emit(data, 'onboardingdata.updated')
+                            .then(() => res.status('202').json(data));
+                    }
                 });
             }
         }
