@@ -355,7 +355,7 @@ module.exports.getOnboardingData = function (req, res)
 module.exports.updateOnboardingData = function(req, res)
 {
     var invitationCode = req.params.invitationCode;
-    var input = { userId: req.body.userId };
+    var input = req.body;
 
     return UserOnboardData.find({ invitationCode : invitationCode, userId : null }).then(found =>
     {
