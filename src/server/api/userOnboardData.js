@@ -14,6 +14,18 @@ function parseSubProperties(data)
     return data;
 }
 
+function serializeSubProperties(data)
+{
+    if(data.campaignDetails)
+        data.campaignDetails = JSON.stringify(data.campaignDetails);
+    if(data.tradingPartnerDetails)
+        data.tradingPartnerDetails = JSON.stringify(data.tradingPartnerDetails);
+    if(data.userDetails)
+        data.userDetails = JSON.stringify(data.userDetails);
+
+    return data;
+}
+
 module.exports.init = function(db, config)
 {
     this.db = db;
@@ -24,13 +36,7 @@ module.exports.init = function(db, config)
 module.exports.create = function(data)
 {
     delete data.userId;
-
-    if(data.campaignDetails)
-        data.campaignDetails = JSON.stringify(data.campaignDetails);
-    if(data.tradingPartnerDetails)
-        data.tradingPartnerDetails = JSON.stringify(data.tradingPartnerDetails);
-    if(data.userDetails)
-        data.userDetails = JSON.stringify(data.userDetails);
+    data = serializeSubProperties(data.dataValues || data);
 
     return this.db.models.UserOnboardData.create(data)
         .then(data => data && data.dataValues)
@@ -46,11 +52,13 @@ module.exports.find = function(search)
 module.exports.updateByInvitationCode = function(invitationCode, userId, data)
 {
     delete data.invitationCode;
+    data = serializeSubProperties(data.dataValues || data);
+
     const where = {
         invitationCode : invitationCode,
         userId : userId
     };
 
-    return this.db.models.UserOnboardData.update(data.dataValues || data, { where : where })
+    return this.db.models.UserOnboardData.update(data, { where : where })
         .then(() => this.find({ invitationCode : invitationCode, userId : data.userId }));
 }
