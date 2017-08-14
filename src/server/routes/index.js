@@ -367,6 +367,8 @@ module.exports.updateOnboardingData = function(req, res)
             {
                 return UserOnboardData.updateByInvitationCode(invitationCode, input).then(data =>
                 {
+                    req.opuscapita.logger.info('Calling onboardingdata.updated...');
+                    
                     return this.events.emit(data, 'onboardingdata.updated')
                         .then(() => res.status('202').json(data));
                 });
@@ -377,12 +379,16 @@ module.exports.updateOnboardingData = function(req, res)
                 {
                     if(input.userId)
                     {
+                        req.opuscapita.logger.info('Calling onboardingdata.created...');
+
                         return UserOnboardData.create(found)
                             .then(() => this.events.emit(found, 'onboardingdata.created'))
                             .then(() => res.status('202').json(data))
                     }
                     else
                     {
+                        req.opuscapita.logger.info('Calling onboardingdata.updated...');
+
                         return this.events.emit(data, 'onboardingdata.updated')
                             .then(() => res.status('202').json(data));
                     }
