@@ -43,10 +43,14 @@ module.exports.find = function(search)
         .then(parseSubProperties);
 }
 
-module.exports.updateByInvitationCode = function(invitationCode, data)
+module.exports.updateByInvitationCode = function(invitationCode, userId, data)
 {
     delete data.invitationCode;
+    const where = {
+        invitationCode : invitationCode,
+        userId : userId
+    };
 
-    return this.db.models.UserOnboardData.update(data.dataValues || data, { where : { invitationCode : invitationCode }})
+    return this.db.models.UserOnboardData.update(data.dataValues || data, { where : where })
         .then(() => this.find({ invitationCode : invitationCode, userId : data.userId }));
 }

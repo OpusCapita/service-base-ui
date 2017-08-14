@@ -356,6 +356,7 @@ module.exports.updateOnboardingData = function(req, res)
 {
     var invitationCode = req.params.invitationCode;
     var input = req.body;
+    var userId = input.userId || null;
 
     return UserOnboardData.find({ invitationCode : invitationCode, userId : null }).then(found =>
     {
@@ -365,17 +366,17 @@ module.exports.updateOnboardingData = function(req, res)
 
             if(found.type === 'singleUse')
             {
-                return UserOnboardData.updateByInvitationCode(invitationCode, input).then(data =>
+                return UserOnboardData.updateByInvitationCode(invitationCode, userId, input).then(data =>
                 {
                     req.opuscapita.logger.info('Calling onboardingdata.updated...');
-                    
+
                     return this.events.emit(data, 'onboardingdata.updated')
                         .then(() => res.status('202').json(data));
                 });
             }
             else if(found.type === 'multipleUse')
             {
-                return UserOnboardData.updateByInvitationCode(invitationCode, input).then(data =>
+                return UserOnboardData.updateByInvitationCode(invitationCode, null, input).then(data =>
                 {
                     if(input.userId)
                     {
