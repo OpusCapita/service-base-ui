@@ -393,7 +393,7 @@ module.exports.updateOnboardingData = function(req, res)
                         req.opuscapita.logger.info('Calling onboardingdata.created...');
 
                         return UserOnboardData.create(found)
-                            .then(() => this.events.emit(found, 'onboardingdata.created'))
+                            .then(() => this.events.emit(data, 'onboardingdata.created'))
                             .then(() => res.status('202').json(data))
                     }
                     else
