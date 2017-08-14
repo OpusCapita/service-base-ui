@@ -111,7 +111,11 @@ module.exports.addUser = function(req, res)
             return Users.addUser(user, true)
                 .then(user => resultUser = user)
                 .then(() => Users.addOrUpdateUserProfile(user.id, userProfile))
-                .then(() => this.events.emit(resultUser, 'user.added'))
+                .then(() =>
+                {
+                    req.opuscapita.logger.info('Calling user.added...');
+                    return this.events.emit(resultUser, 'user.added');
+                })
                 .then(() => res.status('202').json(resultUser));
         }
     })
@@ -150,6 +154,8 @@ module.exports.updateUser = function(req, res, useCurrentUser)
 
                 return preCond.then(() =>
                 {
+                    req.opuscapita.logger.info('Calling user.updated...');
+
                     return this.events.emit(user, 'user.updated')
                         .then(() => res.status('202').json(user));
                 });
@@ -177,6 +183,8 @@ module.exports.addOrUpdateUserProfile = function(req, res, useCurrentUser)
 
             return Users.addOrUpdateUserProfile(userId, profile, true).then(profile =>
             {
+                req.opuscapita.logger.info('Calling user/profile.updated...');
+
                 return this.events.emit(profile, 'user/profile.updated')
                     .then(() => res.status('202').json(profile));
             });
@@ -295,6 +303,8 @@ module.exports.addOnboardingData = function(req, res)
         {
             return UserOnboardData.create(req.body).then(result =>
             {
+                req.opuscapita.logger.info('Calling onboardingdata.created...');
+
                 return this.events.emit(result, 'onboardingdata.created')
                     .then(() => res.status('202').json(result));
             });
