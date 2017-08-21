@@ -14,6 +14,8 @@ WORKDIR /home/node/user
 # Bundle app source by overwriting all WORKDIR content.
 COPY . .
 
+RUN npm run build:client
+
 # Set the user name or UID to use when running the image and for any RUN, CMD and ENTRYPOINT instructions that follow
 USER node
 

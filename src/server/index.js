@@ -22,6 +22,7 @@ db.init({
         dbInstance : db
     },
     server : {
+	    staticFilePath: __dirname + '/static',
         port : process.env.PORT || 3008,
         middlewares : [ bouncer({
             host : 'consul',

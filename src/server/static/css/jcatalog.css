@@ -1,0 +1,27 @@
+footer .copyright {
+  border-top: 1px solid #eee;
+  padding: 1em 0;
+}
+
+footer {
+  width: 100%;
+  bottom: 0;
+  position: fixed;
+}
+
+.loginPage .logoImage img {
+  width: 50%;
+  position: relative;
+  margin: 4em 0 2em;
+}
+
+.panel-success {
+  border: none;
+}
+
+.panel-success .panel-heading {
+  background-color: #2A918E;
+  background-image: none;
+  color: white;
+}
+

@@ -3,5 +3,6 @@ services:
   main:
     build: .
     volumes:
-     - .:/home/node/user
-    command: 'npm run dev'
+      - .:/home/node/user
+      - /home/node/user/node_modules
+    command: 'npm run local'

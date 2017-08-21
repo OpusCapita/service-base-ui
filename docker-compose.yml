@@ -6,8 +6,10 @@ services:
      - consul
      - registrator
      - redis
+     - nginx
     labels:
       SERVICE_NAME: 'user'
+      SERVICE_TAGS: 'external'
     environment:
       PORT: 3008
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -43,6 +45,13 @@ services:
       REDIS_AUTH: ${REDIS_AUTH}
     depends_on:
       - registrator
+
+  nginx:
+    image: gr4per/nginx-rp:dev
+    ports:
+      - '8080:8080'
+    depends_on:
+      - consul
 
   registrator:
     image: gliderlabs/registrator
