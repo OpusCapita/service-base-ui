@@ -376,7 +376,7 @@ module.exports.updateOnboardingData = function(req, res)
 
             if(found.type === 'singleUse')
             {
-                return UserOnboardData.updateByInvitationCode(invitationCode, userId, input).then(data =>
+                return UserOnboardData.updateByInvitationCode(invitationCode, null, input).then(data =>
                 {
                     req.opuscapita.logger.info('Calling onboardingdata.updated...');
 
