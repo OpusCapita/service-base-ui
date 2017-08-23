@@ -16,6 +16,7 @@
     "exclude": []
   },
   "dependencies": {
+    "opuscapita-i18n": "github:patrykkopycinski/js-i18n",
     "bluebird": "^3.5.0",
     "extend": "^3.0.1",
     "ocbesbn-bouncer": "^0.2.7",
@@ -25,7 +26,9 @@
     "ocbesbn-redis-events": "^1.0.5",
     "ocbesbn-service-client": "^1.1.1",
     "ocbesbn-web-init": "^2.1.20",
-    "sequelize": "^3.30.4"
+    "sequelize": "^3.30.4",
+    "superagent": "3.5.2",
+    "superagent-bluebird-promise": "4.2.0"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",
