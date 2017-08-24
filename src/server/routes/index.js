@@ -48,6 +48,9 @@ module.exports.init = function(app, db, config)
         app.put('/users/current/profile', (req, res) => this.addOrUpdateUserProfile(req, res, true));
         app.put('/users/:id/profile', (req, res) => this.addOrUpdateUserProfile(req, res));
 
+        app.get('/users/current/assignableRoles', this.sendUserAssignableRoles.bind(this));
+        app.get('/users/:id/assignableRoles', this.sendUserAssignableRoles.bind(this));
+
         app.get('/roles', (req, res) => this.sendRoles(req, res));
         app.get('/roles/:id', (req, res) => this.sendRole(req, res));
 
@@ -238,6 +241,14 @@ module.exports.sendUserProfile = function(req, res, useCurrentUser)
         (profile && res.json(profile)) || res.status('404').json({ message : 'Profile does not exist!' });
     });
 }
+
+module.exports.sendUserAssignableRoles = function(req, res) {
+    // @todo: this is mock - remove it
+	var assignerUserId = 'scott.tiger@example.com' || req.opuscapita.userData('id');
+
+	Users.getUserAssignableRoles(assignerUserId, req.params.id)
+        .then(roles => res.json(roles));
+};
 
 module.exports.sendRoles = function(req, res)
 {

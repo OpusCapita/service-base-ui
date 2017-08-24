@@ -2,7 +2,10 @@ let Title = 'User roles editor';
 
 export default {
 	UserRoleEditor: {
-		Title: Title
+		Title: Title,
+		Button: {
+			add: 'Add'
+		}
 	},
 	UserRoleListTable: {
 		Confirmation: {

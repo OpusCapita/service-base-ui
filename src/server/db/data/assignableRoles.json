@@ -1,0 +1,32 @@
+[
+  {
+    "ownedRoleId": "admin",
+    "assignableRoleId": "admin",
+    "createdBy": "The Doctor"
+  },
+  {
+    "ownedRoleId": "admin",
+    "assignableRoleId": "user",
+    "createdBy": "The Doctor"
+  },
+  {
+    "ownedRoleId": "supplier-admin",
+    "assignableRoleId": "supplier-admin",
+    "createdBy": "The Doctor"
+  },
+  {
+    "ownedRoleId": "supplier-admin",
+    "assignableRoleId": "supplier",
+    "createdBy": "The Doctor"
+  },
+  {
+    "ownedRoleId": "customer-admin",
+    "assignableRoleId": "customer-admin",
+    "createdBy": "The Doctor"
+  },
+  {
+    "ownedRoleId": "customer-admin",
+    "assignableRoleId": "customer",
+    "createdBy": "The Doctor"
+  }
+]

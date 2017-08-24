@@ -32,23 +32,19 @@ class UserRoleListTable extends Component {
 				</tr>
 				</thead>
 				<tbody>
-				{
-					userRoles.map((userRole, index) => {
-							return (
-								<tr key={'role-' + index}>
-									<td>{userRole}</td>
-									<td className="text-right">
-										{!this.props.readOnly &&
-											<nobr>
-												<Button onClick={this.onDelete.bind(this, userRole)} bsSize="sm">
-													<span className="glyphicon glyphicon-trash" />
-													&nbsp;{this.context.i18n.getMessage('UserRoleListTable.Button.delete')}
-												</Button>
-											</nobr>}
-									</td>
-								</tr>
-							);
-						}
+					{userRoles.map((userRole, i) =>
+						<tr key={`role-${i}`}>
+							<td>{userRole}</td>
+							<td className="text-right">
+								{!this.props.readOnly &&
+									<nobr>
+										<Button onClick={this.onDelete.bind(this, userRole)} bsSize="sm">
+											<span className="glyphicon glyphicon-trash" />
+											&nbsp;{this.context.i18n.getMessage('UserRoleListTable.Button.delete')}
+										</Button>
+									</nobr>}
+							</td>
+						</tr>
 					)}
 				</tbody>
 			</table>

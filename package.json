@@ -16,7 +16,7 @@
     "exclude": []
   },
   "dependencies": {
-    "opuscapita-i18n": "github:patrykkopycinski/js-i18n",
+    "@opuscapita/oc-common-ui": "^4.4.0",
     "bluebird": "^3.5.0",
     "extend": "^3.0.1",
     "ocbesbn-bouncer": "^0.2.7",
@@ -26,6 +26,7 @@
     "ocbesbn-redis-events": "^1.0.5",
     "ocbesbn-service-client": "^1.1.1",
     "ocbesbn-web-init": "^2.1.20",
+    "opuscapita-i18n": "github:patrykkopycinski/js-i18n",
     "sequelize": "^3.30.4",
     "superagent": "3.5.2",
     "superagent-bluebird-promise": "4.2.0"
@@ -41,6 +42,7 @@
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
     "babel-register": "6.24.1",
+    "immutable": "^3.8.1",
     "jsdoc-to-markdown": "^3.0.0",
     "mocha": "^3.2.0",
     "mocha-junit-reporter": "^1.12.1",
@@ -49,9 +51,18 @@
     "raml-to-markdown": "^1.x",
     "rimraf": "^2.6.0",
     "sequelize-to-markdown": "^1.x",
-    "react-router": "^4.0.0",
-    "react-router-dom": "^4.0.0",
-    "webpack": "2.5.1"
+    "react-intl": "^2.1.5",
+    "webpack": "2.5.1",
+    "fixed-data-table-2": "^0.7.17",
+    "react-day-picker": "^3.1.1",
+    "react-immutable-proptypes": "^2.1.0",
+    "react-perfect-scrollbar": "^0.1.1",
+    "react-select": "^1.0.0-rc.3",
+    "react-sidebar": "^2.3.0",
+    "react-spinjs": "^3.0.0",
+    "react-split-pane": "^0.1.57",
+    "react-tether": "^0.5.7",
+    "tether": "^1.4.0"
   },
   "scripts": {
     "start": "node src/server/index.js",

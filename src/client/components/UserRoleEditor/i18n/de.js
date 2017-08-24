@@ -2,7 +2,10 @@ let Title = 'Benutzerregeln';
 
 export default {
 	UserRoleEditor: {
-		Title: Title
+		Title: Title,
+		Button: {
+			add: 'Hinzufügen'
+		}
 	},
 	UserRoleTableList: {
 		Header: {

@@ -275,9 +275,48 @@ module.exports.init = function(db, config)
         createdAt : 'createdOn'
     });
 
-    User.hasOne(UserProfile, { foreignKey : 'userId', targetKey: 'id' });
+	var AssignableRole = db.define('AssignableRole',
+    /** @lends AssignableRole */
+    {
+        ownedRoleId : {
+            type : DataTypes.STRING(100),
+            allowNull : false,
+            primaryKey : true
+        },
+        assignableRoleId : {
+            type : DataTypes.STRING(100),
+            allowNull : false,
+            primaryKey : true
+        },
+	    createdBy : {
+		    type : DataTypes.STRING(60),
+		    allowNull : false
+	    },
+	    changedBy : {
+		    type : DataTypes.STRING(60),
+		    allowNull : false,
+		    defaultValue : ''
+	    },
+	    createdOn : {
+		    type : DataTypes.DATE(),
+		    allowNull : false,
+		    defaultValue : DataTypes.NOW
+	    },
+	    changedOn : {
+		    type : DataTypes.DATE(),
+		    allowNull : true
+	    }
+    }, {
+        freezeTableName: true,
+        updatedAt : 'changedOn',
+        createdAt : 'createdOn'
+    });
+
+	User.hasOne(UserProfile, { foreignKey : 'userId', targetKey: 'id' });
     User.belongsToMany(UserRole, { through : 'UserHasRole', foreignKey : 'userId', constraints : true });
     UserRole.belongsToMany(User, { through : 'UserHasRole', foreignKey : 'roleId', constraints : true });
+    AssignableRole.hasOne(UserRole, { foreignKey: 'id', targetKey: 'ownedRoleId' });
+	AssignableRole.hasOne(UserRole, { foreignKey: 'id', targetKey: 'assignableRoleId' });
 
     return Promise.resolve();
-}
+};
