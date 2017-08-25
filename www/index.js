@@ -3,6 +3,15 @@
 const db = require('ocbesbn-db-init');
 const server = require('ocbesbn-web-init');
 
+const mockUserData = {
+	id: 'john.doe@ncc.com'
+};
+
+const mockUserDataMiddleware = (req, res, next) => {
+	req.opuscapita.userData = key => mockUserData[key];
+	next();
+};
+
 db.init({ consul : { host : 'consul' } })
 	.then(db => server.init({
 		routes : { dbInstance : db },
@@ -13,7 +22,8 @@ db.init({ consul : { host : 'consul' } })
 			webpack: {
 				useWebpack: true,
 				configFilePath: __dirname + '/../webpack.development.config.js'
-			}
+			},
+			middlewares: [mockUserDataMiddleware]
 		},
 		serviceClient : {
 			injectIntoRequest : true,

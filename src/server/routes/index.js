@@ -243,10 +243,7 @@ module.exports.sendUserProfile = function(req, res, useCurrentUser)
 }
 
 module.exports.sendUserAssignableRoles = function(req, res) {
-    // @todo: this is mock - remove it
-	var assignerUserId = 'scott.tiger@example.com' || req.opuscapita.userData('id');
-
-	Users.getUserAssignableRoles(assignerUserId, req.params.id)
+	Users.getUserAssignableRoles(req.opuscapita.userData('id'), req.params.id)
         .then(roles => res.json(roles));
 };
 

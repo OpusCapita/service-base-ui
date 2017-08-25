@@ -217,14 +217,17 @@ module.exports.getRolesOfUser = function(userId)
 }
 
 module.exports.getUserAssignableRoles = function(assignerUserId, assigneeUserId) {
-    return this.getRolesOfUser(user)
-        .then((ownedRoleIds) =>
-            this.db.models.AssignableRole
-		        .findAll({ where : { ownedRoleId : { '$in' : ownedRoleIds } } })
-                .then(assignments =>
-                    assignments.map(assignment => assignment.assignableRoleId)
-	                    .filter((role, i, self) => self.indexOf(role) === i)
-                        .filter(role => ownedRoleIds.indexOf(role) < 0)
-                )
-        )
+    return Promise.all([
+            this.getRolesOfUser(assignerUserId),
+            this.getRolesOfUser(assigneeUserId)
+        ])
+        .then(([assignerRoles, assigneeRoles]) =>
+	        this.db.models.AssignableRole
+		        .findAll({ where : { ownedRoleId : { '$in' : assignerRoles } } })
+		        .then(assignments =>
+			        assignments.map(assignment => assignment.assignableRoleId)
+				        .filter((role, i, self) => self.indexOf(role) === i)
+				        .filter(role => assigneeRoles.indexOf(role) < 0)
+		        )
+        );
 };
