@@ -150,12 +150,70 @@ post:
                     application/json:
                         type: UserProfile
 
+/{id}/assignableRoles:
+    uriParameters:
+        id:
+            type: string
+            description: Unique identifier of a user.
+            pattern: \w{3}
+    get:
+        description: Returns list of roles which currently logged user can assign to given user.
+        is:
+            - sendNotFound
+            - sendGeneralError
+        responses:
+          200:
+            body:
+                application/json:
+                    type: array
+                    example: |
+                        ["supplier", "user"]
+
+/current/assignableRoles:
+    get:
+        description: Returns list of roles current user can assign to himself.
+        is:
+            - sendNotFound
+            - sendGeneralError
+        responses:
+          200:
+            body:
+                application/json:
+                    type: array
+                    example: |
+                        ["supplier", "user"]
+
 /{userId}/roles/{roleId}:
+    uriParameters:
+        userId:
+            type: string
+            description: Unique identifier of a user.
+            pattern: \w{3}
+        roleId:
+            type: string
+            description: Unique identifier of a role.
+            pattern: \w{3}
+
     put:
         description: Adds the role with roleId to the the user with userId.
         is:
             - sendNotFound
             - sendGeneralError
+            - sendForbidden
+        responses:
+            201:
+                body:
+                    application/json:
+                        type: array
+                        example: |
+                            ["admin", "xtenant"]
+
+    delete:
+        description: Removes role from given user.
+        is:
+            - sendNotFound
+            - sendGeneralError
+            - sendForbidden
         responses:
             201:
                 body:

@@ -275,14 +275,21 @@ module.exports.init = function(db, config)
         createdAt : 'createdOn'
     });
 
+	/**
+	 * Data model representing a relation between owned role and assignable role.
+	 * @class AssignableRole
+	 */
 	var AssignableRole = db.define('AssignableRole',
     /** @lends AssignableRole */
     {
+        /** A role which has permission to assignableRoleId */
         ownedRoleId : {
             type : DataTypes.STRING(100),
             allowNull : false,
             primaryKey : true
         },
+
+        /** A role which can be assigned by user having ownedRoleId */
         assignableRoleId : {
             type : DataTypes.STRING(100),
             allowNull : false,

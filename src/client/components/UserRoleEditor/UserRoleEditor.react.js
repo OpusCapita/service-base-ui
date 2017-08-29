@@ -54,12 +54,12 @@ class UserRoleEditor extends Component {
 			.then(response => this.setState({ownedRoles: response.body.roles}));
 
 		this.loadAssignableRolesPromise = request
-			.get(`${this.props.actionUrl}/user/users/${encodeURIComponent(this.props.userId)}/assignableRoles`)
+			.get(`${this.props.actionUrl}/user/users/current/assignableRoles`)
 			.set('Accept', 'application/json')
 			.promise()
 			.then(response => this.setState({assignableRoles: response.body}));
 
-		Promise.all([this.loadOwnedRolesPromise, this.loadAssignableRolesPromise])
+		return Promise.all([this.loadOwnedRolesPromise, this.loadAssignableRolesPromise])
 			.catch((error) => {
 				if (error.status === 401) {
 					this.props.onUnauthorized();
@@ -79,7 +79,8 @@ class UserRoleEditor extends Component {
 			return;
 		}
 
-		this.addRoleToUser(this.state.selectedRoleId);
+		this.addRoleToUser(this.state.selectedRoleId)
+			.then(() => this.setState({ selectedRoleId: null }));
 	};
 
 	/**
@@ -87,7 +88,7 @@ class UserRoleEditor extends Component {
 	 * @param {string} roleId Role identifier
 	 */
 	addRoleToUser = (roleId) => {
-		request
+		return request
 			.put(`${this.props.actionUrl}/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
 			.set('Accept', 'application/json')
 			.set('Content-type', 'application/json')
@@ -135,6 +136,11 @@ class UserRoleEditor extends Component {
 		return !this.state.selectedRoleId;
 	}
 
+	get assignableRoles() {
+		return this.state.assignableRoles
+			.filter(assignableRole => this.state.ownedRoles.indexOf(assignableRole) === -1)
+	}
+
 	render() {
 		return (
 			<div>
@@ -142,7 +148,8 @@ class UserRoleEditor extends Component {
 					<h4 className="tab-description">{this.context.i18n.getMessage('UserRoleEditor.Title', { userId : this.props.userId })}</h4>
 					<UserRoleListTable
 						actionUrl={this.props.actionUrl}
-						roles={this.state.ownedRoles}
+						ownedRoles={this.state.ownedRoles}
+						assignableRoles={this.state.assignableRoles}
 						onDelete={this.removeRoleFromUser}
 						readOnly={this.props.readOnly}
 					/>
@@ -154,9 +161,10 @@ class UserRoleEditor extends Component {
 									value={this.state.selectedRoleId}
 									onChange={this.onRoleChange}
 									searchable={false}
+									clearable={false}
 									placeholder={this.context.i18n.getMessage('UserRoleEditor.AddRoleForm.placeholder')}
 									noResultsText={this.context.i18n.getMessage('UserRoleEditor.AddRoleForm.noResults')}
-									options={this.state.assignableRoles.map(roleId => ({value: roleId, label: roleId}))}
+									options={this.assignableRoles.map(roleId => ({value: roleId, label: roleId}))}
 								/>
 								<Button
 									bsStyle="primary"

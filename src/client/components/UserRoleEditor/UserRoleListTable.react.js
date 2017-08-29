@@ -4,7 +4,8 @@ import Button from 'react-bootstrap/lib/Button';
 class UserRoleListTable extends Component {
 	static propTypes = {
 		actionUrl: React.PropTypes.string.isRequired,
-		roles: React.PropTypes.array.isRequired,
+		ownedRoles: React.PropTypes.array.isRequired,
+		assignableRoles: React.PropTypes.array.isRequired,
 		onDelete: React.PropTypes.func.isRequired,
 		readOnly: React.PropTypes.bool
 	};
@@ -26,8 +27,6 @@ class UserRoleListTable extends Component {
 	}
 
 	render() {
-		const roles = this.props.roles;
-
 		return (
 			<table className="table">
 				<thead>
@@ -37,11 +36,11 @@ class UserRoleListTable extends Component {
 				</tr>
 				</thead>
 				<tbody>
-					{roles.map((roleId, i) =>
+					{this.props.ownedRoles.map((roleId, i) =>
 						<tr key={`role-${i}`}>
 							<td>{roleId}</td>
 							<td className="text-right">
-								{!this.props.readOnly &&
+								{!this.props.readOnly && this.props.assignableRoles.indexOf(roleId) > -1 &&
 									<nobr>
 										<Button onClick={this.onDelete.bind(this, roleId)} bsSize="sm">
 											<span className="glyphicon glyphicon-trash" />
