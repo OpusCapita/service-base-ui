@@ -216,7 +216,8 @@ module.exports.getRolesOfUser = function(userId)
     return this.db.models.UserHasRole.findAll({ where : { userId : userId } }).map(role => role.roleId);
 }
 
-module.exports.getUserAssignableRoles = function(assignerUserId, assigneeUserId) {
+module.exports.getUserAssignableRoles = function(assignerUserId, assigneeUserId)
+{
     return Promise.all([
             this.getRolesOfUser(assignerUserId),
             this.getRolesOfUser(assigneeUserId)
@@ -230,4 +231,21 @@ module.exports.getUserAssignableRoles = function(assignerUserId, assigneeUserId)
 				        .filter(role => assigneeRoles.indexOf(role) < 0)
 		        )
         );
+};
+
+module.exports.userRoleAssignable = function(assignerUserId, assigneeUserId, roleId)
+{
+	return this.getRolesOfUser(assignerUserId)
+		.then((assignerRoles) =>
+			this.db.models.AssignableRole
+				.find({ where : { ownedRoleId : { '$in' : assignerRoles }, assignableRoleId : roleId } })
+				.then(assignment => !!assignment) // convert to boolean
+		);
+};
+
+module.exports.removeRoleFromUser = function(userId, roleId) {
+    return this.db.models.UserHasRole
+        .find({ where: { userId, roleId } })
+        .then(userHasRole => userHasRole.destroy())
+        .then(() => true);
 };

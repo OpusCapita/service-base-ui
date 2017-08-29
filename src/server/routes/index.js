@@ -57,8 +57,9 @@ module.exports.init = function(app, db, config)
         app.post('/roles', (req, res) => this.addUserRoles(req, res));
 
         app.put('/users/:userId/roles/:roleId', (req, res) => this.addUserToRole(req, res));
+        app.delete('/users/:userId/roles/:roleId', this.removeUserFromRole.bind(this))
     });
-}
+};
 
 
 
@@ -297,7 +298,25 @@ module.exports.addUserToRole = function(req, res)
         }
     })
     .catch(e => res.status('400').json({ message : e.message }));
-}
+};
+
+module.exports.removeUserFromRole = function(req, res)
+{
+	Users.userRoleAssignable(req.opuscapita.userData('id'), req.params.userId, req.params.roleId)
+        .then((assignable) => {
+	        if (!assignable) {
+	            res.status('403').json({
+                    message: `You don\'t have permission to remove role \'${req.params.roleId}\' from user \'${req.params.userId}\'`
+	            });
+	            
+	            return;
+            }
+
+            return Users.removeRoleFromUser(req.params.userId, req.params.roleId)
+	            .then(() => res.json({ result: true }));
+        })
+		.catch(e => res.status('400').json({ message : e.stack }));
+};
 
 module.exports.addOnboardingData = function(req, res)
 {

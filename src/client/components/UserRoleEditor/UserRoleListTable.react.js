@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/lib/Button';
 class UserRoleListTable extends Component {
 	static propTypes = {
 		actionUrl: React.PropTypes.string.isRequired,
-		userRoles: React.PropTypes.array.isRequired,
+		roles: React.PropTypes.array.isRequired,
 		onDelete: React.PropTypes.func.isRequired,
 		readOnly: React.PropTypes.bool
 	};
@@ -13,15 +13,20 @@ class UserRoleListTable extends Component {
 		i18n: React.PropTypes.object.isRequired
 	};
 
-	onDelete = (userRole) => {
+	/**
+	 * Handles role deletion.
+	 * @param {string} roleId Role identifier
+	 */
+	onDelete(roleId) {
 		if (!confirm(this.context.i18n.getMessage('UserRoleListTable.Confirmation.delete'))) {
 			return;
 		}
-		this.props.onDelete(userRole);
-	};
+
+		this.props.onDelete(roleId);
+	}
 
 	render() {
-		const userRoles = this.props.userRoles;
+		const roles = this.props.roles;
 
 		return (
 			<table className="table">
@@ -32,13 +37,13 @@ class UserRoleListTable extends Component {
 				</tr>
 				</thead>
 				<tbody>
-					{userRoles.map((userRole, i) =>
+					{roles.map((roleId, i) =>
 						<tr key={`role-${i}`}>
-							<td>{userRole}</td>
+							<td>{roleId}</td>
 							<td className="text-right">
 								{!this.props.readOnly &&
 									<nobr>
-										<Button onClick={this.onDelete.bind(this, userRole)} bsSize="sm">
+										<Button onClick={this.onDelete.bind(this, roleId)} bsSize="sm">
 											<span className="glyphicon glyphicon-trash" />
 											&nbsp;{this.context.i18n.getMessage('UserRoleListTable.Button.delete')}
 										</Button>

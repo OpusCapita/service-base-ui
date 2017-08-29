@@ -5,7 +5,6 @@ import UserRoleEditor from '../src/client/components/UserRoleEditor';
 const actionUrl = 'http://localhost:8080',
 	userId = 'john.doe@ncc.com';
 
-
 const App = () => (
 	<Layout>
 		<UserRoleEditor

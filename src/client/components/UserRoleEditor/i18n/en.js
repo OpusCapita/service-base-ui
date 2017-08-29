@@ -1,10 +1,12 @@
-let Title = 'User roles editor';
-
 export default {
 	UserRoleEditor: {
-		Title: Title,
+		Title: 'Edit roles of user {userId}',
 		Button: {
 			add: 'Add'
+		},
+		AddRoleForm: {
+			placeholder: 'Select role...',
+			noResults: 'No assignable roles'
 		}
 	},
 	UserRoleListTable: {

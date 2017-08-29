@@ -3,6 +3,8 @@ import request from 'superagent-bluebird-promise';
 import i18nMessages from './i18n';
 import UserRoleListTable from './UserRoleListTable.react';
 import Button from 'react-bootstrap/lib/Button';
+import Select from '@opuscapita/react-select';
+import './UserRoleEditor.css';
 
 class UserRoleEditor extends Component {
 
@@ -10,7 +12,6 @@ class UserRoleEditor extends Component {
 		actionUrl: React.PropTypes.string.isRequired,
 		userId: React.PropTypes.string.isRequired,
 		readOnly: React.PropTypes.bool,
-		onChange: React.PropTypes.func,
 		onUnauthorized: React.PropTypes.func
 	};
 
@@ -18,36 +19,33 @@ class UserRoleEditor extends Component {
 		i18n: React.PropTypes.object.isRequired
 	};
 
+	static defaultProps = {
+		readOnly: false
+	};
+
 	loadOwnedRolesPromise = null;
 
 	loadAssignableRolesPromise = null;
 
-	static defaultProps = {
-		readOnly: false,
-		onChange: function(event) {
-			if (event.isDirty) {
-				console.log('data in form changed');
-			} else {
-				console.log('data in form committed or canceled')
-			}
-		}
-	};
-
 	state = {
-		isLoaded: false,
 		ownedRoles: [],
 		assignableRoles: [],
-		loadErrors: false
+		selectedRoleId: null
 	};
 
-	componentWillMount(){
+	componentWillMount() {
 		this.context.i18n.register('UserRoleEditor', i18nMessages);
 	}
 
 	componentDidMount() {
-		if (this.state.isLoaded) {
-			return;
-		}
+		this.loadRoles();
+	}
+
+	/**
+	 * Loads owned and assignable roles from api.
+	 */
+	loadRoles = () => {
+		this.setState({ isLoaded: false });
 
 		this.loadOwnedRolesPromise = request
 			.get(`${this.props.actionUrl}/user/users/${encodeURIComponent(this.props.userId)}`)
@@ -61,18 +59,54 @@ class UserRoleEditor extends Component {
 			.promise()
 			.then(response => this.setState({assignableRoles: response.body}));
 
-
 		Promise.all([this.loadOwnedRolesPromise, this.loadAssignableRolesPromise])
-			.catch((errors) => {
-				if (errors.status === 401) {
+			.catch((error) => {
+				if (error.status === 401) {
 					this.props.onUnauthorized();
-					return;
 				}
-
-				this.setState({loadErrors: true});
 			})
-			.then(() => this.setState({isLoaded: true}));
-	}
+			.then(() => this.setState({ isLoaded: true }));
+	};
+
+	/**
+	 * Add role form submit handler
+	 * @param {object} event Form submit event object
+	 */
+	onSubmit = (event) => {
+		event.preventDefault();
+
+		if (!this.state.selectedRoleId) {
+			return;
+		}
+
+		this.addRoleToUser(this.state.selectedRoleId);
+	};
+
+	/**
+	 * Assigns given role to user.
+	 * @param {string} roleId Role identifier
+	 */
+	addRoleToUser = (roleId) => {
+		request
+			.put(`${this.props.actionUrl}/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
+			.set('Accept', 'application/json')
+			.set('Content-type', 'application/json')
+			.promise()
+			.then(this.loadRoles);
+	};
+
+	/**
+	 * Removes given role to user.
+	 * @param {string} roleId Role identifier
+	 */
+	removeRoleFromUser = (roleId) => {
+		return request
+			.delete(`${this.props.actionUrl}/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
+			.set('Accept', 'application/json')
+			.set('Content-type', 'application/json')
+			.promise()
+			.then(this.loadRoles);
+	};
 
 	componentWillUnmount() {
 		if (!this.state.isLoaded) {
@@ -86,33 +120,52 @@ class UserRoleEditor extends Component {
 		}
 	}
 
+	/**
+	 * Handles role switching.
+	 */
+	onRoleChange = (option) => {
+		this.setState({ selectedRoleId: option.value });
+	};
+
+	/**
+	 * Determines whether add button should be disabled or not
+	 * @returns {boolean|*}
+	 */
+	get isAddRoleButtonDisabled() {
+		return !this.state.selectedRoleId;
+	}
+
 	render() {
 		return (
 			<div>
 				<div>
-					<h4 className="tab-description">{this.context.i18n.getMessage('UserRoleEditor.Title')}</h4>
+					<h4 className="tab-description">{this.context.i18n.getMessage('UserRoleEditor.Title', { userId : this.props.userId })}</h4>
 					<UserRoleListTable
 						actionUrl={this.props.actionUrl}
-						userRoles={this.state.ownedRoles}
-						onDelete={() => {}}
+						roles={this.state.ownedRoles}
+						onDelete={this.removeRoleFromUser}
 						readOnly={this.props.readOnly}
 					/>
-					<form className="form-inline" onSubmit={() => {}}>
-						<div className="btn-group">
-							<button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Role <span className="caret"/>
-							</button>
-							<ul className="dropdown-menu">
-								{this.state.assignableRoles.map((item, i) =>
-									<li key={i}><a href="#">{item}</a></li>)}
-							</ul>
-						</div>
-						<Button
-							bsStyle="primary"
-							type="submit">
-							{this.context.i18n.getMessage('UserRoleEditor.Button.add')}
-						</Button>
-					</form>
+					{!this.props.readOnly &&
+						<form className="form-inline" onSubmit={this.onSubmit}>
+							<div className="form-group">
+								<Select
+									className="add-role-form-select"
+									value={this.state.selectedRoleId}
+									onChange={this.onRoleChange}
+									searchable={false}
+									placeholder={this.context.i18n.getMessage('UserRoleEditor.AddRoleForm.placeholder')}
+									noResultsText={this.context.i18n.getMessage('UserRoleEditor.AddRoleForm.noResults')}
+									options={this.state.assignableRoles.map(roleId => ({value: roleId, label: roleId}))}
+								/>
+								<Button
+									bsStyle="primary"
+									type="submit"
+									disabled={this.isAddRoleButtonDisabled}>
+									{this.context.i18n.getMessage('UserRoleEditor.Button.add')}
+								</Button>
+							</div>
+						</form>}
 				</div>
 			</div>
 		);
