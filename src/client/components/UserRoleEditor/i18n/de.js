@@ -7,17 +7,19 @@ export default {
 		AddRoleForm: {
 			placeholder: 'Rolle auswählen...',
 			noResults: 'Keine zuweisbaren Rollen'
-		}
-	},
-	UserRoleListTable: {
+		},
 		Confirmation: {
 			delete: 'Möchten Sie diese Rolle wirklich löschen?'
-		},
+		}
+	},
+	UserRoleTable: {
 		Header: {
 			name: 'Rollenname'
 		},
-		Button: {
-			delete: ' Löschen'
+		Item: {
+			Button: {
+				delete: ' Löschen'
+			}
 		}
 	}
 };

@@ -7,17 +7,19 @@ export default {
 		AddRoleForm: {
 			placeholder: 'Select role...',
 			noResults: 'No assignable roles'
-		}
-	},
-	UserRoleListTable: {
+		},
 		Confirmation: {
 			delete: 'Do you really want to delete this role?'
-		},
+		}
+	},
+	UserRoleTable: {
 		Header: {
 			name: 'Role name'
 		},
-		Button: {
-			delete: ' Delete'
+		Item: {
+			Button: {
+				delete: ' Delete'
+			}
 		}
 	}
 };

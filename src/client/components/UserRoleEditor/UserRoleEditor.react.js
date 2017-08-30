@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import request from 'superagent-bluebird-promise';
 import i18nMessages from './i18n';
-import UserRoleListTable from './UserRoleListTable.react';
+import UserRoleTable from './UserRoleTable.react';
+import UserRoleTableItem from './UserRoleTableItem.react';
 import Button from 'react-bootstrap/lib/Button';
 import Select from '@opuscapita/react-select';
 import './UserRoleEditor.css';
@@ -101,6 +102,10 @@ class UserRoleEditor extends Component {
 	 * @param {string} roleId Role identifier
 	 */
 	removeRoleFromUser = (roleId) => {
+		if (!confirm(this.context.i18n.getMessage('UserRoleEditor.Confirmation.delete'))) {
+			return;
+		}
+
 		return request
 			.delete(`${this.props.actionUrl}/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
 			.set('Accept', 'application/json')
@@ -136,9 +141,22 @@ class UserRoleEditor extends Component {
 		return !this.state.selectedRoleId;
 	}
 
+	/**
+	 * Roles which can be currently assigned.
+	 * @returns {string[]}
+	 */
 	get assignableRoles() {
 		return this.state.assignableRoles
 			.filter(assignableRole => this.state.ownedRoles.indexOf(assignableRole) === -1)
+	}
+
+	/**
+	 * Determines whether given role can be removed by current user.
+	 * @param {string} roleId Role identifier which is to be removed
+	 * @returns {boolean}
+	 */
+	isRoleRemovable(roleId) {
+		return !this.props.readOnly && this.state.assignableRoles.indexOf(roleId) > -1;
 	}
 
 	render() {
@@ -146,13 +164,16 @@ class UserRoleEditor extends Component {
 			<div>
 				<div>
 					<h4 className="tab-description">{this.context.i18n.getMessage('UserRoleEditor.Title', { userId : this.props.userId })}</h4>
-					<UserRoleListTable
-						actionUrl={this.props.actionUrl}
-						ownedRoles={this.state.ownedRoles}
-						assignableRoles={this.state.assignableRoles}
-						onDelete={this.removeRoleFromUser}
-						readOnly={this.props.readOnly}
-					/>
+
+					<UserRoleTable>
+						{this.state.ownedRoles.map(roleId =>
+							<UserRoleTableItem
+								key={`role-${roleId}`}
+								roleId={roleId}
+								onDelete={this.isRoleRemovable(roleId) ? this.removeRoleFromUser.bind(this, roleId) : null}
+							/>)}
+					</UserRoleTable>
+
 					{!this.props.readOnly &&
 						<form className="form-inline" onSubmit={this.onSubmit}>
 							<div className="form-group">
