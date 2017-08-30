@@ -16,6 +16,7 @@
     "exclude": []
   },
   "dependencies": {
+    "@opuscapita/i18n": "^1.1.0",
     "@opuscapita/react-select": "^1.0.0-rc.5-oc.6",
     "bluebird": "^3.5.0",
     "extend": "^3.0.1",
@@ -26,7 +27,6 @@
     "ocbesbn-redis-events": "^1.0.5",
     "ocbesbn-service-client": "^1.1.1",
     "ocbesbn-web-init": "^2.1.20",
-    "opuscapita-i18n": "github:patrykkopycinski/js-i18n",
     "sequelize": "^3.30.4",
     "superagent": "3.5.2",
     "superagent-bluebird-promise": "4.2.0"
