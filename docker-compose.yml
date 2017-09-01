@@ -37,6 +37,24 @@ services:
     depends_on:
       - registrator
 
+  isodata:
+    image: opuscapita/isodata:dev
+    depends_on:
+      - mysql
+      - consul
+      - registrator
+      - nginx
+    ports:
+      - '3006:3006'
+    labels:
+      SERVICE_NAME: isodata
+      SERVICE_TAGS: 'external'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      PORT: '3006'
+    command: 'npm run dev:production'
+
   redis:
     image: opuscapita/redis:dev
     ports:
