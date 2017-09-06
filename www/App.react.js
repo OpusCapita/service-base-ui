@@ -15,6 +15,8 @@ const renderUserProfileEditor = () => (
 		userId={userId}
 		locale="en"
 		readOnly={false}
+		onUpdate={() => {}}
+		onChange={() => {}}
 	/>
 );
 

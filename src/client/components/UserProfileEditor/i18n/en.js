@@ -4,18 +4,53 @@ export default {
 		Button: {
 			save: 'Save'
 		},
+		Message: {
+			updated: 'User profile updated'
+		},
 		Form: {
+			languageId: {
+				label: 'Language'
+			},
+			countryId: {
+				label: 'Country'
+			},
+			salutation: {
+				label: 'Salutation',
+				options: {
+					Mr: 'Mr',
+					Mrs: 'Mrs',
+					Ms: 'Ms'
+				}
+			},
 			firstName: {
 				label: 'First name'
 			},
 			lastName: {
 				label: 'Last name'
 			},
-			countryId: {
-				label: 'Country'
+			birthday: {
+				label: 'Birthday'
 			},
-			languageId: {
-				label: 'Language'
+			degree: {
+				label: 'Degree'
+			},
+			phoneNo: {
+				label: 'Telephone'
+			},
+			faxNo: {
+				label: 'Telefax'
+			},
+			department: {
+				label: 'Department'
+			},
+			building: {
+				label: 'Building'
+			},
+			floor: {
+				label: 'Floor'
+			},
+			room: {
+				label: 'Room'
 			}
 		}
 	}

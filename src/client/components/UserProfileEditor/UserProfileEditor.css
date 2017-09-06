@@ -1,3 +1,8 @@
 .user-profile-form-submit {
 	padding-top: 20px;
 }
+
+/* @todo remove */
+body {
+	overflow: auto;
+}

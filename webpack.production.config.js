@@ -3,12 +3,8 @@ const webpack = require('webpack');
 
 module.exports = {
 	entry: {
-		registration: './src/client/components/SupplierRegistrationEditor/index.js',
-		information: './src/client/components/SupplierEditor/index.js',
-		address: './src/client/components/SupplierAddressEditor/index.js',
-		contact: './src/client/components/SupplierContactEditor/index.js',
-		profile_strength: './src/client/components/SupplierProfileStrength/index.js',
-		bank_accounts: './src/client/components/SupplierBankAccountEditor/index.js'
+		profile: './src/client/components/UserProfileEditor/index.js',
+		role: './src/client/components/UserRoleEditor/index.js',
 	},
 	output: {
 		path: path.resolve(__dirname, './src/server/static'),
