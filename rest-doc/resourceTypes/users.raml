@@ -106,7 +106,6 @@ post:
         id:
             type: string
             description: Unique identifier of a user.
-            pattern: \w{3}
     get:
         description: Resturns a single user's profile.
         is:
@@ -150,9 +149,16 @@ post:
                     application/json:
                         type: UserProfile
 
-/{userId}/roles/{roleId}:
+/{id}/roles/{roleId}:
+    uriParameters:
+        id:
+            type: string
+            description: Unique identifier of a user.
+        roleId:
+            type: string
+            description: Unique identifier a role a user should be assigned to.
     put:
-        description: Adds the role with roleId to the the user with userId.
+        description: Adds the role with roleId to the the user with id.
         is:
             - sendNotFound
             - sendGeneralError
