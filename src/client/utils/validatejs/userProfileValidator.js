@@ -7,7 +7,7 @@ const isValidDate = function(d) {
 	return !isNaN(d.getTime());
 };
 
-module.exports = function(i18n) {
+export default function(i18n) {
 	validatejs.extend(validatejs.validators.datetime, {
 		parse: function(value) {
 			let date = new Date(value);

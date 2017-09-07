@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import request from 'superagent-bluebird-promise';
 import serviceComponent from '@opuscapita/react-loaders/lib/serviceComponent';
+import Button from 'react-bootstrap/lib/Button';
 import userProfileValidator from '../../utils/validatejs/userProfileValidator';
 import Alert from '../Alert';
 import DateInput from '@opuscapita/react-dates/lib/DateInput';
@@ -10,25 +11,19 @@ import formI18nMessages from './i18n';
 import validationI18nMessages from '../../utils/validatejs/i18n';
 import './UserProfileEditor.css';
 
-const DATE_TIME_PATTERN = 'MM/dd/yyyy';
-
 class UserProfileEditor extends Component {
 
 	static propTypes = {
 		actionUrl: PropTypes.string.isRequired,
-		userId: React.PropTypes.string.isRequired,
-		readOnly: React.PropTypes.bool,
-		onUnauthorized: React.PropTypes.func,
-		onUpdate: React.PropTypes.func.isRequired,
-		onChange: React.PropTypes.func.isRequired
+		userId: PropTypes.string.isRequired,
+		dateTimePattern: PropTypes.string.isRequired,
+		onUnauthorized: PropTypes.func,
+		onUpdate: PropTypes.func.isRequired,
+		onChange: PropTypes.func.isRequired
 	};
 
 	static contextTypes = {
-		i18n: React.PropTypes.object.isRequired
-	};
-
-	static defaultProps = {
-		readOnly: false
+		i18n: PropTypes.object.isRequired
 	};
 
 	loadUserProfilePromise = null;
@@ -73,6 +68,18 @@ class UserProfileEditor extends Component {
 		this.constraints = UserProfileConstraints(nextContext.i18n);
 	}
 
+	componentWillUnmount() {
+		if (!this.state.isLoaded) {
+			if (this.loadUserProfilePromise) {
+				this.loadUserProfilePromise.cancel();
+			}
+
+			if (this.updateUserProfilePromise) {
+				this.updateUserProfilePromise.cancel();
+			}
+		}
+	}
+
 	/**
 	 * Loads user profile from api.
 	 */
@@ -92,8 +99,12 @@ class UserProfileEditor extends Component {
 			.then(() => this.setState({ isLoaded: true }));
 	}
 
-
+	/**
+	 * Persists user profile changes.
+	 */
 	updateUserProfile() {
+		this.setState({ isLoaded: false });
+
 		this.updateUserProfilePromise = request.put(`${this.props.actionUrl}/user/users/${this.props.userId}/profile`)
 			.set('Accept', 'application/json')
 			.send(this.state.userProfile)
@@ -105,25 +116,22 @@ class UserProfileEditor extends Component {
 					userProfile: response.body,
 					globalMessage: message
 				});
-			}).catch((error) => {
+			})
+			.catch((error) => {
 				if (error.status === 401) {
 					this.props.onUnauthorized();
 				}
 
 				console.error(error);
-			});
+			})
+			.then(() => this.setState({ isLoaded: true }));
 	}
 
-
-	componentWillUnmount() {
-		if (!this.state.isLoaded) {
-			if (this.loadUserProfilePromise) {
-				this.loadUserProfilePromise.cancel();
-			}
-		}
-	}
-
-	handleUpdate = (event) => {
+	/**
+	 * Handles form submit
+	 * @param {object} event Submit DOM event
+	 */
+	handleSubmit = (event) => {
 		event.preventDefault();
 
 		const errors = this.validator(
@@ -142,6 +150,11 @@ class UserProfileEditor extends Component {
 		}
 	};
 
+	/**
+	 * Handles input value change.
+	 * @param {string} fieldName Form field name
+	 * @param {object} event Change DOM event
+	 */
 	handleChange(fieldName, event) {
 		const newValue = event && event.target
 			? event.target.value
@@ -159,6 +172,10 @@ class UserProfileEditor extends Component {
 		});
 	}
 
+	/**
+	 * Handles input blur.
+	 * @param {string} fieldName Form field name
+	 */
 	handleBlur = (fieldName) => {
 		const errors = this.validator(
 			this.state.userProfile,
@@ -176,7 +193,12 @@ class UserProfileEditor extends Component {
 		});
 	};
 
-	renderField = attrs => {
+	/**
+	 * Renders a form field.
+	 * @param {{fieldName: string, component: XML?}} attrs Rendering options
+	 * @returns {XML}
+	 */
+	renderField = (attrs) => {
 		const { userProfile, errors } = this.state;
 		const { fieldName } = attrs;
 		const fieldNames = attrs.fieldNames || [fieldName];
@@ -209,6 +231,10 @@ class UserProfileEditor extends Component {
 		);
 	};
 
+	/**
+	 * Returns possible and translated salutations.
+	 * @returns {{value: string, label: string}[]}
+	 */
 	get salutationOptions() {
 		return [
 			{ value: 'Mr', label: this.context.i18n.getMessage('UserProfileEditor.Form.salutation.options.Mr') },
@@ -228,7 +254,7 @@ class UserProfileEditor extends Component {
 				{this.state.globalMessage &&
 					<Alert bsStyle="info" message={this.state.globalMessage}/>}
 
-				<form className="form-horizontal" onSubmit={this.handleUpdate}>
+				<form className="form-horizontal" onSubmit={this.handleSubmit}>
 					{ this.renderField({
 						fieldName: 'languageId',
 						component: (
@@ -278,7 +304,7 @@ class UserProfileEditor extends Component {
 							<DateInput
 								className="form-control"
 								locale={this.context.i18n.locale}
-								dateFormat={DATE_TIME_PATTERN}
+								dateFormat={this.props.dateTimePattern}
 								value={userProfile.birthday && new Date(userProfile.birthday)}
 								onChange={this.handleChange.bind(this, 'birthday')}
 								onBlur={this.handleBlur.bind(this, 'birthday')}
@@ -303,9 +329,11 @@ class UserProfileEditor extends Component {
 
 					<div className='user-profile-form-submit'>
 						<div className='text-right form-submit'>
-							<button className="btn btn-primary" onClick={null}>
+							<Button
+								bsStyle="primary"
+								type="submit">
 								{ this.context.i18n.getMessage('UserProfileEditor.Button.save') }
-							</button>
+							</Button>
 						</div>
 					</div>
 				</form>

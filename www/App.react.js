@@ -13,8 +13,7 @@ const renderUserProfileEditor = () => (
 	<UserProfileEditor
 		actionUrl={actionUrl}
 		userId={userId}
-		locale="en"
-		readOnly={false}
+		dateTimePattern="MM/dd/yyyy"
 		onUpdate={() => {}}
 		onChange={() => {}}
 	/>

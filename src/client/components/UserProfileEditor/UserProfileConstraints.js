@@ -1,4 +1,4 @@
-module.exports = function(i18n) {
+export default function(i18n) {
 	return {
 		"languageId": {
 			presence: {
