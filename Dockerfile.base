@@ -1,4 +1,4 @@
-FROM gr4per/node-react-base
+FROM node:8-alpine
 MAINTAINER kwierchris
 
 # Set the working directory for any RUN, CMD, ENTRYPOINT, COPY and ADD instructions that follow.
@@ -11,6 +11,6 @@ COPY package.json .
 # for a npm error saying: EXDEV: cross-device link not permitted
 ENV NODE_ENV=development
 
-RUN apk add --no-cache rsync curl ; npm set progress=false && npm install && npm cache clean
+RUN apk add --no-cache rsync curl ; yarn
 
 # NOTE: "node" user and corresponding "/home/node" dir are created by "node:6-alpine" image.
