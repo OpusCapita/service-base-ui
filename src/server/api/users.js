@@ -72,7 +72,7 @@ module.exports.getUserProfile = function(userId)
 
 module.exports.userExists = function(userId)
 {
-    return this.db.models.User.findById(userId).then(user => user && userId && user.id.toLowerCase() === userId.toLowerCase());
+    return this.db.models.User.findById(userId).then(user => user ? true : false);
 }
 
 module.exports.addUser = function(user, returnUser)
