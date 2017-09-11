@@ -15,7 +15,7 @@ const Promise = require('bluebird');
  */
 module.exports.up = function(db, config)
 {
-    return db.queryInterface.addColumn('UserOnboardData', 'acceptedConditions', {
+    return db.queryInterface.addColumn('User', 'acceptedConditions', {
         type : DataTypes.STRING(6),
         allowNull : true
     });
@@ -32,5 +32,5 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    return db.queryInterface.dropColumn('UserProfile', 'acceptedConditions');
+    return db.queryInterface.dropColumn('User', 'acceptedConditions');
 }
