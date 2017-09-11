@@ -51,6 +51,10 @@ module.exports.init = function(db, config)
             allowNull : false,
             defaultValue : false
         },
+        acceptedConditions : {
+            type : DataTypes.STRING(6),
+            allowNull : true
+        },
         createdBy : {
             type : DataTypes.STRING(60),
             allowNull : false,

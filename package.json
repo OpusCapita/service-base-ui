@@ -18,13 +18,13 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "extend": "^3.0.1",
-    "ocbesbn-bouncer": "^0.2.7",
-    "ocbesbn-config": "^2.2.8",
-    "ocbesbn-db-init": "^1.1.9",
+    "ocbesbn-bouncer": "^0.2.11",
+    "ocbesbn-config": "^2.2.11",
+    "ocbesbn-db-init": "^1.1.10",
     "ocbesbn-logger": "^1.0.5",
     "ocbesbn-redis-events": "^1.0.5",
     "ocbesbn-service-client": "^1.1.3",
-    "ocbesbn-web-init": "^2.2.5",
+    "ocbesbn-web-init": "^2.2.6",
     "sequelize": "^3.30.4"
   },
   "devDependencies": {
