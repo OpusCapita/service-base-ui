@@ -6,7 +6,7 @@ const server = require('ocbesbn-web-init'); // Web server
 const bouncer = require('ocbesbn-bouncer') // ACL bouncer
 
 const logger = new Logger();
-logger.redirectConsoleOut(); // Force anyone using console outputs into Logger format.
+//logger.redirectConsoleOut(); // Force anyone using console outputs into Logger format.
 
 // Basic database and web server initialization.
 // See database : https://github.com/OpusCapitaBusinessNetwork/db-init

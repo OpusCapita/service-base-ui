@@ -37,7 +37,7 @@ module.exports.up = function(db, config)
     })
     .then(() =>
     {
-        return db.models.User.findAll().map(user => user.dataValues).map(user =>
+        return db.query('SELECT * FROM User').then(res => res && res[0]).map(user =>
         {
             return {
                 userId : user.id,
