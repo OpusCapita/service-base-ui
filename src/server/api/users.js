@@ -140,10 +140,10 @@ module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
         {
             return this.getUserProfile(userId).then(p =>
             {
+                profile.userId = userId;
+                
                 if(p)
                 {
-                    profile.userId = userId;
-                    
                     [ 'createdOn', 'changedOn', 'createdBy' ].forEach(key => delete profile[key]);
 
                     return this.db.models.UserProfile.update(profile,  { where : { userId : userId } })
