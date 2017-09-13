@@ -9,7 +9,7 @@ services:
      - nginx
     labels:
       SERVICE_NAME: 'user'
-      SERVICE_TAGS: 'external'
+      SERVICE_TAGS: 'external,kong'
     environment:
       PORT: 3008
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -48,7 +48,7 @@ services:
       - '3006:3006'
     labels:
       SERVICE_NAME: isodata
-      SERVICE_TAGS: 'external'
+      SERVICE_TAGS: 'external,kong'
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -65,7 +65,7 @@ services:
       - registrator
 
   nginx:
-    image: gr4per/nginx-rp:dev
+    image: opuscapita/nginx-rp:dev
     ports:
       - '8080:8080'
     depends_on:
