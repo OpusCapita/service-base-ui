@@ -99,9 +99,7 @@ module.exports.updateUser = function(userId, user, returnUser)
 {
     var roles = (user.roles && user.roles.map(roleId => ({ userId : userId, roleId : roleId, createdBy : user.changedBy }))) || [ ];
 
-    [ 'createdOn', 'changedOn', 'createdBy', 'roles' ].forEach(key => delete user[key]);
-
-    user.id = userId;
+    [ 'id', 'createdOn', 'changedOn', 'createdBy', 'roles' ].forEach(key => delete user[key]);
 
     return this.db.transaction(trans =>
     {
@@ -142,11 +140,9 @@ module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
         {
             return this.getUserProfile(userId).then(p =>
             {
-                profile.userId = userId;
-
                 if(p)
                 {
-                    [ 'createdOn', 'changedOn', 'createdBy' ].forEach(key => delete profile[key]);
+                    [ 'userId', 'createdOn', 'changedOn', 'createdBy' ].forEach(key => delete profile[key]);
 
                     return this.db.models.UserProfile.update(profile,  { where : { userId : userId } })
                         .then(() => returnProfile ? this.getUserProfile(userId) : userId);
