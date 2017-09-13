@@ -203,7 +203,9 @@ module.exports.addOrUpdateUserProfile = function(req, res, useCurrentUser)
 
 module.exports.sendUsers = function(req, res)
 {
-    var searchObj = { };
+    var searchObj = {
+        id: { $notLike: 'svc_%' } // ignore svc_* service users
+    };
     var customerId = req.query.customerId ? req.query.customerId.replace(/\s/g, '').toLowerCase().split(',') : null;
     var supplierId = req.query.supplierId ? req.query.supplierId.replace(/\s/g, '').toLowerCase().split(',') : null;
     var includes = req.query.include ? req.query.include.replace(/\s/g, '').toLowerCase().split(',') : [ ];

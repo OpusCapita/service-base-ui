@@ -7,6 +7,30 @@ import i18nMessages from './i18n';
 import 'react-table/react-table.css';
 import './UserList.css';
 
+const getUserStatusLabelClassName = (status) => {
+	switch (status) {
+		case 'emailVerification':
+		case 'firstLogin':
+			return 'default';
+
+		case 'failedLogin':
+			return 'warning';
+
+		case 'deleted':
+		case 'locked':
+			return 'danger';
+
+		case 'active': return 'success';
+
+		default:
+			return 'default';
+	}
+};
+
+const shouldShowGenerateNewPasswordAction = ({ status }) => {
+	return status !== 'locked' && status !== 'deleted';
+};
+
 class UserList extends Component {
 
 	static propTypes = {
@@ -85,6 +109,8 @@ class UserList extends Component {
 	}
 
 	render() {
+		const i18n = this.context.i18n.getMessage.bind(this.context.i18n);
+
 		return (
 			<div>
 				<h4 className="tab-description">{this.context.i18n.getMessage('UserList.Title')}</h4>
@@ -94,25 +120,55 @@ class UserList extends Component {
 					className="user-list-table"
 					columns={[
 						{
+							accessor: 'id',
+							Header: i18n('UserList.Table.Id.Title')
+						},
+						{
 							id: 'email',
 							accessor: user => user.profile.email,
-							Header: this.context.i18n.getMessage('UserList.Column.Email.Title')
+							Header: i18n('UserList.Table.Email.Title')
 						},
 						{
 							id: 'firstName',
 							accessor: user => user.profile.firstName,
-							Header: this.context.i18n.getMessage('UserList.Column.FirstName.Title')
+							Header: i18n('UserList.Table.FirstName.Title')
 						},
 						{
 							id: 'lastName',
 							accessor: user => user.profile.lastName,
-							Header: this.context.i18n.getMessage('UserList.Column.LastName.Title')
+							Header: i18n('UserList.Table.LastName.Title')
 						},
 						{
-							id: 'roles',
-							accessor: user => user.roles,
-							Header: this.context.i18n.getMessage('UserList.Column.Roles.Title'),
-							Cell: props => props.value.map(role => <span className="label label-default">{role}</span>)
+							accessor: 'federationId',
+							Header: i18n('UserList.Table.FederationId.Title')
+						},
+						{
+							accessor: 'roles',
+							Header: i18n('UserList.Table.Roles.Title'),
+							Cell: ({ value }) => value.map(role =>
+								<span key={role} className="label label-default">
+									{i18n(`UserList.Table.Roles.Value.${role}`)}
+								</span>)
+						},
+						{
+							accessor: 'status',
+							Header: i18n('UserList.Table.Status.Title'),
+							Cell: ({ value }) =>
+								<span className={`label label-${getUserStatusLabelClassName(value)}`}>
+									{i18n(`UserList.Table.Status.Value.${value}`)}
+								</span>
+						},
+						{
+							id: 'actions',
+							accessor: user => user,
+							Cell: ({ value }) =>
+								<nobr>
+									{shouldShowGenerateNewPasswordAction(value) &&
+										<Button onClick={() => {}} bsSize="sm">
+											<span className="glyphicon glyphicon-envelope" />
+											&nbsp;{i18n('UserList.Table.Actions.GenerateNewPassword')}
+										</Button>}
+								</nobr>
 						}
 					]}
 				/>

@@ -1,3 +1,8 @@
 .user-list-table .label + .label {
 	margin-left: 3px;
 }
+
+.user-list-table .rt-td {
+	display: flex;
+	align-items: center;
+}
