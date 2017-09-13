@@ -52,8 +52,7 @@ module.exports.find = function(search)
 module.exports.updateByInvitationCode = function(invitationCode, userId, data)
 {
     delete data.invitationCode;
-    delete data.userId;
-    
+
     data = serializeSubProperties(data.dataValues || data);
 
     const where = {
