@@ -53,10 +53,6 @@ class UserList extends Component {
 		this.context.i18n.register('UserList', i18nMessages);
 	}
 
-	componentDidMount() {
-		this.loadUsers();
-	}
-
 	componentWillUnmount() {
 		if (!this.state.loading) {
 			if (this.loadUsersPromise) {
@@ -66,24 +62,16 @@ class UserList extends Component {
 	}
 
 	/**
-	 * Loads user profile from api.
+	 * Loads users list from api.
 	 */
-	loadUsers() {
+	loadUsers = (state, instance) => {
 		this.setState({ loading: true });
 
 		this.loadUserProfilePromise = request
-			.get(`${this.props.actionUrl}/user/users`)
+			.get(`${this.props.actionUrl}/user/users?include=profile`)
 			.set('Accept', 'application/json')
 			.promise()
-			.then((response) => {
-				const users = response.body;
-
-				return Promise.all(users.map(user => this.loadUserProfile(user.id)))
-					.then((profiles) => {
-						users.forEach((user, i) => user.profile = profiles[i]);
-						return users;
-					});
-			})
+			.then(response => response.body)
 			.then(users => this.setState({ users }))
 			.catch((error) => {
 				if (error.status === 401) {
@@ -91,71 +79,73 @@ class UserList extends Component {
 				}
 			})
 			.then(() => this.setState({ loading: false }));
-	}
-
-	loadUserProfile(userId) {
-		return request
-			.get(`${this.props.actionUrl}/user/users/${encodeURIComponent(userId)}/profile`)
-			.set('Accept', 'application/json')
-			.promise()
-			.then(response => response.body)
-			.catch((error) => {
-				if (error.status === 404) {
-					return {};
-				}
-
-				throw error;
-			});
-	}
+	};
 
 	render() {
 		const i18n = this.context.i18n.getMessage.bind(this.context.i18n);
+		const { loading, users } = this.state;
 
 		return (
 			<div>
-				<h4 className="tab-description">{this.context.i18n.getMessage('UserList.Title')}</h4>
+				<h4 className="tab-description">{i18n('UserList.Title')}</h4>
 
 				<ReactTable
-					data={ this.state.users }
 					className="user-list-table"
+
+					data={ users }
+					onFetchData={this.loadUsers}
+					loading={loading}
+
+					defaultSorted={[
+						{ id: 'id', desc: false }
+					]}
+
+					loadingText={i18n('UserList.Table.Loading')}
+					noDataText={i18n('UserList.Table.NoData')}
+					previousText={i18n('UserList.Table.Pagination.Previous')}
+					nextText={i18n('UserList.Table.Pagination.Next')}
+					pageText={i18n('UserList.Table.Pagination.Page')}
+					ofText={i18n('UserList.Table.Pagination.Of')}
+					rowsText={i18n('UserList.Table.Pagination.Rows')}
+
 					columns={[
 						{
 							accessor: 'id',
-							Header: i18n('UserList.Table.Id.Title')
+							Header: i18n('UserList.Table.Column.Id.Title')
 						},
 						{
 							id: 'email',
-							accessor: user => user.profile.email,
-							Header: i18n('UserList.Table.Email.Title')
+							accessor: user => user.profile ? user.profile.email : '',
+							Header: i18n('UserList.Table.Column.Email.Title')
 						},
 						{
 							id: 'firstName',
-							accessor: user => user.profile.firstName,
-							Header: i18n('UserList.Table.FirstName.Title')
+							accessor: user => user.profile ? user.profile.firstName : '',
+							Header: i18n('UserList.Table.Column.FirstName.Title')
 						},
 						{
 							id: 'lastName',
-							accessor: user => user.profile.lastName,
-							Header: i18n('UserList.Table.LastName.Title')
+							accessor: user => user.profile ? user.profile.lastName : '',
+							Header: i18n('UserList.Table.Column.LastName.Title')
 						},
 						{
 							accessor: 'federationId',
-							Header: i18n('UserList.Table.FederationId.Title')
+							Header: i18n('UserList.Table.Column.FederationId.Title')
 						},
 						{
 							accessor: 'roles',
-							Header: i18n('UserList.Table.Roles.Title'),
+							Header: i18n('UserList.Table.Column.Roles.Title'),
 							Cell: ({ value }) => value.map(role =>
 								<span key={role} className="label label-default">
-									{i18n(`UserList.Table.Roles.Value.${role}`)}
+									{i18n(`UserList.Table.Column.Roles.Values.${role}`)}
 								</span>)
 						},
 						{
 							accessor: 'status',
-							Header: i18n('UserList.Table.Status.Title'),
+							Header: i18n('UserList.Table.Column.Status.Title'),
 							Cell: ({ value }) =>
 								<span className={`label label-${getUserStatusLabelClassName(value)}`}>
-									{i18n(`UserList.Table.Status.Value.${value}`)}
+									{i18n(`UserList.Table.Column.Status.Values.${value}`)}
 								</span>
 						},
 						{
@@ -166,7 +156,7 @@ class UserList extends Component {
 									{shouldShowGenerateNewPasswordAction(value) &&
 										<Button onClick={() => {}} bsSize="sm">
 											<span className="glyphicon glyphicon-envelope" />
-											&nbsp;{i18n('UserList.Table.Actions.GenerateNewPassword')}
+											&nbsp;{i18n('UserList.Table.Column.Actions.GenerateNewPassword')}
 										</Button>}
 								</nobr>
 						}
