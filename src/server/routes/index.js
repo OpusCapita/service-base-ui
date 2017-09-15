@@ -28,36 +28,36 @@ module.exports.init = function(app, db, config)
         app.use(checkContentType);
 
         /* duplicate endpoint for backwards compatibility */
-        app.get(['/onboardData/:userId', '/onboardingdata/:userId'], (req, res) => this.getOnboardData(req, res));
-        app.get('/onboardingdata', (req, res) => this.getOnboardingData(req, res));
-        app.post('/onboardingdata', (req, res) => this.addOnboardingData(req, res));
-        app.put('/onboardingdata/:invitationCode', (req, res) => this.updateOnboardingData(req, res));
+        app.get(['/api/onboardData/:userId', '/api/onboardingdata/:userId', '/onboardData/:userId', '/onboardingdata/:userId'], (req, res) => this.getOnboardData(req, res));
+        app.get(['/api/onboardingdata', '/onboardingdata'], (req, res) => this.getOnboardingData(req, res));
+        app.post(['/api/onboardingdata', '/onboardingdata'], (req, res) => this.addOnboardingData(req, res));
+        app.put(['/api/onboardingdata/:invitationCode', '/onboardingdata/:invitationCode'], (req, res) => this.updateOnboardingData(req, res));
 
-        app.get('/users', (req, res) => this.sendUsers(req, res));
-        app.post('/users', (req, res) => this.addUser(req, res));
+        app.get(['/api/users', '/users'], (req, res) => this.sendUsers(req, res));
+        app.post(['/api/users', '/users'], (req, res) => this.addUser(req, res));
 
-        app.get('/users/current', (req, res) => this.sendUser(req, res, true));
-        app.get('/users/:id', (req, res) => this.sendUser(req, res));
+        app.get(['/api/users/current', '/users/current'], (req, res) => this.sendUser(req, res, true));
+        app.get(['/api/users/:id', '/users/:id'], (req, res) => this.sendUser(req, res));
 
-        app.put('/users/current', (req, res) => this.updateUser(req, res, true));
-        app.put('/users/:id', (req, res) => this.updateUser(req, res));
+        app.put(['/api/users/current', '/users/current'], (req, res) => this.updateUser(req, res, true));
+        app.put(['/api/users/:id', '/users/:id'], (req, res) => this.updateUser(req, res));
 
-        app.get('/users/current/profile', (req, res) => this.sendUserProfile(req, res, true));
-        app.get('/users/:id/profile', (req, res) => this.sendUserProfile(req, res));
+        app.get(['/api/users/current/profile', '/users/current/profile'], (req, res) => this.sendUserProfile(req, res, true));
+        app.get(['/api/users/:id/profile', '/users/:id/profile'], (req, res) => this.sendUserProfile(req, res));
 
-        app.put('/users/current/profile', (req, res) => this.addOrUpdateUserProfile(req, res, true));
-        app.put('/users/:id/profile', (req, res) => this.addOrUpdateUserProfile(req, res));
+        app.put(['/api/users/current/profile', '/users/current/profile'], (req, res) => this.addOrUpdateUserProfile(req, res, true));
+        app.put(['/api/users/:id/profile', '/users/:id/profile'], (req, res) => this.addOrUpdateUserProfile(req, res));
 
-        app.get('/users/current/assignableRoles', (req, res) => this.sendUserAssignableRoles(req, res, true));
-        app.get('/users/:id/assignableRoles', (req, res) => this.sendUserAssignableRoles(req, res));
+        app.get('/api/users/current/assignableRoles', (req, res) => this.sendUserAssignableRoles(req, res, true));
+        app.get('/api/users/:id/assignableRoles', (req, res) => this.sendUserAssignableRoles(req, res));
 
-        app.get('/roles', (req, res) => this.sendRoles(req, res));
-        app.get('/roles/:id', (req, res) => this.sendRole(req, res));
+        app.get(['/api/roles', '/roles'], (req, res) => this.sendRoles(req, res));
+        app.get(['/api/roles/:id', '/roles/:id'], (req, res) => this.sendRole(req, res));
 
-        app.post('/roles', (req, res) => this.addUserRoles(req, res));
+        app.post(['/api/roles', '/roles'], (req, res) => this.addUserRoles(req, res));
 
-        app.put('/users/:userId/roles/:roleId', (req, res) => this.addUserToRole(req, res));
-        app.delete('/users/:userId/roles/:roleId', this.removeUserFromRole.bind(this))
+        app.delete('/api/users/:userId/roles/:roleId', this.removeUserFromRole.bind(this))
+        app.put(['/api/users/:userId/roles/:roleId', '/users/:userId/roles/:roleId'], (req, res) => this.addUserToRole(req, res));
     });
 };
 

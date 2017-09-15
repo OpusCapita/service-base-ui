@@ -12,43 +12,21 @@
  */
 module.exports.up = function(db, config)
 {
-    var ocAdmin = {
-        userId : 'ocadmin',
-        roleId : 'admin',
+    var r1 = {
+        userId : 'svc_a2a-integration',
+        roleId : 'user',
         createdBy : 'The Doctor',
         createdOn : new Date()
     };
 
-    var svcSupplier = {
-        userId : 'svc_supplier',
-        roleId : 'svc_supplier',
+    var r2 = {
+        userId : 'svc_a2a-integration',
+        roleId : 'svc_a2a-integration',
         createdBy : 'The Doctor',
         createdOn : new Date()
     };
 
-    this.oldEntries = db.models.UserHasRole.findAll();
-
-    return this.oldEntries.then(() =>
-    {
-        return Promise.all([
-            db.queryInterface.bulkDelete('UserHasRole', { roleId : { '$in' : [ 'xtenant', 'user' ] } }),
-            db.queryInterface.bulkDelete('UserHasRole', { userId : 'scott.tiger@example.com', roleId : 'admin' })
-        ]);
-    })
-    .then(() =>
-    {
-        return db.query('SELECT * FROM User').then(res => res && res[0]).map(user =>
-        {
-            return {
-                userId : user.id,
-                roleId : 'user',
-                createdBy : 'The Doctor',
-                createdOn : new Date()
-            };
-        })
-    })
-    .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', allForUser))
-    .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', [ ocAdmin, svcSupplier ]));
+    return db.queryInterface.bulkInsert('UserHasRole', [ r1, r2 ]);
 }
 
 /**
@@ -62,6 +40,15 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    return this.oldEntries.map(e => e.dataValues).filter(e => e.roleId === 'xtenant' || e.roleId === 'user')
-        .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', allForUser));
+    var d1 = db.queryInterface.bulkDelete('UserHasRole', {
+        userId : 'svc_a2a-integration',
+        roleId : 'user'
+    });
+
+    var d2 = db.queryInterface.bulkDelete('UserHasRole', {
+        userId : 'svc_a2a-integration',
+        roleId : 'svc_a2a-integration'
+    });
+
+    return Promise.all([ d1, d2 ]);
 }

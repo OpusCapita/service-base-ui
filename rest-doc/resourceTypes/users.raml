@@ -106,7 +106,6 @@ post:
         id:
             type: string
             description: Unique identifier of a user.
-            pattern: \w{3}
     get:
         description: Resturns a single user's profile.
         is:
@@ -183,19 +182,16 @@ post:
                     example: |
                         ["supplier", "user"]
 
-/{userId}/roles/{roleId}:
+/{id}/roles/{roleId}:
     uriParameters:
-        userId:
+        id:
             type: string
             description: Unique identifier of a user.
-            pattern: \w{3}
         roleId:
             type: string
-            description: Unique identifier of a role.
-            pattern: \w{3}
-
+            description: Unique identifier a role a user should be assigned to.
     put:
-        description: Adds the role with roleId to the the user with userId.
+        description: Adds the role with roleId to the the user with id.
         is:
             - sendNotFound
             - sendGeneralError
