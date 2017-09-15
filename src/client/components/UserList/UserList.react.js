@@ -70,7 +70,7 @@ class UserList extends Component {
 		this.setState({ loading: true });
 
 		this.loadUserProfilePromise = request
-			.get(`${this.props.actionUrl}/user/users?include=profile`)
+			.get(`${this.props.actionUrl}/user/api/users?include=profile`)
 			.set('Accept', 'application/json')
 			.promise()
 			.then(response => response.body)
