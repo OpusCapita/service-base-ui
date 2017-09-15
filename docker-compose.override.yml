@@ -5,3 +5,9 @@ services:
     volumes:
       - .:/home/node/user
     command: 'npm run dev'
+
+  auth:
+    command: 'npm run dev'
+
+  email:
+    command: 'npm run dev'

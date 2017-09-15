@@ -6,3 +6,16 @@
 	display: flex;
 	align-items: center;
 }
+
+.user-list-table .action-reset-password .fa-spinner {
+	display: none;
+	margin-left: 4px;
+}
+
+.user-list-table .action-reset-password.loading .icon {
+	display: none;
+}
+
+.user-list-table .action-reset-password.loading .spinner {
+	display: inline;
+}

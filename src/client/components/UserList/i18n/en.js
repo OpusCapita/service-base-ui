@@ -53,7 +53,7 @@ export default {
 				Actions: {
 					Lock: 'Lock',
 					Unlock: 'Unlock',
-					GenerateNewPassword: 'Send new password'
+					ResetPassword: 'Reset password'
 				}
 			}
 		}

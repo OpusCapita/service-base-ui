@@ -27,7 +27,7 @@ const getUserStatusLabelClassName = (status) => {
 	}
 };
 
-const shouldShowGenerateNewPasswordAction = ({ status }) => {
+const shouldShowResetPasswordAction = ({ status }) => {
 	return status !== 'locked' && status !== 'deleted';
 };
 
@@ -46,7 +46,9 @@ class UserList extends Component {
 
 	state = {
 		users: [],
-		loading: false
+		loading: false,
+		globalMessage: '',
+		globalError: ''
 	};
 
 	componentWillMount() {
@@ -81,6 +83,21 @@ class UserList extends Component {
 			.then(() => this.setState({ loading: false }));
 	};
 
+	resetPassword({ id, profile }, event) {
+		const buttonEl = event.target;
+		buttonEl.classList.add('loading');
+
+		const lang = profile ? `?lang=${profile.languageId}` : '';
+
+		request
+			.post(`${this.props.actionUrl}/auth/password/reset${lang}`)
+			.set('Accept', 'application/json')
+			.send({ email: id })
+			.promise()
+			.then(() => buttonEl.classList.remove('loading'))
+			.catch(() => buttonEl.classList.remove('loading'));
+	}
+
 	render() {
 		const i18n = this.context.i18n.getMessage.bind(this.context.i18n);
 		const { loading, users } = this.state;
@@ -88,6 +105,9 @@ class UserList extends Component {
 		return (
 			<div>
 				<h4 className="tab-description">{i18n('UserList.Title')}</h4>
+
+				{this.state.globalMessage &&
+					<Alert bsStyle="info" message={this.state.globalMessage}/>}
 
 				<ReactTable
 					className="user-list-table"
@@ -153,10 +173,15 @@ class UserList extends Component {
 							accessor: user => user,
 							Cell: ({ value }) =>
 								<nobr>
-									{shouldShowGenerateNewPasswordAction(value) &&
-										<Button onClick={() => {}} bsSize="sm">
-											<span className="glyphicon glyphicon-envelope" />
-											&nbsp;{i18n('UserList.Table.Column.Actions.GenerateNewPassword')}
+									{shouldShowResetPasswordAction(value) &&
+										<Button
+											onClick={this.resetPassword.bind(this, value)}
+											bsSize="sm"
+											className="action-reset-password"
+										>
+											<span className="icon glyphicon glyphicon-envelope" />
+											<span className="spinner fa fa-spinner fa-spin" />
+											&nbsp;{i18n('UserList.Table.Column.Actions.ResetPassword')}
 										</Button>}
 								</nobr>
 						}

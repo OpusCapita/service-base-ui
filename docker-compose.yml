@@ -55,6 +55,41 @@ services:
       PORT: '3006'
     command: 'npm run dev:production'
 
+  auth:
+    image: opuscapita/auth:dev
+    ports:
+     - '3005:3005'
+    labels:
+      SERVICE_NAME: auth
+      SERVICE_TAGS: 'external,kong'
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      USER_NAME: 'auth'
+      PASSWORD: 'svc_auth'
+      REDIS_AUTH: ${REDIS_AUTH}
+      SERVICE_3005_CHECK_HTTP: /auth/certs
+      SERVICE_3005_CHECK_INTERVAL: 15s
+      SERVICE_3005_CHECK_TIMEOUT: 3s
+    depends_on:
+      - consul
+
+  email:
+    image: opuscapita/email:dev
+    ports:
+      - '3050:3050'
+    environment:
+      REDIS_AUTH: ${REDIS_AUTH}
+      PORT: 3050
+      SERVICE_NAME: 'email'
+      SERVICE_3050_CHECK_HTTP: /
+      SERVICE_3050_CHECK_INTERVAL: 15s
+      SERVICE_3050_CHECK_TIMEOUT: 3s
+      MAIL_API_KEY: $MJ_APIKEY_PUBLIC
+      MAIL_API_SECRET: $MJ_APIKEY_PRIVATE
+    depends_on:
+      - registrator
+
   redis:
     image: opuscapita/redis:dev
     ports:
