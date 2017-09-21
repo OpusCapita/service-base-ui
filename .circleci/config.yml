@@ -18,7 +18,8 @@ jobs:
             chmod +x buildscript.sh
             ./buildscript.sh opuscapita/$CIRCLE_PROJECT_REPONAME
 
-  mirror:
+
+  copy_to_env:
     docker:
       - image: circleci/node:8
     working_directory: ~/build
@@ -32,7 +33,7 @@ jobs:
             if [[ "$CIRCLE_BRANCH" == "master" ]]; then export andariel_branch=master; fi
             curl -f --header "Authorization: token $GIT_TOKEN" https://raw.githubusercontent.com/OpusCapita/andariel/$andariel_branch/mirrorscript.sh > mirrorscript.sh
             chmod +x mirrorscript.sh
-            ./mirrorscript.sh opuscapita/$CIRCLE_PROJECT_REPONAME $FROM_ENV $TO_ENV
+            ./mirrorscript.sh opuscapita/$CIRCLE_PROJECT_REPONAME $FROM_ENV $TO_ENV $GIT_TOKEN
 
   build_base:
     docker:
