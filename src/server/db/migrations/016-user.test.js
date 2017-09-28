@@ -1,6 +1,6 @@
 'use strict'
 
-const users = require('../data/16-user.json');
+const users = require('../data/user-16.json');
 
 /**
  * Inserts test data into existing database structures.

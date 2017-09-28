@@ -1,6 +1,6 @@
 'use strict'
 
-const userHasRoles = require('../data/16-userHasRole.json');
+const userHasRoles = require('../data/userHasRole-16.json');
 
 /**
  * Inserts test data into existing database structures.
