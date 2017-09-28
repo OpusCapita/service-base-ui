@@ -1,0 +1,30 @@
+[
+  {
+    "userId": "andy.approver@musterkunden.de",
+    "roleId": "invoice-approver",
+    "createdBy": "The Doctor",
+    "changedBy": "",
+    "changedOn": null
+  },
+  {
+    "userId": "andy.approver@musterkunden.de",
+    "roleId": "user",
+    "createdBy": "The Doctor",
+    "changedBy": "",
+    "changedOn": null
+  },
+  {
+    "userId": "indy.inspector@musterkunden.de",
+    "roleId": "invoice-inspector",
+    "createdBy": "The Doctor",
+    "changedBy": "",
+    "changedOn": null
+  },
+  {
+    "userId": "indy.inspector@musterkunden.de",
+    "roleId": "user",
+    "createdBy": "The Doctor",
+    "changedBy": "",
+    "changedOn": null
+  }
+]

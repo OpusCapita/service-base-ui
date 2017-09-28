@@ -1,0 +1,28 @@
+[
+  {
+    "id": "andy.approver@musterkunden.de",
+    "federationId": "",
+    "supplierId": null,
+    "customerId": "OC001",
+    "status": "firstLogin",
+    "mayChangeSupplier": 0,
+    "mayChangeCustomer": 0,
+    "createdBy": "The Doctor",
+    "changedBy": "Opuscapita user",
+    "changedOn": null,
+    "acceptedConditions": null
+  },
+  {
+    "id": "indy.inspector@musterkunden.de",
+    "federationId": "",
+    "supplierId": null,
+    "customerId": "OC001",
+    "status": "firstLogin",
+    "mayChangeSupplier": 0,
+    "mayChangeCustomer": 0,
+    "createdBy": "The Doctor",
+    "changedBy": "Opuscapita user",
+    "changedOn": null,
+    "acceptedConditions": null
+  }
+]
