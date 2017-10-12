@@ -1,0 +1,16 @@
+[
+  {
+    "userId": "mark.matcher@musterkunden.de",
+    "roleId": "invoice-matcher",
+    "createdBy": "The Doctor",
+    "changedBy": "",
+    "changedOn": null
+  },
+  {
+    "userId": "mark.matcher@musterkunden.de",
+    "roleId": "user",
+    "createdBy": "The Doctor",
+    "changedBy": "",
+    "changedOn": null
+  }
+]
