@@ -87,7 +87,7 @@ class UserProfileEditor extends Component {
 		this.setState({ isLoaded: false });
 
 		this.loadUserProfilePromise = request
-			.get(`${this.props.actionUrl}/user/api/users/${encodeURIComponent(this.props.userId)}/profile`)
+			.get(`${this.props.actionUrl}/user/api/users/${this.props.userId}/profile`)
 			.set('Accept', 'application/json')
 			.promise()
 			.then(response => this.setState({userProfile: response.body}))

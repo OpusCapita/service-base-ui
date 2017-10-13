@@ -119,6 +119,7 @@ class UserList extends Component {
 					defaultSorted={[
 						{ id: 'id', desc: false }
 					]}
+					minRows={0}
 
 					loadingText={i18n('UserList.Table.Loading')}
 					noDataText={i18n('UserList.Table.NoData')}

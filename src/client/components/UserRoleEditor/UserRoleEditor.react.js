@@ -49,13 +49,13 @@ class UserRoleEditor extends Component {
 		this.setState({ isLoaded: false });
 
 		this.loadOwnedRolesPromise = request
-			.get(`${this.props.actionUrl}/user/users/${encodeURIComponent(this.props.userId)}`)
+			.get(`${this.props.actionUrl}/user/api/users/${this.props.userId}`)
 			.set('Accept', 'application/json')
 			.promise()
 			.then(response => this.setState({ownedRoles: response.body.roles}));
 
 		this.loadAssignableRolesPromise = request
-			.get(`${this.props.actionUrl}/user/users/current/assignableRoles`)
+			.get(`${this.props.actionUrl}/user/api/users/current/assignableRoles`)
 			.set('Accept', 'application/json')
 			.promise()
 			.then(response => this.setState({assignableRoles: response.body}));
@@ -90,7 +90,7 @@ class UserRoleEditor extends Component {
 	 */
 	addRoleToUser = (roleId) => {
 		return request
-			.put(`${this.props.actionUrl}/user/api/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
+			.put(`${this.props.actionUrl}/user/api/users/${this.props.userId}/roles/${roleId}`)
 			.set('Accept', 'application/json')
 			.set('Content-type', 'application/json')
 			.promise()
@@ -107,7 +107,7 @@ class UserRoleEditor extends Component {
 		}
 
 		return request
-			.delete(`${this.props.actionUrl}/user/api/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
+			.delete(`${this.props.actionUrl}/user/api/users/${this.props.userId}/roles/${roleId}`)
 			.set('Accept', 'application/json')
 			.set('Content-type', 'application/json')
 			.promise()

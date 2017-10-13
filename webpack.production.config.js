@@ -5,12 +5,13 @@ module.exports = {
 	entry: {
 		profile: './src/client/components/UserProfileEditor/index.js',
 		role: './src/client/components/UserRoleEditor/index.js',
+		list: './src/client/components/UserList/index.js'
 	},
 	output: {
 		path: path.resolve(__dirname, './src/server/static'),
 		publicPath: '/static',
 		filename: 'components/[name]-bundle.js',
-		library: 'supplier-[name]',
+		library: 'user-[name]',
 		libraryTarget: 'umd',
 		umdNamedDefine: true
 	},
@@ -30,10 +31,12 @@ module.exports = {
 	],
 
 	resolve: {
+		modules: [process.env.NODE_PATH, 'node_modules'],
 		extensions: ['.json', '.jsx', '.js']
 	},
 
 	resolveLoader: {
+		modules: [process.env.NODE_PATH, 'node_modules'],
 		extensions: ['.js']
 	},
 

@@ -68,10 +68,10 @@
     "webpack": "2.5.1"
   },
   "scripts": {
-    "start": "node src/server/index.js",
+    "start": "npm run setup-consul ; node src/server/index.js",
     "dev": "npm run setup-consul ; NODE_ENV=development ${NODE_PATH}/.bin/nodemon --watch src/server www/index.js",
     "build": "npm run build:client",
-    "build:client": "NODE_ENV=production ${NODE_PATH}/.bin/webpack -p --config ./webpack.development.config.js --profile --colors --bail",
+    "build:client": "NODE_ENV=production ${NODE_PATH}/.bin/webpack -p --config ./webpack.production.config.js --profile --colors --bail",
     "test": "npm run clean ; npm run setup-consul ; ${NODE_PATH}/.bin/nyc ${NODE_PATH}/.bin/mocha --timeout 30000 --recursive -R mocha-junit-reporter",
     "test-raw": "npm run clean ; npm run setup-consul ; ${NODE_PATH}/.bin/nyc ${NODE_PATH}/.bin/mocha --timeout 30000 --recursive",
     "clean": "${NODE_PATH}/.bin/rimraf .nyc_output coverage test-results.xml",
