@@ -1,0 +1,108 @@
+#root, #main {
+    height: 100%
+}
+
+#react-root {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+#system-error-message {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 99999999;
+    display: none;
+}
+
+#system-progress-bar {
+    height: 4px;
+    position: fixed;
+    top: 86px;
+    width: 100%;
+}
+
+#system-spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 99999999;
+    background: rgba(0,0,0,0.5);
+
+}
+
+#system-spinner .inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    margin-left: -50px;
+    margin-top: -50px;
+    background: #fff;
+    border-radius: 50px;
+}
+
+#system-spinner .inner i {
+    font-size: 75px;
+    color: #e70;
+    margin-top: 13px;
+}
+
+.progress {
+    border-radius: 0 !important;
+}
+
+section.content {
+    margin-top: 110px;
+    padding-bottom: 110px;
+}
+
+.oc-progress-bar {
+    background-color: #ec6608;
+    background-image: none;
+}
+
+.notification-info {
+    background-color: #E8E8E8 !important;
+    border-top: none !important;
+    border-bottom : 3px solid #5bc0de;
+}
+
+.notification-info .notification-dismiss {
+    background: #5bc0de !important;
+}
+
+.notification-success {
+    background-color: #E8E8E8 !important;
+    border-top: none !important;
+    border-bottom : 3px solid #26AC6E;
+}
+
+.notification-success .notification-dismiss {
+    background: #26AC6E !important;
+}
+
+.notification-warning {
+    background-color: #E8E8E8 !important;
+    border-top: none !important;
+    border-bottom : 3px solid #DE6620;
+}
+
+.notification-warning .notification-dismiss {
+    background: #DE6620 !important;
+}
+
+.notification-error {
+    background-color: #E8E8E8 !important;
+    border-top: none !important;
+    border-bottom : 3px solid #CF2821;
+}
+
+.notification-error .notification-dismiss {
+    background: #CF2821 !important;
+}

@@ -1,0 +1,182 @@
+{
+    "customer":
+    {
+        "en": [
+        {
+            "label": "Home",
+            "link": "/bnp"
+        },
+        {
+            "label": "Suppliers",
+            "children": [
+            {
+                "label": "Onboarding Dashboard",
+                "link": "/onboarding/dashboard"
+            },
+            {
+                "label": "Onboarding Campaigns",
+                "link": "/onboarding"
+            },
+            {
+                "label": "Onboarding Create Campaign",
+                "link": "/onboarding/create"
+            },
+            {
+                "label": "Supplier Directory",
+                "link": "/bnp/supplierDirectory"
+            }]
+        }],
+
+        "de": [
+        {
+            "label": "Home",
+            "link": "/bnp"
+        },
+        {
+            "label": "Lieferantent",
+            "children": [
+            {
+                "label": "Onboarding Dashboard",
+                "link": "/onboarding/dashboard"
+            },
+            {
+                "label": "Onboarding Kampagnen",
+                "link": "/onboarding"
+            },
+            {
+                "label": "Onboarding Kampagne erstellen",
+                "link": "/onboarding/create"
+            },
+            {
+                "label": "Lieferantenverzeichnis",
+                "link": "/bnp/supplierDirectory"
+            }]
+        }]
+    },
+
+    "supplier":
+    {
+        "en": [
+        {
+            "label": "Home",
+            "link": "/bnp"
+        },
+        {
+            "label": "Invoice",
+            "children": [
+            {
+                "label": "Service configuration",
+                "link": "/einvoice-send"
+            }]
+        },
+        {
+            "label": "Company",
+            "children": [
+            {
+                "label": "Profile",
+                "link": "/bnp/supplierInformation"
+            }]
+        }],
+
+        "de": [
+        {
+            "label": "Home",
+            "link": "/bnp"
+        },
+        {
+            "label": "Rechnungen",
+            "children": [
+            {
+                "label": "Service Konfiguration",
+                "link": "/einvoice-send"
+            }]
+        },
+        {
+            "label": "Unternehmen",
+            "children": [
+            {
+                "label": "Profil",
+                "link": "/bnp/supplierInformation"
+            }]
+        }]
+    },
+
+    "admin":
+    {
+        "en": [
+        {
+            "label": "Home",
+            "link": "/bnp"
+        },
+        {
+            "label": "Suppliers",
+            "children": [
+            {
+                "label": "Onboarding Dashboard",
+                "link": "/onboarding/dashboard"
+            },
+            {
+                "label": "Onboarding Campaigns",
+                "link": "/onboarding"
+            },
+            {
+                "label": "Onboarding Create Campaign",
+                "link": "/onboarding/create"
+            }]
+        },
+        {
+            "label": "Invoice",
+            "children": [
+            {
+                "label": "Service configuration",
+                "link": "/einvoice-send"
+            }]
+        },
+        {
+            "label": "Company",
+            "children": [
+            {
+                "label": "Profile",
+                "link": "/bnp/supplierInformation"
+            }]
+        }],
+
+        "de": [
+        {
+            "label": "Home",
+            "link": "/bnp"
+        },
+        {
+            "label": "Lieferantent",
+            "children": [
+            {
+                "label": "Onboarding Dashboard",
+                "link": "/onboarding/dashboard"
+            },
+            {
+                "label": "Onboarding Kampagnen",
+                "link": "/onboarding"
+            },
+            {
+                "label": "Onboarding Kampagne erstellen",
+                "link": "/onboarding/create"
+            }]
+        },
+        {
+            "label": "Rechnungen",
+            "children": [
+            {
+                "label": "Service Konfiguration",
+                "link": "/einvoice-send"
+            }]
+        },
+        {
+            "label": "Unternehmen",
+            "children": [
+            {
+                "label": "Profil",
+                "link": "/bnp/supplierInformation"
+            }]
+        }]
+    }
+}

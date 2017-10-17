@@ -1,0 +1,41 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'run',
+1 verbose cli   'setup-user' ]
+2 info using npm@5.4.2
+3 info using node@v8.7.0
+4 verbose config Skipping project config: /home/node/.npmrc. (matches userconfig)
+5 verbose run-script [ 'presetup-user', 'setup-user', 'postsetup-user' ]
+6 info lifecycle @opuscapita/service-base-ui@1.0.0~presetup-user: @opuscapita/service-base-ui@1.0.0
+7 info lifecycle @opuscapita/service-base-ui@1.0.0~setup-user: @opuscapita/service-base-ui@1.0.0
+8 verbose lifecycle @opuscapita/service-base-ui@1.0.0~setup-user: unsafe-perm in lifecycle true
+9 verbose lifecycle @opuscapita/service-base-ui@1.0.0~setup-user: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/home/node/node_modules/.bin:/usr/local/lib/node_modules/npm/bin/node-gyp-bin:/home/node/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/.bin
+10 verbose lifecycle @opuscapita/service-base-ui@1.0.0~setup-user: CWD: /home/node
+11 silly lifecycle @opuscapita/service-base-ui@1.0.0~setup-user: Args: [ '-c',
+11 silly lifecycle   'sleep 5 ; curl -X PUT -d \'{"id": "test", "username": "testUser", "roles": ["admin"]}\' http://localhost:8500/v1/kv/user/json' ]
+12 silly lifecycle @opuscapita/service-base-ui@1.0.0~setup-user: Returned: code: 7  signal: null
+13 info lifecycle @opuscapita/service-base-ui@1.0.0~setup-user: Failed to exec setup-user script
+14 verbose stack Error: @opuscapita/service-base-ui@1.0.0 setup-user: `sleep 5 ; curl -X PUT -d '{"id": "test", "username": "testUser", "roles": ["admin"]}' http://localhost:8500/v1/kv/user/json`
+14 verbose stack Exit status 7
+14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/index.js:280:16)
+14 verbose stack     at emitTwo (events.js:125:13)
+14 verbose stack     at EventEmitter.emit (events.js:213:7)
+14 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-lifecycle/lib/spawn.js:55:14)
+14 verbose stack     at emitTwo (events.js:125:13)
+14 verbose stack     at ChildProcess.emit (events.js:213:7)
+14 verbose stack     at maybeClose (internal/child_process.js:927:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+15 verbose pkgid @opuscapita/service-base-ui@1.0.0
+16 verbose cwd /home/node
+17 verbose Linux 4.9.49-moby
+18 verbose argv "/usr/local/bin/node" "/usr/local/bin/npm" "run" "setup-user"
+19 verbose node v8.7.0
+20 verbose npm  v5.4.2
+21 error code ELIFECYCLE
+22 error errno 7
+23 error @opuscapita/service-base-ui@1.0.0 setup-user: `sleep 5 ; curl -X PUT -d '{"id": "test", "username": "testUser", "roles": ["admin"]}' http://localhost:8500/v1/kv/user/json`
+23 error Exit status 7
+24 error Failed at the @opuscapita/service-base-ui@1.0.0 setup-user script.
+24 error This is probably not a problem with npm. There is likely additional logging output above.
+25 verbose exit [ 7, true ]
