@@ -7,8 +7,7 @@
     "license": "MIT",
     "scripts": {
         "dev": "node dev/index.js",
-        "build": "npx webpack -p --config webpack.prod.config.js --env=production --profile --colors --bail",
-        "install": "cp package.json  ../onboarding/node_modules/@opuscapita/service-base-ui ; cp -R lib/*  ../onboarding/node_modules/@opuscapita/service-base-ui/lib"
+        "build": "npx webpack -p --config webpack.prod.config.js --env=production --profile --colors --bail"
     },
     "dependencies": {
         "@opuscapita/i18n": "^1.1.0",
