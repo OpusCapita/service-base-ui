@@ -5,9 +5,11 @@ services:
     build: .
     depends_on:
         - consul
-        - nginx-rp
+        - kong
         - registrator
         - user
+        - acl
+        - auth
     labels:
      SERVICE_NAME: 'service-base-ui'
      SERVICE_TAGS: 'external,kong'
@@ -26,14 +28,14 @@ services:
     command:
         'npm run dev'
 
-  mysql:
-    image: 'mysql:5.7'
-    command: ['--character-set-server=utf8', '--collation-server=utf8_general_ci']
+  postgres:
+    image: postgres:9.4
     ports:
-      - '3306:3306'
+      - '5432:5432'
     environment:
-      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-      MYSQL_DATABASE: $MYSQL_DATABASE
+      POSTGRES_USER: $POSTGRES_DB
+      POSTGRES_DB: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     depends_on:
       - registrator
 
@@ -56,6 +58,108 @@ services:
      - '3008:3008'
     command: 'npm run dev'
 
+  kong:
+    image: opuscapita/kong:dev
+    environment:
+      KONG_DATABASE: 'postgres'
+      KONG_PG_HOST: $KONG_PG_HOST
+      KONG_PG_PORT: $KONG_PG_PORT
+      APP_HOST: $HOST_IP
+      APP_HOST_PROTOCOL: $APP_HOST_PROTOCOL
+      APP_HOST_PORT: $APP_HOST_PORT
+      GATEWAY_SCHEME: $GATEWAY_SCHEME
+      GATEWAY_IP: $GATEWAY_IP
+      GATEWAY_PORT: $GATEWAY_PORT
+      GATEWAY_CALLBACK: $GATEWAY_CALLBACK
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      LOG_PORT: 5000
+      LOG_HOST: $LOG_HOST
+      ACL_HOST: $ACL_HOST
+      ACL_PORT: $ACL_PORT
+      REDIS_HOST: $HOST_IP # TODO: remove after api-gw is using config
+      REDIS_PORT: 6379 # TODO: remove after api-gw is using config
+      REDIS_AUTH: $REDIS_AUTH # TODO: remove after api-gw is using config
+      SERVICE_8001_NAME: 'kong'
+      SERVICE_8080_NAME: 'kong-http'
+    ports:
+      - '8080:8080'
+      - '8443:8443'
+      - '8001:8001'
+      - '7946:7946'
+      - '7946:7946/udp'
+    depends_on:
+      - postgres
+      - mysql
+
+  auth:
+    image: opuscapita/auth:dev
+    ports:
+     - '$APP_HOST_PORT:$APP_HOST_PORT'
+    environment:
+      NODE_ENV: $NODE_ENV
+      APP_HOST: '0.0.0.0'
+      APP_HOST_PROTOCOL: $APP_HOST_PROTOCOL
+      APP_HOST_PORT: $APP_HOST_PORT
+      GATEWAY_SCHEME: $GATEWAY_SCHEME
+      GATEWAY_IP: $GATEWAY_IP
+      GATEWAY_PORT: $GATEWAY_PORT
+      GATEWAY_CALLBACK: $GATEWAY_CALLBACK
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      REDIS_AUTH: ${REDIS_AUTH}
+      SERVICE_3005_CHECK_HTTP: /auth/certs
+      SERVICE_3005_CHECK_INTERVAL: 15s
+      SERVICE_3005_CHECK_TIMEOUT: 3s
+    depends_on:
+      - kong
+      - consul
+    command: 'npm run dev'
+
+  acl:
+    image: opuscapita/acl:dev
+    labels:
+      - 'SERVICE_NAME=acl'
+      - 'SERVICE_TAGS=external,kong'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      SERVICE_3013_CHECK_HTTP: /api/health/check
+      SERVICE_3013_CHECK_INTERVAL: 15s
+      SERVICE_3013_CHECK_TIMEOUT: 3s
+    ports:
+     - '3013:3013'
+    depends_on:
+      - kong
+    command: 'npm run dev'
+
+  api-registry:
+    image: opuscapita/api-registrator:dev
+    ports:
+      - '$API_REGISTRY_PORT:$API_REGISTRY_PORT'
+    environment:
+      AUTH_SERVER: $AUTH_SERVER
+      AUTH_SERVER_PORT: $AUTH_SERVER_PORT
+      API_REGISTRY_PORT: $API_REGISTRY_PORT
+      GATEWAY_CALLBACK: $GATEWAY_CALLBACK
+      SERVICE_3002_CHECK_HTTP: /api/health/check
+      SERVICE_3002_CHECK_INTERVAL: 15s
+      SERVICE_3002_CHECK_TIMEOUT: 3s
+    depends_on:
+      - kong
+
+  mysql:
+    image: 'mysql:5.7'
+    command: ['--character-set-server=utf8', '--collation-server=utf8_general_ci']
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    depends_on:
+      - registrator
+
   redis:
     image: 'opuscapita/redis:dev'
     environment:
@@ -65,17 +169,8 @@ services:
     ports:
       - '6379:6379'
 
-  nginx-rp:
-    image: opuscapita/nginx-rp:dev
-    environment:
-        USER_IDENTITY: '{"id": "test", "username": "testUser", "roles": ["admin"]}'
-    ports:
-      - '8080:8080'
-    depends_on:
-      - registrator
-
   registrator:
-    image: gliderlabs/registrator
+    image: opuscapita/consul-registrator
     command: consul://consul:8500
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
@@ -91,3 +186,8 @@ services:
     labels:
       SERVICE_IGNORE: 'true'  # Do not add any of Consul's services to Consul's service discovery registry.
     command: [agent, '-server', '-ui', '-bootstrap', '-client=0.0.0.0']
+
+  networktest:
+    image: opuscapita/networktest:dev
+    depends_on:
+      - main

@@ -130,10 +130,22 @@ class ServiceLayout extends Component
         this.showSystemSpinner();
 
         return this.authApi.refreshIdToken().then(() => this.authApi.getUserData())
-            .then(userData => this.usersApi.getUserProfile(userData.id).then(userProfile => ({ userData, userProfile })))
-            .then(({ userData, userProfile }) => this.setState({ userData, userProfile, i18n : this.getI18nManager(userData.languageid) }))
-            .catch(e => this.showNotification(e.message, 'error', 10))
-            .finally(() => this.hideSystemSpinner());
+        .then(userData =>
+        {
+            return this.usersApi.getUserProfile(userData.id)
+                .then(userProfile => ({ userData, userProfile }));
+        })
+        .then(({ userData, userProfile }) =>
+        {
+            this.setState({
+                userData,
+                userProfile,
+                locale : userData.languageid,
+                i18n : this.getI18nManager(userData.languageid)
+            })
+        })
+        .catch(e => this.showNotification(e.message, 'error', 10))
+        .finally(() => this.hideSystemSpinner());
     }
 
     showNotification(message, level = 'info', duration = 4)
