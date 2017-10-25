@@ -11,9 +11,6 @@ module.exports = {
         library: 'service-base-ui',
         libraryTarget: 'umd'
     },
-    externals: {
-        'jquery': 'jQuery',
-    },
     plugins: [
         new webpack.ProvidePlugin({
             $: "jquery",

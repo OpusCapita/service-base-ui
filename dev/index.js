@@ -26,6 +26,7 @@ server.init({
         addRoutes: false
     }
 })
+.then(app => app.get('*', (req, res) => res.sendFile(process.cwd() + '/dev/index.html')))
 .catch((e) => {
     server.end();
     throw e;

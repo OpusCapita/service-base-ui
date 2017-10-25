@@ -8,14 +8,20 @@ class ContextComponent extends React.Component
         router : PropTypes.object.isRequired,
         showNotification : PropTypes.func.isRequired,
         hideNotification : PropTypes.func.isRequired,
+        clearNotifications : PropTypes.func.isRequired,
         showModalDialog: PropTypes.func.isRequired,
         hideModalDialog: PropTypes.func.isRequired,
         userData : PropTypes.object.isRequired,
+        userProfile : PropTypes.object.isRequired,
+        refreshUserData : PropTypes.func.isRequired,
+        refreshUserProfile : PropTypes.func.isRequired,
         i18n : PropTypes.object.isRequired,
         locale : PropTypes.string.isRequired,
         setLocale: PropTypes.func.isRequired,
         showSpinner : PropTypes.func.isRequired,
-        hideSpinner : PropTypes.func.isRequired
+        hideSpinner : PropTypes.func.isRequired,
+        setPageTitle : PropTypes.func.isRequired,
+        logOutUser : PropTypes.func.isRequired
     }
 
     getComponentId()

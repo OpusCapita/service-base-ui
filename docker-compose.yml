@@ -7,13 +7,14 @@ services:
         - consul
         - nginx-rp
         - registrator
+        - user
     labels:
      SERVICE_NAME: 'service-base-ui'
      SERVICE_TAGS: 'external,kong'
     environment:
-     SERVICE_3000_CHECK_HTTP: /api/health/check
-     SERVICE_3000_CHECK_INTERVAL: 15s
-     SERVICE_3000_CHECK_TIMEOUT: 3s
+     SERVICE_3300_CHECK_HTTP: /api/health/check
+     SERVICE_3300_CHECK_INTERVAL: 15s
+     SERVICE_3300_CHECK_TIMEOUT: 3s
     volumes:
         - ./api:/home/node/api
         - ./components:/home/node/components
@@ -24,6 +25,45 @@ services:
         - '3300:3300'
     command:
         'npm run dev'
+
+  mysql:
+    image: 'mysql:5.7'
+    command: ['--character-set-server=utf8', '--collation-server=utf8_general_ci']
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+    depends_on:
+      - registrator
+
+  user:
+    image: opuscapita/user:dev
+    depends_on:
+     - mysql
+     - consul
+     - registrator
+    labels:
+      SERVICE_NAME: 'user'
+    environment:
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      REDIS_AUTH: $REDIS_AUTH
+      SERVICE_3008_CHECK_HTTP: /api/health/check
+      SERVICE_3008_CHECK_INTERVAL: 15s
+      SERVICE_3008_CHECK_TIMEOUT: 3s
+    ports:
+     - '3008:3008'
+    command: 'npm run dev'
+
+  redis:
+    image: 'opuscapita/redis:dev'
+    environment:
+      REDIS_AUTH: $REDIS_AUTH
+    depends_on:
+      - registrator
+    ports:
+      - '6379:6379'
 
   nginx-rp:
     image: opuscapita/nginx-rp:dev

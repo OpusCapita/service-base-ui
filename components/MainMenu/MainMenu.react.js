@@ -18,8 +18,6 @@ class MainMenu extends ContextComponent
         onSearch : (term) => null
     }
 
-    static lvl1Mappings = [ '/bnp', '/onboarding' ]
-
     constructor(props, context)
     {
         super(props);
@@ -30,6 +28,18 @@ class MainMenu extends ContextComponent
             activeMenuItem : 0
         }
 
+        const oldPush = context.router.push;
+
+        context.router.push = (path) =>
+        {
+            const location = this.context.router.location;
+
+            if(path.startsWith(location.basename))
+                oldPush.call(this.context.router, path.substr(location.basename.length));
+            else
+                document.location.replace(path);
+        }
+
         context.i18n.register('MainMenu', translations);
 
         this.logoImage = 'data:image/svg+xml,' + encodeURIComponent(require('!!raw-loader!./img/oc-logo-white.svg'));
@@ -38,33 +48,32 @@ class MainMenu extends ContextComponent
 
     componentDidMount()
     {
-        const { router } = this.context;
+        const { router, routes } = this.context;
+        const location = router.location;
 
-        this.switchMenuItemByPath(router.location.basename);
-        router.listen(item => this.switchMenuItemByPath(item.basename));
+        this.switchMenuItemByPath(location.basename + location.pathname);
+        router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
 
-    switchMenuItemByPath(basename)
+    switchMenuItemByPath(pathname)
     {
-        const activeMenuItem = MainMenu.lvl1Mappings.indexOf(basename);
-        this.setState({ activeMenuItem });
+        const navItems = this.getNavItems();
+        const findPath = (items) => items.reduce((all, item) => all || item.link === pathname || (item.children && findPath(item.children)), false);
+
+        for(const i in navItems)
+        {
+            if(findPath([ navItems[i] ]))
+            {
+                this.setState({ activeMenuItem : parseInt(i) });
+                break;
+            }
+        }
     }
 
     handleSearch(e)
     {
         const value = e.target.value;
         this.searchTimer.reset(() => this.props.onSearch(value), 500);
-    }
-
-    handleClick(path)
-    {
-        const { router } = this.context;
-        const location = router.location;
-
-        if(path.startsWith(location.basename))
-            router.push(path.substr(location.basename.length));
-        else
-            document.location.replace(path);
     }
 
     handleLogout()
@@ -119,30 +128,37 @@ class MainMenu extends ContextComponent
         else
             items = [ ];
 
+        return items;
+    }
+
+    mapNavItems()
+    {
+        const { router } = this.context;
+
         const mapItem = (item) =>
         {
             const result = { children : item.label };
 
             if(item.link)
-                result['onClick'] = () => this.handleClick(item.link);
+                result['onClick'] = () => router.push(item.link);
             else if(item.children)
                 result['subItems'] = item.children.map(mapItem);
 
             return result;
         }
 
-        return items.map(mapItem);
+        return this.getNavItems().map(mapItem);
     }
 
     render()
     {
-        const { i18n, userData } = this.context;
+        const { i18n, userData, router } = this.context;
         const { activeMenuItem, newNotifications, recentNotifications } = this.state;
 
         const applicationItems = [{
             label : 'Business Network',
             svg : this.getIcon('app_business_network_portal'),
-            onClick : () => this.handleClick('/bnp')
+            onClick : () => router.push('/bnp')
         }];
         /*const applicationItems = [{
             label : 'Analytics',
@@ -172,7 +188,7 @@ class MainMenu extends ContextComponent
                     placeholder : i18n.getMessage('MainMenu.search'),
                     onChange : (e) => this.handleSearch(e)
                 }}
-                navigationItems={this.getNavItems()}
+                navigationItems={this.mapNavItems()}
                 iconsBarItems={[(
                     <MenuIcon
                         svg={this.getIcon('apps')}

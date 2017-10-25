@@ -38,4 +38,4 @@ const config = {
     ]
 }
 
-module.exports = extend(true, config, baseConfig);
+module.exports = extend(true, { }, baseConfig, config);

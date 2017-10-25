@@ -1,17 +1,22 @@
 {
     "name": "@opuscapita/service-base-ui",
-    "version": "1.0.0",
+    "version": "1.0.22",
     "description": "Basic API for UI services of OpusCapita Business Network.",
     "main": "lib/bundle.js",
+    "files": [
+        "lib"
+    ],
     "author": "Christian Drengenberg",
     "license": "MIT",
     "scripts": {
         "dev": "node dev/index.js",
-        "build": "npx webpack -p --config webpack.prod.config.js --env=production --profile --colors --bail"
+        "build": "npx webpack -p --config webpack.prod.config.js --env=production --profile --colors --bail",
+        "prepublish": "npm run build"
     },
     "dependencies": {
         "@opuscapita/i18n": "^1.1.0",
         "@opuscapita/react-navigation": "^0.0.32",
+        "bluebird": "^3.5.1",
         "deep-equal": "^1.0.1",
         "extend": "^3.0.1",
         "history": "^3.3.0",
@@ -32,7 +37,7 @@
         "babel-preset-stage-0": "^6.24.1",
         "css-loader": "^0.28.7",
         "file-loader": "^1.1.5",
-        "jQuery": "^1.7.4",
+        "jquery": "^3.2.1",
         "json-loader": "^0.5.7",
         "ocbesbn-web-init": "^2.2.9",
         "raw-loader": "^0.5.1",

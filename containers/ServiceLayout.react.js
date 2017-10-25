@@ -29,14 +29,20 @@ class ServiceLayout extends Component
         router : PropTypes.object.isRequired,
         showNotification : PropTypes.func.isRequired,
         hideNotification : PropTypes.func.isRequired,
+        clearNotifications : PropTypes.func.isRequired,
         showModalDialog: PropTypes.func.isRequired,
         hideModalDialog: PropTypes.func.isRequired,
         userData : PropTypes.object.isRequired,
+        userProfile : PropTypes.object.isRequired,
+        refreshUserData : PropTypes.func.isRequired,
+        refreshUserProfile : PropTypes.func.isRequired,
         i18n : PropTypes.object.isRequired,
         locale : PropTypes.string.isRequired,
         setLocale : PropTypes.func.isRequired,
         showSpinner : PropTypes.func.isRequired,
-        hideSpinner : PropTypes.func.isRequired
+        hideSpinner : PropTypes.func.isRequired,
+        setPageTitle : PropTypes.func.isRequired,
+        logOutUser : PropTypes.func.isRequired
     };
 
     constructor(props)
@@ -45,6 +51,7 @@ class ServiceLayout extends Component
 
         this.state = {
             userData : null,
+            userProfile : null,
             i18n : this.getI18nManager('en'),
             locale : 'en'
         }
@@ -64,13 +71,7 @@ class ServiceLayout extends Component
 
     componentWillMount()
     {
-        return this.authApi.getUserData().then(userData =>
-        {
-            this.setState({
-                userData,
-                i18n : this.getI18nManager(userData.languageid)
-            });
-        });
+        this.refreshUserData();
     }
 
     getI18nManager(locale)
@@ -99,26 +100,39 @@ class ServiceLayout extends Component
             router : this.router || { },
             showNotification : this.showNotification.bind(this),
             hideNotification : this.hideNotification.bind(this),
+            clearNotifications : this.clearNotifications.bind(this),
             showModalDialog: this.showModalDialog.bind(this),
             hideModalDialog: this.hideModalDialog.bind(this),
             userData : this.state.userData || { },
+            userProfile : this.state.userProfile || { },
+            refreshUserData : this.refreshUserData.bind(this),
+            refreshUserProfile : this.refreshUserData.bind(this),
             i18n : this.state.i18n,
             locale : this.state.locale,
             setLocale : this.setLocale.bind(this),
             showSpinner : this.showSystemSpinner.bind(this),
-            hideSpinner : this.hideSystemSpinner.bind(this)
+            hideSpinner : this.hideSystemSpinner.bind(this),
+            setPageTitle : this.setPageTitle.bind(this),
+            logOutUser : this.logOutUser.bind(this)
         }
     }
 
     setLocale(locale)
     {
-        this.showSystemSpinner();
         const id = this.state.userData.id;
 
         return this.usersApi.updateUserProfile(id, { languageId : locale })
-            .then(() => this.authApi.refreshIdToken())
-            .then(() => this.authApi.getUserData())
-            .then(userData => this.setState({ userData, locale, i18n : this.getI18nManager(locale) }))
+            .then(() => this.refreshUserData());
+    }
+
+    refreshUserData()
+    {
+        this.showSystemSpinner();
+
+        return this.authApi.refreshIdToken().then(() => this.authApi.getUserData())
+            .then(userData => this.usersApi.getUserProfile(userData.id).then(userProfile => ({ userData, userProfile })))
+            .then(({ userData, userProfile }) => this.setState({ userData, userProfile, i18n : this.getI18nManager(userData.languageid) }))
+            .catch(e => this.showNotification(e.message, 'error', 10))
             .finally(() => this.hideSystemSpinner());
     }
 
@@ -132,6 +146,12 @@ class ServiceLayout extends Component
     {
         if(this.notificationSystem)
             setTimeout(() => this.notificationSystem.removeNotification(handle), duration * 1000);
+    }
+
+    clearNotifications()
+    {
+        if(this.notificationSystem)
+            this.notificationSystem.clearNotifications();
     }
 
     showModalDialog(title, message, onButtonClick, buttons)
@@ -207,11 +227,24 @@ class ServiceLayout extends Component
         $('#system-spinner').fadeOut();
     }
 
+    setPageTitle(title)
+    {
+        $('#system-title').html(title);
+    }
+
+    logOutUser(backToUrl)
+    {
+        if(backToUrl)
+            document.location.replace(`/auth/logout?backTo=${backToUrl}`);
+        else
+            document.location.replace('/auth/logout');
+    }
+
     render()
     {
-        const { i18n, userData } = this.state;
+        const { i18n, userData, userProfile } = this.state;
 
-        const applicationIsReady = i18n && userData && true;
+        const applicationIsReady = i18n && userData && userProfile && true;
 
         if(applicationIsReady)
             setTimeout(() => { this.hideSystemSpinner(); }, 1000);
