@@ -27,6 +27,11 @@ const config = {
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': '"production"'
         }),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            jquery:"jquery"
+        }),
         new webpack.optimize.OccurrenceOrderPlugin(true),
         new webpack.optimize.UglifyJsPlugin({
             compress: {

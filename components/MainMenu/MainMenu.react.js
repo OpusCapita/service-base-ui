@@ -59,15 +59,18 @@ class MainMenu extends ContextComponent
     {
         const navItems = this.getNavItems();
         const findPath = (items) => items.reduce((all, item) => all || item.link === pathname || (item.children && findPath(item.children)), false);
+        let activeMenuItem = 0;
 
         for(const i in navItems)
         {
             if(findPath([ navItems[i] ]))
             {
-                this.setState({ activeMenuItem : parseInt(i) });
+                activeMenuItem = parseInt(i);
                 break;
             }
         }
+
+        this.setState({ activeMenuItem });
     }
 
     handleSearch(e)
