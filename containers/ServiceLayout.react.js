@@ -22,7 +22,8 @@ import './static/css/Main.css';
 class ServiceLayout extends Component
 {
     static propTypes = {
-        serviceName : PropTypes.string.isRequired
+        serviceName : PropTypes.string.isRequired,
+        component : PropTypes.object
     }
 
     static childContextTypes = {
@@ -257,6 +258,7 @@ class ServiceLayout extends Component
         const { i18n, userData, userProfile } = this.state;
 
         const applicationIsReady = i18n && userData && userProfile && true;
+        const InnerComponent = this.props.component || ((props) => (<div>{props.children}</div>));
 
         if(applicationIsReady)
             setTimeout(() => { this.hideSystemSpinner(); }, 1000);
@@ -280,7 +282,9 @@ class ServiceLayout extends Component
                                     <div className="col-xs-12 col-sm-offset-1 col-sm-10">
                                         <Router ref={node => this.router = node} history={this.history}>
                                             <Route component={InnerLayout}>
-                                                {this.props.children}
+                                                <InnerComponent>
+                                                    {this.props.children}
+                                                </InnerComponent>
                                             </Route>
                                         </Router>
                                     </div>
