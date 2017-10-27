@@ -23,7 +23,7 @@ class ServiceLayout extends Component
 {
     static propTypes = {
         serviceName : PropTypes.string.isRequired,
-        component : PropTypes.object
+        component : PropTypes.func
     }
 
     static childContextTypes = {
@@ -282,9 +282,9 @@ class ServiceLayout extends Component
                                     <div className="col-xs-12 col-sm-offset-1 col-sm-10">
                                         <Router ref={node => this.router = node} history={this.history}>
                                             <Route component={InnerLayout}>
-                                                <InnerComponent>
+                                                <Route component={InnerComponent}>
                                                     {this.props.children}
-                                                </InnerComponent>
+                                                </Route>
                                             </Route>
                                         </Router>
                                     </div>
