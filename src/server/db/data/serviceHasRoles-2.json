@@ -1,7 +1,7 @@
 [
     {
         "userId": "svc_email",
-        "roleIds": ["svc_email"],
+        "roleIds": ["svc_email", "user"],
         "createdBy": "The Doctor"
     }
 ]
