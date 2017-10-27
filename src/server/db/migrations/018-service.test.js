@@ -2,7 +2,6 @@
 
 const Promise = require('bluebird');
 const pathjs = require('path');
-const upsert = require('../upsert.js');
 
 /**
 * Inserts test data into existing database structures.
@@ -24,7 +23,7 @@ module.exports.up = function(db, config)
         return data;
     });
 
-    return db.queryInterface.bulkInsert(db, 'User', userData);
+    return db.queryInterface.bulkInsert('User', userData);
 }
 
 /**
