@@ -66,9 +66,9 @@ module.exports.getOnboardData = function(req, res)
         if(onboardData)
             res.json(onboardData);
         else
-            res.status(404).json({ message: 'No Onboarding-Data was found for this user ID.' });
+            res.status('404').json({ message: 'No Onboarding-Data was found for this user ID.' });
     })
-    .catch(err => res.status(500).json({ message : err.message }));
+    .catch(err => res.status('400').json({ message : err.message }));
 }
 
 module.exports.addUser = function(req, res)
@@ -215,7 +215,8 @@ module.exports.sendUsers = function(req, res)
             : req.query.ids.replace(/\s/g, '').toLowerCase().split(',');
     }
 
-    Users.getUsers(searchObj, includes).then(users => res.json(users));
+    Users.getUsers(searchObj, includes).then(users => res.json(users))
+        .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.sendUser = function(req, res, useCurrentUser)
@@ -226,7 +227,8 @@ module.exports.sendUser = function(req, res, useCurrentUser)
     Users.getUser(userId, includes).then(user =>
     {
         (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
-    });
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.sendUserProfile = function(req, res, useCurrentUser)
@@ -236,15 +238,14 @@ module.exports.sendUserProfile = function(req, res, useCurrentUser)
     Users.getUserProfile(userId).then(profile =>
     {
         (profile && res.json(profile)) || res.status('404').json({ message : 'Profile does not exist!' });
-    });
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.sendRoles = function(req, res)
 {
-    Users.getUserRoles().then(roles =>
-    {
-        res.json(roles);
-    });
+    Users.getUserRoles().then(roles => res.json(roles))
+        .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.sendRole = function(req, res)
@@ -252,7 +253,8 @@ module.exports.sendRole = function(req, res)
     Users.getUserRole(req.params.id).then(role =>
     {
         (role && res.json(role)) || res.status('404').json({ message : 'Role does not exist!' });
-    });
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.addUserRoles = function(req, res)
