@@ -18,7 +18,6 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "extend": "^3.0.1",
-    "ocbesbn-bouncer": "^0.2.11",
     "ocbesbn-config": "^2.2.11",
     "ocbesbn-db-init": "^1.1.11",
     "ocbesbn-logger": "^1.0.5",

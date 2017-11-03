@@ -3,7 +3,6 @@
 const Logger = require('ocbesbn-logger'); // Logger
 const db = require('ocbesbn-db-init'); // Database
 const server = require('ocbesbn-web-init'); // Web server
-const bouncer = require('ocbesbn-bouncer') // ACL bouncer
 
 const logger = new Logger();
 logger.redirectConsoleOut(); // Force anyone using console outputs into Logger format.
@@ -23,12 +22,7 @@ db.init({
     },
     server : {
         port : process.env.PORT || 3008,
-        middlewares : [ bouncer({
-            host : 'consul',
-            serviceName : 'user',
-            acl : require('./acl.json'),
-            aclServiceName : 'acl'
-        }).Middleware ]
+        enableBouncer : true
     },
     serviceClient : {
         injectIntoRequest : true,
