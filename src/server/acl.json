@@ -69,5 +69,48 @@
                 "actions": ["view", "edit"]
             }
         ]
+    },
+    "x-tenant-user-read": {
+        "translations": {
+            "name": {
+                "en": "Fetching all user information for x-tenant access.",
+                "de": "Auslesen aller Benutzerdaten für x-tenant zugriff."
+            },
+            "description": {
+                "en": "",
+                "de": ""
+            }
+        },
+        "resources": [{
+                "type": "rest",
+                "resourceId": "(/api)?/users/[%w | %p]*",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "(/api)?/users",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "(/api)?/roles",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "(/api)?/roles/[%w | %p]*",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "(/api)?/onboardingdata",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "(/api)?/onboardingdata/[%w | %p]*",
+                "actions": ["view"]
+            }
+        ]
     }
 }
