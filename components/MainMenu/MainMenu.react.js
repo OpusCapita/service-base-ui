@@ -57,6 +57,9 @@ class MainMenu extends ContextComponent
 
     switchMenuItemByPath(pathname)
     {
+        if(pathname.endsWith('/'))
+            pathname = pathname.substr(0, pathname.length - 1);
+
         const navItems = this.getNavItems();
         const findPath = (items) => items.reduce((all, item) => all || item.link === pathname || (item.children && findPath(item.children)), false);
         let activeMenuItem = 0;
