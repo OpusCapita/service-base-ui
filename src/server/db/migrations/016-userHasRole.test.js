@@ -1,5 +1,7 @@
 'use strict'
 
+const userHasRoles = require('../data/userHasRole-16.json');
+
 /**
  * Inserts test data into existing database structures.
  * If all migrations were successul, this method will never be executed again.
@@ -12,43 +14,8 @@
  */
 module.exports.up = function(db, config)
 {
-    var ocAdmin = {
-        userId : 'ocadmin',
-        roleId : 'admin',
-        createdBy : 'The Doctor',
-        createdOn : new Date()
-    };
-
-    var svcSupplier = {
-        userId : 'svc_supplier',
-        roleId : 'svc_supplier',
-        createdBy : 'The Doctor',
-        createdOn : new Date()
-    };
-
-    this.oldEntries = db.models.UserHasRole.findAll();
-
-    return this.oldEntries.then(() =>
-    {
-        return Promise.all([
-            db.queryInterface.bulkDelete('UserHasRole', { roleId : { '$in' : [ 'xtenant', 'user' ] } }),
-            db.queryInterface.bulkDelete('UserHasRole', { userId : 'scott.tiger@example.com', roleId : 'admin' })
-        ]);
-    })
-    .then(() =>
-    {
-        return db.query('SELECT * FROM User').then(res => res && res[0]).map(user =>
-        {
-            return {
-                userId : user.id,
-                roleId : 'user',
-                createdBy : 'The Doctor',
-                createdOn : new Date()
-            };
-        })
-    })
-    .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', allForUser))
-    .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', [ ocAdmin, svcSupplier ]));
+    userHasRoles.forEach(userHasRole => userHasRole.createdOn = new Date());
+    return db.queryInterface.bulkInsert('UserHasRole', userHasRoles);
 }
 
 /**
@@ -62,6 +29,9 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    return this.oldEntries.map(e => e.dataValues).filter(e => e.roleId === 'xtenant' || e.roleId === 'user')
-        .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', allForUser));
+    return db.queryInterface.bulkDelete('UserHasRole',
+        {
+            userId: { $in: userHasRoles.map(userHasRole => userHasRole.userId) }
+        }
+    )
 }

@@ -1,0 +1,24 @@
+[
+  {
+    "userId": "mark.matcher@musterkunden.de",
+    "email": "mark.matcher@musterkunden.de",
+    "languageId": "en",
+    "countryId": "EU",
+    "timeZoneId": "CET",
+    "salutation": "Mr",
+    "firstName": "Mark",
+    "lastName": "Matcher",
+    "birthday": null,
+    "degree": "",
+    "phoneNo": "",
+    "faxNo": "",
+    "department": "",
+    "building": "",
+    "floor": "",
+    "room": "",
+    "showWelcomePage": 1,
+    "createdBy": "The Doctor",
+    "changedBy": "",
+    "changedOn": null
+  }
+]

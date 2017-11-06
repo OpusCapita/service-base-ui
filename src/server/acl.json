@@ -12,17 +12,17 @@
         },
         "resources": [{
                 "type": "rest",
-                "resourceId": "/onboardData/${_current_user_id}$",
+                "resourceId": "(/api)?/onboardData/${_current_user_id}$",
                 "actions": ["view"]
             },
             {
                 "type": "rest",
-                "resourceId": "/users/${_current_user_id}/profile",
+                "resourceId": "(/api)?/users/${_current_user_id}/profile",
                 "actions": ["view", "edit"]
             },
             {
                 "type": "rest",
-                "resourceId": "/users/current/profile",
+                "resourceId": "(/api)?/users/current/profile",
                 "actions": ["view", "edit"]
             }
         ]
@@ -40,33 +40,76 @@
         },
         "resources": [{
                 "type": "rest",
-                "resourceId": "/users/[%w | %p]*",
+                "resourceId": "(/api)?/users/[%w | %p]*",
                 "actions": ["view", "edit"]
             },
             {
                 "type": "rest",
-                "resourceId": "/users",
+                "resourceId": "(/api)?/users",
                 "actions": ["create", "view"]
             },
             {
                 "type": "rest",
-                "resourceId": "/roles",
+                "resourceId": "(/api)?/roles",
                 "actions": ["view", "create"]
             },
             {
                 "type": "rest",
-                "resourceId": "/roles/[%w | %p]*",
+                "resourceId": "(/api)?/roles/[%w | %p]*",
                 "actions": ["view"]
             },
             {
                 "type": "rest",
-                "resourceId": "/onboardingdata",
+                "resourceId": "(/api)?/onboardingdata",
                 "actions": ["view", "create"]
             },
             {
                 "type": "rest",
-                "resourceId": "/onboardingdata/[%w | %p]*",
+                "resourceId": "(/api)?/onboardingdata/[%w | %p]*",
                 "actions": ["view", "edit"]
+            }
+        ]
+    },
+    "x-tenant-user-read": {
+        "translations": {
+            "name": {
+                "en": "Fetching all user information for x-tenant access.",
+                "de": "Auslesen aller Benutzerdaten für x-tenant zugriff."
+            },
+            "description": {
+                "en": "",
+                "de": ""
+            }
+        },
+        "resources": [{
+                "type": "rest",
+                "resourceId": "(/api)?/users/[%w | %p]*",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "(/api)?/users",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "(/api)?/roles",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "(/api)?/roles/[%w | %p]*",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "(/api)?/onboardingdata",
+                "actions": ["view"]
+            },
+            {
+                "type": "rest",
+                "resourceId": "(/api)?/onboardingdata/[%w | %p]*",
+                "actions": ["view"]
             }
         ]
     }

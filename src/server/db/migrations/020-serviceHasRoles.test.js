@@ -12,43 +12,23 @@
  */
 module.exports.up = function(db, config)
 {
-    var ocAdmin = {
-        userId : 'ocadmin',
-        roleId : 'admin',
-        createdBy : 'The Doctor',
-        createdOn : new Date()
-    };
+    var data = require('../data/serviceHasRoles-2.json');
+    var assignedRoles = [ ];
 
-    var svcSupplier = {
-        userId : 'svc_supplier',
-        roleId : 'svc_supplier',
-        createdBy : 'The Doctor',
-        createdOn : new Date()
-    };
-
-    this.oldEntries = db.models.UserHasRole.findAll();
-
-    return this.oldEntries.then(() =>
+    data.forEach(item =>
     {
-        return Promise.all([
-            db.queryInterface.bulkDelete('UserHasRole', { roleId : { '$in' : [ 'xtenant', 'user' ] } }),
-            db.queryInterface.bulkDelete('UserHasRole', { userId : 'scott.tiger@example.com', roleId : 'admin' })
-        ]);
-    })
-    .then(() =>
-    {
-        return db.query('SELECT * FROM User').then(res => res && res[0]).map(user =>
+        item.roleIds.forEach(roleId =>
         {
-            return {
-                userId : user.id,
-                roleId : 'user',
-                createdBy : 'The Doctor',
+            assignedRoles.push({
+                userId : item.userId,
+                roleId : roleId,
+                createdBy : item.createdBy,
                 createdOn : new Date()
-            };
-        })
+            })
+        });
     })
-    .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', allForUser))
-    .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', [ ocAdmin, svcSupplier ]));
+
+    return db.queryInterface.bulkInsert('UserHasRole', assignedRoles);
 }
 
 /**
@@ -62,6 +42,16 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    return this.oldEntries.map(e => e.dataValues).filter(e => e.roleId === 'xtenant' || e.roleId === 'user')
-        .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', allForUser));
+    var data = require('../data/serviceHasRoles-2.json');
+
+    return Promise.all(
+        data.map(item => {
+            return db.queryInterface.bulkDelete('UserHasRole', {
+                userId : item.userId,
+                roleId: {
+                  $in: item.roleIds
+                }
+            })
+        })
+    );
 }

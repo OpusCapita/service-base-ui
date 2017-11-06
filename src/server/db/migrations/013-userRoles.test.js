@@ -12,43 +12,13 @@
  */
 module.exports.up = function(db, config)
 {
-    var ocAdmin = {
-        userId : 'ocadmin',
-        roleId : 'admin',
+    var role = {
+        id : 'svc_a2a-integration',
         createdBy : 'The Doctor',
         createdOn : new Date()
     };
 
-    var svcSupplier = {
-        userId : 'svc_supplier',
-        roleId : 'svc_supplier',
-        createdBy : 'The Doctor',
-        createdOn : new Date()
-    };
-
-    this.oldEntries = db.models.UserHasRole.findAll();
-
-    return this.oldEntries.then(() =>
-    {
-        return Promise.all([
-            db.queryInterface.bulkDelete('UserHasRole', { roleId : { '$in' : [ 'xtenant', 'user' ] } }),
-            db.queryInterface.bulkDelete('UserHasRole', { userId : 'scott.tiger@example.com', roleId : 'admin' })
-        ]);
-    })
-    .then(() =>
-    {
-        return db.query('SELECT * FROM User').then(res => res && res[0]).map(user =>
-        {
-            return {
-                userId : user.id,
-                roleId : 'user',
-                createdBy : 'The Doctor',
-                createdOn : new Date()
-            };
-        })
-    })
-    .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', allForUser))
-    .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', [ ocAdmin, svcSupplier ]));
+    return db.queryInterface.bulkInsert('UserRole', [ role ]);
 }
 
 /**
@@ -62,6 +32,5 @@ module.exports.up = function(db, config)
  */
 module.exports.down = function(db, config)
 {
-    return this.oldEntries.map(e => e.dataValues).filter(e => e.roleId === 'xtenant' || e.roleId === 'user')
-        .then(allForUser => db.queryInterface.bulkInsert('UserHasRole', allForUser));
+    return db.queryInterface.bulkDelete('UserRole', { id : 'svc_a2a-integration' });
 }

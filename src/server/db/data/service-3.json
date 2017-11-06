@@ -1,0 +1,10 @@
+[
+    {
+        "id" : "svc_email",
+        "federationId" : "",
+        "status" : "firstLogin",
+        "mayChangeSupplier" : false,
+        "mayChangeCustomer" : false,
+        "createdBy" : "the doctor"
+    }
+]

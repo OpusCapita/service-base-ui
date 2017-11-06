@@ -28,35 +28,36 @@ module.exports.init = function(app, db, config)
         app.use(checkContentType);
 
         /* duplicate endpoint for backwards compatibility */
-        app.get(['/onboardData/:userId', '/onboardingdata/:userId'], (req, res) => this.getOnboardData(req, res));
-        app.get('/onboardingdata', (req, res) => this.getOnboardingData(req, res));
-        app.post('/onboardingdata', (req, res) => this.addOnboardingData(req, res));
-        app.put('/onboardingdata/:invitationCode', (req, res) => this.updateOnboardingData(req, res));
+        app.get(['/api/onboardData/:userId', '/api/onboardingdata/:userId', '/onboardData/:userId', '/onboardingdata/:userId'], (req, res) => this.getOnboardData(req, res));
+        app.get(['/api/onboardingdata', '/onboardingdata'], (req, res) => this.getOnboardingData(req, res));
+        app.post(['/api/onboardingdata', '/onboardingdata'], (req, res) => this.addOnboardingData(req, res));
+        app.put(['/api/onboardingdata/:invitationCode', '/onboardingdata/:invitationCode'], (req, res) => this.updateOnboardingData(req, res));
 
-        app.get('/users', (req, res) => this.sendUsers(req, res));
-        app.post('/users', (req, res) => this.addUser(req, res));
+        app.get(['/api/users', '/users'], (req, res) => this.sendUsers(req, res));
+        app.post(['/api/users', '/users'], (req, res) => this.addUser(req, res));
 
-        app.get('/users/current', (req, res) => this.sendUser(req, res, true));
-        app.get('/users/:id', (req, res) => this.sendUser(req, res));
+        app.get(['/api/users/current', '/users/current'], (req, res) => this.sendUser(req, res, true));
+        app.get(['/api/users/:id', '/users/:id'], (req, res) => this.sendUser(req, res));
 
-        app.put('/users/current', (req, res) => this.updateUser(req, res, true));
-        app.put('/users/:id', (req, res) => this.updateUser(req, res));
+        app.put(['/api/users/current', '/users/current'], (req, res) => this.updateUser(req, res, true));
+        app.put(['/api/users/:id', '/users/:id'], (req, res) => this.updateUser(req, res));
 
-        app.get('/users/current/profile', (req, res) => this.sendUserProfile(req, res, true));
-        app.get('/users/:id/profile', (req, res) => this.sendUserProfile(req, res));
+        app.get(['/api/users/current/profile', '/users/current/profile'], (req, res) => this.sendUserProfile(req, res, true));
+        app.get(['/api/users/:id/profile', '/users/:id/profile'], (req, res) => this.sendUserProfile(req, res));
 
-        app.put('/users/current/profile', (req, res) => this.addOrUpdateUserProfile(req, res, true));
-        app.put('/users/:id/profile', (req, res) => this.addOrUpdateUserProfile(req, res));
+        app.put(['/api/users/current/profile', '/users/current/profile'], (req, res) => this.addOrUpdateUserProfile(req, res, true));
+        app.put(['/api/users/:id/profile', '/users/:id/profile'], (req, res) => this.addOrUpdateUserProfile(req, res));
 
         app.get('/users/current/assignableRoles', (req, res) => this.sendUserAssignableRoles(req, res, true));
         app.get('/users/:id/assignableRoles', (req, res) => this.sendUserAssignableRoles(req, res));
 
-        app.get('/roles', (req, res) => this.sendRoles(req, res));
-        app.get('/roles/:id', (req, res) => this.sendRole(req, res));
+        app.get(['/api/roles', '/roles'], (req, res) => this.sendRoles(req, res));
+        app.get(['/api/roles/:id', '/roles/:id'], (req, res) => this.sendRole(req, res));
 
-        app.post('/roles', (req, res) => this.addUserRoles(req, res));
-
-        app.put('/users/:userId/roles/:roleId', (req, res) => this.addUserToRole(req, res));
+        app.post(['/api/roles', '/roles'], (req, res) => this.addUserRoles(req, res));
+      
+        app.put(['/api/users/:userId/roles/:roleId', '/users/:userId/roles/:roleId'], (req, res) => this.addUserToRole(req, res));
+      
         app.delete('/users/:userId/roles/:roleId', this.removeUserFromRole.bind(this))
     });
 };
@@ -70,9 +71,9 @@ module.exports.getOnboardData = function(req, res)
         if(onboardData)
             res.json(onboardData);
         else
-            res.status(404).json({ message: 'No Onboarding-Data was found for this user ID.' });
+            res.status('404').json({ message: 'No Onboarding-Data was found for this user ID.' });
     })
-    .catch(err => res.status(500).json({ message : err.message }));
+    .catch(err => res.status('400').json({ message : err.message }));
 }
 
 module.exports.addUser = function(req, res)
@@ -219,7 +220,8 @@ module.exports.sendUsers = function(req, res)
             : req.query.ids.replace(/\s/g, '').toLowerCase().split(',');
     }
 
-    Users.getUsers(searchObj, includes).then(users => res.json(users));
+    Users.getUsers(searchObj, includes).then(users => res.json(users))
+        .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.sendUser = function(req, res, useCurrentUser)
@@ -230,7 +232,8 @@ module.exports.sendUser = function(req, res, useCurrentUser)
     Users.getUser(userId, includes).then(user =>
     {
         (user && res.json(user)) || res.status('404').json({ message : 'User does not exist!' });
-    });
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.sendUserProfile = function(req, res, useCurrentUser)
@@ -240,7 +243,8 @@ module.exports.sendUserProfile = function(req, res, useCurrentUser)
     Users.getUserProfile(userId).then(profile =>
     {
         (profile && res.json(profile)) || res.status('404').json({ message : 'Profile does not exist!' });
-    });
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.sendUserAssignableRoles = function(req, res, useCurrentUser = false) {
@@ -261,10 +265,8 @@ module.exports.sendUserAssignableRoles = function(req, res, useCurrentUser = fal
 
 module.exports.sendRoles = function(req, res)
 {
-    Users.getUserRoles().then(roles =>
-    {
-        res.json(roles);
-    });
+    Users.getUserRoles().then(roles => res.json(roles))
+        .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.sendRole = function(req, res)
@@ -272,7 +274,8 @@ module.exports.sendRole = function(req, res)
     Users.getUserRole(req.params.id).then(role =>
     {
         (role && res.json(role)) || res.status('404').json({ message : 'Role does not exist!' });
-    });
+    })
+    .catch(e => res.status('400').json({ message : e.message }));
 }
 
 module.exports.addUserRoles = function(req, res)
