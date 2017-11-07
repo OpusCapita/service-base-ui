@@ -55,9 +55,9 @@ module.exports.init = function(app, db, config)
         app.get(['/api/roles/:id', '/roles/:id'], (req, res) => this.sendRole(req, res));
 
         app.post(['/api/roles', '/roles'], (req, res) => this.addUserRoles(req, res));
-      
+
         app.put(['/api/users/:userId/roles/:roleId', '/users/:userId/roles/:roleId'], (req, res) => this.addUserToRole(req, res));
-      
+
         app.delete('/users/:userId/roles/:roleId', this.removeUserFromRole.bind(this))
     });
 };
@@ -247,18 +247,16 @@ module.exports.sendUserProfile = function(req, res, useCurrentUser)
     .catch(e => res.status('400').json({ message : e.message }));
 }
 
-module.exports.sendUserAssignableRoles = function(req, res, useCurrentUser = false) {
+module.exports.sendUserAssignableRoles = function(req, res, useCurrentUser = false)
+{
     const userId = useCurrentUser ? req.opuscapita.userData('id') : req.params.id;
 
-    Users.userExists(userId)
-    .then((exists) => {
-        if (!exists) {
-	        res.status('404').json({ message : 'User does not exist!' });
-	        return;
-        }
+    Users.userExists(userId).then(exists =>
+    {
+        if(exists)
+            return Users.getUserAssignableRoles(userId).then(roles => res.json(roles));
 
-        return Users.getUserAssignableRoles(userId)
-            .then(roles => res.json(roles));
+        res.status('404').json({ message : 'User does not exist!' });
     })
     .catch(error => res.status(400).send({ message: error.message }));
 };
@@ -294,31 +292,20 @@ module.exports.addUserToRole = function(req, res)
     const assignerUserId = req.opuscapita.userData('id');
 
 	Promise.all([
-		Users.userExists(assignerUserId),
-		Users.userExists(assignerUserId),
+		Users.userExists(assigneeUserId),
 		Users.userRoleExists(roleId),
-		Users.userRoleAssignable(assignerUserId, assigneeUserId, req.params.roleId)
+		Users.userRoleAssignable(assignerUserId, assigneeUserId, roleId)
 	])
-    .then(([assignerUserExists, assigneeUserExists, roleExists, userRoleAssignable]) => {
-        if (!assignerUserExists) {
-            res.status('404').json({message: `User ${assignerUserId} does not exists`});
-            return;
-        }
+    .then(([ assigneeUserExists, roleExists, userRoleAssignable ]) =>
+    {
+        if(!assigneeUserExists)
+            return res.status('404').json({message: `User ${assigneeUserId} does not exists.`});
 
-        if (!assigneeUserExists) {
-            res.status('404').json({message: `User ${assigneeUserId} does not exists`});
-            return;
-        }
+        if(!roleExists)
+            return res.status('404').json({message: `Role ${roleId} does not exists.`});res.status('404').json({message: `Role ${roleId} does not exists`});
 
-        if (!roleExists) {
-            res.status('404').json({message: `Role ${roleId} does not exists`});
-            return;
-        }
-
-        if (!userRoleAssignable) {
-            res.status('403').json({message: `You don\'t have permission to assign role \'${roleId}\' to user \'${assigneeUserId}\'`});
-            return;
-        }
+        if(!userRoleAssignable)
+            res.status('403').json({message: `You don't have permission to assign role '${roleId}' to user '${assigneeUserId}'.`});
 
         return Users.addUserToRole(assigneeUserId, roleId, assignerUserId, true)
             .then(roles => res.status('201').json(roles));
@@ -328,42 +315,31 @@ module.exports.addUserToRole = function(req, res)
 
 module.exports.removeUserFromRole = function(req, res)
 {
-    const assignerUserId = req.opuscapita.userData('id');
     const assigneeUserId = req.params.userId;
     const roleId = req.params.roleId;
+    const assignerUserId = req.opuscapita.userData('id');
 
-    Promise.all([
-        Users.userExists(assignerUserId),
-        Users.userExists(assignerUserId),
-        Users.userRoleExists(roleId),
-	    Users.userRoleAssignable(assignerUserId, assigneeUserId, req.params.roleId)
-    ])
-    .then(([assignerUserExists, assigneeUserExists, roleExists, userRoleAssignable]) => {
-        if (!assignerUserExists) {
-            res.status('404').json({ message: `User ${assignerUserId} does not exists` });
-            return;
-        }
+	Promise.all([
+		Users.userExists(assigneeUserId),
+		Users.userRoleExists(roleId),
+		Users.userRoleAssignable(assignerUserId, assigneeUserId, roleId)
+	])
+    .then(([ assigneeUserExists, roleExists, userRoleAssignable ]) =>
+    {
+        if(!assigneeUserExists)
+            return res.status('404').json({message: `User ${assigneeUserId} does not exists.`});
 
-        if (!assigneeUserExists) {
-            res.status('404').json({ message: `User ${assigneeUserId} does not exists` });
-            return;
-        }
+        if(!roleExists)
+            return res.status('404').json({message: `Role ${roleId} does not exists.`});
 
-	    if (!roleExists) {
-		    res.status('404').json({ message: `Role ${roleId} does not exists` });
-		    return;
-	    }
+        if(!userRoleAssignable)
+            res.status('403').json({message: `You don't have permission to assign role '${roleId}' to user '${assigneeUserId}'.`});
 
-	    if (!userRoleAssignable) {
-		    res.status('403').json({ message: `You don\'t have permission to remove role \'${roleId}\' from user \'${assigneeUserId}\'` });
-		    return;
-        }
-
-	    return Users.removeRoleFromUser(req.params.userId, req.params.roleId)
+        return Users.removeRoleFromUser(req.params.userId, req.params.roleId)
 		    .then(() => Users.getUserRoles())
 		    .then(roles => res.status(201).json(roles));
     })
-    .catch(e => res.status('400').json({ message : e.stack }));
+    .catch(e => res.status('400').json({ message : e.message }));
 };
 
 module.exports.addOnboardingData = function(req, res)

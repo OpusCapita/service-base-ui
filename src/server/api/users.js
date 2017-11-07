@@ -141,7 +141,7 @@ module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
             return this.getUserProfile(userId).then(p =>
             {
                 profile.userId = userId;
-                
+
                 if(p)
                 {
                     [ 'createdOn', 'changedOn', 'createdBy' ].forEach(key => delete profile[key]);
@@ -216,30 +216,25 @@ module.exports.getRolesOfUser = function(userId)
 
 module.exports.getUserAssignableRoles = function(assignerUserId)
 {
-    return this.getRolesOfUser(assignerUserId)
-        .then(assignerRoles =>
-	        this.db.models.AssignableRole
-		        .findAll({ where : { ownedRoleId : { '$in' : assignerRoles } } })
-		        .then(assignments =>
-			        assignments.map(assignment => assignment.assignableRoleId)
-				        .filter((role, i, self) => self.indexOf(role) === i)
-		        )
-        );
+    return this.getRolesOfUser(assignerUserId).then(assignerRoles =>
+    {
+        return this.db.models.AssignableRole.findAll({ where : { ownedRoleId : { '$in' : assignerRoles } } })
+            .map(assignment => assignment.assignableRoleId)
+            .filter((role, i, self) => self.indexOf(role) === i)
+    });
 };
 
 module.exports.userRoleAssignable = function(assignerUserId, assigneeUserId, roleId)
 {
-	return this.getRolesOfUser(assignerUserId)
-		.then((assignerRoles) =>
-			this.db.models.AssignableRole
-				.find({ where : { ownedRoleId : { '$in' : assignerRoles }, assignableRoleId : roleId } })
-				.then(assignment => !!assignment) // convert to boolean
-		);
+	return this.getRolesOfUser(assignerUserId).then(assignerRoles =>
+    {
+        return this.db.models.AssignableRole.find({ where : { ownedRoleId : { '$in' : assignerRoles }, assignableRoleId : roleId } })
+            .then(assignment => !!assignment) // convert to boolean
+    });
 };
 
-module.exports.removeRoleFromUser = function(userId, roleId) {
-    return this.db.models.UserHasRole
-        .find({ where: { userId, roleId } })
-        .then(userHasRole => userHasRole.destroy())
-        .then(() => true);
+module.exports.removeRoleFromUser = function(userId, roleId)
+{
+    return this.db.models.UserHasRole.find({ where: { userId, roleId } })
+        .then(userHasRole => userHasRole.destroy()).then(() => true);
 };
