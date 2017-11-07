@@ -24,7 +24,7 @@
     "ocbesbn-db-init": "^1.1.11",
     "ocbesbn-logger": "^1.0.5",
     "superagent": "3.5.2",
-    "superagent-bluebird-promise": "4.2.0"
+    "superagent-bluebird-promise": "4.2.0",
     "ocbesbn-redis-events": "^1.0.6",
     "ocbesbn-service-client": "^1.1.4",
     "ocbesbn-web-init": "^2.2.13",
