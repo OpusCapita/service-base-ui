@@ -16,7 +16,6 @@ class Inner extends ContextComponent
 
 const layout =
 <ServiceLayout serviceName="service-base-ui" component={Inner}>
-    <Route path="/" />
     <Route path="/test" component={Test} />
 </ServiceLayout>
 

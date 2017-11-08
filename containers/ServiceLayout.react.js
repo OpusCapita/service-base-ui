@@ -53,10 +53,11 @@ class ServiceLayout extends Component
         this.fixDocumentOrigin();
 
         this.state = {
+            isReady : false,
             userData : null,
             userProfile : null,
             i18n : this.getI18nManager('en'),
-            locale : 'en'
+            locale : 'en',
         }
 
         this.notificationSystem = null;
@@ -269,11 +270,17 @@ class ServiceLayout extends Component
             document.location.replace('/auth/logout');
     }
 
+    setApplicationReady(isReady)
+    {
+        if(this.state.isReady !== isReady)
+            this.setState({ isReady });
+    }
+
     render()
     {
-        const { i18n, userData, userProfile } = this.state;
+        const { isReady, i18n, userData, userProfile } = this.state;
 
-        const applicationIsReady = i18n && userData && userProfile && true;
+        const applicationIsReady = isReady || (i18n && userData && userProfile && true);
         const InnerComponent = this.props.component || ((props) => (<div>{props.children}</div>));
 
         if(applicationIsReady)
