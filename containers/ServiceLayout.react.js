@@ -50,6 +50,8 @@ class ServiceLayout extends Component
     {
         super(props);
 
+        this.fixDocumentOrigin();
+
         this.state = {
             userData : null,
             userProfile : null,
@@ -116,6 +118,20 @@ class ServiceLayout extends Component
             setPageTitle : this.setPageTitle.bind(this),
             logOutUser : this.logOutUser.bind(this)
         }
+    }
+
+    fixDocumentOrigin()
+    {
+        const origin = window.location.protocol + '//' + window.location.hostname + (window.location.port ? (':' + window.location.port) : '');
+
+        if(!window.origin)
+            window.origin = origin;
+        if(!window.location.origin)
+            window.location.origin = origin;
+        if(!document.origin)
+            document.origin = origin;
+        if(!document.location.origin)
+            document.location.origin = origin;
     }
 
     setLocale(locale)
