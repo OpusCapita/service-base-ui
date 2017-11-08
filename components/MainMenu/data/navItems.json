@@ -70,7 +70,7 @@
             },
             {
                 "label": "Invoice Key-In",
-                "link": "/einvoice-send/key-in"
+                "link": "/sales-invoice/create"
             }]
         },
         {
@@ -96,7 +96,7 @@
             },
             {
                 "label": "Rechnungserfassung Key-In",
-                "link": "/einvoice-send/key-in"
+                "link": "/sales-invoice/create"
             }]
         },
         {
@@ -145,7 +145,7 @@
             },
             {
                 "label": "Invoice Key-In",
-                "link": "/einvoice-send/key-in"
+                "link": "/sales-invoice/create"
             }]
         },
         {
@@ -191,7 +191,7 @@
             },
             {
                 "label": "Rechnungserfassung Key-In",
-                "link": "/einvoice-send/key-in"
+                "link": "/sales-invoice/create"
             }]
         },
         {
