@@ -4,4 +4,4 @@ services:
     build: .
     volumes:
       - .:/home/node/user
-    command: 'npm run dev'
+    command: 'npm run local'
