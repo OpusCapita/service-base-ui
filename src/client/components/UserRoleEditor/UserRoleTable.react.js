@@ -1,4 +1,5 @@
 import React, { Component, Children } from 'react';
+import PropTypes from 'prop-types';
 
 const UserRoleTable = ({ children }, context) => (
 	<table className="table">

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import request from 'superagent-bluebird-promise';
 import i18nMessages from './i18n';
 import UserRoleTable from './UserRoleTable.react';
@@ -10,14 +11,13 @@ import './UserRoleEditor.css';
 class UserRoleEditor extends Component {
 
 	static propTypes = {
-		actionUrl: React.PropTypes.string.isRequired,
-		userId: React.PropTypes.string.isRequired,
-		readOnly: React.PropTypes.bool,
-		onUnauthorized: React.PropTypes.func
+		userId: PropTypes.string.isRequired,
+		readOnly: PropTypes.bool,
+		onUnauthorized: PropTypes.func
 	};
 
 	static contextTypes = {
-		i18n: React.PropTypes.object.isRequired
+		i18n: PropTypes.object.isRequired
 	};
 
 	static defaultProps = {
@@ -49,13 +49,13 @@ class UserRoleEditor extends Component {
 		this.setState({ isLoaded: false });
 
 		this.loadOwnedRolesPromise = request
-			.get(`${this.props.actionUrl}/user/users/${encodeURIComponent(this.props.userId)}`)
+			.get(`/user/users/${encodeURIComponent(this.props.userId)}`)
 			.set('Accept', 'application/json')
 			.promise()
 			.then(response => this.setState({ownedRoles: response.body.roles}));
 
 		this.loadAssignableRolesPromise = request
-			.get(`${this.props.actionUrl}/user/users/current/assignableRoles`)
+			.get(`/user/users/current/assignableRoles`)
 			.set('Accept', 'application/json')
 			.promise()
 			.then(response => this.setState({assignableRoles: response.body}));
@@ -90,7 +90,7 @@ class UserRoleEditor extends Component {
 	 */
 	addRoleToUser = (roleId) => {
 		return request
-			.put(`${this.props.actionUrl}/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
+			.put(`/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
 			.set('Accept', 'application/json')
 			.set('Content-type', 'application/json')
 			.promise()
@@ -107,7 +107,7 @@ class UserRoleEditor extends Component {
 		}
 
 		return request
-			.delete(`${this.props.actionUrl}/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
+			.delete(`/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
 			.set('Accept', 'application/json')
 			.set('Content-type', 'application/json')
 			.promise()
