@@ -117,6 +117,18 @@
             "link": "/bnp"
         },
         {
+            "label": "Admin",
+            "children": [
+            {
+                "label": "Kibana",
+                "link": "/kibana"
+            },
+            {
+                "label": "Consul",
+                "link": "/consul"
+            }]
+        },
+        {
             "label": "Suppliers",
             "children": [
             {
@@ -161,6 +173,18 @@
         {
             "label": "Home",
             "link": "/bnp"
+        },
+        {
+            "label": "Admin",
+            "children": [
+            {
+                "label": "Kibana",
+                "link": "/kibana"
+            },
+            {
+                "label": "Consul",
+                "link": "/consul"
+            }]
         },
         {
             "label": "Lieferantent",
