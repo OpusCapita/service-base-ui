@@ -72,12 +72,10 @@ class UserRoleEditor extends Component {
 	onSubmit(event) {
 		event.preventDefault();
 
-		if (!this.state.selectedRoleId) {
-			return;
+		if (this.state.selectedRoleId) {
+			this.addRoleToUser(this.state.selectedRoleId)
+				.then(() => this.setState({ selectedRoleId: null }));
 		}
-
-		this.addRoleToUser(this.state.selectedRoleId)
-			.then(() => this.setState({ selectedRoleId: null }));
 	};
 
 	/**
@@ -97,15 +95,13 @@ class UserRoleEditor extends Component {
 	 * @param {string} roleId Role identifier
 	 */
 	removeRoleFromUser(roleId) {
-		if (!confirm(this.context.i18n.getMessage('UserRoleEditor.Confirmation.delete'))) {
-			return;
+		if (confirm(this.context.i18n.getMessage('UserRoleEditor.Confirmation.delete'))) {
+			request
+				.delete(`/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
+				.set('Accept', 'application/json')
+				.set('Content-type', 'application/json')
+				.then(() => this.loadRoles());
 		}
-
-		return request
-			.delete(`/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
-			.set('Accept', 'application/json')
-			.set('Content-type', 'application/json')
-			.then(() => this.loadRoles());
 	};
 
 	componentWillUnmount() {
