@@ -12,7 +12,7 @@ const mockUserDataMiddleware = (req, res, next) => {
 	next();
 };
 
-db.init({ consul : { host : 'consul' } })
+db.init({ consul : { host : 'consul' }, retryCount: 50 })
 	.then(db => server.init({
 		routes : { dbInstance : db },
 		server: {

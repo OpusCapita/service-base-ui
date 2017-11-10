@@ -16,21 +16,21 @@
     "exclude": []
   },
   "dependencies": {
-    "@opuscapita/i18n": "^1.1.0",
-    "@opuscapita/react-select": "^1.0.0-rc.5-oc.6",
     "bluebird": "^3.5.1",
     "extend": "^3.0.1",
     "ocbesbn-config": "^2.2.11",
     "ocbesbn-db-init": "^1.1.11",
     "ocbesbn-logger": "^1.0.5",
-    "superagent": "3.5.2",
-    "superagent-bluebird-promise": "4.2.0",
     "ocbesbn-redis-events": "^1.0.6",
     "ocbesbn-service-client": "^1.1.4",
     "ocbesbn-web-init": "^2.2.13",
-    "sequelize": "^3.30.4"
+    "sequelize": "^3.30.4",
+    "superagent": "3.5.2",
+    "superagent-bluebird-promise": "4.2.0"
   },
   "devDependencies": {
+    "@opuscapita/i18n": "^1.1.0",
+    "@opuscapita/react-select": "^1.0.0-rc.5-oc.6",
     "babel-cli": "6.24.1",
     "babel-core": "6.24.1",
     "babel-eslint": "7.2.3",
@@ -42,14 +42,20 @@
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
     "babel-register": "6.24.1",
+    "css-loader": "^0.28.7",
     "jsdoc-to-markdown": "^3.0.0",
     "mocha": "^3.2.0",
     "mocha-junit-reporter": "^1.12.1",
     "nodemon": "^1.11.0",
     "nyc": "^10.1.2",
+    "prop-types": "^15.4.2",
     "raml-to-markdown": "^1.x",
+    "react": "^15.4.2",
+    "react-bootstrap": "^0.31.5",
+    "react-dom": "^15.4.2",
     "rimraf": "^2.6.0",
     "sequelize-to-markdown": "^1.x",
+    "style-loader": "^0.19.0",
     "webpack": "2.5.1"
   },
   "scripts": {

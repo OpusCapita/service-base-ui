@@ -219,8 +219,11 @@ module.exports.getUserAssignableRoles = function(assignerUserId)
     return this.getRolesOfUser(assignerUserId).then(assignerRoles =>
     {
         return this.db.models.AssignableRole.findAll({ where : { ownedRoleId : { '$in' : assignerRoles } } })
-            .map(assignment => assignment.assignableRoleId)
-            .filter((role, i, self) => self.indexOf(role) === i)
+            .then((assignments) => {
+                return assignments.map(assignment => assignment.assignableRoleId)
+	                .filter((role, i, self) => self.indexOf(role) === i)
+
+            })
     });
 };
 

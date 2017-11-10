@@ -45,19 +45,17 @@ class UserRoleEditor extends Component {
 	/**
 	 * Loads owned and assignable roles from api.
 	 */
-	loadRoles = () => {
+	loadRoles() {
 		this.setState({ isLoaded: false });
 
 		this.loadOwnedRolesPromise = request
 			.get(`/user/users/${encodeURIComponent(this.props.userId)}`)
 			.set('Accept', 'application/json')
-			.promise()
 			.then(response => this.setState({ownedRoles: response.body.roles}));
 
 		this.loadAssignableRolesPromise = request
 			.get(`/user/users/current/assignableRoles`)
 			.set('Accept', 'application/json')
-			.promise()
 			.then(response => this.setState({assignableRoles: response.body}));
 
 		return Promise.all([this.loadOwnedRolesPromise, this.loadAssignableRolesPromise])
@@ -73,7 +71,7 @@ class UserRoleEditor extends Component {
 	 * Add role form submit handler
 	 * @param {object} event Form submit event object
 	 */
-	onSubmit = (event) => {
+	onSubmit(event) {
 		event.preventDefault();
 
 		if (!this.state.selectedRoleId) {
@@ -88,20 +86,19 @@ class UserRoleEditor extends Component {
 	 * Assigns given role to user.
 	 * @param {string} roleId Role identifier
 	 */
-	addRoleToUser = (roleId) => {
+	addRoleToUser(roleId) {
 		return request
 			.put(`/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
 			.set('Accept', 'application/json')
 			.set('Content-type', 'application/json')
-			.promise()
-			.then(this.loadRoles);
+			.then(() => this.loadRoles());
 	};
 
 	/**
 	 * Removes given role to user.
 	 * @param {string} roleId Role identifier
 	 */
-	removeRoleFromUser = (roleId) => {
+	removeRoleFromUser(roleId) {
 		if (!confirm(this.context.i18n.getMessage('UserRoleEditor.Confirmation.delete'))) {
 			return;
 		}
@@ -110,8 +107,7 @@ class UserRoleEditor extends Component {
 			.delete(`/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
 			.set('Accept', 'application/json')
 			.set('Content-type', 'application/json')
-			.promise()
-			.then(this.loadRoles);
+			.then(() => this.loadRoles());
 	};
 
 	componentWillUnmount() {
@@ -129,7 +125,7 @@ class UserRoleEditor extends Component {
 	/**
 	 * Handles role switching.
 	 */
-	onRoleChange = (option) => {
+	onRoleChange(option) {
 		this.setState({ selectedRoleId: option.value });
 	};
 
@@ -137,7 +133,7 @@ class UserRoleEditor extends Component {
 	 * Determines whether add button should be disabled or not
 	 * @returns {boolean|*}
 	 */
-	get isAddRoleButtonDisabled() {
+	isAddRoleButtonDisabled() {
 		return !this.state.selectedRoleId;
 	}
 
@@ -145,7 +141,7 @@ class UserRoleEditor extends Component {
 	 * Roles which can be currently assigned.
 	 * @returns {string[]}
 	 */
-	get assignableRoles() {
+	getAssignableRoles() {
 		return this.state.assignableRoles
 			.filter(assignableRole => this.state.ownedRoles.indexOf(assignableRole) === -1)
 	}
@@ -175,22 +171,22 @@ class UserRoleEditor extends Component {
 					</UserRoleTable>
 
 					{!this.props.readOnly &&
-						<form className="form-inline" onSubmit={this.onSubmit}>
+						<form className="form-inline" onSubmit={event => this.onSubmit(event)}>
 							<div className="form-group">
 								<Select
 									className="add-role-form-select"
 									value={this.state.selectedRoleId}
-									onChange={this.onRoleChange}
+									onChange={option => this.onRoleChange(option)}
 									searchable={false}
 									clearable={false}
 									placeholder={this.context.i18n.getMessage('UserRoleEditor.AddRoleForm.placeholder')}
 									noResultsText={this.context.i18n.getMessage('UserRoleEditor.AddRoleForm.noResults')}
-									options={this.assignableRoles.map(roleId => ({value: roleId, label: roleId}))}
+									options={this.getAssignableRoles().map(roleId => ({value: roleId, label: roleId}))}
 								/>
 								<Button
 									bsStyle="primary"
 									type="submit"
-									disabled={this.isAddRoleButtonDisabled}>
+									disabled={this.isAddRoleButtonDisabled()}>
 									{this.context.i18n.getMessage('UserRoleEditor.Button.add')}
 								</Button>
 							</div>

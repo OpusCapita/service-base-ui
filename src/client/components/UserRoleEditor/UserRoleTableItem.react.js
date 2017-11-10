@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/lib/Button';
 
 
@@ -19,13 +20,13 @@ const UserRoleTableItem = ({ roleId, onDelete }, context) => (
 
 
 UserRoleTableItem.propTypes = {
-	roleId: React.PropTypes.string.isRequired,
-	onDelete: React.PropTypes.func
+	roleId: PropTypes.string.isRequired,
+	onDelete: PropTypes.func
 };
 
 
 UserRoleTableItem.contextTypes = {
-	i18n: React.PropTypes.object.isRequired
+	i18n: PropTypes.object.isRequired
 };
 
 

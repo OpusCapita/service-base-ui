@@ -34,7 +34,7 @@ module.exports = {
 	],
 
 	resolve: {
-		extensions: ['.json', '.jsx', '.js']
+		extensions: ['.js']
 	},
 
 	resolveLoader: {
@@ -44,16 +44,8 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.json$/,
-				loader: 'json-loader'
-			},
-			{
 				test: /\.css$/,
 				loader: "style-loader!css-loader"
-			},
-			{
-				test: /\.less$/,
-				loader: 'style-loader!css-loader!less-loader'
 			},
 			{
 				test: /.jsx?$/,

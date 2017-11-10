@@ -17,7 +17,7 @@ const UserRoleTable = ({ children }, context) => (
 
 
 UserRoleTable.contextTypes = {
-	i18n: React.PropTypes.object.isRequired
+	i18n: PropTypes.object.isRequired
 };
 
 
