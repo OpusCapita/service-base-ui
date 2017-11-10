@@ -302,10 +302,10 @@ module.exports.addUserToRole = function(req, res)
             return res.status('404').json({message: `User ${assigneeUserId} does not exists.`});
 
         if(!roleExists)
-            return res.status('404').json({message: `Role ${roleId} does not exists.`});res.status('404').json({message: `Role ${roleId} does not exists`});
+            return res.status('404').json({message: `Role ${roleId} does not exists.`});
 
         if(!userRoleAssignable)
-            res.status('403').json({message: `You don't have permission to assign role '${roleId}' to user '${assigneeUserId}'.`});
+            return res.status('403').json({message: `You don't have permission to assign role '${roleId}' to user '${assigneeUserId}'.`});
 
         return Users.addUserToRole(assigneeUserId, roleId, assignerUserId, true)
             .then(roles => res.status('201').json(roles));
