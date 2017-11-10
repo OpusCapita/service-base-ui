@@ -10,15 +10,15 @@ export default {
 		},
 		Confirmation: {
 			delete: 'Möchten Sie diese Rolle wirklich löschen?'
-		}
-	},
-	UserRoleTable: {
-		Header: {
-			name: 'Rollenname'
 		},
-		Item: {
-			Button: {
-				delete: ' Löschen'
+		Table: {
+			Header: {
+				name: 'Rollenname'
+			},
+			Item: {
+				Button: {
+					delete: ' Löschen'
+				}
 			}
 		}
 	}

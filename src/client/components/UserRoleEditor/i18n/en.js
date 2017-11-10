@@ -10,15 +10,15 @@ export default {
 		},
 		Confirmation: {
 			delete: 'Do you really want to delete this role?'
-		}
-	},
-	UserRoleTable: {
-		Header: {
-			name: 'Role name'
 		},
-		Item: {
-			Button: {
-				delete: ' Delete'
+		Table: {
+			Header: {
+				name: 'Role name'
+			},
+			Item: {
+				Button: {
+					delete: ' Delete'
+				}
 			}
 		}
 	}
