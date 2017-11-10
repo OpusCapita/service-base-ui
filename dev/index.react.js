@@ -16,7 +16,7 @@ class Inner extends ContextComponent
 
 const layout =
 <ServiceLayout serviceName="service-base-ui" component={Inner}>
-    <Route path="/test" component={Test} />
+    <Route path="/" component={Test} />
 </ServiceLayout>
 
 ReactDOM.render(layout, document.getElementById('root'));

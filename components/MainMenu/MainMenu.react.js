@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ContextComponent from '../ContextComponent.react';
+import ConditionalRenderComponent from '../ContextComponent.react';
 import { ResetTimer } from '../../system';
 import { Menu, MenuIcon, MenuDropdownGrid, Notifications, Notification, MenuAccount, MenuSelect } from '@opuscapita/react-navigation';
 import translations from './i18n';
 import navItems from './data/navItems';
 
-class MainMenu extends ContextComponent
+class MainMenu extends ConditionalRenderComponent
 {
     static propTypes = {
         onLanguageChange : PropTypes.func.isRequired,
@@ -146,9 +146,21 @@ class MainMenu extends ContextComponent
             const result = { children : item.label };
 
             if(item.link)
-                result['onClick'] = () => router.push(item.link);
+            {
+                if(item.target)
+                {
+                    result['href'] = item.link;
+                    result['target'] = item.target;
+                }
+                else
+                {
+                    result['onClick'] = () => router.push(item.link);
+                }
+            }
             else if(item.children)
+            {
                 result['subItems'] = item.children.map(mapItem);
+            }
 
             return result;
         }
@@ -198,7 +210,7 @@ class MainMenu extends ContextComponent
                 iconsBarItems={[(
                     <MenuIcon
                         svg={this.getIcon('apps')}
-                        title="Applications"
+                        title={i18n.getMessage('MainMenu.applications')}
                         hideDropdownArrow={true}>
                         <MenuDropdownGrid
                             activeItem={0}
@@ -209,7 +221,7 @@ class MainMenu extends ContextComponent
                         onClick={() => console.log('click!')}
                         svg={this.getIcon('notifications')}
                         supTitle={newNotifications.length}
-                        title="Notifications"
+                        title={i18n.getMessage('MainMenu.notifications')}
                         hideDropdownArrow={true}>
                         <Notifications>
                             <div className="oc-notifications__header">{i18n.getMessage('MainMenu.newNotifications')}</div>

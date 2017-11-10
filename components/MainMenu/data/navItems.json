@@ -121,51 +121,13 @@
             "children": [
             {
                 "label": "Kibana",
-                "link": "/kibana"
+                "link": "/kibana",
+                "target": "_blank"
             },
             {
                 "label": "Consul",
-                "link": "/consul"
-            }]
-        },
-        {
-            "label": "Suppliers",
-            "children": [
-            {
-                "label": "Onboarding Dashboard",
-                "link": "/onboarding/dashboard"
-            },
-            {
-                "label": "Onboarding Campaigns",
-                "link": "/onboarding"
-            },
-            {
-                "label": "Onboarding Create Campaign",
-                "link": "/onboarding/create"
-            },
-            {
-                "label": "Supplier Directory",
-                "link": "/bnp/supplierDirectory"
-            }]
-        },
-        {
-            "label": "Invoice",
-            "children": [
-            {
-                "label": "Service configuration",
-                "link": "/einvoice-send"
-            },
-            {
-                "label": "Invoice Key-In",
-                "link": "/sales-invoice/create"
-            }]
-        },
-        {
-            "label": "Company",
-            "children": [
-            {
-                "label": "Profile",
-                "link": "/bnp/supplierInformation"
+                "link": "/consul",
+                "target": "_blank"
             }]
         }],
 
@@ -179,51 +141,13 @@
             "children": [
             {
                 "label": "Kibana",
-                "link": "/kibana"
+                "link": "/kibana",
+                "target": "_blank"
             },
             {
                 "label": "Consul",
-                "link": "/consul"
-            }]
-        },
-        {
-            "label": "Lieferantent",
-            "children": [
-            {
-                "label": "Onboarding Dashboard",
-                "link": "/onboarding/dashboard"
-            },
-            {
-                "label": "Onboarding Kampagnen",
-                "link": "/onboarding"
-            },
-            {
-                "label": "Onboarding Kampagne erstellen",
-                "link": "/onboarding/create"
-            },
-            {
-                "label": "Lieferantenverzeichnis",
-                "link": "/bnp/supplierDirectory"
-            }]
-        },
-        {
-            "label": "Rechnungen",
-            "children": [
-            {
-                "label": "Service Konfiguration",
-                "link": "/einvoice-send"
-            },
-            {
-                "label": "Rechnungserfassung Key-In",
-                "link": "/sales-invoice/create"
-            }]
-        },
-        {
-            "label": "Unternehmen",
-            "children": [
-            {
-                "label": "Profil",
-                "link": "/bnp/supplierInformation"
+                "link": "/consul",
+                "target": "_blank"
             }]
         }]
     }

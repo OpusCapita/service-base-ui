@@ -14,7 +14,10 @@ export default {
     'MainMenu.support' : 'Support',
     'MainMenu.language' : 'Language',
     'MainMenu.laguage.english' : 'English',
-    'MainMenu.laguage.german' : 'German'
+    'MainMenu.laguage.german' : 'German',
+
+    'MainMenu.applications' : 'Applications',
+    'MainMenu.notifications' : 'Notifications'
 }
 
 // Lieferantenhandbuch.pdf
