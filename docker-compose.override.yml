@@ -5,3 +5,7 @@ services:
     volumes:
       - .:/home/node/user
     command: 'npm run local'
+
+  nginx:
+    environment:
+      USER_IDENTITY: '{\"id\":\"john.doe@ncc.com\"}'
