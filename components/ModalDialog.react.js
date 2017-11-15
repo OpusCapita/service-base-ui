@@ -9,7 +9,7 @@ class ModalDialog extends ContextComponent
         visible : PropTypes.bool.isRequired,
         title : PropTypes.string.isRequired,
         message : PropTypes.string.isRequired,
-        size : React.PropTypes.oneOf([null, 'small', 'large']),
+        size : PropTypes.oneOf([null, 'small', 'large']),
         buttons : PropTypes.object.isRequired,
         buttonsDisabled : PropTypes.array.isRequired,
         allowClose: PropTypes.bool.isRequired,

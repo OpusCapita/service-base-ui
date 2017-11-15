@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Router, Route, useRouterHistory } from 'react-router';
 import { createHistory } from 'history';
-import { ModalDialog } from '../components';
+import { ModalDialog, LogInForm } from '../components';
 import NotificationSystem from 'react-notification-system';
 import { I18nManager } from '@opuscapita/i18n';
 import InnerLayout from './InnerLayout.react';
@@ -23,7 +23,8 @@ class ServiceLayout extends Component
 {
     static propTypes = {
         serviceName : PropTypes.string.isRequired,
-        component : PropTypes.func
+        component : PropTypes.func,
+        size : PropTypes.oneOf([ null, '', 'default', 'full-width', 'full-screen' ]),
     }
 
     static childContextTypes = {
@@ -43,7 +44,11 @@ class ServiceLayout extends Component
         showSpinner : PropTypes.func.isRequired,
         hideSpinner : PropTypes.func.isRequired,
         setPageTitle : PropTypes.func.isRequired,
-        logOutUser : PropTypes.func.isRequired
+        logOutUser : PropTypes.func.isRequired,
+        setLayoutSize : PropTypes.func.isRequired,
+        getLayoutSize : PropTypes.func.isRequired,
+        showLogInDialog : PropTypes.func.isRequired,
+        hideLogInDialog : PropTypes.func.isRequired
     };
 
     constructor(props)
@@ -58,10 +63,13 @@ class ServiceLayout extends Component
             userProfile : null,
             i18n : this.getI18nManager('en'),
             locale : 'en',
+            size : this.normalizeLayoutSize(props.size)
         }
 
         this.notificationSystem = null;
         this.modalDialog = null;
+        this.logInDialog = null;
+        this.logInForm = null;
         this.router = null;
         this.progressValue = 0;
         this.ajaxExtender = null;
@@ -69,6 +77,7 @@ class ServiceLayout extends Component
         this.history = useRouterHistory(createHistory)({ basename : '/' + props.serviceName });
         this.authApi = new Auth();
         this.usersApi = new Users();
+        this.systemSpinnerCount = 0;
 
         this.watchAjax();
     }
@@ -76,6 +85,12 @@ class ServiceLayout extends Component
     componentWillMount()
     {
         this.refreshUserData();
+    }
+
+    componentDidMount()
+    {
+        this.showSystemSpinner();
+        setTimeout(() => this.showLogInDialog(), 3000);
     }
 
     getI18nManager(locale)
@@ -117,7 +132,11 @@ class ServiceLayout extends Component
             showSpinner : this.showSystemSpinner.bind(this),
             hideSpinner : this.hideSystemSpinner.bind(this),
             setPageTitle : this.setPageTitle.bind(this),
-            logOutUser : this.logOutUser.bind(this)
+            logOutUser : this.logOutUser.bind(this),
+            setLayoutSize : this.setLayoutSize.bind(this),
+            getLayoutSize : this.getLayoutSize.bind(this),
+            showLogInDialog : this.showLogInDialog.bind(this),
+            hideLogInDialog : this.hideLogInDialog.bind(this)
         }
     }
 
@@ -206,7 +225,13 @@ class ServiceLayout extends Component
             spinnerTimer.reset(() => this.setSystemProgressValue(0), 2000);
         }
 
-        const onRequestEnd = (err, requestId) => err && this.showSystemError(err.message);
+        const onRequestEnd = (err, requestId, req) =>
+        {
+            if(err)
+                return this.showSystemError(err.message);
+            //else if(req.status === 401)
+                //this.showLogInDialog(true);
+        };
 
         this.ajaxExtender = new AjaxExtender({ onRequestStart, onProgress, onRequestEnd });
         this.ajaxExtender.run();
@@ -249,12 +274,21 @@ class ServiceLayout extends Component
 
     showSystemSpinner()
     {
-        $('#system-spinner').fadeIn();
+        if(this.systemSpinnerCount === 0)
+            $('#system-spinner').fadeIn();
+
+        this.systemSpinnerCount++;
     }
 
     hideSystemSpinner()
     {
-        $('#system-spinner').fadeOut();
+        if(this.systemSpinnerCount > 0)
+        {
+            if(this.systemSpinnerCount === 1)
+                $('#system-spinner').fadeOut();
+
+            this.systemSpinnerCount--;
+        }
     }
 
     setPageTitle(title)
@@ -270,6 +304,54 @@ class ServiceLayout extends Component
             document.location.replace('/auth/logout');
     }
 
+    normalizeLayoutSize(size)
+    {
+        size = size && size.toLocaleLowerCase();
+
+        if(size === 'full-width' || size === 'full-screen')
+            return size;
+        else if(!size || size === '' || size === 'default')
+            return 'default';
+        else
+            throw new Error('Invalid size value provided.');
+    }
+
+    setLayoutSize(size)
+    {
+        this.setState({ size : this.normalizeLayoutSize(size) });
+    }
+
+    getLayoutSize()
+    {
+        return this.state.size;
+    }
+
+    showLogInDialog()
+    {
+        const { i18n } = this.state;
+        const buttons = {
+            ok : i18n.getMessage('ServiceLayout.LogInDialog.button.signIn'),
+            cancel : i18n.getMessage('System.cancel')
+        }
+
+        const onButtonClick = (button) =>
+        {
+            if(button === 'ok')
+                return this.logInForm.doLogIn();
+            else
+                this.logInForm.clearForm();
+        }
+
+        this.logInDialog.show(i18n.getMessage('ServiceLayout.LogInDialog.title'), undefined, onButtonClick, buttons);
+        setTimeout(() => this.logInForm.focus(), 500);
+    }
+
+    hideLogInDialog()
+    {
+        this.logInDialog.hide();
+        this.logInForm.clearForm();
+    }
+
     setApplicationReady(isReady)
     {
         if(this.state.isReady !== isReady)
@@ -278,13 +360,14 @@ class ServiceLayout extends Component
 
     render()
     {
-        const { isReady, i18n, userData, userProfile } = this.state;
+        const { isReady, i18n, userData, userProfile, size } = this.state;
 
         const applicationIsReady = isReady || (i18n && userData && userProfile && true);
+        const contentWidthClass = size === 'default' ? 'col-xs-12 col-sm-offset-1 col-sm-10' : 'col-xs-12';
         const InnerComponent = this.props.component || ((props) => (<div>{props.children}</div>));
 
         if(applicationIsReady)
-            setTimeout(() => { this.hideSystemSpinner(); }, 1000);
+            setTimeout(() => this.hideSystemSpinner(), 1000);
 
         return(
             <div id="react-root">
@@ -296,13 +379,16 @@ class ServiceLayout extends Component
                             <strong>{i18n.getMessage('Main.systemError.title')}</strong>: <span className="system-error-text"></span>
                         </div>
 
-                        <div id="system-progress-bar" className="progress">
-                            <div className="progress-bar oc-progress-bar" role="progressbar"></div>
-                        </div>
+                        {
+                            size === 'full-screen' ? null :
+                            <div id="system-progress-bar" className="progress">
+                                <div className="progress-bar oc-progress-bar" role="progressbar"></div>
+                            </div>
+                        }
                         <section className="content">
                             <div className="container-fluid">
                                 <div className="row">
-                                    <div className="col-xs-12 col-sm-offset-1 col-sm-10">
+                                    <div className={contentWidthClass}>
                                         <Router ref={node => this.router = node} history={this.history}>
                                             <Route component={InnerLayout}>
                                                 <Route component={InnerComponent}>
@@ -317,6 +403,13 @@ class ServiceLayout extends Component
 
                         <NotificationSystem ref={node => this.notificationSystem = node} />
                         <ModalDialog ref={node => this.modalDialog = node} />
+                        <ModalDialog ref={node => this.logInDialog = node}>
+                            <p>{i18n.getMessage('ServiceLayout.LogInDialog.description')}<br />&nbsp;</p>
+                            <LogInForm
+                                ref={node => this.logInForm = node}
+                                username={this.state.userData.id}
+                                displayLogInButton={false} />
+                        </ModalDialog>
                     </div>
                 }
                 <div id="system-spinner" className="text-center">

@@ -7,8 +7,16 @@ class InnerLayout extends ContextComponent
     {
         return(
             <div>
-                <MainMenu onLanguageChange={locale => this.context.setLocale(locale)} />
-                {this.props.children}
+                {
+                    this.context.getLayoutSize() === 'full-screen' ? null :
+                    <div>
+                        <MainMenu onLanguageChange={locale => this.context.setLocale(locale)} />
+                        <div id="menu-placeholder"></div>
+                    </div>
+                }
+                <div id="main-content">
+                    {this.props.children}
+                </div>
             </div>
         )
     }

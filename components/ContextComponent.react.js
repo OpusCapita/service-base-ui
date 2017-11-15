@@ -21,7 +21,11 @@ class ContextComponent extends React.Component
         showSpinner : PropTypes.func.isRequired,
         hideSpinner : PropTypes.func.isRequired,
         setPageTitle : PropTypes.func.isRequired,
-        logOutUser : PropTypes.func.isRequired
+        logOutUser : PropTypes.func.isRequired,
+        setLayoutSize : PropTypes.func.isRequired,
+        getLayoutSize : PropTypes.func.isRequired,
+        showLogInDialog : PropTypes.func.isRequired,
+        hideLogInDialog : PropTypes.func.isRequired
     }
 
     getComponentId()

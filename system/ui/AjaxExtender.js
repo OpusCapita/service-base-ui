@@ -71,7 +71,7 @@ class AjaxExtender
                     }
 
                     setTimeout(() => delete self.openRequests[requestId], 500);
-                    self.config.onRequestEnd(err, { target, requestId });
+                    self.config.onRequestEnd(err, requestId, target);
                 }
             });
 
