@@ -71,6 +71,10 @@
             {
                 "label": "Invoice Key-In",
                 "link": "/sales-invoice/create"
+            },
+            {
+                "label": "Invoice search",
+                "link": "/einvoice-send/invoice-search"
             }]
         },
         {
@@ -97,6 +101,10 @@
             {
                 "label": "Rechnungserfassung Key-In",
                 "link": "/sales-invoice/create"
+            },
+            {
+                "label": "Rechnungssuche",
+                "link": "/einvoice-send/invoice-search"
             }]
         },
         {
