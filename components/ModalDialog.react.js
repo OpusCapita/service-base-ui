@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ContextComponent from './ContextComponent.react';
 import extend from 'extend';
+import System from '../system';
 
 class ModalDialog extends ContextComponent
 {
@@ -125,7 +126,7 @@ class ModalDialog extends ContextComponent
                                   <div className="modal-body">
                                         {
                                             state.message &&
-                                                <p>{state.message}</p>
+                                                <p>{System.UI.nl2br(state.message)}</p>
                                         }
                                         {
                                             this.props.children

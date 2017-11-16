@@ -90,7 +90,6 @@ class ServiceLayout extends Component
     componentDidMount()
     {
         this.showSystemSpinner();
-        setTimeout(() => this.showLogInDialog(), 3000);
     }
 
     getI18nManager(locale)
