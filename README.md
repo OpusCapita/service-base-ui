@@ -115,7 +115,7 @@ hideNotification(handle, duration = 1) : void
 **Removes all notifications** displayed instantly.
 
 ```JS
-clearNotifications()
+clearNotifications() : void
 ```
 
 ##### showModalDialog
@@ -124,7 +124,7 @@ Displays a **modal dialog** using the ModalDialog component that covers the whol
 Dialogs can be actively hidden using the **hideModalDialog()** method.
 
 ```JS
-showModalDialog(title, message, onButtonClick, buttons)
+showModalDialog(title, message, onButtonClick, buttons) : void
 ```
 |Name|Type|Required|Description|
 |:---|----|--------|:----------|
@@ -137,7 +137,7 @@ showModalDialog(title, message, onButtonClick, buttons)
 Hides a modal dialog currently displayed.
 
 ```JS
-hideModalDialog()
+hideModalDialog() : void
 ```
 
 ##### refreshUserData / refreshUserProfile
@@ -146,10 +146,10 @@ Runs a full **refresh** of all **user related data** in the user interface which
 The methods **refreshUserData()** and **refreshUserProfile()** actually refer to the **same** method so only one of them should be called. This is made for API design reasons as userData and userProfile are two separate entities in this API.
 
 ```JS
-refreshUserData()
+refreshUserData() : Promise
 ```
 ```JS
-refreshUserProfile()
+refreshUserProfile() : Promise
 ```
 
 ##### setLocale
@@ -158,7 +158,7 @@ Sets the **language** of the **current user's** user interface and **stores** th
 Calling this method triggers a full re-rendering of the application as it calls refreshUserData().
 
 ```JS
-setLocale(locale)
+setLocale(locale) : Promise
 ```
 |Name|Type|Required|Description|
 |:---|----|--------|:----------|
@@ -170,17 +170,17 @@ Shows a **full page spinner**. This **blocks** all user **interactions** with th
 System **spinners** get **stacked** internally on every call to showSpinner(). This means the spinner only gets hidden after the final call to hideSpinner() removes the last spinner shown.
 
 ```JS
-showSpinner()
+showSpinner() : void
 ```
 ```JS
-hideSpinner()
+hideSpinner() : void
 ```
 
 ##### setPageTitle
 Sets the **document** (browser) **title** of an application.
 
 ```JS
-setPageTitle(title)
+setPageTitle(title) : void
 ```
 |Name|Type|Required|Description|
 |:---|----|--------|:----------|
@@ -189,7 +189,7 @@ setPageTitle(title)
 ##### logOutUser
 **Ends a user's session** by redirecting them to the log-out endpoint which will then display the log-in page. If an optional backToUrl is passed, a user gets redirected to this URL once they log-in again.
 ```JS
-logOutUser(backToUrl)
+logOutUser(backToUrl) : void
 ```
 
 |Name|Type|Required|Description|
@@ -200,7 +200,7 @@ logOutUser(backToUrl)
 Besides the **size** property of the **ServiceLayout** component, this method allows switching the main layout in a limited way from within a component. It can be used to **hide the menu** or even **widening the content** area.
 
 ```JS
-setLayoutSize(size)
+setLayoutSize(size) : void
 ```
 |Name|Type|Required|Possible values|Description|
 |:---|----|--------|:--------------|:----------|
@@ -210,21 +210,21 @@ setLayoutSize(size)
 Returns the size identifier of the currently used layout size.
 
 ```JS
-getLayoutSize()
+getLayoutSize() : string
 ```
 
 ##### showLogInDialog (not fully implemented yet)
 Brings up a **modal log-in dialog** for users to re-log-in and continue using the application **without** getting redirected to the normal log-in page and **losing their state**. **Returns** a **promise** resolving with **true** or **false** depending on whenever the log-in has been successful;
 
 ```JS
-showLogInDialog()
+showLogInDialog() : Promise
 ```
 
 ##### hideLogInDialog
 Hides a currently displayed modal log-in dialog.
 
 ```JS
-hideLogInDialog()
+hideLogInDialog() : void
 ```
 
 ## Components
