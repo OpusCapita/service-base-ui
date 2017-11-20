@@ -1,25 +1,12 @@
 export default {
-	UserRoleEditor: {
-		Title: 'Edit roles of user {userId}',
-		Button: {
-			add: 'Add'
-		},
-		AddRoleForm: {
-			placeholder: 'Select role...',
-			noResults: 'No assignable roles'
-		},
-		Confirmation: {
-			delete: 'Do you really want to delete this role?'
-		},
-		Table: {
-			Header: {
-				name: 'Role name'
-			},
-			Item: {
-				Button: {
-					delete: ' Delete'
-				}
-			}
-		}
-	}
+	'UserRoleEditor.title': 'Edit roles of user {userId}',
+	'UserRoleEditor.button.add': 'Add',
+	'UserRoleEditor.addRoleForm.placeholder': 'Select role...',
+	'UserRoleEditor.addRoleForm.noResults': 'No assignable roles',
+	'UserRoleEditor.confirmation.delete.title': 'Confirmation',
+	'UserRoleEditor.confirmation.delete.message': 'Do you really want to delete this role?',
+	'UserRoleEditor.confirmation.delete.yes': 'Yes',
+	'UserRoleEditor.confirmation.delete.no': 'No',
+	'UserRoleEditor.table.header.name': 'Role name',
+	'UserRoleEditor.table.item.button.delete': 'Delete'
 };

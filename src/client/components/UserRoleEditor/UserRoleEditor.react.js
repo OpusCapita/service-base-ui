@@ -4,18 +4,14 @@ import request from 'superagent-bluebird-promise';
 import i18nMessages from './i18n';
 import Button from 'react-bootstrap/lib/Button';
 import Select from '@opuscapita/react-select';
+import { Components } from '@opuscapita/service-base-ui';
 import './UserRoleEditor.css';
 
-class UserRoleEditor extends Component {
+class UserRoleEditor extends Components.ContextComponent {
 
 	static propTypes = {
 		userId: PropTypes.string.isRequired,
-		readOnly: PropTypes.bool,
-		onUnauthorized: PropTypes.func
-	};
-
-	static contextTypes = {
-		i18n: PropTypes.object.isRequired
+		readOnly: PropTypes.bool
 	};
 
 	static defaultProps = {
@@ -40,29 +36,25 @@ class UserRoleEditor extends Component {
 		this.loadRoles();
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (this.props.userId !== nextProps.userId) {
+			this.loadRoles();
+		}
+	}
+
 	/**
 	 * Loads owned and assignable roles from api.
 	 */
 	loadRoles() {
-		this.setState({ isLoaded: false });
-
 		this.loadOwnedRolesPromise = request
-			.get(`/user/users/${encodeURIComponent(this.props.userId)}`)
-			.set('Accept', 'application/json')
+			.get(`/user/api/users/${encodeURIComponent(this.props.userId)}`)
 			.then(response => this.setState({ownedRoles: response.body.roles}));
 
 		this.loadAssignableRolesPromise = request
-			.get(`/user/users/current/assignableRoles`)
-			.set('Accept', 'application/json')
+			.get(`/user/api/users/current/assignableRoles`)
 			.then(response => this.setState({assignableRoles: response.body}));
 
-		return Promise.all([this.loadOwnedRolesPromise, this.loadAssignableRolesPromise])
-			.catch((error) => {
-				if (error.status === 401) {
-					this.props.onUnauthorized();
-				}
-			})
-			.then(() => this.setState({ isLoaded: true }));
+		return Promise.all([this.loadOwnedRolesPromise, this.loadAssignableRolesPromise]);
 	};
 
 	/**
@@ -84,8 +76,7 @@ class UserRoleEditor extends Component {
 	 */
 	addRoleToUser(roleId) {
 		return request
-			.put(`/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
-			.set('Accept', 'application/json')
+			.put(`/user/api/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
 			.set('Content-type', 'application/json')
 			.then(() => this.loadRoles());
 	};
@@ -95,26 +86,25 @@ class UserRoleEditor extends Component {
 	 * @param {string} roleId Role identifier
 	 */
 	removeRoleFromUser(roleId) {
-		if (confirm(this.context.i18n.getMessage('UserRoleEditor.Confirmation.delete'))) {
-			request
-				.delete(`/user/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
-				.set('Accept', 'application/json')
-				.set('Content-type', 'application/json')
-				.then(() => this.loadRoles());
-		}
+		this.context.showModalDialog(
+			this.context.i18n.getMessage('UserRoleEditor.confirmation.delete.title'),
+			this.context.i18n.getMessage('UserRoleEditor.confirmation.delete.message'),
+			(button) => {
+				if (button === 'yes') {
+					request
+						.delete(`/user/api/users/${encodeURIComponent(this.props.userId)}/roles/${roleId}`)
+						.set('Content-type', 'application/json')
+						.then(() => this.loadRoles());
+				}
+
+				return true;
+			},
+			{
+				'yes': this.context.i18n.getMessage('UserRoleEditor.confirmation.delete.yes'),
+				'no': this.context.i18n.getMessage('UserRoleEditor.confirmation.delete.no')
+			}
+		);
 	};
-
-	componentWillUnmount() {
-		if (!this.state.isLoaded) {
-			if (this.loadOwnedRolesPromise) {
-				this.loadOwnedRolesPromise.cancel();
-			}
-
-			if (this.loadAssignableRolesPromise) {
-				this.loadAssignableRolesPromise.cancel();
-			}
-		}
-	}
 
 	/**
 	 * Handles role switching.
@@ -155,12 +145,12 @@ class UserRoleEditor extends Component {
 		return (
 			<div>
 				<div>
-					<h4 className="tab-description">{i18n.getMessage('UserRoleEditor.Title', { userId : this.props.userId })}</h4>
+					<h4 className="tab-description">{i18n.getMessage('UserRoleEditor.title', { userId : this.props.userId })}</h4>
 
 					<table className="table">
 						<thead>
 							<tr>
-								<th>{i18n.getMessage('UserRoleEditor.Table.Header.name')}</th>
+								<th>{i18n.getMessage('UserRoleEditor.table.header.name')}</th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -173,7 +163,7 @@ class UserRoleEditor extends Component {
 											<nobr>
 												<Button onClick={this.removeRoleFromUser.bind(this, roleId)} bsSize="sm">
 													<span className="glyphicon glyphicon-trash" />
-													&nbsp;{i18n.getMessage('UserRoleEditor.Table.Item.Button.delete')}
+													&nbsp;{i18n.getMessage('UserRoleEditor.table.item.button.delete')}
 												</Button>
 											</nobr>}
 									</td>
@@ -190,15 +180,15 @@ class UserRoleEditor extends Component {
 									onChange={option => this.onRoleChange(option)}
 									searchable={false}
 									clearable={false}
-									placeholder={i18n.getMessage('UserRoleEditor.AddRoleForm.placeholder')}
-									noResultsText={i18n.getMessage('UserRoleEditor.AddRoleForm.noResults')}
+									placeholder={i18n.getMessage('UserRoleEditor.addRoleForm.placeholder')}
+									noResultsText={i18n.getMessage('UserRoleEditor.addRoleForm.noResults')}
 									options={this.getAssignableRoles().map(roleId => ({value: roleId, label: roleId}))}
 								/>
 								<Button
 									bsStyle="primary"
 									type="submit"
 									disabled={this.isAddRoleButtonDisabled()}>
-									{i18n.getMessage('UserRoleEditor.Button.add')}
+									{i18n.getMessage('UserRoleEditor.button.add')}
 								</Button>
 							</div>
 						</form>}

@@ -48,8 +48,8 @@ module.exports.init = function(app, db, config)
         app.put(['/api/users/current/profile', '/users/current/profile'], (req, res) => this.addOrUpdateUserProfile(req, res, true));
         app.put(['/api/users/:id/profile', '/users/:id/profile'], (req, res) => this.addOrUpdateUserProfile(req, res));
 
-        app.get('/users/current/assignableRoles', (req, res) => this.sendUserAssignableRoles(req, res, true));
-        app.get('/users/:id/assignableRoles', (req, res) => this.sendUserAssignableRoles(req, res));
+        app.get('/api/users/current/assignableRoles', (req, res) => this.sendUserAssignableRoles(req, res, true));
+        app.get('/api/users/:id/assignableRoles', (req, res) => this.sendUserAssignableRoles(req, res));
 
         app.get(['/api/roles', '/roles'], (req, res) => this.sendRoles(req, res));
         app.get(['/api/roles/:id', '/roles/:id'], (req, res) => this.sendRole(req, res));
@@ -58,7 +58,7 @@ module.exports.init = function(app, db, config)
 
         app.put(['/api/users/:userId/roles/:roleId', '/users/:userId/roles/:roleId'], (req, res) => this.addUserToRole(req, res));
 
-        app.delete('/users/:userId/roles/:roleId', this.removeUserFromRole.bind(this))
+        app.delete('/api/users/:userId/roles/:roleId', this.removeUserFromRole.bind(this))
     });
 };
 

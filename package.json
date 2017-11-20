@@ -53,6 +53,7 @@
     "react": "^15.4.2",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^15.4.2",
+    "react-router": "^4.0.0",
     "rimraf": "^2.6.0",
     "sequelize-to-markdown": "^1.x",
     "style-loader": "^0.19.0",
