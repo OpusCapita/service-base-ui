@@ -11,11 +11,11 @@ module.exports.init = function(db, config)
 
 module.exports.getUsers = function(searchObj, includes)
 {
-    for(var key in searchObj)
+    for(const key in searchObj)
         if(Array.isArray(searchObj[key]))
             searchObj[key] = { '$in' : searchObj[key] };
 
-    var includeModels = [
+    const includeModels = [
         this.db.models.UserRole
     ];
 
@@ -40,7 +40,7 @@ module.exports.getUsers = function(searchObj, includes)
 
 module.exports.getUser = function(userId, includes)
 {
-    var includeModels = [
+    const includeModels = [
       this.db.models.UserRole
     ];
 
@@ -77,13 +77,13 @@ module.exports.userExists = function(userId)
 
 module.exports.addUser = function(user, returnUser)
 {
-    var roles = (user.roles && user.roles.map(roleId => ({ userId : user.id, roleId : roleId, createdBy : user.createdBy }))) || [ ];
+    const roles = (user.roles && user.roles.map(roleId => ({ userId : user.id, roleId : roleId, createdBy : user.createdBy }))) || [ ];
 
     [ 'createdOn', 'changedOn', 'changedBy', 'roles' ].forEach(key => delete user[key]);
 
     return this.db.transaction(trans =>
     {
-        var transaction = { transaction : trans };
+        const transaction = { transaction : trans };
 
         return this.db.models.User.create(user, transaction).then(() =>
         {
@@ -97,13 +97,13 @@ module.exports.addUser = function(user, returnUser)
 
 module.exports.updateUser = function(userId, user, returnUser)
 {
-    var roles = (user.roles && user.roles.map(roleId => ({ userId : userId, roleId : roleId, createdBy : user.changedBy }))) || [ ];
+    const roles = (user.roles && user.roles.map(roleId => ({ userId : userId, roleId : roleId, createdBy : user.changedBy }))) || [ ];
 
     [ 'id', 'createdOn', 'changedOn', 'createdBy', 'roles' ].forEach(key => delete user[key]);
 
     return this.db.transaction(trans =>
     {
-        var transaction = { transaction : trans };
+        const transaction = { transaction : trans };
 
         return this.db.models.User.update(user, {
             where : {
@@ -117,14 +117,14 @@ module.exports.updateUser = function(userId, user, returnUser)
             {
                 return this.getUser(userId).then(user =>
                 {
-                    return Promise.all(roles.map(role =>
+                    return this.db.models.UserHasRole.destroy({
+                        where : { userId : userId },
+                        transaction : trans
+                    })
+                    .then(() =>
                     {
-                        return this.db.models.UserHasRole.destroy({
-                            where : { userId : userId },
-                            transaction : trans
-                        })
-                        .then(() => this.db.models.UserHasRole.upsert(role, transaction))
-                    }));
+                        return Promise.all(roles.map(role => this.db.models.UserHasRole.upsert(role, transaction)));
+                    });
                 });
             }
         });
@@ -141,7 +141,7 @@ module.exports.addOrUpdateUserProfile = function(userId, profile, returnProfile)
             return this.getUserProfile(userId).then(p =>
             {
                 profile.userId = userId;
-                
+
                 if(p)
                 {
                     [ 'createdOn', 'changedOn', 'createdBy' ].forEach(key => delete profile[key]);
@@ -195,12 +195,12 @@ module.exports.userRoleExists = function(roleId)
 
 module.exports.addUserRoles = function(roles, returnRoles)
 {
-    var localRules = Array.isArray(roles) ? roles : [ roles ];
+    let localRules = Array.isArray(roles) ? roles : [ roles ];
     localRules = localRules.map(role => ({ id : role.id, createdBy : role.createdBy }));
 
     return this.db.models.UserRole.bulkCreate(localRules).then(() =>
     {
-        var idsOnly = localRules.map(role => role.id);
+        const idsOnly = localRules.map(role => role.id);
 
         if(returnRoles)
             return this.getUserRoles(idsOnly);

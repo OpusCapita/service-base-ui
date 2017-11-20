@@ -4,8 +4,12 @@ const Logger = require('ocbesbn-logger'); // Logger
 const db = require('ocbesbn-db-init'); // Database
 const server = require('ocbesbn-web-init'); // Web server
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const logger = new Logger();
-logger.redirectConsoleOut(); // Force anyone using console outputs into Logger format.
+
+if(isProduction)
+    logger.redirectConsoleOut(); // Force anyone using console outputs into Logger format.
 
 // Basic database and web server initialization.
 // See database : https://github.com/OpusCapitaBusinessNetwork/db-init
