@@ -55,6 +55,10 @@ All API is accessed using the **this.context** object. It all APIs are automatic
 |component|function|false|||And additional component to be wrapped around all inner components.|
 |size|string|false|null, '', 'default', 'full-width', 'full-screen'|'default'|Defines the layout size of the outer frame. See [setLayoutSize()](#setlayoutsize) below.|
 
+##### Hide AJAX progress
+To **prevent requests** from **showing** their status in the UI's **progress** bar (e.g. for recurring background tasks), you may set the **X-Client-Progress** HTTP header to **false** on every AJAX request.
+
+**Note**: *This header will not be sent to the server as it is meant for client behavior control only.*
 
 ##### Objects
 The following objects are available through a component's context:
@@ -91,7 +95,7 @@ Shows a short notification bubble on the top of a page that will automatically d
 Notifications are stacked on every call to this method.
 
 ```JS
-showNotification(message, level = 'info', duration = 4) : object
+showNotification(message, level = 'info', duration = 4, buttonLabel = null, onButtonClick = null) : object
 ```
 
 |Name|Type|Required|Possible values|Description|
@@ -99,6 +103,8 @@ showNotification(message, level = 'info', duration = 4) : object
 |message|string|true||Message to be displayed|
 |level|string|true|'success', 'error', 'warning', 'info'|Controls style and color of a message bubble.|
 |duration|integer|true||Duration in seconds a message lasts visible.|
+|buttonLabel|string|false||Sets the label of a button to display within a notification.|
+|onButtonClick|function|false||Sets the callback for a notification's button click event.|
 
 ##### hideNotification
 Remove a certain notification.

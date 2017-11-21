@@ -80,6 +80,7 @@ class ServiceLayout extends Component
         this.systemSpinnerCount = 0;
 
         this.watchAjax();
+        this.watchSession();
     }
 
     componentWillMount()
@@ -184,10 +185,17 @@ class ServiceLayout extends Component
         .finally(() => this.hideSystemSpinner());
     }
 
-    showNotification(message, level = 'info', duration = 4)
+    showNotification(message, level = 'info', duration = 4, buttonLabel = null, onButtonClick = null)
     {
         if(this.notificationSystem)
-            return this.notificationSystem.addNotification({ message, level, autoDismiss : duration, position : 'tr' });
+        {
+            const action = buttonLabel && {
+                label : buttonLabel,
+                callback : onButtonClick
+            }
+
+            return this.notificationSystem.addNotification({ message, level, autoDismiss : duration, position : 'tr', action });
+        }
     }
 
     hideNotification(handle, duration = 1)
@@ -234,6 +242,46 @@ class ServiceLayout extends Component
 
         this.ajaxExtender = new AjaxExtender({ onRequestStart, onProgress, onRequestEnd });
         this.ajaxExtender.run();
+    }
+
+    watchSession()
+    {
+        let expireNoitification = null;
+
+        setInterval(() =>
+        {
+            this.authApi.getUserData().then(userData =>
+            {
+                if(userData && typeof userData === 'object')
+                {
+                    const now = new Date();
+                    const secondsRemaining = userData.exp - Math.floor(now / 1000) + (now.getTimezoneOffset() * 60);
+
+                    if(!expireNoitification && secondsRemaining <= 300)
+                    {
+                        const message = this.state.i18n.getMessage('Main.notification.sessionExpiring');
+                        const buttonLabel = this.state.i18n.getMessage('Main.notification.button.renewSession');
+                        const buttonClick = () =>
+                        {
+                            this.authApi.refreshIdToken().then(() => this.refreshUserData());
+                            expireNoitification = null;
+                        }
+
+                        expireNoitification = this.showNotification(message, 'warning', secondsRemaining, buttonLabel, buttonClick);
+                    }
+                    else if(expireNoitification && secondsRemaining > 300)
+                    {
+                        expireNoitification = this.hideNotification(expireNoitification);
+                    }
+                }
+                else if(this.state.userData)
+                {
+                    document.location.reload(true);
+                }
+            })
+            .catch(e => null);
+
+        }, 30000);
     }
 
     showSystemError(message)

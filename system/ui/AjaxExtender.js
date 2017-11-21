@@ -26,15 +26,25 @@ class AjaxExtender
             return false;
 
         const oldOpen = XMLHttpRequest.prototype.open;
+        const oldSetHeader = XMLHttpRequest.prototype.setRequestHeader;
+
         const self = this;
 
-        const captureProgress = (e, requestId) =>
+        const captureProgress = (e, requestId, request) =>
         {
-            if(e.lengthComputable)
+            if(e.lengthComputable && request.opuscapita.useProgress)
             {
                 this.openRequests[requestId].total = e.total;
                 this.openRequests[requestId].loaded = e.loaded;
             }
+        }
+
+        XMLHttpRequest.prototype.setRequestHeader = function(name, value)
+        {
+            if(name.toLocaleLowerCase() === 'x-client-progress')
+                this.opuscapita.useProgress = value && true;
+            else
+                return oldSetHeader.apply(this, arguments);
         }
 
         XMLHttpRequest.prototype.open = function()
@@ -43,8 +53,12 @@ class AjaxExtender
             self.openRequests[requestId] = { loaded : 0, total : 0 };
             self.config.onRequestStart(requestId);
 
-            this.upload.addEventListener('progress', e => captureProgress(e, requestId));
-            this.addEventListener('progress', e => captureProgress(e, requestId));
+            this.opuscapita = {
+                useProgress : true
+            };
+
+            this.upload.addEventListener('progress', e => captureProgress(e, requestId, this));
+            this.addEventListener('progress', e => captureProgress(e, requestId, this));
 
             this.addEventListener('readystatechange', e =>
             {

@@ -110,3 +110,16 @@
 .notification-error .notification-dismiss {
     background: #CF2821 !important;
 }
+
+.notification-action-button {
+    background: #EE7700 !important;
+    font-weight: 400 !important;
+    border: 1px solid #EE7700 !important;
+}
+
+.notification-action-button:focus,
+.notification-action-button:active {
+  color: #ffffff !important;
+  background-color: #00434e !important;
+  border-color: #001c20 !important;
+}

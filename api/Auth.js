@@ -5,12 +5,12 @@ class Auth extends ApiBase
     refreshIdToken()
     {
         return this.ajax.post('/refreshIdToken').set('Content-Type', 'application/json')
-            .then(res => res && res.body).catch(this.getErrorFromResponse);
+            .set('X-Client-Progress', false).then(res => res && res.body).catch(this.getErrorFromResponse);
     }
 
     getUserData()
     {
-        return this.ajax.get('/auth/userdata')
+        return this.ajax.get('/auth/userdata').set('X-Client-Progress', false)
             .then(res => res && res.body).catch(this.getErrorFromResponse);
     }
 }
