@@ -1,6 +1,6 @@
 {
     "name": "@opuscapita/service-base-ui",
-    "version": "1.0.44",
+    "version": "1.0.45",
     "description": "Basic API for UI services of OpusCapita Business Network.",
     "main": "lib/bundle.js",
     "files": [
@@ -10,24 +10,25 @@
     "license": "MIT",
     "scripts": {
         "dev": "node dev/index.js",
-        "build": "npx webpack -p --config webpack.prod.config.js --env=production --profile --colors --bail",
+        "build": "npx webpack -p --config webpack.prod.config.js --env=production --colors --bail",
         "prepublish": "npm run build"
     },
     "dependencies": {
         "@opuscapita/i18n": "^1.1.0",
         "@opuscapita/react-navigation": "^0.0.36",
         "bluebird": "^3.5.1",
+        "clean-css": "^4.1.9",
         "deep-equal": "^1.0.1",
         "extend": "^3.0.1",
         "history": "^3.3.0",
+        "node-minify": "^2.4.1",
         "prop-types": "^15.6.0",
         "react": "^15.4.0",
         "react-dom": "^15.4.2",
         "react-notification-system": "^0.2.15",
         "react-router": "^3.2.0",
         "superagent": "^3.6.3",
-        "superagent-bluebird-promise": "^4.2.0",
-        "webpack-bundle-size-analyzer": "^2.7.0"
+        "superagent-bluebird-promise": "^4.2.0"
     },
     "devDependencies": {
         "babel-core": "^6.26.0",
@@ -40,10 +41,11 @@
         "file-loader": "^1.1.5",
         "jquery": "^3.2.1",
         "json-loader": "^0.5.7",
-        "ocbesbn-web-init": "^2.2.9",
+        "ocbesbn-web-init": "^2.2.22",
         "raw-loader": "^0.5.1",
         "style-loader": "^0.19.0",
         "url-loader": "^0.6.2",
-        "webpack": "^3.7.1"
+        "webpack": "^3.7.1",
+        "webpack-visualizer-plugin": "^0.1.11"
     }
 }
