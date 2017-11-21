@@ -31,6 +31,7 @@
   "devDependencies": {
     "@opuscapita/i18n": "^1.1.0",
     "@opuscapita/react-select": "^1.0.0-rc.5-oc.6",
+    "@opuscapita/service-base-ui": "^1.0.44",
     "babel-cli": "6.24.1",
     "babel-core": "6.24.1",
     "babel-eslint": "7.2.3",
