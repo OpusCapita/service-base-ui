@@ -22,15 +22,7 @@ const config = {
             commonjs2: 'react-dom',
             commonjs: 'react-dom',
             amd: 'react-dom'
-        },
-        'react-router': {
-            root: 'ReactRouter',
-            commonjs2: 'react-router',
-            commonjs: 'react-router',
-            amd: 'react-router'
-        },
-        jquery : 'jquery',
-        moment : 'moment'
+        }
     },
     plugins: [
         new webpack.DefinePlugin({
