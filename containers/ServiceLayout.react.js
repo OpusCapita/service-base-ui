@@ -15,9 +15,9 @@ import formatters from './i18n/formatters';
 import ajax from 'superagent-bluebird-promise';
 
 import './static/css/bootstrap-3.3.7.min.css';
-import './static/css/ocui-bootstrap-bundle-0.1.2.css';
+import './static/css/ocui-bootstrap-bundle-0.1.2.min.css';
 import './static/js/bootstrap-3.3.7.min.js';
-import './static/css/Main.css';
+import './static/css/Main.min.css';
 
 class ServiceLayout extends Component
 {

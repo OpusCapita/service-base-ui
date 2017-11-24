@@ -16,7 +16,10 @@ module.exports = {
             $: "jquery",
             jQuery: "jquery",
             jquery:"jquery"
-        })
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"development"'
+        }),
     ],
     module: {
         rules: [
@@ -33,11 +36,11 @@ module.exports = {
                 loader: 'url-loader?limit=819200'
             },
             {
-                test: /.jsx?$/,
+                test: /\.(js|jsx)$/,
                 loader: 'babel-loader',
-                exclude: /node_modules/,
+                exclude: [/node_modules/],
                 options: {
-                    compact: false,
+                    compact: true,
                     babelrc: false,
                     presets: [
                         ['env', { 'targets': { 'node': 8, 'uglify': true }, 'modules': false }],

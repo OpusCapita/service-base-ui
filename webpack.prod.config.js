@@ -1,6 +1,7 @@
 const baseConfig = require('./dev/webpack.config');
 const extend = require('extend');
 const webpack = require('webpack');
+const Visualizer = require('webpack-visualizer-plugin');
 
 delete baseConfig.entry.main;
 delete baseConfig.output.publicPath;
@@ -14,7 +15,7 @@ const config = {
             root: 'React',
             commonjs2: 'react',
             commonjs: 'react',
-            umd: 'react'
+            amd: 'react'
         },
         'react-dom': {
             root: 'ReactDOM',
@@ -33,18 +34,17 @@ const config = {
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': '"production"'
         }),
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery",
-            jquery:"jquery"
-        }),
         new webpack.optimize.OccurrenceOrderPlugin(true),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false,
-                screw_ie8: true
+                screw_ie8: true,
+                drop_console : true
             },
             comments: false
+        }),
+        new Visualizer({
+          filename: './statistics.html'
         })
     ]
 }
