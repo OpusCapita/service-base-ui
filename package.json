@@ -1,23 +1,13 @@
 {
     "name": "@opuscapita/service-base-ui",
-<<<<<<< HEAD
     "version": "1.0.55",
-=======
-    "version": "1.0.49",
->>>>>>> develop
     "description": "Basic API for UI services of OpusCapita Business Network.",
     "main": "lib/bundle.js",
     "files": [
         "lib",
-<<<<<<< HEAD
         "components",
         "containers",
         "system"
-=======
-        "system",
-        "components",
-        "containers"
->>>>>>> develop
     ],
     "author": "Christian Drengenberg",
     "license": "MIT",
