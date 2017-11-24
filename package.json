@@ -1,16 +1,19 @@
 {
     "name": "@opuscapita/service-base-ui",
-    "version": "1.0.44",
+    "version": "1.0.55",
     "description": "Basic API for UI services of OpusCapita Business Network.",
     "main": "lib/bundle.js",
     "files": [
-        "lib"
+        "lib",
+        "components",
+        "containers",
+        "system"
     ],
     "author": "Christian Drengenberg",
     "license": "MIT",
     "scripts": {
         "dev": "node dev/index.js",
-        "build": "npx webpack -p --config webpack.prod.config.js --env=production --profile --colors --bail",
+        "build": "npx webpack -p --config webpack.prod.config.js --env=production --colors --bail",
         "prepublish": "npm run build"
     },
     "dependencies": {

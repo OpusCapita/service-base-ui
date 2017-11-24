@@ -21,7 +21,13 @@ const config = {
             commonjs2: 'react-dom',
             commonjs: 'react-dom',
             umd: 'react-dom'
-        }
+        },
+        'react-router': {
+            root: 'ReactRouter',
+            commonjs2: 'react-router',
+            commonjs: 'react-router',
+            amd: 'react-router'
+        },
     },
     plugins: [
         new webpack.DefinePlugin({
