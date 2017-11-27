@@ -5,7 +5,7 @@ export default {
     'MainMenu.logout' : 'Abmelden',
     'MainMenu.manualName' : 'Lieferantenhandbuch.pdf',
     'MainMenu.manual' : 'Handbuch',
-    'MainMenu.download' : 'Herunetrladen',
+    'MainMenu.download' : 'Herunterladen',
     'MainMenu.newNotifications' : 'Neue Benachrichtigungen',
     'MainMenu.recentNotifications' : 'Letzte Benachrichtigungen',
     'MainMenu.noNewNotifications' : 'Es gibt keine neuen Benachrichtigungen',
