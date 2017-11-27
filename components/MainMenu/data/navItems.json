@@ -99,7 +99,7 @@
                 "link": "/einvoice-send"
             },
             {
-                "label": "Rechnungserfassung Key-In",
+                "label": "Key-In-"Rechnungserfassung",
                 "link": "/sales-invoice/create"
             },
             {
