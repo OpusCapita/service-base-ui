@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ContextComponent from '../ContextComponent.react';
 import extend from 'extend';
 
 import './bootstrap-datepicker';
 import './bootstrap-datepicker-i18n';
 import './date-picker.css';
 
-class DatePicker extends ContextComponent
+class DatePicker extends React.Component
 {
     static propTypes = {
         showIcon : PropTypes.bool.isRequired,
