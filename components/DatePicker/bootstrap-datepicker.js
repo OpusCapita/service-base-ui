@@ -11,7 +11,7 @@
     define(["jquery"], factory);
   } else if (typeof exports === 'object') {
     factory(require('jquery'));
-  } else {
+} else {
     factory(jQuery);
   }
 }(function($, undefined){

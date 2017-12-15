@@ -28,9 +28,14 @@ const config = {
             commonjs2: 'react-router',
             commonjs: 'react-router',
             amd: 'react-router'
-        },
+        }
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            jquery: "jquery"
+        }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': '"production"'
         }),
