@@ -74,7 +74,7 @@
             },
             {
                 "label": "Invoice search",
-                "link": "/einvoice-send/invoice-search"
+                "link": "/sales-invoice/search"
             }]
         },
         {
@@ -104,7 +104,7 @@
             },
             {
                 "label": "Rechnungssuche",
-                "link": "/einvoice-send/invoice-search"
+                "link": "/sales-invoice/search"
             }]
         },
         {
