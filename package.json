@@ -1,6 +1,6 @@
 {
     "name": "@opuscapita/service-base-ui",
-    "version": "1.0.62",
+    "version": "1.0.67",
     "description": "Basic API for UI services of OpusCapita Business Network.",
     "main": "lib/bundle.js",
     "files": [
@@ -12,9 +12,10 @@
     "author": "Christian Drengenberg",
     "license": "MIT",
     "scripts": {
-        "dev": "node dev/index.js",
+        "dev": "npm run setup-consul ; node dev/index.js",
         "build": "npx webpack -p --config webpack.prod.config.js --env=production --colors --bail",
-        "prepublish": "npm run build"
+        "prepublish": "npm run build",
+        "setup-consul": "curl -X PUT -d ${MYSQL_DATABASE} http://consul:8500/v1/kv/service-base-ui/db-init/database ; curl -X PUT -d root http://consul:8500/v1/kv/service-base-ui/db-init/user ; curl -X PUT -d ${MYSQL_ROOT_PASSWORD} http://consul:8500/v1/kv/service-base-ui/db-init/password ; curl -X PUT -d true http://consul:8500/v1/kv/service-base-ui/db-init/populate-test-data"
     },
     "dependencies": {
         "@opuscapita/i18n": "^1.1.0",
@@ -39,11 +40,13 @@
         "babel-preset-env": "^1.6.0",
         "babel-preset-react": "^6.24.1",
         "babel-preset-stage-0": "^6.24.1",
+        "bluebird-retry": "^0.11.0",
         "clean-css": "^4.1.9",
         "css-loader": "^0.28.7",
         "file-loader": "^1.1.5",
         "jquery": "^3.2.1",
         "json-loader": "^0.5.7",
+        "ocbesbn-db-init": "^1.1.11",
         "ocbesbn-web-init": "^2.2.22",
         "raw-loader": "^0.5.1",
         "style-loader": "^0.19.0",

@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import extend from 'extend';
+import ContextComponent from '../ContextComponent.react';
 
 import './bootstrap-datepicker';
 import './bootstrap-datepicker-i18n';
 import './date-picker.css';
 
-class DatePicker extends React.Component
+class DatePicker extends ContextComponent
 {
     static propTypes = {
         showIcon : PropTypes.bool.isRequired,
@@ -14,7 +15,7 @@ class DatePicker extends React.Component
         // additionally you can receive 'events' [{ name: 'hide', fn: () => {} }, ...]
         // Possible events: https://bootstrap-datepicker.readthedocs.io/en/latest/events.html
         value : PropTypes.string,
-        format : PropTypes.string.isRequired,
+        format : PropTypes.string,
         onChange : PropTypes.func.isRequired,
         onBlur : PropTypes.func.isRequired,
     };
@@ -22,7 +23,6 @@ class DatePicker extends React.Component
     static defaultProps = {
         showIcon : true,
         value : '',
-        format : 'dd.mm.yyyy',
         onChange : () => null,
         onBlur : () => null
     };
@@ -38,7 +38,7 @@ class DatePicker extends React.Component
         language : 'en'
     }
 
-    constructor(props)
+    constructor(props, context)
     {
         super(props);
 
@@ -57,21 +57,23 @@ class DatePicker extends React.Component
         this.dispose();
     }
 
-    init()
+    init(initialValue)
     {
+        const contextFormat = this.context.i18n.dateFormat.toLowerCase();
+
         let pickerOptions = {
             showIcon : this.props.showIcon,
-            format : this.props.format,
+            format : this.props.format || contextFormat,
             language : this.context.locale
         }
 
-        pickerOptions = extend(true, DatePicker.defaultOptions, pickerOptions);
+        pickerOptions = extend(true, { }, DatePicker.defaultOptions, pickerOptions);
 
         const element = this.container || this.picker;
 
         $(element).datepicker(pickerOptions).on('changeDate', e =>
         {
-            const dateString = e.date.toString();
+            const dateString = e.date && e.date.toString();
 
             if(dateString != this.lastValue)
             {
@@ -81,7 +83,9 @@ class DatePicker extends React.Component
             }
         });
 
-        if(this.props.value != this.lastValue)
+        if(initialValue)
+            $(element).datepicker('update', new Date(initialValue));
+        else if(this.props.value != this.lastValue)
             $(element).datepicker('update', new Date(this.props.value));
     }
 
@@ -92,27 +96,12 @@ class DatePicker extends React.Component
 
     componentWillReceiveProps(nextProps, nextContext)
     {
-        let propsChanged = false;
+        this.dispose();
 
-        for(let key in nextProps)
-        {
-            if(nextProps[key] != this.props[key])
-            {
-                propsChanged = true;
-                break;
-            }
+        this.props = nextProps;
+        this.context = nextContext;
 
-        }
-
-        if(propsChanged)
-        {
-            this.dispose();
-
-            this.props = nextProps;
-            this.context = nextContext;
-
-            this.init();
-        }
+        this.init(this.lastValue);
     }
 
     render()

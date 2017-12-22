@@ -14,15 +14,17 @@ services:
      SERVICE_NAME: 'service-base-ui'
      SERVICE_TAGS: 'external,kong'
     environment:
+     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+     MYSQL_DATABASE: ${MYSQL_DATABASE}
      SERVICE_3300_CHECK_HTTP: /api/health/check
      SERVICE_3300_CHECK_INTERVAL: 15s
      SERVICE_3300_CHECK_TIMEOUT: 3s
     volumes:
-        - ./api:/home/node/api
-        - ./components:/home/node/components
-        - ./containers:/home/node/containers
-        - ./dev:/home/node/dev
-        - ./system:/home/node/system
+        - ./api:/home/node/service-base-ui/api
+        - ./components:/home/node/service-base-ui/components
+        - ./containers:/home/node/service-base-ui/containers
+        - ./dev:/home/node/service-base-ui/dev
+        - ./system:/home/node/service-base-ui/system
     ports:
         - '3300:3300'
     command:

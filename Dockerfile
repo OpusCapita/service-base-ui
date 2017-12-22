@@ -3,7 +3,7 @@ MAINTAINER kwierchris
 
 RUN apk add --no-cache curl
 
-WORKDIR /home/node
+WORKDIR /home/node/service-base-ui
 COPY . .
 
 ENV NODE_ENV=development NODE_PATH=/home/node/node_modules PATH=${PATH}:${NODE_PATH}/.bin
@@ -20,4 +20,4 @@ EXPOSE 3300
 CMD [ "npm", "start" ]
 
 HEALTHCHECK --interval=15s --timeout=3s --retries=12 \
-  CMD curl --silent --fail http://localhost:3000/api/health/check || exit 1
+  CMD curl --silent --fail http://localhost:3300/api/health/check || exit 1
