@@ -136,6 +136,10 @@
                 "label": "Consul",
                 "link": "/consul",
                 "target": "_blank"
+            },
+            {
+                "label": "Users",
+                "link": "/bnp/users"
             }]
         }],
 
@@ -156,6 +160,10 @@
                 "label": "Consul",
                 "link": "/consul",
                 "target": "_blank"
+            },
+            {
+                "label": "Users DE",
+                "link": "/bnp/users"
             }]
         }]
     }
