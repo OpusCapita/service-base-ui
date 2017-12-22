@@ -139,7 +139,7 @@
             },
             {
                 "label": "Users",
-                "link": "/users"
+                "link": "/bnp/users"
             }]
         }],
 
@@ -163,7 +163,7 @@
             },
             {
                 "label": "Users DE",
-                "link": "/users"
+                "link": "/bnp/users"
             }]
         }]
     }
