@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/build
+    steps:
+      - checkout
+      - run:
+          name: Preparing
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            git config --global user.email "${GIT_USER_EMAIL}"
+            git config --global user.name "${GIT_USER_NAME}"
+      - run:
+          name: Testing
+          command: |
+            mkdir -p test
+            touch test/test-results.xml
+      - store_artifacts:
+          path: ./test/test-results.xml
+      - deploy:
+          name: Publishing to NPM...
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              git reset HEAD --hard
+              echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login
+              npm publish --access public
+              git push
+            fi

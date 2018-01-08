@@ -1,0 +1,9 @@
+version: '2'
+services:
+  main:
+    volumes:
+        - ./api:/home/node/service-base-ui/api
+        - ./components:/home/node/service-base-ui/components
+        - ./containers:/home/node/service-base-ui/containers
+        - ./dev:/home/node/service-base-ui/dev
+        - ./system:/home/node/service-base-ui/system
