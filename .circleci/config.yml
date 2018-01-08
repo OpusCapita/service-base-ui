@@ -8,6 +8,7 @@ jobs:
       - run:
           name: Preparing
           command: |
+            mkdir -p lib
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             git config --global user.email "${GIT_USER_EMAIL}"
             git config --global user.name "${GIT_USER_NAME}"
@@ -18,6 +19,10 @@ jobs:
             touch test/test-results.xml
       - store_artifacts:
           path: ./test/test-results.xml
+      - run:
+          name: Building package
+          command: |
+            docker-compose -f docker-compose.yml -f docker-compose.ci.yml run main npm run build
       - deploy:
           name: Publishing to NPM...
           command: |

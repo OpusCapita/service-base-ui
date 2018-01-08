@@ -7,3 +7,4 @@ services:
         - ./containers:/home/node/service-base-ui/containers
         - ./dev:/home/node/service-base-ui/dev
         - ./system:/home/node/service-base-ui/system
+        - ./lib:/home/node/service-base-ui/lib
