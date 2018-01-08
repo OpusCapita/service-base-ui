@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ConditionalRenderComponent from '../ConditionalRenderComponent.react';
 import translations from './i18n';
-import ajax from 'superagent-bluebird-promise';
+import ajax from 'superagent';
 
 class LogInForm extends ConditionalRenderComponent
 {
@@ -84,7 +84,7 @@ class LogInForm extends ConditionalRenderComponent
             const { username, password } = this.state;
 
             return ajax.post('/auth/api/backend/login').send({ username, password})
-            .then(console.log)
+                .then((...args) => args),
 
             this.props.onSuccess();
 

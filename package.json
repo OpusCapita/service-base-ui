@@ -21,7 +21,6 @@
     "dependencies": {
         "@opuscapita/i18n": "^1.1.0",
         "@opuscapita/react-navigation": "^0.0.36",
-        "bluebird": "^3.5.1",
         "deep-equal": "^1.0.1",
         "extend": "^3.0.1",
         "history": "^3.3.0",
@@ -31,8 +30,7 @@
         "react-dom": "^15.4.2",
         "react-notification-system": "^0.2.15",
         "react-router": "^3.2.0",
-        "superagent": "^3.6.3",
-        "superagent-bluebird-promise": "^4.2.0"
+        "superagent": "^3.6.3"
     },
     "devDependencies": {
         "babel-core": "^6.26.0",
@@ -41,6 +39,7 @@
         "babel-preset-env": "^1.6.0",
         "babel-preset-react": "^6.24.1",
         "babel-preset-stage-0": "^6.24.1",
+        "bluebird": "^3.5.1",
         "bluebird-retry": "^0.11.0",
         "clean-css": "^4.1.9",
         "css-loader": "^0.28.7",

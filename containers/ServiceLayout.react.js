@@ -12,7 +12,7 @@ import { AjaxExtender } from '../system/ui';
 import translations from './i18n';
 import systemTranslations from './i18n/system';
 import formatters from './i18n/formatters';
-import ajax from 'superagent-bluebird-promise';
+import ajax from 'superagent';
 
 import './static/css/bootstrap-3.3.7.min.css';
 import './static/css/ocui-bootstrap-bundle-0.1.2.min.css';

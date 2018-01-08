@@ -18,7 +18,7 @@ class DatePicker extends ContextComponent
         format : PropTypes.string,
         onChange : PropTypes.func.isRequired,
         onBlur : PropTypes.func.isRequired,
-        enabled : PropTypes.bool.isRequired
+        disabled : PropTypes.bool.isRequired
     };
 
     static defaultProps = {
@@ -26,7 +26,7 @@ class DatePicker extends ContextComponent
         value : '',
         onChange : () => null,
         onBlur : () => null,
-        enabled : true
+        disabled : false
     };
 
     static defaultOptions = {
@@ -47,7 +47,7 @@ class DatePicker extends ContextComponent
         this.container = null;
         this.picker = null;
         this.lastValue = null;
-        this.enabled = props.enabled;
+        this.disabled = props.disabled;
     }
 
     componentDidMount()
@@ -93,7 +93,7 @@ class DatePicker extends ContextComponent
         else if(this.props.value != this.lastValue)
             $(element).datepicker('update', new Date(this.props.value));
 
-        $(element).prop('disabled', !this.enabled);
+        $(element).prop('disabled', this.disabled);
     }
 
     dispose()
@@ -112,10 +112,10 @@ class DatePicker extends ContextComponent
         this.init(this.lastValue);
     }
 
-    setEnabled(enabled)
+    setDisabled(disabled)
     {
         this.dispose();
-        this.enabled = enabled;
+        this.disabled = disabled;
         this.init(this.lastValue);
     }
 

@@ -1,4 +1,4 @@
-const request = require('superagent-bluebird-promise');
+const request = require('superagent');
 
 class ApiBase
 {
