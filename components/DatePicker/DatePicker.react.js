@@ -29,6 +29,11 @@ class DatePicker extends ContextComponent
         disabled : false
     };
 
+    state = {
+        value : null,
+        disabled : false
+    };
+
     static defaultOptions = {
         autoclose : true,
         todayHighlight : true,
@@ -44,10 +49,11 @@ class DatePicker extends ContextComponent
     {
         super(props);
 
+        this.state.value = props.value;
+        this.state.disabled = props.disabled;
+
         this.container = null;
         this.picker = null;
-        this.lastValue = null;
-        this.disabled = props.disabled;
     }
 
     componentDidMount()
@@ -60,7 +66,7 @@ class DatePicker extends ContextComponent
         this.dispose();
     }
 
-    init(initialValue)
+    init()
     {
         const contextFormat = this.context.i18n.dateFormat.toLowerCase();
 
@@ -78,22 +84,20 @@ class DatePicker extends ContextComponent
         {
             const dateString = e.date && e.date.toString();
 
-            if(dateString != this.lastValue)
+            if(dateString != this.state.value)
             {
                 const payload = { date : e.date, dateString : dateString, timestamp : e.timeStamp };
-                this.lastValue = dateString
+                this.setState({ value : dateString });
                 this.props.onChange(payload);
             }
         });
 
-        if(initialValue)
-            $(element).datepicker('update', new Date(initialValue));
-        else if(!this.props.value || this.props.value === '')
-            this.reset();
-        else if(this.props.value != this.lastValue)
-            $(element).datepicker('update', new Date(this.props.value));
+        if(!this.state.value || this.state.value === '')
+            $(element).datepicker('update', '');
+        else
+            $(element).datepicker('update', new Date(this.state.value));
 
-        $(element).prop('disabled', this.disabled);
+        $(element).prop('disabled', this.state.disabled);
     }
 
     dispose()
@@ -105,23 +109,23 @@ class DatePicker extends ContextComponent
     {
         this.dispose();
 
-        this.props = nextProps;
-        this.context = nextContext;
-        this.disabled = this.props.disabled;
-
-        this.init(this.lastValue);
+        this.setState({
+            value : nextProps.value,
+            disabled : nextProps.disabled
+        },
+        () => this.init());
     }
 
     setDisabled(disabled)
     {
         this.dispose();
-        this.disabled = disabled;
-        this.init(this.lastValue);
+        this.setState({ disabled }, () => this.init());
     }
 
     reset()
     {
-        $(this.container || this.picker).datepicker('clearDates');
+        this.dispose();
+        this.setState({ value : '' }, () => this.init());
     }
 
     render()
