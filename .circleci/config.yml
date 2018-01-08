@@ -12,6 +12,7 @@ jobs:
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             git config --global user.email "${GIT_USER_EMAIL}"
             git config --global user.name "${GIT_USER_NAME}"
+            docker-compose -f docker-compose.yml -f docker-compose.ci.yml build
       - run:
           name: Testing
           command: |
