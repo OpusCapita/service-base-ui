@@ -107,7 +107,7 @@ class DatePicker extends ContextComponent
 
         this.props = nextProps;
         this.context = nextContext;
-        this.enabled = props.enabled;
+        this.disabled = this.props.disabled;
 
         this.init(this.lastValue);
     }
