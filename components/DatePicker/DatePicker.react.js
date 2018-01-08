@@ -18,13 +18,15 @@ class DatePicker extends ContextComponent
         format : PropTypes.string,
         onChange : PropTypes.func.isRequired,
         onBlur : PropTypes.func.isRequired,
+        enabled : PropTypes.bool.isRequired
     };
 
     static defaultProps = {
         showIcon : true,
         value : '',
         onChange : () => null,
-        onBlur : () => null
+        onBlur : () => null,
+        enabled : true
     };
 
     static defaultOptions = {

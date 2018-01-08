@@ -9,9 +9,6 @@ COPY . .
 ENV NODE_ENV=development NODE_PATH=/home/node/node_modules PATH=${PATH}:${NODE_PATH}/.bin
 RUN yarn
 
-# Set the user name or UID to use when running the image and for any RUN, CMD and ENTRYPOINT instructions that follow
-USER node
-
 # A container must expose a port if it wants to be registered in Consul by Registrator.
 # The port is fed both to node express server and Consul => DRY principle is observed with ENV VAR.
 # NOTE: a port can be any, not necessarily different from exposed ports of other containers.
