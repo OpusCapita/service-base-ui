@@ -6,13 +6,27 @@ import { ContextComponent, LogInForm, DatePicker } from '../components';
 
 class Test extends ContextComponent
 {
+    state = {
+        value : new Date().toString()
+    }
+
+    constructor()
+    {
+        super();
+        setTimeout(() =>
+        {
+            console.log('reset');
+            this.setState({ disabled : true });
+        }, 5000);
+    }
+
     render()
     {
         return(
             <DatePicker ref={node => this.picker = node}
                showIcon={false}
                enabled={true}
-               value={new Date().toString()}
+               disabled={this.state.disabled}
             />);
     }
 }
