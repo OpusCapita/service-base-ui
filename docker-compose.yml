@@ -10,6 +10,7 @@ services:
         - user
         - acl
         - auth
+        - api-registry
     labels:
      SERVICE_NAME: 'service-base-ui'
      SERVICE_TAGS: 'external,kong'
@@ -41,6 +42,7 @@ services:
      - mysql
      - consul
      - registrator
+     - redis
     labels:
       SERVICE_NAME: 'user'
     environment:
@@ -88,6 +90,7 @@ services:
     depends_on:
       - postgres
       - mysql
+      - redis
 
   auth:
     image: opuscapita/auth:dev

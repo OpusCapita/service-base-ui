@@ -9,9 +9,10 @@ class Test extends ContextComponent
     render()
     {
         return(
-            <DatePicker
+            <DatePicker ref={node => this.picker = node}
                showIcon={false}
-               disabled={false}
+               enabled={true}
+               value={new Date().toString()}
             />);
     }
 }

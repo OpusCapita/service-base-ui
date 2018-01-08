@@ -47,6 +47,7 @@ class DatePicker extends ContextComponent
         this.container = null;
         this.picker = null;
         this.lastValue = null;
+        this.enabled = props.enabled;
     }
 
     componentDidMount()
@@ -87,8 +88,12 @@ class DatePicker extends ContextComponent
 
         if(initialValue)
             $(element).datepicker('update', new Date(initialValue));
+        else if(!this.props.value || this.props.value === '')
+            this.reset();
         else if(this.props.value != this.lastValue)
             $(element).datepicker('update', new Date(this.props.value));
+
+        $(element).prop('disabled', !this.enabled);
     }
 
     dispose()
@@ -102,8 +107,21 @@ class DatePicker extends ContextComponent
 
         this.props = nextProps;
         this.context = nextContext;
+        this.enabled = props.enabled;
 
         this.init(this.lastValue);
+    }
+
+    setEnabled(enabled)
+    {
+        this.dispose();
+        this.enabled = enabled;
+        this.init(this.lastValue);
+    }
+
+    reset()
+    {
+        $(this.container || this.picker).datepicker('clearDates');
     }
 
     render()
