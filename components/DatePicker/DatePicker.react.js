@@ -89,9 +89,11 @@ class DatePicker extends ContextComponent
             {
                 const payload = { date : e.date, dateString : dateString, timestamp : e.timeStamp };
 
+                if(this.state.value !== this.lastValue)
+                    this.props.onChange(payload);
+
                 this.lastValue = dateString;
                 this.setState({ value : dateString });
-                this.props.onChange(payload);
             }
         });
 
