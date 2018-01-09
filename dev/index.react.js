@@ -12,6 +12,7 @@ class Test extends ContextComponent
 
     setValue(value)
     {
+        console.log(value);
         this.setState({ value : value.dateString });
     }
 
@@ -22,7 +23,6 @@ class Test extends ContextComponent
 
     render()
     {
-        console.log(this.state);
         return(
             <DatePicker ref={node => this.picker = node}
                showIcon={false}
