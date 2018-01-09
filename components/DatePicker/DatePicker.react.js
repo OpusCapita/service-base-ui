@@ -54,6 +54,7 @@ class DatePicker extends ContextComponent
 
         this.container = null;
         this.picker = null;
+        this.lastValue = null;
     }
 
     componentDidMount()
@@ -87,15 +88,19 @@ class DatePicker extends ContextComponent
             if(dateString != this.state.value)
             {
                 const payload = { date : e.date, dateString : dateString, timestamp : e.timeStamp };
+                this.lastValue = dateString;
                 this.setState({ value : dateString });
                 this.props.onChange(payload);
             }
         });
 
-        if(!this.state.value || this.state.value === '')
-            $(element).datepicker('update', '');
-        else
-            $(element).datepicker('update', new Date(this.state.value));
+        if(this.state.value !== this.lastValue)
+        {
+            if(!this.state.value || this.state.value === '')
+                $(element).datepicker('update', '');
+            else
+                $(element).datepicker('update', new Date(this.state.value));
+        }
 
         $(element).prop('disabled', this.state.disabled);
     }
