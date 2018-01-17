@@ -16,6 +16,11 @@ class Test extends ContextComponent
         this.setState({ value : value.dateString });
     }
 
+    onFocus()
+    {
+      console.log("DatePicker Focused!");
+    }
+
     constructor()
     {
         super();
@@ -29,7 +34,9 @@ class Test extends ContextComponent
                enabled={true}
                value={this.state.value}
                onChange={this.setValue.bind(this)}
-            />);
+               onFocus={this.onFocus}
+            />
+        );
     }
 }
 

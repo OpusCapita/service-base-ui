@@ -17,6 +17,7 @@ class DatePicker extends ContextComponent
         value : PropTypes.string,
         format : PropTypes.string,
         onChange : PropTypes.func.isRequired,
+        onFocus : PropTypes.func.isRequired,
         onBlur : PropTypes.func.isRequired,
         disabled : PropTypes.bool.isRequired
     };
@@ -25,6 +26,7 @@ class DatePicker extends ContextComponent
         showIcon : true,
         value : '',
         onChange : () => null,
+        onFocus : () => null,
         onBlur : () => null,
         disabled : false
     };
@@ -140,18 +142,18 @@ class DatePicker extends ContextComponent
 
     render()
     {
-        const { showIcon, onBlur } = this.props;
+        const { showIcon, onFocus, onBlur } = this.props;
 
         return(
                 (showIcon &&
-                    <div className="input-group date" ref={node => this.container = node}>
-                        <input className="form-control" onBlur={() => onBlur()} ref={node => this.picker = node}  />
+                    <div className="input-group date"  ref={node => this.container = node}>
+                        <input className="form-control" onFocus={() => onFocus()} onBlur={() => onBlur()} ref={node => this.picker = node}  />
                         <span className="input-group-addon" ref="toggleBtn">
                             <span className="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>)
                 ||
-                    <input className="form-control" onBlur={() => onBlur()} ref={node => this.picker = node} />
+                    <input className="form-control" onFocus={() => onFocus()} onBlur={() => onBlur()} ref={node => this.picker = node} />
 
         );
     }
