@@ -25,6 +25,14 @@
                 "label": "Supplier Directory",
                 "link": "/bnp/supplierDirectory"
             }]
+        },
+        {
+            "label": "Company",
+            "children": [
+            {
+                "label": "Profile",
+                "link": "/bnp/buyerInformation"
+            }]
         }],
 
         "de": [
@@ -50,6 +58,14 @@
             {
                 "label": "Lieferantenverzeichnis",
                 "link": "/bnp/supplierDirectory"
+            }]
+        },
+        {
+            "label": "Unternehmen",
+            "children": [
+            {
+                "label": "Profil",
+                "link": "/bnp/buyerInformation"
             }]
         }]
     },
