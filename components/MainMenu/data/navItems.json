@@ -78,6 +78,14 @@
             "link": "/bnp"
         },
         {
+            "label": "Orders",
+            "children": [
+            {
+                "label": "Overview",
+                "link": "/sales-order"
+            }]
+        },
+        {
             "label": "Invoice",
             "children": [
             {

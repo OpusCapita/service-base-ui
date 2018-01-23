@@ -124,6 +124,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      REDIS_AUTH: ${REDIS_AUTH}
       SERVICE_3013_CHECK_HTTP: /api/health/check
       SERVICE_3013_CHECK_INTERVAL: 15s
       SERVICE_3013_CHECK_TIMEOUT: 3s
@@ -131,6 +134,7 @@ services:
      - '3013:3013'
     depends_on:
       - kong
+      - rabbitmq
     command: 'npm run dev'
 
   api-registry:
@@ -167,6 +171,18 @@ services:
       - registrator
     ports:
       - '6379:6379'
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+        - '4369:4369'
+        - '5671:5671'
+        - '5672:5672'
+        - '15672:15672'
+    environment:
+        RABBITMQ_DEFAULT_USER: $RABBITMQ_USER
+        RABBITMQ_DEFAULT_PASS: $RABBITMQ_PASS
+        SERVICE_5672_NAME: 'rabbitmq-amqp'
 
   registrator:
     image: opuscapita/consul-registrator
