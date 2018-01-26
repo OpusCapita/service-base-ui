@@ -263,7 +263,7 @@ class ServiceLayout extends Component
                         const buttonLabel = this.state.i18n.getMessage('Main.notification.button.renewSession');
                         const buttonClick = () =>
                         {
-                            this.authApi.refreshIdToken().then(() => this.refreshUserData());
+                            this.refreshUserData();
                             expireNoitification = null;
                         }
 
