@@ -156,18 +156,27 @@ class ServiceLayout extends Component
 
     setLocale(locale)
     {
+        if(locale === this.state.locale)
+            return Promise.resolve();
+
         const id = this.state.userData.id;
 
         return this.usersApi.updateUserProfile(id, { languageId : locale })
             .then(() => this.refreshUserData());
     }
 
-    refreshUserData()
+    refreshUserData(refreshIdToken)
     {
         this.showSystemSpinner();
 
-        return this.authApi.refreshIdToken().then(() => this.authApi.getUserData())
-        .then(userData =>
+        let precondition;
+
+        if(refreshIdToken)
+            precondition = this.authApi.refreshIdToken().then(() => this.authApi.getUserData());
+        else
+            precondition = this.authApi.getUserData();
+
+        return precondition.then(userData =>
         {
             return this.usersApi.getUserProfile(userData.id)
                 .then(userProfile => ({ userData, userProfile }));
@@ -250,12 +259,12 @@ class ServiceLayout extends Component
 
         setInterval(() =>
         {
-            this.authApi.getUserData().then(userData =>
+            this.authApi.getSessionData().then(session =>
             {
-                if(userData && typeof userData === 'object')
+                if(session && typeof session === 'object')
                 {
                     const now = new Date();
-                    const secondsRemaining = userData.exp - Math.floor(now / 1000) + (now.getTimezoneOffset() * 60);
+                    const secondsRemaining = session.access_token_expiration - Math.floor(now / 1000) + (now.getTimezoneOffset() * 60);
 
                     if(!expireNoitification && secondsRemaining <= 300)
                     {
@@ -263,7 +272,7 @@ class ServiceLayout extends Component
                         const buttonLabel = this.state.i18n.getMessage('Main.notification.button.renewSession');
                         const buttonClick = () =>
                         {
-                            this.refreshUserData();
+                            this.refreshUserData(true);
                             expireNoitification = null;
                         }
 
@@ -272,6 +281,7 @@ class ServiceLayout extends Component
                     else if(expireNoitification && secondsRemaining > 300)
                     {
                         expireNoitification = this.hideNotification(expireNoitification);
+                        expireNoitification = null;
                     }
                 }
                 else if(this.state.userData)

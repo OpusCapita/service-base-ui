@@ -13,6 +13,12 @@ class Auth extends ApiBase
         return this.ajax.get('/auth/userdata').set('X-Client-Progress', false)
             .then(res => res && res.body).catch(this.getErrorFromResponse);
     }
+
+    getSessionData()
+    {
+        return this.ajax.get('/auth/sessiondata').set('X-Client-Progress', false)
+            .then(res => res && res.body).catch(this.getErrorFromResponse);
+    }
 }
 
 export default Auth;
