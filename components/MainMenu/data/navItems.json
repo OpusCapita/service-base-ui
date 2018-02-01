@@ -89,15 +89,15 @@
             "label": "Invoice",
             "children": [
             {
-                "label": "Service configuration",
+                "label": "In-Channel Configuration",
                 "link": "/einvoice-send"
             },
             {
-                "label": "Invoice Key-In",
+                "label": "Key-In",
                 "link": "/sales-invoice/create"
             },
             {
-                "label": "Invoice search",
+                "label": "Overview",
                 "link": "/sales-invoice/search"
             }]
         },
@@ -127,15 +127,15 @@
             "label": "Rechnungen",
             "children": [
             {
-                "label": "Service Konfiguration",
+                "label": "In-Channel Konfiguration",
                 "link": "/einvoice-send"
             },
             {
-                "label": "Key-In-Rechnungserfassung",
+                "label": "Rechnungserfassung",
                 "link": "/sales-invoice/create"
             },
             {
-                "label": "Rechnungssuche",
+                "label": "Übersicht",
                 "link": "/sales-invoice/search"
             }]
         },
