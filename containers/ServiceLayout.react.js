@@ -162,7 +162,7 @@ class ServiceLayout extends Component
         const id = this.state.userData.id;
 
         return this.usersApi.updateUserProfile(id, { languageId : locale })
-            .then(() => this.refreshUserData());
+            .then(() => this.refreshUserData(true));
     }
 
     refreshUserData(refreshIdToken)

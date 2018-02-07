@@ -49,13 +49,15 @@ services:
       MYSQL_DATABASE: $MYSQL_DATABASE
       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
       REDIS_AUTH: $REDIS_AUTH
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
       SERVICE_3008_CHECK_HTTP: /api/health/check
       SERVICE_3008_CHECK_INTERVAL: 15s
       SERVICE_3008_CHECK_TIMEOUT: 3s
     ports:
      - '3008:3008'
     command: 'npm run dev'
-
+    
   kong:
     image: opuscapita/kong:dev
     environment:
