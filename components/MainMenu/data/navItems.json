@@ -198,11 +198,11 @@
                 "target": "_blank"
             },
             {
-                "label": "Users DE",
+                "label": "Benutzer",
                 "link": "/bnp/users"
             },
             {
-                "label": "Permissions DE",
+                "label": "Berechtigungen",
                 "link": "/bnp/acl"
             }]
         }]
