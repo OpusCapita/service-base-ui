@@ -172,6 +172,10 @@
             {
                 "label": "Users",
                 "link": "/bnp/users"
+            },
+            {
+                "label": "Permissions",
+                "link": "/bnp/acl"
             }]
         }],
 
@@ -196,6 +200,10 @@
             {
                 "label": "Users DE",
                 "link": "/bnp/users"
+            },
+            {
+                "label": "Permissions DE",
+                "link": "/bnp/acl"
             }]
         }]
     }
