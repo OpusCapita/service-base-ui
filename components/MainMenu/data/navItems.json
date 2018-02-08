@@ -175,7 +175,7 @@
             },
             {
                 "label": "Permissions",
-                "link": "/bnp/acl"
+                "link": "/bnp/permissions"
             }]
         }],
 
@@ -203,7 +203,7 @@
             },
             {
                 "label": "Berechtigungen",
-                "link": "/bnp/acl"
+                "link": "/bnp/permissions"
             }]
         }]
     }
