@@ -176,6 +176,14 @@
             {
                 "label": "Permissions",
                 "link": "/bnp/permissions"
+            },
+            {
+                "label": "Suppliers",
+                "link": "/bnp/suppliers"
+            },
+            {
+                "label": "Customers",
+                "link": "/bnp/customers"
             }]
         }],
 
@@ -204,6 +212,14 @@
             {
                 "label": "Berechtigungen",
                 "link": "/bnp/permissions"
+            },
+            {
+                "label": "Lieferanten",
+                "link": "/bnp/suppliers"
+            },
+            {
+                "label": "Kunden",
+                "link": "/bnp/customers"
             }]
         }]
     }
