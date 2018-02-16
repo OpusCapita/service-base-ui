@@ -172,6 +172,10 @@
             {
                 "label": "Users",
                 "link": "/bnp/users"
+            },
+            {
+                "label": "Permissions",
+                "link": "/bnp/permissions"
             }]
         }],
 
@@ -194,8 +198,12 @@
                 "target": "_blank"
             },
             {
-                "label": "Users DE",
+                "label": "Benutzer",
                 "link": "/bnp/users"
+            },
+            {
+                "label": "Berechtigungen",
+                "link": "/bnp/permissions"
             }]
         }]
     }
