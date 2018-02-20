@@ -32,6 +32,10 @@
             {
                 "label": "Profile",
                 "link": "/bnp/buyerInformation"
+            },
+            {
+                "label": "Users",
+                "link": "/bnp/users"
             }]
         }],
 
@@ -66,6 +70,10 @@
             {
                 "label": "Profil",
                 "link": "/bnp/buyerInformation"
+            },
+            {
+                "label": "Benutzer",
+                "link": "/bnp/users"
             }]
         }]
     },
@@ -107,6 +115,10 @@
             {
                 "label": "Profile",
                 "link": "/bnp/supplierInformation"
+            },
+            {
+                "label": "Users",
+                "link": "/bnp/users"
             }]
         }],
 
@@ -145,6 +157,10 @@
             {
                 "label": "Profil",
                 "link": "/bnp/supplierInformation"
+            },
+            {
+                "label": "Benutzer",
+                "link": "/bnp/users"
             }]
         }]
     },
