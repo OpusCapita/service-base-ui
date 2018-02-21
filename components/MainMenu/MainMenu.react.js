@@ -93,7 +93,7 @@ class MainMenu extends ConditionalRenderComponent
         const onButtonClick = (button) =>
         {
             if(button === 'yes')
-                document.location.replace('/auth/logout');
+                document.location.replace('/auth/logout?backTo=/bnp');
         }
 
         this.context.showModalDialog(title, message, onButtonClick, buttons);
