@@ -32,6 +32,10 @@
             {
                 "label": "Profile",
                 "link": "/bnp/buyerInformation"
+            },
+            {
+                "label": "Users",
+                "link": "/bnp/users"
             }]
         }],
 
@@ -66,6 +70,10 @@
             {
                 "label": "Profil",
                 "link": "/bnp/buyerInformation"
+            },
+            {
+                "label": "Benutzer",
+                "link": "/bnp/users"
             }]
         }]
     },
@@ -107,6 +115,10 @@
             {
                 "label": "Profile",
                 "link": "/bnp/supplierInformation"
+            },
+            {
+                "label": "Users",
+                "link": "/bnp/users"
             }]
         }],
 
@@ -145,6 +157,10 @@
             {
                 "label": "Profil",
                 "link": "/bnp/supplierInformation"
+            },
+            {
+                "label": "Benutzer",
+                "link": "/bnp/users"
             }]
         }]
     },
@@ -172,6 +188,18 @@
             {
                 "label": "Users",
                 "link": "/bnp/users"
+            },
+            {
+                "label": "Permissions",
+                "link": "/bnp/permissions"
+            },
+            {
+                "label": "Suppliers",
+                "link": "/bnp/suppliers"
+            },
+            {
+                "label": "Customers",
+                "link": "/bnp/customers"
             }]
         }],
 
@@ -194,8 +222,20 @@
                 "target": "_blank"
             },
             {
-                "label": "Users DE",
+                "label": "Benutzer",
                 "link": "/bnp/users"
+            },
+            {
+                "label": "Berechtigungen",
+                "link": "/bnp/permissions"
+            },
+            {
+                "label": "Lieferanten",
+                "link": "/bnp/suppliers"
+            },
+            {
+                "label": "Kunden",
+                "link": "/bnp/customers"
             }]
         }]
     }
