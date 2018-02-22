@@ -2,6 +2,7 @@ export default {
     'MainMenu.logoutDialog.title' : 'Abmelden',
     'MainMenu.logoutDialog.message' : 'Möchten Sie sich wirklich abmelden?',
 
+    'MainMenu.profile' : 'Profil',
     'MainMenu.logout' : 'Abmelden',
     'MainMenu.manualName' : 'Lieferantenhandbuch.pdf',
     'MainMenu.manual' : 'Handbuch',

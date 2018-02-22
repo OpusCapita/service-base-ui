@@ -2,6 +2,7 @@ export default {
     'MainMenu.logoutDialog.title' : 'Log-out',
     'MainMenu.logoutDialog.message' : 'Do you really want to leave the system?',
 
+    'MainMenu.profile' : 'Profile',
     'MainMenu.logout' : 'Log-out',
     'MainMenu.manualName' : 'SupplierManual.pdf',
     'MainMenu.manual' : 'Manual',

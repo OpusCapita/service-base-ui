@@ -83,6 +83,11 @@ class MainMenu extends ConditionalRenderComponent
         this.searchTimer.reset(() => this.props.onSearch(value), 500);
     }
 
+    showProfile()
+    {
+        this.context.router.push(`/bnp/users/${this.context.userData.id}`);
+    }
+
     handleLogout()
     {
         const { i18n } = this.context;
@@ -281,6 +286,9 @@ class MainMenu extends ConditionalRenderComponent
                         userName={userData.id}
                         avatarSrc="./static/avatar.jpg"
                         actions={[{
+                            label : i18n.getMessage('MainMenu.profile'),
+                            onClick : () => this.showProfile()
+                        }, {
                             label : i18n.getMessage('MainMenu.logout'),
                             onClick : () => this.handleLogout()
                         }]}
