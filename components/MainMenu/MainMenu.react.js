@@ -5,6 +5,7 @@ import { ResetTimer } from '../../system';
 import { Menu, MenuIcon, MenuDropdownGrid, Notifications, Notification, MenuAccount, MenuSelect } from '@opuscapita/react-navigation';
 import translations from './i18n';
 import navItems from './data/navItems';
+import {NotificationApi} from '../../api';
 
 class MainMenu extends ConditionalRenderComponent
 {
@@ -24,7 +25,6 @@ class MainMenu extends ConditionalRenderComponent
 
         this.state = {
             newNotifications : [ ],
-            recentNotifications : [ ],
             activeMenuItem : 0
         }
 
@@ -44,7 +44,21 @@ class MainMenu extends ConditionalRenderComponent
 
         this.logoImage = 'data:image/svg+xml,' + encodeURIComponent(require('!!raw-loader!./img/oc-logo-white.svg'));
         this.searchTimer = new ResetTimer();
+
+        this.notificationApi = new NotificationApi();
     }
+
+
+    async loadNotifications(){
+        var newNotifications = await this.notificationApi.getNotifications(4);
+        this.setState({newNotifications});
+    }
+
+    async itemClicked(args,sender){
+        await this.notificationApi.acknowledge(args);
+        await this.load(this.state.previousToken);
+    }
+
 
     componentDidMount()
     {
@@ -177,7 +191,7 @@ class MainMenu extends ConditionalRenderComponent
     render()
     {
         const { i18n, userData, router } = this.context;
-        const { activeMenuItem, newNotifications, recentNotifications } = this.state;
+        const { activeMenuItem, newNotifications } = this.state;
 
         const applicationItems = [{
             label : 'Business Network',
@@ -225,7 +239,7 @@ class MainMenu extends ConditionalRenderComponent
                 ), (
                     <MenuIcon
                         onClick={() => console.log('click!')}
-                        svg={this.getIcon('notifications')}
+                        svg={newNotifications && newNotifications.length ?this.getIcon('notifications_active'):this.getIcon('notifications')}
                         supTitle={newNotifications.length}
                         title={i18n.getMessage('MainMenu.notifications')}
                         hideDropdownArrow={true}>
@@ -233,11 +247,7 @@ class MainMenu extends ConditionalRenderComponent
                             <div className="oc-notifications__header">{i18n.getMessage('MainMenu.newNotifications')}</div>
                             {
                                 newNotifications && newNotifications.length ?
-                                <Notification
-                                    svg={this.getIcon('info')}
-                                    svgClassName="fill-info"
-                                    message={<span>Your password will expire in 14 days. <a href="#">Change it now</a></span>}
-                                    dateTime="20/02/2017"/>
+                                notifications.map(item => (<Notification key={item.id} data-key={item.id} onClick={this.notificationClicked.bind(this,item.id)} svg={this.getIcon('info')} svgClassName="fill-info" message={item.description} dateTime={item.changedOn}/>))
                                 :
                                 <div className="oc-notification">
                                     <div className="oc-notification__text-contaniner">
@@ -247,35 +257,6 @@ class MainMenu extends ConditionalRenderComponent
                                     </div>
                                 </div>
                             }
-                            {
-                                recentNotifications && recentNotifications.length ?
-                                <div>
-                                    <hr className="oc-notifications__divider" />
-                                    <div className="oc-notifications__header">{i18n.getMessage('MainMenu.recentNotifications')}</div>
-                                </div>
-                                :
-                                <div></div>
-                            }
-                            {/*<Notification
-                                svg={this.getIcon('info')}
-                                svgClassName="fill-info"
-                                message={<span>Your password will expire in 14 days. <a href="#">Change it now</a></span>}
-                                dateTime="20/02/2017"/>
-                            <Notification
-                                svg={this.getIcon('warning')}
-                                svgClassName="fill-error"
-                                message={<span>Automatic currnency rate update failed. <a href="#">Try manual update</a></span>}
-                                dateTime="20/02/2017"/>*/}
-                            {/*<Notification
-                                svg={this.getIcon('check')}
-                                svgClassName="fill-success"
-                                message={<span>Full report for Neon Lights Oy you requester is ready. <a href="#">See full results</a></span>}
-                                dateTime="20/02/2017"/>*/}
-                            {/*<div className="oc-notifications__more-container">
-                                <a href="#" className="oc-notifications__more">
-                                    View more
-                                </a>
-                            </div>*/}
                         </Notifications>
                     </MenuIcon>
                 ), (
