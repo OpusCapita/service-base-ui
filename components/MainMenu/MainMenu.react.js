@@ -249,7 +249,7 @@ class MainMenu extends ConditionalRenderComponent
                             <div className="oc-notifications__header">{i18n.getMessage('MainMenu.newNotifications')}</div>
                             {
                                 newNotifications && newNotifications.length ?
-                                newNotifications.map(item => (<Notification key={item.id} data-key={item.id} link={item.link} onClick={this.notificationClicked.bind(this,item.id)} svg={this.getIcon('info')} svgClassName="fill-info" message={item.title} description={item.description} dateTime={i18n.formatDateTime(item.changedOn)}/>))
+                                newNotifications.map(item => (<Notification key={item.id} data-key={item.id} onClick={this.notificationClicked.bind(this,item.id)} svg={this.getIcon('info')} svgClassName="fill-info" message={item.title} dateTime={i18n.formatDateTime(item.changedOn)}/>))
                                 :
                                 <div className="oc-notification">
                                     <div className="oc-notification__text-contaniner">
