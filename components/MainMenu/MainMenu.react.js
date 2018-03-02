@@ -25,6 +25,7 @@ class MainMenu extends ConditionalRenderComponent
 
         this.state = {
             newNotifications : [ ],
+            notificationCount: 0,
             activeMenuItem : 0
         }
 
@@ -46,17 +47,18 @@ class MainMenu extends ConditionalRenderComponent
         this.searchTimer = new ResetTimer();
 
         this.notificationApi = new NotificationApi();
+        this.loadNotifications();
     }
 
 
-    async loadNotifications(){
-        var newNotifications = await this.notificationApi.getNotifications(4);
-        this.setState({newNotifications});
+    loadNotifications(){
+        return Promise.all([this.notificationApi.getNotificationCount(),this.notificationApi.getNotifications(5)])
+            .then(values=>this.setState({newNotifications : values[1],notificationCount: values[0]}));
     }
 
-    async itemClicked(args,sender){
-        await this.notificationApi.acknowledge(args);
-        await this.load(this.state.previousToken);
+    notificationClicked(args,sender){
+        return this.notificationApi.acknowledge(args)
+            .then(()=>this.loadNotifications());
     }
 
 
@@ -191,7 +193,7 @@ class MainMenu extends ConditionalRenderComponent
     render()
     {
         const { i18n, userData, router } = this.context;
-        const { activeMenuItem, newNotifications } = this.state;
+        const { activeMenuItem, newNotifications,notificationCount } = this.state;
 
         const applicationItems = [{
             label : 'Business Network',
@@ -239,15 +241,15 @@ class MainMenu extends ConditionalRenderComponent
                 ), (
                     <MenuIcon
                         onClick={() => console.log('click!')}
-                        svg={newNotifications && newNotifications.length ?this.getIcon('notifications_active'):this.getIcon('notifications')}
-                        supTitle={newNotifications.length}
+                        svg={notificationCount > 0 ?this.getIcon('notifications_active'):this.getIcon('notifications')}
+                        supTitle={notificationCount}
                         title={i18n.getMessage('MainMenu.notifications')}
                         hideDropdownArrow={true}>
                         <Notifications>
                             <div className="oc-notifications__header">{i18n.getMessage('MainMenu.newNotifications')}</div>
                             {
                                 newNotifications && newNotifications.length ?
-                                notifications.map(item => (<Notification key={item.id} data-key={item.id} onClick={this.notificationClicked.bind(this,item.id)} svg={this.getIcon('info')} svgClassName="fill-info" message={item.description} dateTime={item.changedOn}/>))
+                                newNotifications.map(item => (<Notification key={item.id} data-key={item.id} onClick={this.notificationClicked.bind(this,item.id)} svg={this.getIcon('info')} svgClassName="fill-info" message={item.description} dateTime={item.changedOn}/>))
                                 :
                                 <div className="oc-notification">
                                     <div className="oc-notification__text-contaniner">
