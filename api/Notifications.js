@@ -2,19 +2,15 @@
 const {ApiBase} = require('./ApiBase');
 
 
-class NotificationApi extends ApiBase {
+class Notifications extends ApiBase {
     constructor() {
         super();
     }
 
     getNotifications(count) {
-        return this.ajax.get('/notification/api/deliveries')
-            .then(res => {
-                if(res && res.body){
-                    return count?res.body.slice(0,count):res.body;
-                }
-                return [];
-            })
+        var url = count?'/notification/api/deliveries?limit='+count:'/notification/api/deliveries';
+        return this.ajax.get(url)
+            .then(res => res && res.body)
             .catch(err => this.getErrorFromResponse(err));
     }
 
@@ -31,4 +27,4 @@ class NotificationApi extends ApiBase {
     }
 }
 
-export default NotificationApi;
+export default Notifications;

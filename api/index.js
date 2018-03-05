@@ -1,6 +1,6 @@
 import Auth from './Auth';
 import Users from './Users';
-import NotificationApi from './Notification';
+import Notifications from './Notifications';
 
-export { Auth, Users,NotificationApi };
-export default { Auth, Users,NotificationApi };
+export { Auth, Users,Notifications };
+export default { Auth, Users,Notifications };

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ConditionalRenderComponent from '../ConditionalRenderComponent.react';
 import { ResetTimer } from '../../system';
-import { Menu, MenuIcon, MenuDropdownGrid, Notifications, Notification, MenuAccount, MenuSelect } from '@opuscapita/react-navigation';
+import { Menu, MenuIcon, MenuDropdownGrid, Notifications as NotificationsUI , Notification, MenuAccount, MenuSelect } from '@opuscapita/react-navigation';
 import translations from './i18n';
 import navItems from './data/navItems';
-import {NotificationApi} from '../../api';
+import {Notifications} from '../../api';
 
 class MainMenu extends ConditionalRenderComponent
 {
@@ -46,19 +46,22 @@ class MainMenu extends ConditionalRenderComponent
         this.logoImage = 'data:image/svg+xml,' + encodeURIComponent(require('!!raw-loader!./img/oc-logo-white.svg'));
         this.searchTimer = new ResetTimer();
 
-        this.notificationApi = new NotificationApi();
+        this.notifications = new Notifications();
         this.loadNotifications();
     }
 
 
     loadNotifications(){
-        return Promise.all([this.notificationApi.getNotificationCount(),this.notificationApi.getNotifications(5)])
-            .then(values=>this.setState({newNotifications : values[1],notificationCount: values[0]}));
+        return Promise.all([
+            this.Notifications.getNotificationCount(),
+            this.Notifications.getNotifications(5)
+        ])
+        .then(values => this.setState({newNotifications : values[1], notificationCount : values[0]}));
     }
 
     notificationClicked(args,sender){
-        return this.notificationApi.acknowledge(args)
-            .then(()=>this.loadNotifications());
+        return this.Notifications.acknowledge(args)
+            .then(() => this.loadNotifications());
     }
 
 
@@ -245,7 +248,7 @@ class MainMenu extends ConditionalRenderComponent
                         supTitle={notificationCount}
                         title={i18n.getMessage('MainMenu.notifications')}
                         hideDropdownArrow={true}>
-                        <Notifications>
+                        <NotificationsUI>
                             <div className="oc-notifications__header">{i18n.getMessage('MainMenu.newNotifications')}</div>
                             {
                                 newNotifications && newNotifications.length ?
@@ -259,7 +262,7 @@ class MainMenu extends ConditionalRenderComponent
                                     </div>
                                 </div>
                             }
-                        </Notifications>
+                        </NotificationsUI>
                     </MenuIcon>
                 ), (
                     <MenuIcon label={userData.firstname}>
