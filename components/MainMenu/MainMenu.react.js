@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ConditionalRenderComponent from '../ConditionalRenderComponent.react';
 import { ResetTimer } from '../../system';
-import { Menu, MenuIcon, MenuDropdownGrid, Notifications, Notification, MenuAccount, MenuSelect } from '@opuscapita/react-navigation';
+import { Menu, MenuIcon, MenuDropdownGrid, Notifications as NotificationsUI , Notification, MenuAccount, MenuSelect } from '@opuscapita/react-navigation';
 import translations from './i18n';
 import navItems from './data/navItems';
+import {Notifications} from '../../api';
 
 class MainMenu extends ConditionalRenderComponent
 {
@@ -24,7 +25,7 @@ class MainMenu extends ConditionalRenderComponent
 
         this.state = {
             newNotifications : [ ],
-            recentNotifications : [ ],
+            notificationCount: 0,
             activeMenuItem : 0
         }
 
@@ -44,7 +45,25 @@ class MainMenu extends ConditionalRenderComponent
 
         this.logoImage = 'data:image/svg+xml,' + encodeURIComponent(require('!!raw-loader!./img/oc-logo-white.svg'));
         this.searchTimer = new ResetTimer();
+
+        this.notifications = new Notifications();
+        this.loadNotifications();
     }
+
+
+    loadNotifications(){
+        return Promise.all([
+            this.notifications.getNotificationCount(),
+            this.notifications.getNotifications(5)
+        ])
+        .then(values => this.setState({newNotifications : values[1], notificationCount : values[0]}));
+    }
+
+    notificationClicked(args,sender){
+        return this.notifications.acknowledge(args)
+            .then(() => this.loadNotifications());
+    }
+
 
     componentDidMount()
     {
@@ -177,7 +196,7 @@ class MainMenu extends ConditionalRenderComponent
     render()
     {
         const { i18n, userData, router } = this.context;
-        const { activeMenuItem, newNotifications, recentNotifications } = this.state;
+        const { activeMenuItem, newNotifications,notificationCount } = this.state;
 
         const applicationItems = [{
             label : 'Business Network',
@@ -225,19 +244,15 @@ class MainMenu extends ConditionalRenderComponent
                 ), (
                     <MenuIcon
                         onClick={() => console.log('click!')}
-                        svg={this.getIcon('notifications')}
-                        supTitle={newNotifications.length}
+                        svg={notificationCount > 0 ?this.getIcon('notifications_active'):this.getIcon('notifications')}
+                        supTitle={notificationCount}
                         title={i18n.getMessage('MainMenu.notifications')}
                         hideDropdownArrow={true}>
-                        <Notifications>
+                        <NotificationsUI>
                             <div className="oc-notifications__header">{i18n.getMessage('MainMenu.newNotifications')}</div>
                             {
                                 newNotifications && newNotifications.length ?
-                                <Notification
-                                    svg={this.getIcon('info')}
-                                    svgClassName="fill-info"
-                                    message={<span>Your password will expire in 14 days. <a href="#">Change it now</a></span>}
-                                    dateTime="20/02/2017"/>
+                                newNotifications.map(item => (<Notification key={item.id} data-key={item.id} onClick={this.notificationClicked.bind(this,item.id)} svg={this.getIcon('info')} svgClassName="fill-info" message={item.title} dateTime={i18n.formatDateTime(item.changedOn)}/>))
                                 :
                                 <div className="oc-notification">
                                     <div className="oc-notification__text-contaniner">
@@ -247,36 +262,7 @@ class MainMenu extends ConditionalRenderComponent
                                     </div>
                                 </div>
                             }
-                            {
-                                recentNotifications && recentNotifications.length ?
-                                <div>
-                                    <hr className="oc-notifications__divider" />
-                                    <div className="oc-notifications__header">{i18n.getMessage('MainMenu.recentNotifications')}</div>
-                                </div>
-                                :
-                                <div></div>
-                            }
-                            {/*<Notification
-                                svg={this.getIcon('info')}
-                                svgClassName="fill-info"
-                                message={<span>Your password will expire in 14 days. <a href="#">Change it now</a></span>}
-                                dateTime="20/02/2017"/>
-                            <Notification
-                                svg={this.getIcon('warning')}
-                                svgClassName="fill-error"
-                                message={<span>Automatic currnency rate update failed. <a href="#">Try manual update</a></span>}
-                                dateTime="20/02/2017"/>*/}
-                            {/*<Notification
-                                svg={this.getIcon('check')}
-                                svgClassName="fill-success"
-                                message={<span>Full report for Neon Lights Oy you requester is ready. <a href="#">See full results</a></span>}
-                                dateTime="20/02/2017"/>*/}
-                            {/*<div className="oc-notifications__more-container">
-                                <a href="#" className="oc-notifications__more">
-                                    View more
-                                </a>
-                            </div>*/}
-                        </Notifications>
+                        </NotificationsUI>
                     </MenuIcon>
                 ), (
                     <MenuIcon label={userData.firstname}>

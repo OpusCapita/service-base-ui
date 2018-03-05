@@ -1,5 +1,6 @@
 import Auth from './Auth';
 import Users from './Users';
+import Notifications from './Notifications';
 
-export { Auth, Users };
-export default { Auth, Users };
+export { Auth, Users,Notifications };
+export default { Auth, Users,Notifications };
