@@ -53,14 +53,14 @@ class MainMenu extends ConditionalRenderComponent
 
     loadNotifications(){
         return Promise.all([
-            this.Notifications.getNotificationCount(),
-            this.Notifications.getNotifications(5)
+            this.notifications.getNotificationCount(),
+            this.notifications.getNotifications(5)
         ])
         .then(values => this.setState({newNotifications : values[1], notificationCount : values[0]}));
     }
 
     notificationClicked(args,sender){
-        return this.Notifications.acknowledge(args)
+        return this.notifications.acknowledge(args)
             .then(() => this.loadNotifications());
     }
 
