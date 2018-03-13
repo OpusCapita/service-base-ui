@@ -284,7 +284,7 @@ class MainMenu extends ConditionalRenderComponent
                         firstName={userData.firstname}
                         lastName={userData.lastname}
                         userName={userData.id}
-                        avatarSrc="./static/avatar.jpg"
+                        avatarSrc={userData.profileImage || './static/avatar.jpg'}
                         actions={[{
                             label : i18n.getMessage('MainMenu.profile'),
                             onClick : () => this.showProfile()

@@ -52,6 +52,11 @@
     margin-top: 13px;
 }
 
+#menu-placeholder {
+    height: 74px;
+    width: 100%;
+ }
+
 #main-content {
     padding: 20px 0;
 }
