@@ -186,6 +186,10 @@
                 "target": "_blank"
             },
             {
+                "label": "Redis",
+                "link": "/bnp/redis"
+            },
+            {
                 "label": "Users",
                 "link": "/bnp/users"
             },
@@ -220,6 +224,10 @@
                 "label": "Consul",
                 "link": "/consul",
                 "target": "_blank"
+            },
+            {
+                "label": "Redis",
+                "link": "/bnp/redis"
             },
             {
                 "label": "Benutzer",
