@@ -57,7 +57,7 @@ services:
     ports:
      - '3008:3008'
     command: 'npm run dev'
-    
+
   kong:
     image: opuscapita/kong:dev
     environment:
@@ -203,8 +203,3 @@ services:
     labels:
       SERVICE_IGNORE: 'true'  # Do not add any of Consul's services to Consul's service discovery registry.
     command: [agent, '-server', '-ui', '-bootstrap', '-client=0.0.0.0']
-
-  networktest:
-    image: opuscapita/networktest:dev
-    depends_on:
-      - main

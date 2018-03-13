@@ -1,0 +1,109 @@
+.oc-menu {
+  display: flex;
+  background-color: #fff;
+  height: 70px;
+  position: relative;
+  z-index: 999;
+  margin-bottom: 20px;
+  transition: all 180ms ease-in;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #000;
+    opacity: 0.22;
+  }
+}
+
+.oc-menu--no-margin,
+.oc-menu--at-top {
+  margin-bottom: 0;
+}
+
+.oc-menu--at-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: all 180ms ease-out;
+}
+
+.oc-menu--minimized {
+  height: 40px;
+  transition: all 180ms ease-out;
+}
+
+.oc-menu--at-top.oc-menu--minimized {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.24);
+}
+
+.oc-menu__left-col {
+  display: inline-flex;
+  align-items: center;
+}
+
+.oc-menu__right-col {
+  justify-content: flex-end;
+  display: flex;
+  margin-left: auto;
+}
+
+.oc-menu__search-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+.oc-menu__navigation-bar {
+  z-index: 1;
+}
+
+.oc-menu__middle-col {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+  position: relative;
+  justify-content: flex-end;
+}
+
+.oc-menu__middle-col-top-row,
+.oc-menu__middle-col-bottom-row {
+  height: 50%;
+}
+
+.oc-menu__middle-col-top-row {
+  display: flex;
+  align-items: center;
+}
+
+.oc-menu__middle-col-bottom-row {
+  display: flex;
+  align-items: flex-end;
+}
+
+.oc-menu__app-name {
+  display: inline-flex;
+  font-weight: bold;
+  font-size: 18px;
+  align-items: center;
+  white-space: nowrap;
+  margin: 0;
+  border: none;
+  padding: 10px 0 10px 10px;
+}
+
+.oc-menu__app-name--minimized {
+  display: none;
+}
+
+.oc-menu__icons-bar-container {
+  margin-left: auto;
+  padding: 4px 24px;
+  padding-right: 8px;
+  display: inline-flex;
+  align-items: flex-start;
+  flex: 1 0 auto;
+}

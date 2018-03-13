@@ -28,8 +28,8 @@ module.exports = {
                 loader: 'json-loader'
             },
             {
-                test: /\.css$/,
-                loader: 'style-loader!css-loader'
+                test: /\.(css|less)$/,
+                loader: 'style-loader!css-loader!less-loader'
             },
             {
                 test: /\.(png|jpg|svg|eot|svg|ttf|woff|woff2)$/,
@@ -43,7 +43,7 @@ module.exports = {
                     compact: true,
                     babelrc: false,
                     presets: [
-                        ['env', { 'targets': { 'node': 8, 'uglify': true }, 'modules': false }],
+                        ['env', { 'targets': { 'node': 8, 'uglify': false }, 'modules': false }],
                         'stage-0',
                         'react'
                     ]
