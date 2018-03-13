@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ConditionalRenderComponent from '../ConditionalRenderComponent.react';
 import { ResetTimer } from '../../system';
-import { Menu, MenuIcon, MenuDropdownGrid, Notifications, Notification, MenuAccount, MenuSelect } from '@opuscapita/react-navigation';
+import { Menu, MenuIcon, MenuDropdownGrid, Notifications, Notification, MenuAccount, MenuSelect } from './Menu';
 import translations from './i18n';
 import navItems from './data/navItems';
 

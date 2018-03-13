@@ -18,7 +18,7 @@
 #system-progress-bar {
     height: 4px;
     position: fixed;
-    top: 86px;
+    top: 70px;
     width: 100%;
 }
 
@@ -50,12 +50,6 @@
     font-size: 75px;
     color: #e70;
     margin-top: 13px;
-}
-
-#menu-placeholder {
-    height: 86px;
-    width: 100%;
-    border: solid 1px red;
 }
 
 #main-content {

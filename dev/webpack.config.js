@@ -28,8 +28,21 @@ module.exports = {
                 loader: 'json-loader'
             },
             {
-                test: /\.(css|less)$/,
-                loader: 'style-loader!css-loader!less-loader'
+                test: /\.less$/,
+                use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' },
+                    { loader: 'postcss-loader', options : { plugins: [ require('autoprefixer') ] } },
+                    { loader: 'less-loader' }
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader' },
+                    { loader: 'postcss-loader', options : { plugins: [ require('autoprefixer') ] } }
+                ]
             },
             {
                 test: /\.(png|jpg|svg|eot|svg|ttf|woff|woff2)$/,
@@ -43,7 +56,7 @@ module.exports = {
                     compact: true,
                     babelrc: false,
                     presets: [
-                        ['env', { 'targets': { 'node': 8, 'uglify': false }, 'modules': false }],
+                        ['env', { 'targets': { 'node': 8, 'uglify': true }, 'modules': false }],
                         'stage-0',
                         'react'
                     ]

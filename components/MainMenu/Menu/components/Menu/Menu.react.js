@@ -147,7 +147,7 @@ class Menu extends Component {
         `}
       >
         <div
-          className="oc-menu__left-col"
+          className="oc-menu__logo-container"
           ref={ref => (this.leftCol = ref)}
         >
           <MenuLogo

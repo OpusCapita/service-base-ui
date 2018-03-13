@@ -12,4 +12,5 @@ import NavigationBar from './components/NavigationBar';
 import Notification from './components/Notification';
 import Notifications from './components/Notifications';
 
+export { Menu, MenuAccount, MenuAccountIcon, MenuDropdownGrid, MenuDropdownList, MenuIcon, MenuIconsBar, MenuLogo, MenuSearch, MenuSelect, NavigationBar, Notification, Notifications };
 export default { Menu, MenuAccount, MenuAccountIcon, MenuDropdownGrid, MenuDropdownList, MenuIcon, MenuIconsBar, MenuLogo, MenuSearch, MenuSelect, NavigationBar, Notification, Notifications };

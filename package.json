@@ -20,7 +20,6 @@
     },
     "dependencies": {
         "@opuscapita/i18n": "^1.1.0",
-        "@opuscapita/react-navigation": "^0.0.36",
         "deep-equal": "^1.0.1",
         "extend": "^3.0.1",
         "history": "^3.3.0",
@@ -34,6 +33,9 @@
         "superagent": "^3.6.3"
     },
     "devDependencies": {
+        "@opuscapita/react-svg": "^4.0.0",
+        "@opuscapita/svg-icons": "^1.1.2",
+        "@opuscapita/react-buttons": "^4.0.2",
         "babel-core": "^6.26.0",
         "babel-loader": "^7.1.2",
         "babel-polyfill": "^6.26.0",
@@ -50,6 +52,7 @@
         "less-loader": "^4.1.0",
         "ocbesbn-db-init": "^1.1.11",
         "ocbesbn-web-init": "^2.2.22",
+        "postcss-loader": "^2.1.1",
         "raw-loader": "^0.5.1",
         "style-loader": "^0.19.0",
         "url-loader": "^0.6.2",

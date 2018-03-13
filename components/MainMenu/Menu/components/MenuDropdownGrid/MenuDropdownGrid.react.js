@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 import Types from 'prop-types';
 import './MenuDropdownGrid.less';
 import { SVG } from '@opuscapita/react-svg';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import 'react-perfect-scrollbar/dist/css/styles.css';
+//import PerfectScrollbar from 'react-perfect-scrollbar';
+//import 'react-perfect-scrollbar/dist/css/styles.css';
 
 const propTypes = {
   activeItem: Types.number,
@@ -72,11 +72,11 @@ class MenuDropdownGrid extends Component {
       <div
         className="oc-menu-dropdown-grid"
       >
-        <PerfectScrollbar>
+        {/*<PerfectScrollbar>*/}
           <div className="oc-menu-dropdown-grid__items">
             {itemsElement}
           </div>
-        </PerfectScrollbar>
+        {/*</PerfectScrollbar>*/}
       </div>
     );
   }

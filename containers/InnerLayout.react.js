@@ -11,7 +11,6 @@ class InnerLayout extends ContextComponent
                     this.context.getLayoutSize() === 'full-screen' ? null :
                     <div>
                         <MainMenu onLanguageChange={locale => this.context.setLocale(locale)} />
-                        <div id="menu-placeholder"></div>
                     </div>
                 }
                 <div id="main-content">
