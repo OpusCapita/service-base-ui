@@ -1,39 +1,51 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Item } from './Item';
+import translations from './i18n';
 import './Notifications.less';
 
-export default
-class Notifications extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { };
-  }
+class Notifications extends Component
+{
+    static propTypes = {
+        items : PropTypes.arrayOf(PropTypes.shape({
+            icon : PropTypes.string,
+            label : PropTypes.node,
+            date : PropTypes.string,
+            type : PropTypes.string
+        }))
+    }
 
-  handleWheel = (e) => {
-    const containerRect = this.containerRef.getBoundingClientRect();
-    console.log(this.containerRef.scrollTop, this.containerRef.scrollHeight, containerRect.height);
-    // if(
-    //   (this.containerRef.scrollTop === (this.containerRef.scrollHeight - containerRect.height) && e.deltaY < 0) ||
-    //   (this.containerRef.scrollTop === 0 && e.deltaY > 0)
-    // ) {
-    //   e.preventDefault();
-    // }
-  }
+    static contextTypes = {
+        i18n : PropTypes.object.isRequired
+    }
 
-  render() {
-    const {
-      children
-    } = this.props;
+    constructor(props, context)
+    {
+        super(props);
 
-    return (
-      <div className="oc-notifications">
-        <div
-          ref={ref => (this.containerRef = ref)}
-          className="oc-notifications__items-container"
-          onWheel={this.handleWheel}
-        >
-          {children}
-        </div>
-      </div>
-    );
-  }
+        context.i18n.register('Menu.Notifications', translations);
+    }
+
+    render()
+    {
+        const { items, children } = this.props;
+        const { i18n } = this.context;
+
+        return(
+            <div className="oc-notifications">
+                <div className="header">{i18n.getMessage('Menu.Notifications.newNotifications')}</div>
+                <div className="items-container">
+                    {
+                        items && items.length ?
+                            items.map((item, i) => <Item key={i} {...item} />)
+                        : <Item label={i18n.getMessage('Menu.Notifications.noNewNotifications')} />
+                    }
+                </div>
+
+                {children}
+            </div>
+        );
+    }
 }
+
+export default Notifications;
