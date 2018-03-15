@@ -1,60 +1,49 @@
-/* eslint-disable react/jsx-pascal-case */
 import React, { Component } from 'react';
-import Types from 'prop-types';
-import './Notification.less';
+import PropTypes from 'prop-types';
 import { SVG } from '@opuscapita/react-svg';
 
-const propTypes = {
-  svg: Types.string,
-  svgClassName: Types.string,
-  message: Types.node,
-  dateTime: Types.string,
-  className: Types.string
-};
-const defaultProps = {
-  svg: '',
-  svgClassName: '',
-  message: '',
-  dateTime: '',
-  className: ''
-};
+import './Notification.less';
 
-export default
-class Notification extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { };
-  }
+class Notification extends Component
+{
+    static propPropTypes = {
+        svg: PropTypes.string,
+        svgClassName: PropTypes.string,
+        message: PropTypes.node,
+        dateTime: PropTypes.string,
+        className: PropTypes.string
+    }
 
-  render() {
-    const {
-      svg,
-      svgClassName,
-      message,
-      dateTime,
-      className,
-      ...restProps
-    } = this.props;
+    static defaultProps = {
+        svg: '',
+        svgClassName: '',
+        message: '',
+        dateTime: '',
+        className: ''
+    }
 
-    return (
-      <div className={`oc-notification ${className}`} { ...restProps }>
-        <div className={`oc-notification__icon`}>
-          <SVG svg={svg} className={svgClassName} />
-        </div>
+    render()
+    {
+        const { svg, svgClassName, message, dateTime, className, ...restProps } = this.props;
 
-        <div className="oc-notification__text-contaniner">
-          <div className={`oc-notification__message`}>
-            {message}
-          </div>
+        return(
+            <div className={`oc-notification ${className}`} { ...restProps }>
+                <div className={`icon`}>
+                    <SVG svg={svg} className={svgClassName} />
+                </div>
 
-          <div className={`oc-notification__date-time`}>
-            {dateTime}
-          </div>
-        </div>
-      </div>
-    );
-  }
+                <div className="text-contaniner">
+                    <div className={`message`}>
+                        {message}
+                    </div>
+
+                    <div className={`date-time`}>
+                        {dateTime}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 }
 
-Notification.propTypes = propTypes;
-Notification.defaultProps = defaultProps;
+export default Notification;

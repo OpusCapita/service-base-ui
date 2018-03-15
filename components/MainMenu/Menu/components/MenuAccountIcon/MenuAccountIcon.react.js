@@ -1,43 +1,33 @@
 import React, { Component } from 'react';
-import Types from 'prop-types';
+import PropTypes from 'prop-types';
 import './MenuAccountIcon.less';
 
-const propTypes = {
-  initials: Types.string,
-  avatarSrc: Types.string,
-  onClick: Types.func,
-  style: Types.object
-};
-const defaultProps = {
-  initials: '',
-  avatarSrc: '',
-  onClick: () => {},
-  style: Types.object
-};
+class MenuAccountIcon extends Component
+{
+    static propPropTypes = {
+        initials: PropTypes.string,
+        avatarSrc: PropTypes.string,
+        onClick: PropTypes.func,
+        style: PropTypes.object
+    }
 
-export default
-class MenuAccountIcon extends Component {
-  render() {
-    const {
-      initials,
-      avatarSrc,
-      onClick,
-      style
-    } = this.props;
+    static defaultProps = {
+        initials: '',
+        avatarSrc: '',
+        onClick: () => { },
+        style: PropTypes.object
+    }
 
-    const initialsElement = avatarSrc ? null : initials;
+    render()
+    {
+        const { initials, avatarSrc, onClick, style } = this.props;
 
-    return (
-      <div
-        className="oc-menu-account-icon"
-        onClick={onClick}
-        style={{ ...style, backgroundImage: `url(${avatarSrc})` }}
-      >
-        {initialsElement}
-      </div>
-    );
-  }
+        return(
+            <div className="oc-menu-account-icon" onClick={onClick} style={{ ...style, backgroundImage: `url(${avatarSrc})` }}>
+                {avatarSrc ? null : initials}
+            </div>
+        );
+    }
 }
 
-MenuAccountIcon.propTypes = propTypes;
-MenuAccountIcon.defaultProps = defaultProps;
+export default MenuAccountIcon;

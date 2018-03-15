@@ -1,71 +1,43 @@
 import React, { Component } from 'react';
-import Types from 'prop-types';
+import PropTypes from 'prop-types';
 import './MenuLogo.less';
 
-const propTypes = {
-  logoSrc: Types.string,
-  logoHref: Types.string,
-  logoTitle: Types.string,
-  labelText: Types.string,
-  labelLinkText: Types.string,
-  labelLinkHref: Types.string,
-  showLabel: Types.bool
-};
-const defaultProps = {
-  logoSrc: '',
-  logoTitle: '',
-  logoHref: '#',
-  labelText: '',
-  labelLinkText: '',
-  labelLinkHref: '#',
-  showLabel: true
-};
+class MenuLogo extends Component
+{
+    static propPropTypes = {
+        logoSrc: PropTypes.string,
+        logoHref: PropTypes.string,
+        logoTitle: PropTypes.string,
+        labelText: PropTypes.string,
+        labelLinkText: PropTypes.string,
+        labelLinkHref: PropTypes.string,
+        showLabel: PropTypes.bool
+    }
 
-export default
-class MenuLogo extends Component {
-  render() {
-    const {
-      logoSrc,
-      logoHref,
-      logoTitle,
-      labelText,
-      labelLinkText,
-      labelLinkHref,
-      showLabel
-    } = this.props;
+    static defaultProps = {
+        logoSrc: '',
+        logoTitle: '',
+        logoHref: '#',
+        labelText: '',
+        labelLinkText: '',
+        labelLinkHref: '#',
+        showLabel: true
+    }
 
-    return (
-      <div className="oc-menu-logo" data-test="oc-menu-logo">
-        <a
-          className="oc-menu-logo__link"
-          href={logoHref}
-        >
-          <img
-            className="oc-menu-logo__image"
-            title={logoTitle}
-            src={logoSrc}
-          />
-        </a>
-        <div
-          className={`
-            oc-menu-logo__label
-            ${showLabel ? '' : 'oc-menu-logo__label--hidden' }
-          `}
-        >
-          <span className="oc-menu-logo__label-text">
-            {labelText}
-          </span>
-          <a
-            className="oc-menu-logo__label-link"
-            href={labelLinkHref}
-          >
-            {labelLinkText}
-          </a>
-        </div>
-      </div>
-    );
-  }
+    render()
+    {
+        const { logoSrc, logoHref, logoTitle, labelText, labelLinkText, labelLinkHref, showLabel } = this.props;
+
+        return (
+            <div className="oc-menu-logo" data-test="oc-menu-logo">
+                <a className="link" href={logoHref}><img className="image" title={logoTitle} src={logoSrc} /></a>
+                <div className={`label ${showLabel ? '' : 'label--hidden' }`}>
+                    <span className="label-text">{labelText}</span>
+                    <a className="label-link" href={labelLinkHref}>{labelLinkText}</a>
+                </div>
+            </div>
+        );
+    }
 }
 
-MenuLogo.propTypes = propTypes;
-MenuLogo.defaultProps = defaultProps;
+export default MenuLogo;

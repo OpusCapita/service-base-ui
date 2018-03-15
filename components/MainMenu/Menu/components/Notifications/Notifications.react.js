@@ -1,39 +1,22 @@
 import React, { Component } from 'react';
 import './Notifications.less';
 
-export default
-class Notifications extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { };
-  }
+class Notifications extends Component
+{
+    render()
+    {
+        const { children } = this.props;
 
-  handleWheel = (e) => {
-    const containerRect = this.containerRef.getBoundingClientRect();
-    console.log(this.containerRef.scrollTop, this.containerRef.scrollHeight, containerRect.height);
-    // if(
-    //   (this.containerRef.scrollTop === (this.containerRef.scrollHeight - containerRect.height) && e.deltaY < 0) ||
-    //   (this.containerRef.scrollTop === 0 && e.deltaY > 0)
-    // ) {
-    //   e.preventDefault();
-    // }
-  }
-
-  render() {
-    const {
-      children
-    } = this.props;
-
-    return (
-      <div className="oc-notifications">
-        <div
-          ref={ref => (this.containerRef = ref)}
-          className="oc-notifications__items-container"
-          onWheel={this.handleWheel}
-        >
-          {children}
-        </div>
-      </div>
-    );
-  }
+        return(
+            <div className="oc-notifications">
+                <div
+                    ref={ref => (this.containerRef = ref)}
+                    className="items-container">
+                    {children}
+                </div>
+            </div>
+        );
+    }
 }
+
+export default Notifications;

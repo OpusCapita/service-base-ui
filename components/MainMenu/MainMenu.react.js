@@ -203,7 +203,6 @@ class MainMenu extends ConditionalRenderComponent
                 appName="Business Network"
                 activeItem={activeMenuItem}
                 alwaysAtTop={true}
-                className="oc-menu--opuscapita-dark-theme"
                 logoSrc={this.logoImage}
                 logoTitle="OpusCapita"
                 logoHref="http://www.opuscapita.com"
@@ -230,7 +229,7 @@ class MainMenu extends ConditionalRenderComponent
                         title={i18n.getMessage('MainMenu.notifications')}
                         hideDropdownArrow={true}>
                         <Notifications>
-                            <div className="oc-notifications__header">{i18n.getMessage('MainMenu.newNotifications')}</div>
+                            <div className="header">{i18n.getMessage('MainMenu.newNotifications')}</div>
                             {
                                 newNotifications && newNotifications.length ?
                                 <Notification
@@ -250,8 +249,8 @@ class MainMenu extends ConditionalRenderComponent
                             {
                                 recentNotifications && recentNotifications.length ?
                                 <div>
-                                    <hr className="oc-notifications__divider" />
-                                    <div className="oc-notifications__header">{i18n.getMessage('MainMenu.recentNotifications')}</div>
+                                    <hr className="divider" />
+                                    <div className="header">{i18n.getMessage('MainMenu.recentNotifications')}</div>
                                 </div>
                                 :
                                 <div></div>
@@ -271,8 +270,8 @@ class MainMenu extends ConditionalRenderComponent
                                 svgClassName="fill-success"
                                 message={<span>Full report for Neon Lights Oy you requester is ready. <a href="#">See full results</a></span>}
                                 dateTime="20/02/2017"/>*/}
-                            {/*<div className="oc-notifications__more-container">
-                                <a href="#" className="oc-notifications__more">
+                            {/*<div className="more-container">
+                                <a href="#" className="more">
                                     View more
                                 </a>
                             </div>*/}
@@ -294,16 +293,16 @@ class MainMenu extends ConditionalRenderComponent
                         }]}
                         bottomElement={(
                             <div>
-                                <div className="oc-menu-account__select-item">
+                                <div className="select-item">
                                     <span><strong>{i18n.getMessage('MainMenu.support')}:</strong> +49 231 3967 350<br /><a href="mailto:customerservice.de@opuscapita.com">customerservice.de@opuscapita.com</a></span>
                                 </div>
-                                <div className="oc-menu-account__select-item">
+                                <div className="select-item">
                                     <span><strong>{i18n.getMessage('MainMenu.manual')}:</strong> <a href="#" onClick={e => this.handleManualClick(e)}>{i18n.getMessage('MainMenu.download')}</a></span>
                                 </div>
 
-                                <div className="oc-menu-account__select-item">
-                                    <span className="oc-menu-account__select-item-label">{i18n.getMessage('MainMenu.language')}</span>
-                                    <MenuSelect className="oc-menu-account__select-item-select" defaultValue={userData.languageid} onChange={e => this.handleLanguageChange(e)}>
+                                <div className="select-item">
+                                    <span className="select-item-label">{i18n.getMessage('MainMenu.language')}</span>
+                                    <MenuSelect className="select-item-select" defaultValue={userData.languageid} onChange={e => this.handleLanguageChange(e)}>
                                         <option value="en">{i18n.getMessage('MainMenu.laguage.english')}</option>
                                         <option value="de">{i18n.getMessage('MainMenu.laguage.german')}</option>
                                     </MenuSelect>
