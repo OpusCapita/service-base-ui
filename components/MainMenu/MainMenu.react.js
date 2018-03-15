@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ConditionalRenderComponent from '../ConditionalRenderComponent.react';
 import { ResetTimer } from '../../system';
-import { Menu, MenuIcon, MenuDropdownGrid, Notifications, Notification, MenuAccount, MenuSelect } from './Menu';
+import { Menu, MenuIcon, MenuDropdownGrid, Notifications, MenuAccount, MenuSelect } from './Menu';
 import translations from './i18n';
 import navItems from './data/navItems';
 
@@ -181,7 +181,7 @@ class MainMenu extends ConditionalRenderComponent
 
         const applicationItems = [{
             label : 'Business Network',
-            svg : this.getIcon('app_business_network_portal'),
+            icon : this.getIcon('app_business_network_portal'),
             onClick : () => router.push('/bnp')
         }];
         /*const applicationItems = [{
@@ -218,7 +218,7 @@ class MainMenu extends ConditionalRenderComponent
                         title={i18n.getMessage('MainMenu.applications')}
                         hideDropdownArrow={true}>
                         <MenuDropdownGrid
-                            activeItem={0}
+                            activeIndex={0}
                             items={applicationItems}/>
                     </MenuIcon>
                 ), (
@@ -229,52 +229,6 @@ class MainMenu extends ConditionalRenderComponent
                         title={i18n.getMessage('MainMenu.notifications')}
                         hideDropdownArrow={true}>
                         <Notifications>
-                            <div className="header">{i18n.getMessage('MainMenu.newNotifications')}</div>
-                            {
-                                newNotifications && newNotifications.length ?
-                                <Notification
-                                    svg={this.getIcon('info')}
-                                    svgClassName="fill-info"
-                                    message={<span>Your password will expire in 14 days. <a href="#">Change it now</a></span>}
-                                    dateTime="20/02/2017"/>
-                                :
-                                <div className="oc-notification">
-                                    <div className="oc-notification__text-contaniner">
-                                        <div className="oc-notification__message">
-                                            <span>{i18n.getMessage('MainMenu.noNewNotifications')}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            {
-                                recentNotifications && recentNotifications.length ?
-                                <div>
-                                    <hr className="divider" />
-                                    <div className="header">{i18n.getMessage('MainMenu.recentNotifications')}</div>
-                                </div>
-                                :
-                                <div></div>
-                            }
-                            {/*<Notification
-                                svg={this.getIcon('info')}
-                                svgClassName="fill-info"
-                                message={<span>Your password will expire in 14 days. <a href="#">Change it now</a></span>}
-                                dateTime="20/02/2017"/>
-                            <Notification
-                                svg={this.getIcon('warning')}
-                                svgClassName="fill-error"
-                                message={<span>Automatic currnency rate update failed. <a href="#">Try manual update</a></span>}
-                                dateTime="20/02/2017"/>*/}
-                            {/*<Notification
-                                svg={this.getIcon('check')}
-                                svgClassName="fill-success"
-                                message={<span>Full report for Neon Lights Oy you requester is ready. <a href="#">See full results</a></span>}
-                                dateTime="20/02/2017"/>*/}
-                            {/*<div className="more-container">
-                                <a href="#" className="more">
-                                    View more
-                                </a>
-                            </div>*/}
                         </Notifications>
                     </MenuIcon>
                 ), (
