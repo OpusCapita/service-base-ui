@@ -132,15 +132,46 @@ class MainMenu extends ConditionalRenderComponent
         let items = [ ];
 
         if(supplierid)
-            items = navItems['supplier'][locale];
+            items = navItems.supplier[locale];
         else if(customerid)
-            items = navItems['customer'][locale];
-        else if(roles && roles.indexOf('admin') > -1)
-            items = navItems['admin'][locale];
-        else
-            items = [ ];
+            items = navItems.customer[locale];
+
+        if(roles && roles.indexOf('admin') > -1)
+            items = this.recursiveMergeNavItems(items, navItems.admin[locale])
 
         return items;
+    }
+
+    recursiveMergeNavItems(items, overlays)
+    {
+        const results = [ ];
+
+        items.forEach(item =>
+        {
+            const overlay = overlays.find(overlay => overlay.key === item.key);
+
+            if(overlay)
+            {
+                const overlayCopy = Object.assign({ }, overlay);
+                overlayCopy.children = this.recursiveMergeNavItems(item.children || [ ], overlay.children || [ ])
+
+                results.push(overlayCopy);
+            }
+            else
+            {
+                results.push(item);
+            }
+        });
+
+        overlays.forEach(overlay =>
+        {
+            const found = items.reduce((all, item) => all || item.key === overlay.key, false);
+
+            if(!found)
+                results.push(overlay);
+        });
+
+        return results;
     }
 
     mapNavItems()
