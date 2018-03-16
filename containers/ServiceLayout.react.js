@@ -7,7 +7,7 @@ import NotificationSystem from 'react-notification-system';
 import { I18nManager } from '@opuscapita/i18n';
 import InnerLayout from './InnerLayout.react';
 import { Auth, Users } from '../api';
-import { ResetTimer } from '../system';
+import { ResetTimer, ComponentLoader } from '../system';
 import { AjaxExtender } from '../system/ui';
 import translations from './i18n';
 import systemTranslations from './i18n/system';
@@ -48,7 +48,8 @@ class ServiceLayout extends Component
         setLayoutSize : PropTypes.func.isRequired,
         getLayoutSize : PropTypes.func.isRequired,
         showLogInDialog : PropTypes.func.isRequired,
-        hideLogInDialog : PropTypes.func.isRequired
+        hideLogInDialog : PropTypes.func.isRequired,
+        loadComponent : PropTypes.func.isRequired
     };
 
     constructor(props)
@@ -78,6 +79,10 @@ class ServiceLayout extends Component
         this.authApi = new Auth();
         this.usersApi = new Users();
         this.systemSpinnerCount = 0;
+        this.componentLoader = new ComponentLoader({
+            onLoadingStarted: () => console.log('started'),
+            onLoadingFinished: () => console.log('finished')
+        });
 
         this.watchAjax();
         this.watchSession();
@@ -136,7 +141,8 @@ class ServiceLayout extends Component
             setLayoutSize : this.setLayoutSize.bind(this),
             getLayoutSize : this.getLayoutSize.bind(this),
             showLogInDialog : this.showLogInDialog.bind(this),
-            hideLogInDialog : this.hideLogInDialog.bind(this)
+            hideLogInDialog : this.hideLogInDialog.bind(this),
+            loadComponent : this.loadComponent.bind(this)
         }
     }
 
@@ -407,6 +413,11 @@ class ServiceLayout extends Component
     {
         this.logInDialog.hide();
         this.logInForm.clearForm();
+    }
+
+    loadComponent({ moduleName, registryUrl, jsFileName, inProgressComponent, onLoaded })
+    {
+        return this.componentLoader.load({ moduleName, registryUrl, jsFileName, inProgressComponent, onLoaded });
     }
 
     setApplicationReady(isReady)
