@@ -3,16 +3,30 @@ import scriptjs from 'scriptjs';
 
 class ComponentLoader {
 
+    /**
+     * Constructor
+     * @param {function} onLoadingStarted Called when loading of script(s) started
+     * @param {function} onLoadingFinished Called once loading of script(s) finished
+     */
     constructor({ onLoadingStarted, onLoadingFinished }) {
         this.onLoadingStarted = onLoadingStarted;
         this.onLoadingFinished = onLoadingFinished;
         this.loading = new Set();
     }
 
+    /**
+     * Returns module by given module name.
+     * @param {string} moduleName Name of module being exported to window object
+     * @returns {function|null}
+     */
     getLoadedModule(moduleName) {
-        return window[moduleName] || null;
+        return (window[moduleName] && window[moduleName].default) || null;
     }
 
+    /**
+     * Updates internal state of modules being currently loaded. Calls global loading started if appropriate.
+     * @param {string} moduleName Name of module being exported to window object
+     */
     onModuleLoadingStarted(moduleName) {
         if (this.loading.size === 0) {
             this.onLoadingStarted && this.onLoadingStarted();
@@ -21,6 +35,10 @@ class ComponentLoader {
         this.loading.add(moduleName);
     }
 
+    /**
+     * Updates internal state of modules being currently loaded. Calls global loading finished if appropriate.
+     * @param {string} moduleName Name of module being exported to window object
+     */
     onModuleLoadingFinished(moduleName) {
         this.loading.delete(moduleName);
 
@@ -30,26 +48,27 @@ class ComponentLoader {
     }
 
     /**
-     *
-     * @param moduleName
-     * @param registryUrl
-     * @param jsFileName
-     * @param inProgressComponent
-     * @param onLoaded
-     * @returns {*}
+     * Loads external component.
+     * @param {string} moduleName Name of module being exported to window object
+     * @param {string} registryUrl Base URL of components registry
+     * @param {string?} jsFileName Bundle file name
+     * @param {Component?} inProgressComponent Component displayed while external is being loaded
+     * @param {function?} onLoaded Called once component was loaded
+     * @returns {function}
      */
     load({ moduleName, registryUrl, jsFileName, inProgressComponent, onLoaded }) {
         const module = this.getLoadedModule(moduleName);
 
         if (module) {
-            return this.getLoadedComponent(module);
+            onLoaded && onLoaded();
+            return module;
         }
 
         this.onModuleLoadingStarted(moduleName);
 
-
         const url = `${registryUrl}/static/components/${jsFileName || moduleName}.js`;
-        this.getLoaderComponent({
+
+        return this.getLoaderComponent({
             moduleName,
             url,
             inProgressComponent,
@@ -60,20 +79,25 @@ class ComponentLoader {
         });
     }
 
-
+    /**
+     * Returns instance of component being an external component loader.
+     * @param {string} moduleName Name of module being exported to window object
+     * @param {string} url Script URL
+     * @param {Component?} inProgressComponent Component displayed while external is being loaded
+     * @param {function?} onLoaded Called once component was loaded
+     * @returns {function}
+     */
     getLoaderComponent({ moduleName, url, inProgressComponent, onLoaded }) {
         const componentLoader = this;
 
         return class extends Component {
-            state = {
-                component: null
-            };
+            state = { component: null };
 
             componentDidMount() {
                 scriptjs(
                     url,
                     () => this.setState(
-                        { component: componentLoader.getLoadedModule(moduleName).default },
+                        { component: componentLoader.getLoadedModule(moduleName) },
                         onLoaded
                     )
                 );
@@ -85,23 +109,12 @@ class ComponentLoader {
                 if (component) {
                     return React.createElement(component, this.props);
                 } else if (inProgressComponent) {
-                    return React.createElement(inProgressComponent);
+                    return inProgressComponent;
                 } else {
                     return null;
                 }
             }
         };
-    }
-
-    getLoadedComponent(module) {
-        return class extends Component {
-            render() {
-                return React.createElement(
-                    module.default,
-                    this.props
-                );
-            }
-        }
     }
 
 }

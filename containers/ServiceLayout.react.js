@@ -80,8 +80,8 @@ class ServiceLayout extends Component
         this.usersApi = new Users();
         this.systemSpinnerCount = 0;
         this.componentLoader = new ComponentLoader({
-            onLoadingStarted: () => console.log('started'),
-            onLoadingFinished: () => console.log('finished')
+            onLoadingStarted: this.showSystemSpinner.bind(this),
+            onLoadingFinished: this.hideSystemSpinner.bind(this)
         });
 
         this.watchAjax();
