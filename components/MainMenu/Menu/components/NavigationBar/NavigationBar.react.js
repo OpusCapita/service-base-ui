@@ -1,214 +1,144 @@
-/* eslint-disable react/jsx-pascal-case */
 import React, { Component } from 'react';
-import Types from 'prop-types';
-import './NavigationBar.less';
+import PropTypes from 'prop-types';
 import { SVG } from '@opuscapita/react-svg';
+import './NavigationBar.less';
+
 const dropdownSVG = require('!!raw-loader!@opuscapita/svg-icons/lib/arrow_drop_down.svg');
 
-const propTypes = {
-  activeItem: Types.number,
-  openedItem: Types.number,
-  navigationItems: Types.arrayOf(Types.shape({
-    children: Types.node,
-    href: Types.string,
-    subItems: Types.arrayOf(Types.shape({
-      children: Types.node,
-      href: Types.string,
-      onClick: Types.func
-    }))
-  }))
-};
-const defaultProps = {
-  openedItem: null,
-  activeItem: null,
-  navigationItems: []
-};
-
-export default
-class NavigationBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      openedItem: null
+class NavigationBar extends Component
+{
+    static propPropTypes = {
+        activeItem: PropTypes.number,
+        openedItem: PropTypes.number,
+        navigationItems: PropTypes.arrayOf(PropTypes.shape({
+            children: PropTypes.node,
+            href: PropTypes.string,
+            subItems: PropTypes.arrayOf(PropTypes.shape({
+                children: PropTypes.node,
+                href: PropTypes.string,
+                onClick: PropTypes.func
+            }))
+        }))
     };
 
-    this.handleBodyClick = this.handleBodyClick.bind(this);
-    this.handleBodyKeyDown = this.handleBodyKeyDown.bind(this);
-  }
+    static defaultProps = {
+        openedItem: null,
+        activeItem: null,
+        navigationItems: []
+    };
 
-  componentDidMount() {
-    document.body.addEventListener('click', this.handleBodyClick);
-    document.body.addEventListener('keydown', this.handleBodyKeyDown);
-  }
+    state = {
+        openedItem: null
+    };
 
-  componentWillUnmount() {
-    document.body.removeEventListener('click', this.handleBodyClick);
-    document.body.removeEventListener('keydown', this.handleBodyKeyDown);
-  }
-
-  handleBodyClick(event) {
-    let clickedOutside = !this.containerRef.contains(event.target);
-
-    if (clickedOutside) {
-      this.hideTopLevelItem();
-    }
-  }
-
-  handleBodyKeyDown(event) {
-    if (event.which === 9 || event.which === 27) { // TAB or ESC key
-      this.hideTopLevelItem();
-    }
-  }
-
-  showTopLevelItem = (key) => {
-    this.setState({ openedItem: key });
-  }
-
-  hideTopLevelItem = () => {
-    this.setState({ openedItem: null });
-  }
-
-  handleTopLevelItemClick = (key) => {
-    if (this.state.openedItem === key) {
-      this.hideTopLevelItem();
-    } else {
-      this.showTopLevelItem(key);
-    }
-  }
-
-  renderClickableElement = (item, key, className) => {
-    const {
-      href,
-      children,
-      subItems, // eslint-disable-line no-unused-vars
-      onClick,
-      ...restProps
-    } = item;
-
-    let dropdownIcon = item.subItems ? (
-      <div className="oc-navigation-bar__dropdown-icon">
-        <SVG
-          svg={dropdownSVG}
-        />
-      </div>
-    ) : null;
-
-    let clickableElement = null;
-
-    if (href) {
-      clickableElement = (
-        <a
-          href={href}
-          onClick={onClick || (() => {})}
-          className={`
-            oc-navigation-bar__clickable-element
-            ${dropdownIcon ? 'oc-navigation-bar__clickable-element--with-dropdown' : ''}
-          `}
-          {...restProps}
-        >
-          {children}
-        </a>
-      );
-    } else {
-      clickableElement = (
-        <div
-          href={href}
-          onClick={onClick || (() => {})}
-          className={`
-            oc-navigation-bar__clickable-element
-            ${dropdownIcon ? 'oc-navigation-bar__clickable-element--with-dropdown' : ''}
-          `}
-        >
-          {children}
-        </div>
-      );
+    componentDidMount()
+    {
+        document.body.addEventListener('click', this.handleBodyClick.bind(this));
+        document.body.addEventListener('keydown', this.handleBodyKeyDown.bind(this));
     }
 
-    return (
-      <div
-        key={key}
-        className="oc-navigation-bar__clickable-element-container"
-      >
-        {clickableElement}
-        {dropdownIcon}
-      </div>
-    );
-  }
-
-  renderTopLevelItem = (navigationItem, key) => {
-    const clickableItem = this.renderClickableElement(navigationItem, key);
-    const isActive = this.props.activeItem === key;
-
-    let subItems = null;
-    let isOpened = this.state.openedItem === key;
-
-    if (navigationItem.subItems && isOpened) {
-      subItems = (
-        <ul
-          className="oc-navigation-bar__sub-items-container"
-        >
-          {navigationItem.subItems.map((subItem, i) => this.renderSubLevelItem(subItem, i))}
-        </ul>
-      );
+    componentWillUnmount()
+    {
+        document.body.removeEventListener('click', this.handleBodyClick.bind(this));
+        document.body.removeEventListener('keydown', this.handleBodyKeyDown.bind(this));
     }
 
-    return (
-      <li
-        key={key}
-        data-test="oc-navigation-bar__top-level-item"
-        className={`
-          oc-navigation-bar__top-level-item
-          ${isActive ? 'oc-navigation-bar__top-level-item--active' : ''}
-          ${isOpened ? 'oc-navigation-bar__top-level-item--opened' : ''}
-          ${'oc-navigation-bar__top-level-item--light-overlay'}
-        `}
-        onClick={() => this.handleTopLevelItemClick(key)}
-      >
-        <div
-          className={`
-            oc-navigation-bar__top-level-clickable-item
-            ${isActive ? 'oc-navigation-bar__top-level-clickable-item--active' : '' }`
-          }
-        >
-          {clickableItem}
-        </div>
-        {subItems}
-      </li>
-    );
-  }
+    handleBodyClick(event)
+    {
+        const clickedOutside = !this.containerRef.contains(event.target);
 
-  renderSubLevelItem = (subItem, key) => {
-    return (
-      <li
-        key={key}
-        className="oc-navigation-bar__sub-item"
-        data-test="oc-navigation-bar__sub-item"
-      >
-        {this.renderClickableElement(subItem, key)}
-      </li>
-    );
-  }
+        if(clickedOutside)
+            this.hideTopLevelItem();
+    }
 
-  render() {
-    let {
-      navigationItems
-    } = this.props;
+    handleBodyKeyDown(event)
+    {
+        // TAB or ESC key
+        if(event.which === 9 || event.which === 27)
+            this.hideTopLevelItem();
+    }
 
-    const navigationItemsElement = navigationItems.map(
-      (navigationItem, i) => this.renderTopLevelItem(navigationItem, i)
-    );
+    showTopLevelItem(key)
+    {
+        this.setState({ openedItem : key });
+    }
 
-    return (
-      <ul
-        ref={ref => (this.containerRef = ref)}
-        className="oc-navigation-bar"
-        data-test="oc-navigation-bar"
-      >
-        {navigationItemsElement}
-      </ul>
-    );
-  }
+    hideTopLevelItem()
+    {
+        this.setState({ openedItem : null });
+    }
+
+    handleTopLevelItemClick(key)
+    {
+        if(this.state.openedItem === key)
+            this.hideTopLevelItem();
+        else
+            this.showTopLevelItem(key);
+    }
+
+    renderClickableElement(item, key, className)
+    {
+        const { href, children, subItems, onClick, ...restProps } = item;
+        const dropdownIcon = item.subItems ? <div className="dropdown-icon"><SVG svg={dropdownSVG} /></div> : null;
+
+        return (
+            <div key={key} className="clickable-element-container">
+                {<a href={href || '#'} onClick={onClick || (e => href || e.preventDefault())} className={`clickable-element ${dropdownIcon ? 'clickable-element--with-dropdown' : ''}`} {...restProps}>{children}</a>}
+                {dropdownIcon}
+            </div>
+        );
+    }
+
+    renderTopLevelItem(navigationItem, key)
+    {
+        const isActive = this.props.activeItem === key;
+        const isOpened = this.state.openedItem === key;
+
+        return(
+            <li
+                key={key}
+                data-test="top-level-item"
+                className={`
+                    top-level-item
+                    ${isActive ? 'top-level-item--active' : ''}
+                    ${isOpened ? 'top-level-item--opened' : ''}
+                    ${'top-level-item--light-overlay'}
+                `}
+                onClick={() => this.handleTopLevelItemClick(key)}>
+                <div className={`top-level-clickable-item ${isActive ? 'top-level-clickable-item--active' : '' }`}>
+                    {this.renderClickableElement(navigationItem, key)}
+                </div>
+
+                {
+                    navigationItem.subItems && isOpened ?
+                        <ul className="sub-items-container">
+                            {
+                                navigationItem.subItems.map((subItem, key) =>
+                                {
+                                    return (
+                                        <li key={key} className="sub-item" data-test="sub-item">
+                                            {this.renderClickableElement(subItem, key)}
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    : null
+                }
+            </li>
+        );
+    }
+
+    render()
+    {
+        const { navigationItems } = this.props;
+
+        return(
+            <ul ref={ref => (this.containerRef = ref)} className="oc-navigation-bar" data-test="oc-navigation-bar">
+                {navigationItems.map((item, i) => this.renderTopLevelItem(item, i))}
+            </ul>
+        );
+    }
 }
 
-NavigationBar.propTypes = propTypes;
-NavigationBar.defaultProps = defaultProps;
+export default NavigationBar;

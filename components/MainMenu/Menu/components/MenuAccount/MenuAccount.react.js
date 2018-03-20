@@ -1,111 +1,92 @@
 import React, { Component } from 'react';
-import Types from 'prop-types';
-import './MenuAccount.less';
+import PropTypes from 'prop-types';
 import MenuAccountIcon from '../MenuAccountIcon';
 import { Button } from '@opuscapita/react-buttons';
+import './MenuAccount.less';
 
-const propTypes = {
-  firstName: Types.string,
-  lastName: Types.string,
-  userName: Types.string,
-  initials: Types.string,
-  avatarSrc: Types.string,
-  onAvatarClick: Types.func,
-  actions: Types.oneOf([
-    Types.arrayOf(Types.shape({
-      label: Types.string,
-      svg: Types.string,
-      onClick: Types.func
-    })),
-    Types.node
-  ]),
-  bottomElement: Types.node
-};
-const defaultProps = {
-  firstName: '',
-  lastName: '',
-  userName: '',
-  initials: '',
-  avatarSrc: '',
-  onAvatarClick: () => {},
-  actions: [],
-  bottomElement: null
-};
+class MenuAccount extends Component
+{
+    static propPropTypes = {
+        firstName: PropTypes.string,
+        lastName: PropTypes.string,
+        userName: PropTypes.string,
+        initials: PropTypes.string,
+        avatarSrc: PropTypes.string,
+        onAvatarClick: PropTypes.func,
+        actions: PropTypes.oneOf([
+        PropTypes.arrayOf(PropTypes.shape({
+                label: PropTypes.string,
+                svg: PropTypes.string,
+                onClick: PropTypes.func
+        })), PropTypes.node
+        ]),
+        bottomElement: PropTypes.node
+    };
 
-export default
-class MenuAccount extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { };
-  }
+    static defaultProps = {
+        firstName: '',
+        lastName: '',
+        userName: '',
+        initials: '',
+        avatarSrc: '',
+        onAvatarClick: () => { },
+        actions: [ ],
+        bottomElement: null
+    };
 
-  render() {
-    const {
-      firstName,
-      lastName,
-      userName,
-      initials,
-      avatarSrc,
-      onAvatarClick,
-      actions,
-      bottomElement
-    } = this.props;
+    state = { };
 
-    const actionsElement = actions.map((action, i) => {
-      const isReactNode = React.isValidElement(action);
+    render()
+    {
+        const { firstName, lastName, userName, initials, avatarSrc, onAvatarClick, actions, bottomElement } = this.props;
 
-      if (isReactNode) {
-        return action;
-      }
+        const actionElements = actions.map((action, i) =>
+        {
+            const isReactNode = React.isValidElement(action);
 
-      let { label, svg, onClick, ...restProps } = action;
+            if(isReactNode)
+                return action;
 
-      return (
-        <Button
-          key={i}
-          className="oc-menu-account__action-button"
-          label={label}
-          svg={svg}
-          onClick={e => onClick(e)}
-          contentPosition="before"
-          data-test="oc-menu-account__action-button"
-          {...restProps}
-        />
-      );
-    });
+            const { label, svg, onClick, ...restProps } = action;
 
-    const bottomRowElement = (
-      <div className="oc-menu-account__bottom-row">
-        {bottomElement}
-      </div>
-    );
+            return(
+                <Button
+                    key={i}
+                    className="action-button"
+                    label={label}
+                    svg={svg}
+                    onClick={e => onClick(e)}
+                    contentPosition="before"
+                    data-test="action-button"
+                    {...restProps} />
+            );
+        });
 
-    return (
-      <div className="oc-menu-account" data-test="oc-menu-account">
-        <div className="oc-menu-account__top-row">
-          <div className="oc-menu-account__account-icon-container">
-            <MenuAccountIcon
-              initials={initials}
-              avatarSrc={avatarSrc}
-              onClick={onAvatarClick}
-            />
-          </div>
-          <div className="oc-menu-account__name-container">
-            <div id="oc-menu-account__full-name" className="oc-menu-account__full-name">{firstName} {lastName}</div>
-            <div id="oc-menu-account__user-name" className="oc-menu-account__user-name">{userName}</div>
-          </div>
-        </div>
-
-        <div className="oc-menu-account__middle-row">
-          <div className="oc-menu-account__actions-container">
-            {actionsElement}
-          </div>
-        </div>
-        {bottomRowElement}
-      </div>
-    );
-  }
+        return(
+            <div className="oc-menu-account" data-test="oc-menu-account">
+                <div className="top-row">
+                    <div className="account-icon-container">
+                        <MenuAccountIcon
+                            initials={initials}
+                            avatarSrc={avatarSrc}
+                            onClick={onAvatarClick} />
+                    </div>
+                    <div className="name-container">
+                        <div className="full-name">{firstName} {lastName}</div>
+                        <div className="user-name">{userName}</div>
+                    </div>
+                </div>
+                <div className="middle-row">
+                    <div className="actions-container">
+                        {actionElements}
+                    </div>
+                </div>
+                <div className="bottom-row">
+                    {bottomElement}
+                </div>
+            </div>
+        );
+    }
 }
 
-MenuAccount.propTypes = propTypes;
-MenuAccount.defaultProps = defaultProps;
+export default MenuAccount;
