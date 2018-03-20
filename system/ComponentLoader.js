@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import scriptjs from 'scriptjs';
 
-const NOOP = () => {};
+const NOOP = () => { }
 
-class ComponentLoader {
-
+class ComponentLoader
+{
     /**
      * Constructor
      * @param {function} onLoadingStarted Called when loading of script(s) started
      * @param {function} onLoadingFinished Called once loading of script(s) finished
      */
-    constructor({ onLoadingStarted = NOOP, onLoadingFinished = NOOP}) {
+    constructor({ onLoadingStarted = NOOP, onLoadingFinished = NOOP })
+    {
         this.onLoadingStarted = onLoadingStarted;
         this.onLoadingFinished = onLoadingFinished;
         this.loading = new Map();
@@ -25,15 +26,18 @@ class ComponentLoader {
      * @param {function?} onLoaded Called once component was loaded
      * @returns {function}
      */
-    load({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded = NOOP }) {
+    load({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded = NOOP })
+    {
         const module = this.getLoadedComponent(moduleName);
 
-        if (module) {
+        if(module)
+        {
             onLoaded();
             return module;
         }
 
-        return this.getWrapperComponent({
+        return this.getWrapperComponent(
+        {
             url: `/${serviceName}/static/components/${jsFileName || moduleName}.js`,
             moduleName,
             placeholderComponent,
@@ -46,8 +50,9 @@ class ComponentLoader {
      * @param {string} moduleName Name of module being exported to window object
      * @returns {function|null}
      */
-    getLoadedComponent(moduleName) {
-        return (window[moduleName] && window[moduleName].default) || null;
+    getLoadedComponent(moduleName)
+    {
+        return(window[moduleName] && window[moduleName].default) || null;
     }
 
     /**
@@ -58,36 +63,44 @@ class ComponentLoader {
      * @param {function?} onLoaded Called once component was loaded
      * @returns {function}
      */
-    getWrapperComponent({ url, moduleName, placeholderComponent, onLoaded }) {
+    getWrapperComponent({ url, moduleName, placeholderComponent, onLoaded })
+    {
         const componentLoader = this;
 
-        return class extends Component {
-            state = { component: null };
+        return class extends Component
+        {
+            state = {
+                component: null
+            };
 
-            componentDidMount() {
+            componentDidMount()
+            {
                 const component = componentLoader.getLoadedComponent(moduleName);
 
-                if (component) {
+                if(component)
+                {
                     this.setState({ component }, onLoaded);
-                } else {
-                    componentLoader.fetchScript(url)
-                        .then(() => this.setState(
-                            { component: componentLoader.getLoadedComponent(moduleName) },
-                            onLoaded
-                        ));
+                }
+                else
+                {
+                    componentLoader.fetchScript(url).then(() => this.setState({
+                            component: componentLoader.getLoadedComponent(moduleName)
+                        },
+                        onLoaded
+                    ));
                 }
             }
 
-            render() {
+            render()
+            {
                 const { component } = this.state;
 
-                if (component) {
+                if(component)
                     return React.createElement(component, this.props);
-                } else if (placeholderComponent) {
+                else if(placeholderComponent)
                     return placeholderComponent;
-                } else {
+                else
                     return null;
-                }
             }
         };
     }
@@ -98,19 +111,20 @@ class ComponentLoader {
      * @param {string} url Script url
      * @returns {Promise<void>}
      */
-    fetchScript(url) {
+    fetchScript(url)
+    {
         const existing = this.loading.get(url);
 
-        if (existing) {
+        if(existing)
             return existing;
-        }
 
         const promise = new Promise(resolve => scriptjs(url, resolve));
 
         this.loading.size === 0 && this.onLoadingStarted();
         this.loading.set(url, promise);
 
-        promise.then(() => {
+        promise.then(() =>
+        {
             this.loading.delete(url);
             this.loading.size === 0 && this.onLoadingFinished();
         });
