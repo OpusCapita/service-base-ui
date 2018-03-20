@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import scriptjs from 'scriptjs';
 
+const NOOP = () => {};
+
 class ComponentLoader {
 
     /**
@@ -8,10 +10,35 @@ class ComponentLoader {
      * @param {function} onLoadingStarted Called when loading of script(s) started
      * @param {function} onLoadingFinished Called once loading of script(s) finished
      */
-    constructor({ onLoadingStarted, onLoadingFinished }) {
+    constructor({ onLoadingStarted = NOOP, onLoadingFinished = NOOP}) {
         this.onLoadingStarted = onLoadingStarted;
         this.onLoadingFinished = onLoadingFinished;
-        this.loading = new Set();
+        this.loading = new Map();
+    }
+
+    /**
+     * Loads external component.
+     * @param {string} moduleName Name of module being exported to window object
+     * @param {string} serviceName Service name which determines base URL
+     * @param {string?} jsFileName Bundle file name
+     * @param {Component?} placeholderComponent Component displayed while external is being loaded
+     * @param {function?} onLoaded Called once component was loaded
+     * @returns {function}
+     */
+    load({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded = NOOP }) {
+        const module = this.getLoadedComponent(moduleName);
+
+        if (module) {
+            onLoaded();
+            return module;
+        }
+
+        return this.getLoaderComponent({
+            url: `/${serviceName}/static/components/${jsFileName || moduleName}.js`,
+            moduleName,
+            placeholderComponent,
+            onLoaded
+        });
     }
 
     /**
@@ -19,88 +46,36 @@ class ComponentLoader {
      * @param {string} moduleName Name of module being exported to window object
      * @returns {function|null}
      */
-    getLoadedModule(moduleName) {
+    getLoadedComponent(moduleName) {
         return (window[moduleName] && window[moduleName].default) || null;
     }
 
     /**
-     * Updates internal state of modules being currently loaded. Calls global loading started if appropriate.
-     * @param {string} moduleName Name of module being exported to window object
-     */
-    onModuleLoadingStarted(moduleName) {
-        if (this.loading.size === 0) {
-            this.onLoadingStarted && this.onLoadingStarted();
-        }
-
-        this.loading.add(moduleName);
-    }
-
-    /**
-     * Updates internal state of modules being currently loaded. Calls global loading finished if appropriate.
-     * @param {string} moduleName Name of module being exported to window object
-     */
-    onModuleLoadingFinished(moduleName) {
-        this.loading.delete(moduleName);
-
-        if (this.loading.size === 0) {
-            this.onLoadingFinished && this.onLoadingFinished();
-        }
-    }
-
-    /**
-     * Loads external component.
-     * @param {string} moduleName Name of module being exported to window object
-     * @param {string} registryUrl Base URL of components registry
-     * @param {string?} jsFileName Bundle file name
-     * @param {Component?} inProgressComponent Component displayed while external is being loaded
-     * @param {function?} onLoaded Called once component was loaded
-     * @returns {function}
-     */
-    load({ moduleName, registryUrl, jsFileName, inProgressComponent, onLoaded }) {
-        const module = this.getLoadedModule(moduleName);
-
-        if (module) {
-            onLoaded && onLoaded();
-            return module;
-        }
-
-        this.onModuleLoadingStarted(moduleName);
-
-        const url = `${registryUrl}/static/components/${jsFileName || moduleName}.js`;
-
-        return this.getLoaderComponent({
-            moduleName,
-            url,
-            inProgressComponent,
-            onLoaded: () => {
-                this.onModuleLoadingFinished(moduleName);
-                onLoaded && onLoaded();
-            }
-        });
-    }
-
-    /**
      * Returns instance of component being an external component loader.
-     * @param {string} moduleName Name of module being exported to window object
      * @param {string} url Script URL
-     * @param {Component?} inProgressComponent Component displayed while external is being loaded
+     * @param {string} moduleName Name of module being exported to window object
+     * @param {Component?} placeholderComponent Component displayed while external is being loaded
      * @param {function?} onLoaded Called once component was loaded
      * @returns {function}
      */
-    getLoaderComponent({ moduleName, url, inProgressComponent, onLoaded }) {
+    getLoaderComponent({ url, moduleName, placeholderComponent, onLoaded }) {
         const componentLoader = this;
 
         return class extends Component {
             state = { component: null };
 
             componentDidMount() {
-                scriptjs(
-                    url,
-                    () => this.setState(
-                        { component: componentLoader.getLoadedModule(moduleName) },
-                        onLoaded
-                    )
-                );
+                const component = componentLoader.getLoadedComponent(moduleName);
+
+                if (component) {
+                    this.setState({ component }, onLoaded);
+                } else {
+                    componentLoader.fetchScript(url)
+                        .then(() => this.setState(
+                            { component: componentLoader.getLoadedComponent(moduleName) },
+                            onLoaded
+                        ));
+                }
             }
 
             render() {
@@ -108,13 +83,39 @@ class ComponentLoader {
 
                 if (component) {
                     return React.createElement(component, this.props);
-                } else if (inProgressComponent) {
-                    return inProgressComponent;
+                } else if (placeholderComponent) {
+                    return placeholderComponent;
                 } else {
                     return null;
                 }
             }
         };
+    }
+
+    /**
+     * Downloads script from given url. Deduplicates open transfers, sends notifications
+     * on a transfer started or all transfers finished events.
+     * @param {string} url Script url
+     * @returns {Promise<void>}
+     */
+    fetchScript(url) {
+        const existing = this.loading.get(url);
+
+        if (existing) {
+            return existing;
+        }
+
+        const promise = new Promise(resolve => scriptjs(url, resolve));
+
+        this.loading.size === 0 && this.onLoadingStarted();
+        this.loading.set(url, promise);
+
+        promise.then(() => {
+            this.loading.delete(url);
+            this.loading.size === 0 && this.onLoadingFinished();
+        });
+
+        return promise;
     }
 
 }

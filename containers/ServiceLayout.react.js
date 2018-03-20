@@ -415,9 +415,9 @@ class ServiceLayout extends Component
         this.logInForm.clearForm();
     }
 
-    loadComponent({ moduleName, registryUrl, jsFileName, inProgressComponent, onLoaded })
+    loadComponent({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded })
     {
-        return this.componentLoader.load({ moduleName, registryUrl, jsFileName, inProgressComponent, onLoaded });
+        return this.componentLoader.load({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded });
     }
 
     setApplicationReady(isReady)
