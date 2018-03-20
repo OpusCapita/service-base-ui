@@ -33,7 +33,7 @@ class ComponentLoader {
             return module;
         }
 
-        return this.getLoaderComponent({
+        return this.getWrapperComponent({
             url: `/${serviceName}/static/components/${jsFileName || moduleName}.js`,
             moduleName,
             placeholderComponent,
@@ -51,14 +51,14 @@ class ComponentLoader {
     }
 
     /**
-     * Returns instance of component being an external component loader.
+     * Returns external component's wrapper which will display actual component after it loads.
      * @param {string} url Script URL
      * @param {string} moduleName Name of module being exported to window object
      * @param {Component?} placeholderComponent Component displayed while external is being loaded
      * @param {function?} onLoaded Called once component was loaded
      * @returns {function}
      */
-    getLoaderComponent({ url, moduleName, placeholderComponent, onLoaded }) {
+    getWrapperComponent({ url, moduleName, placeholderComponent, onLoaded }) {
         const componentLoader = this;
 
         return class extends Component {
