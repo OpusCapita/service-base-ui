@@ -25,7 +25,8 @@ class ContextComponent extends React.Component
         setLayoutSize : PropTypes.func.isRequired,
         getLayoutSize : PropTypes.func.isRequired,
         showLogInDialog : PropTypes.func.isRequired,
-        hideLogInDialog : PropTypes.func.isRequired
+        hideLogInDialog : PropTypes.func.isRequired,
+        loadComponent : PropTypes.func.isRequired
     }
 
     getComponentId()

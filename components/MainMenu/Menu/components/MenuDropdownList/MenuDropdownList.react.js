@@ -1,39 +1,36 @@
 import React, { Component, Children } from 'react';
-import Types from 'prop-types';
+import PropTypes from 'prop-types';
 import './MenuDropdownList.less';
 
-const propTypes = {
-  items: Types.arrayOf(Types.node)
-};
-const defaultProps = {
-  items: []
-};
+class MenuDropdownList extends Component
+{
+    static propPropTypes = {
+        items: PropTypes.arrayOf(PropTypes.node)
+    }
 
-export default
-class MenuDropdownList extends Component {
-  render() {
-    const {
-      items
-    } = this.props;
+    static defaultProps = {
+        items: [ ]
+    }
 
-    const itemsElement = Children.toArray(items).map((item, i) => {
-      return (
-        <li
-          key={i}
-          className="oc-menu-dropdown-list__item"
-        >
-          {item}
-        </li>
-      );
-    });
+    render()
+    {
+        const { items } = this.props;
 
-    return (
-      <ul className="oc-menu-dropdown-list">
-        {itemsElement}
-      </ul>
-    );
-  }
+        return (
+            <ul className="oc-menu-dropdown-list">
+                {
+                    Children.toArray(items).map((item, i) =>
+                    {
+                        return (
+                            <li key={i} className="common-item" >
+                                {item}
+                            </li>
+                        );
+                    })
+                }
+            </ul>
+        );
+    }
 }
 
-MenuDropdownList.propTypes = propTypes;
-MenuDropdownList.defaultProps = defaultProps;
+export default MenuDropdownList;

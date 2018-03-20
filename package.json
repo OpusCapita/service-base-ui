@@ -33,9 +33,9 @@
         "superagent": "^3.6.3"
     },
     "devDependencies": {
+        "@opuscapita/react-buttons": "^4.0.2",
         "@opuscapita/react-svg": "^4.0.0",
         "@opuscapita/svg-icons": "^1.1.2",
-        "@opuscapita/react-buttons": "^4.0.2",
         "babel-core": "^6.26.0",
         "babel-loader": "^7.1.2",
         "babel-polyfill": "^6.26.0",
@@ -54,6 +54,7 @@
         "ocbesbn-web-init": "^2.2.22",
         "postcss-loader": "^2.1.1",
         "raw-loader": "^0.5.1",
+        "scriptjs": "^2.5.8",
         "style-loader": "^0.19.0",
         "url-loader": "^0.6.2",
         "webpack": "^3.7.1",

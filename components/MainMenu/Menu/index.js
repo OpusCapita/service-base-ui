@@ -9,8 +9,7 @@ import MenuLogo from './components/MenuLogo';
 import MenuSearch from './components/MenuSearch';
 import MenuSelect from './components/MenuSelect';
 import NavigationBar from './components/NavigationBar';
-import Notification from './components/Notification';
 import Notifications from './components/Notifications';
 
-export { Menu, MenuAccount, MenuAccountIcon, MenuDropdownGrid, MenuDropdownList, MenuIcon, MenuIconsBar, MenuLogo, MenuSearch, MenuSelect, NavigationBar, Notification, Notifications };
-export default { Menu, MenuAccount, MenuAccountIcon, MenuDropdownGrid, MenuDropdownList, MenuIcon, MenuIconsBar, MenuLogo, MenuSearch, MenuSelect, NavigationBar, Notification, Notifications };
+export { Menu, MenuAccount, MenuAccountIcon, MenuDropdownGrid, MenuDropdownList, MenuIcon, MenuIconsBar, MenuLogo, MenuSearch, MenuSelect, NavigationBar, Notifications };
+export default { Menu, MenuAccount, MenuAccountIcon, MenuDropdownGrid, MenuDropdownList, MenuIcon, MenuIconsBar, MenuLogo, MenuSearch, MenuSelect, NavigationBar, Notifications };
