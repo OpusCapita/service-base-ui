@@ -88,6 +88,7 @@ The following methods are available through a component's context:
 * [getLayoutSize](#getkayoutsize)
 * [showLogInDialog](#showlogindialog)
 * [hideLogInDialog](#hidelogindialog)
+* [loadComponent](#loadComponent)
 
 ##### showNotification
 Shows a short notification bubble on the top of a page that will automatically disappear after a certain amount of time. **Returns** a **notification handle object** which can be used to actively hide a certain notification.
@@ -231,6 +232,13 @@ Hides a currently displayed modal log-in dialog.
 
 ```JS
 hideLogInDialog() : void
+```
+
+##### loadComponent
+Loads an external component into a React component wrapper and returns an instance of this component to be used in the UI.
+
+```JS
+loadComponent({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded }) : void
 ```
 
 ## Components
