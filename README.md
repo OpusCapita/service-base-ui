@@ -88,7 +88,7 @@ The following methods are available through a component's context:
 * [getLayoutSize](#getkayoutsize)
 * [showLogInDialog](#showlogindialog)
 * [hideLogInDialog](#hidelogindialog)
-* [loadComponent](#loadComponent)
+* [loadComponent](#loadcomponent)
 
 ##### showNotification
 Shows a short notification bubble on the top of a page that will automatically disappear after a certain amount of time. **Returns** a **notification handle object** which can be used to actively hide a certain notification.
