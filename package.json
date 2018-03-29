@@ -1,6 +1,6 @@
 {
     "name": "@opuscapita/service-base-ui",
-    "version": "1.0.90",
+    "version": "1.1.0",
     "description": "Basic API for UI services of OpusCapita Business Network.",
     "main": "lib/bundle.js",
     "files": [
@@ -19,7 +19,7 @@
         "prepublishOnly": "npm version patch -m 'Version set to %s. [skip ci]'"
     },
     "dependencies": {
-        "@opuscapita/i18n": "^1.1.0",
+        "@opuscapita/i18n": "^1.2.1",
         "deep-equal": "^1.0.1",
         "extend": "^3.0.1",
         "history": "^3.3.0",

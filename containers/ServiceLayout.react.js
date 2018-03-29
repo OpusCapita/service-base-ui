@@ -7,7 +7,7 @@ import NotificationSystem from 'react-notification-system';
 import { I18nManager } from '@opuscapita/i18n';
 import InnerLayout from './InnerLayout.react';
 import { Auth, Users } from '../api';
-import { ResetTimer, ComponentLoader } from '../system';
+import { Bouncer, ResetTimer, ComponentLoader } from '../system';
 import { AjaxExtender } from '../system/ui';
 import translations from './i18n';
 import systemTranslations from './i18n/system';
@@ -49,7 +49,8 @@ class ServiceLayout extends Component
         getLayoutSize : PropTypes.func.isRequired,
         showLogInDialog : PropTypes.func.isRequired,
         hideLogInDialog : PropTypes.func.isRequired,
-        loadComponent : PropTypes.func.isRequired
+        loadComponent : PropTypes.func.isRequired,
+        bouncer : PropTypes.object.isRequired
     };
 
     constructor(props)
@@ -79,6 +80,7 @@ class ServiceLayout extends Component
         this.authApi = new Auth();
         this.usersApi = new Users();
         this.systemSpinnerCount = 0;
+        this.bouncer = new Bouncer();
         this.componentLoader = new ComponentLoader({
             onLoadingStarted: this.showSystemSpinner.bind(this),
             onLoadingFinished: this.hideSystemSpinner.bind(this)
@@ -142,7 +144,8 @@ class ServiceLayout extends Component
             getLayoutSize : this.getLayoutSize.bind(this),
             showLogInDialog : this.showLogInDialog.bind(this),
             hideLogInDialog : this.hideLogInDialog.bind(this),
-            loadComponent : this.loadComponent.bind(this)
+            loadComponent : this.loadComponent.bind(this),
+            bouncer : this.bouncer
         }
     }
 
@@ -189,12 +192,15 @@ class ServiceLayout extends Component
         })
         .then(({ userData, userProfile }) =>
         {
-            this.setState({
-                userData,
-                userProfile,
-                locale : userData.languageid,
-                i18n : this.getI18nManager(userData.languageid)
-            })
+            return this.bouncer.init(userData).then(() =>
+            {
+                this.setState({
+                    userData,
+                    userProfile,
+                    locale : userData.languageid,
+                    i18n : this.getI18nManager(userData.languageid),
+                });
+            });
         })
         .catch(e => this.showNotification(e.message, 'error', 10))
         .finally(() => this.hideSystemSpinner());

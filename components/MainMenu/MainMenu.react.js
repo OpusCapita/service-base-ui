@@ -25,7 +25,8 @@ class MainMenu extends ConditionalRenderComponent
         this.state = {
             newNotifications : [ ],
             recentNotifications : [ ],
-            activeMenuItem : 0
+            activeMenuItem : 0,
+            navItems : [ ]
         }
 
         const oldPush = context.router.push;
@@ -50,6 +51,8 @@ class MainMenu extends ConditionalRenderComponent
     {
         const { router, routes } = this.context;
         const location = router.location;
+
+        this.setState({ navItems : this.loadNavItems() });
 
         this.switchMenuItemByPath(location.basename + location.pathname);
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
@@ -174,9 +177,26 @@ class MainMenu extends ConditionalRenderComponent
         return results;
     }
 
-    mapNavItems()
+    loadNavItems()
     {
         const { router } = this.context;
+
+        const filterItem = (item) =>
+        {
+            if(item.link)
+            {
+                const url = this.parseUrl(item.link);
+
+                if(url.isExternal)
+                    return true;
+
+                const resources = this.context.bouncer.findResource(url.serviceName, url.path, 'GET');
+
+                return resources.length > 0;
+            }
+
+            return true;
+        }
 
         const mapItem = (item) =>
         {
@@ -196,19 +216,58 @@ class MainMenu extends ConditionalRenderComponent
             }
             else if(item.children)
             {
-                result['subItems'] = item.children.map(mapItem);
+                result['subItems'] = item.children.filter(filterItem).map(mapItem);
+
+                if(result['subItems'].length === 0)
+                    result['subItems'] = null;
             }
 
             return result;
         }
 
-        return this.getNavItems().map(mapItem);
+        return this.getNavItems().filter(filterItem).map(mapItem).filter(item => item.href || item.target || item.subItems);
+    }
+
+    parseUrl(url)
+    {
+        const element = document.createElement('a');
+        element.href = url;
+
+        const { protocol, hostname, port, pathname, href, search, hash } = element;
+        const isExternal = url.startsWith(protocol) || url.startsWith('//');
+
+        let serviceName;
+        let path;
+
+        if(!isExternal)
+        {
+            const firstSlash = pathname.indexOf('/');
+            const secondSlash = firstSlash > -1 ? pathname.indexOf('/', firstSlash + 1) : -1;
+
+            if(firstSlash > -1 && secondSlash > firstSlash)
+            {
+                serviceName = pathname.substr(firstSlash + 1, secondSlash - 1);
+                path = pathname.substr(secondSlash);
+            }
+            else if(firstSlash > -1)
+            {
+                serviceName = pathname.substr(firstSlash + 1);
+                path = '/';
+            }
+            else
+            {
+                serviceName = null;
+                path = pathname;
+            }
+        }
+
+        return { protocol, hostname, port, serviceName, path, search, hash, href, isExternal };
     }
 
     render()
     {
         const { i18n, userData, router } = this.context;
-        const { activeMenuItem, newNotifications, recentNotifications } = this.state;
+        const { activeMenuItem, newNotifications, recentNotifications, navItems } = this.state;
 
         const applicationItems = [{
             label : 'Business Network',
@@ -242,7 +301,7 @@ class MainMenu extends ConditionalRenderComponent
                     placeholder : i18n.getMessage('MainMenu.search'),
                     onChange : (e) => this.handleSearch(e)
                 }}
-                navigationItems={this.mapNavItems()}
+                navigationItems={navItems}
                 iconsBarItems={[(
                     <MenuIcon
                         svg={this.getIcon('apps')}
