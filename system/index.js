@@ -1,6 +1,7 @@
-import ResetTimer from './ResetTimer';
+import Bouncer from './Bouncer';
 import ComponentLoader from './ComponentLoader';
+import ResetTimer from './ResetTimer';
 import UI from './ui';
 
-export default { UI, ResetTimer, ComponentLoader };
-export { UI, ResetTimer, ComponentLoader };
+export default { Bouncer, ComponentLoader, ResetTimer, UI };
+export { Bouncer, ComponentLoader, ResetTimer, UI };
