@@ -1,6 +1,6 @@
 {
     "name": "@opuscapita/service-base-ui",
-    "version": "1.0.94",
+    "version": "1.0.95",
     "description": "Basic API for UI services of OpusCapita Business Network.",
     "main": "lib/bundle.js",
     "files": [
