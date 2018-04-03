@@ -50,6 +50,17 @@ export default
             "label": "Users",
             "link": "/bnp/users"
         }]
+    },
+    {
+        "key": "catalog",
+        "label": "Catalog",
+        "children": [
+        {
+            "key": "upload",
+            "label": "Upload",
+            "link": "https://opuscapita.jcatalog.com/bnp/ssm/standardWorkflow/index?customerId=OC001",
+            "target": "_blank"
+        }]
     }],
 
     "de": [
@@ -101,6 +112,17 @@ export default
             "key": "users",
             "label": "Benutzer",
             "link": "/bnp/users"
+        }]
+    },
+    {
+        "key": "catalog",
+        "label": "Katalog",
+        "children": [
+        {
+            "key": "upload",
+            "label": "Upload",
+            "link": "https://opuscapita.jcatalog.com/bnp/ssm/standardWorkflow/index?customerId=OC001",
+            "target": "_blank"
         }]
     }]
 }
