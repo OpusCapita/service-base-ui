@@ -183,6 +183,7 @@ class MainMenu extends ConditionalRenderComponent
 
         const filterItem = (item) =>
         {
+            return true;
             if(item.link)
             {
                 const url = this.parseUrl(item.link);
