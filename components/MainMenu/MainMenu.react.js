@@ -226,7 +226,7 @@ class MainMenu extends ConditionalRenderComponent
             return result;
         }
 
-        return this.getNavItems().filter(filterItem).map(mapItem).filter(item => item.href || item.target || item.subItems);
+        return this.getNavItems().filter(filterItem).map(mapItem).filter(item => item.href || item.onClick || item.target || item.subItems);
     }
 
     parseUrl(url)
