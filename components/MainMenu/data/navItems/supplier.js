@@ -37,6 +37,17 @@ export default
         }]
     },
     {
+        "key": "catalog",
+        "label": "Catalog",
+        "children": [
+        {
+            "key": "upload",
+            "label": "Upload",
+            "link": "/bnp/catalog-upload",
+            "target": "_blank"
+        }]
+    },
+    {
         "key": "company",
         "label": "Company",
         "children": [
@@ -49,17 +60,6 @@ export default
             "key": "users",
             "label": "Users",
             "link": "/bnp/users"
-        }]
-    },
-    {
-        "key": "catalog",
-        "label": "Catalog",
-        "children": [
-        {
-            "key": "upload",
-            "label": "Upload",
-            "link": "https://opuscapita.jcatalog.com/bnp/ssm/standardWorkflow/index?customerId=OC001",
-            "target": "_blank"
         }]
     }],
 
@@ -100,6 +100,17 @@ export default
         }]
     },
     {
+        "key": "catalog",
+        "label": "Katalog",
+        "children": [
+        {
+            "key": "upload",
+            "label": "Upload",
+            "link": "/bnp/catalog-upload",
+            "target": "_blank"
+        }]
+    },
+    {
         "key": "company",
         "label": "Unternehmen",
         "children": [
@@ -112,17 +123,6 @@ export default
             "key": "users",
             "label": "Benutzer",
             "link": "/bnp/users"
-        }]
-    },
-    {
-        "key": "catalog",
-        "label": "Katalog",
-        "children": [
-        {
-            "key": "upload",
-            "label": "Upload",
-            "link": "https://opuscapita.jcatalog.com/bnp/ssm/standardWorkflow/index?customerId=OC001",
-            "target": "_blank"
         }]
     }]
 }
