@@ -1,8 +1,9 @@
 'use strict';
 
 const Logger = require('ocbesbn-logger'); // Logger
-const server = require('ocbesbn-web-init'); // Web server
-const db = require('ocbesbn-db-init');
+const server = require('@opuscapita/web-init'); // Web server
+const db = require('@opuscapita/db-init');
+const configService = require('@opuscapita/config');
 
 const logger = new Logger();
 
@@ -29,13 +30,11 @@ server.init({
     }
 })
 .then(app => app.get('*', (req, res) => res.sendFile(process.cwd() + '/dev/index.html')))
+.then(() => configService.init())
+.then(config => config.waitForEndpoints([ 'acl', 'user', 'auth' ]))
 .then(() =>
 {
     return db.init({
-        retryCount : 50,
-        consul : {
-            host : 'consul'
-        },
         data : {
             registerModels : false,
             addTestData : true,

@@ -19,7 +19,10 @@
         "prepublishOnly": "npm version patch -m 'Version set to %s. [skip ci]'"
     },
     "dependencies": {
+        "@opuscapita/config": "^3.0.2",
+        "@opuscapita/db-init": "^2.0.12",
         "@opuscapita/i18n": "^1.2.1",
+        "@opuscapita/web-init": "^3.0.24",
         "deep-equal": "^1.0.1",
         "extend": "^3.0.1",
         "history": "^3.3.0",
@@ -50,8 +53,6 @@
         "jquery": "^3.2.1",
         "json-loader": "^0.5.7",
         "less-loader": "^4.1.0",
-        "ocbesbn-db-init": "^1.1.11",
-        "ocbesbn-web-init": "^2.2.22",
         "postcss-loader": "^2.1.1",
         "raw-loader": "^0.5.1",
         "scriptjs": "^2.5.8",
