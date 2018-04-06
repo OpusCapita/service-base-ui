@@ -18,6 +18,7 @@ class Bouncer
 
     init(userData)
     {
+        this.userData = userData;
         const roles = (userData && userData.roles) || [ ];
 
         return Promise.all([
@@ -45,15 +46,27 @@ class Bouncer
         const action = actionsMap[method.toUpperCase()];
 
         let foundResources = [ ];
+        const permissions = this.permissions.filter(p => p.resourceGroupId.startsWith(serviceName));
 
-        this.permissions.forEach(permission =>
+        for(const i in permissions)
         {
-            const foundResrouceGroup = this.resourceGroups[permission.resourceGroupId.substring(prefixLength)];
-            const resources = foundResrouceGroup && foundResrouceGroup.resources;
+            const permission = permissions[i];
+            const resourceGroupName = permission.resourceGroupId.substring(prefixLength);
 
-            if(resources)
-                foundResources = foundResources.concat(resources.filter(r => url.match(new RegExp(this.replacePlaceholders(r.resourceId, this.userData))) && r.actions.indexOf(action) > -1));
-        })
+            if(resourceGroupName === '*')
+            {
+                foundResources = [ '*' ];
+                break;
+            }
+            else
+            {
+                const foundResourceGroup = this.resourceGroups[resourceGroupName];
+                const resources = foundResourceGroup && foundResourceGroup.resources;
+
+                if(resources)
+                    foundResources = foundResources.concat(resources.filter(r => url.match(new RegExp(this.replacePlaceholders(r.resourceId, this.userData))) && r.actions.indexOf(action) > -1));
+            }
+        }
 
         foundResources.length && this.setCachedValue(cacheKey, foundResources);
 
