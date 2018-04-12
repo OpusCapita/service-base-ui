@@ -21,7 +21,7 @@
     "dependencies": {
         "@opuscapita/config": "^3.0.2",
         "@opuscapita/db-init": "^2.0.12",
-        "@opuscapita/i18n": "^1.2.1",
+        "@opuscapita/i18n": "1.2.1",
         "@opuscapita/web-init": "^3.0.24",
         "deep-equal": "^1.0.1",
         "extend": "^3.0.1",
