@@ -60,7 +60,7 @@ class Bouncer
             }
             else
             {
-                const foundResourceGroup = this.resourceGroups[resourceGroupName];
+                const foundResourceGroup = this.resourceGroups[serviceName] && this.resourceGroups[serviceName][resourceGroupName];
                 const resources = foundResourceGroup && foundResourceGroup.resources;
 
                 if(resources)
@@ -101,9 +101,30 @@ class Bouncer
         const cached = this.getCachedValue(cacheKey);
 
         if(cached)
+        {
             return Promise.resolve(cached);
+        }
         else
-            return this.acl.getResourceGroups().then(groups => { this.setCachedValue(cacheKey, groups); return groups; });
+        {
+            return this.acl.getResourceGroups().then(resourceGroups =>
+            {
+                const map = { };
+
+                resourceGroups.forEach(rg =>
+                {
+                    const { serviceName, resourceGroupId, resources } = rg;
+
+                    if(!map[serviceName])
+                        map[serviceName] = { };
+
+                    map[serviceName][resourceGroupId] = { resources };
+                });
+
+                this.setCachedValue(cacheKey, map);
+
+                return map;
+            });
+        }
     }
 
     replacePlaceholders(resourceId, userData)
