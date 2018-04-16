@@ -20,6 +20,7 @@ class DatePicker extends ContextComponent
         onFocus : PropTypes.func.isRequired,
         onBlur : PropTypes.func.isRequired,
         disabled : PropTypes.bool.isRequired
+        debugging : PropTypes.bool.isRequired
     };
 
     static defaultProps = {
@@ -28,7 +29,8 @@ class DatePicker extends ContextComponent
         onChange : () => null,
         onFocus : () => null,
         onBlur : () => null,
-        disabled : false
+        disabled : false,
+        debugging : false
     };
 
     state = {
@@ -72,6 +74,10 @@ class DatePicker extends ContextComponent
     init()
     {
         const contextFormat = this.context.i18n.dateFormat.toLowerCase();
+        const { debugging } = this.props;
+
+        if(debugging)
+            console.log('init()');
 
         let pickerOptions = {
             showIcon : this.props.showIcon,
@@ -83,13 +89,25 @@ class DatePicker extends ContextComponent
 
         const element = this.container || this.picker;
 
+        if(debugging)
+            console.log('Registering "changeDate"');
+
         $(element).datepicker(pickerOptions).on('changeDate', e =>
         {
+            if(debugging)
+                console.log('changeDate()');
+
             const dateString = e.date && e.date.toString();
+
+            if(debugging)
+                console.log(`e.date : ${e.date}, dateString : ${dateString}, this.state.value : ${this.state.value}`);
 
             if(dateString !== this.state.value)
             {
                 const payload = { date : e.date, dateString : dateString, timestamp : e.timeStamp };
+
+                if(debugging)
+                    console.log(`dateString : ${dateString}, this.lastValue : ${this.lastValue}`);
 
                 if(dateString !== this.lastValue)
                 {
@@ -100,6 +118,9 @@ class DatePicker extends ContextComponent
                 this.lastValue = dateString;
             }
         });
+
+        if(debugging)
+            console.log(`this.state.value : ${this.state.value}, this.lastValue : ${this.lastValue}`);
 
         if(this.state.value !== this.lastValue)
         {
