@@ -98,11 +98,12 @@ class DatePicker extends ContextComponent
                 console.log('changeDate()');
 
             const dateString = e.date && e.date.toString();
+            const valueString = this.state.value && this.state.value.toString();
 
             if(debugging)
-                console.log(`e.date : ${e.date}, dateString : ${dateString}, this.state.value : ${this.state.value}`);
+                console.log(`e.date : ${e.date}, dateString : ${dateString}, this.state.value : ${this.state.value}, valueString : ${valueString}`);
 
-            if(dateString !== this.state.value)
+            if(dateString !== valueString)
             {
                 const payload = { date : e.date, dateString : dateString, timestamp : e.timeStamp };
 
