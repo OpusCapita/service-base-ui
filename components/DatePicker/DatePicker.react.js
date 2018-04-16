@@ -19,7 +19,7 @@ class DatePicker extends ContextComponent
         onChange : PropTypes.func.isRequired,
         onFocus : PropTypes.func.isRequired,
         onBlur : PropTypes.func.isRequired,
-        disabled : PropTypes.bool.isRequired
+        disabled : PropTypes.bool.isRequired,
         debugging : PropTypes.bool.isRequired
     };
 
