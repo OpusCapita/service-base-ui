@@ -18,8 +18,7 @@ class MenuAccount extends Component
                 label: PropTypes.string,
                 svg: PropTypes.string,
                 onClick: PropTypes.func
-        })), PropTypes.node
-        ]),
+        })), PropTypes.node]),
         bottomElement: PropTypes.node
     };
 

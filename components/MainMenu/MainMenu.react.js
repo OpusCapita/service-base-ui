@@ -117,6 +117,9 @@ class MainMenu extends ConditionalRenderComponent
 
     handleLanguageChange(e)
     {
+        if(this.accountIcon)
+            this.accountIcon.hideChildren();
+            
         this.props.onLanguageChange(e.target.value);
     }
 
@@ -320,7 +323,7 @@ class MainMenu extends ConditionalRenderComponent
                         </Notifications>
                     </MenuIcon>
                 ), (
-                    <MenuIcon label={userData.firstname}>
+                    <MenuIcon ref={node => this.accountIcon = node} label={userData.firstname}>
                         <MenuAccount
                         firstName={userData.firstname}
                         lastName={userData.lastname}
