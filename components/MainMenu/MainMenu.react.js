@@ -52,8 +52,6 @@ class MainMenu extends ConditionalRenderComponent
         const { router, routes } = this.context;
         const location = router.location;
 
-        this.setState({ navItems : this.loadNavItems() });
-
         this.switchMenuItemByPath(location.basename + location.pathname);
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -301,7 +299,7 @@ class MainMenu extends ConditionalRenderComponent
                     placeholder : i18n.getMessage('MainMenu.search'),
                     onChange : (e) => this.handleSearch(e)
                 }}
-                navigationItems={navItems}
+                navigationItems={this.loadNavItems()}
                 iconsBarItems={[(
                     <MenuIcon
                         svg={this.getIcon('apps')}

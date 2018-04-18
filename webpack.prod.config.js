@@ -44,7 +44,7 @@ const config = {
             compress: {
                 warnings: false,
                 screw_ie8: true,
-                drop_console : false
+                drop_console : true
             },
             comments: false
         }),
