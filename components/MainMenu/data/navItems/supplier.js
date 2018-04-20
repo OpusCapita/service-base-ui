@@ -22,7 +22,7 @@ export default
         "children": [
         {
             "key": "in-channel-configuration",
-            "label": "In-Channel Configuration",
+            "label": "Invoice Sending Configuration",
             "link": "/einvoice-send"
         },
         {
@@ -85,7 +85,7 @@ export default
         "children": [
         {
             "key": "in-channel-configuration",
-            "label": "In-Channel Konfiguration",
+            "label": "Konfiguration Rechnungsversand",
             "link": "/einvoice-send"
         },
         {
