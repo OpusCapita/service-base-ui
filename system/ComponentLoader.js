@@ -42,26 +42,9 @@ class ComponentLoader
      * @param {string} moduleName Name of module being exported to window object
      * @returns {function|null}
      */
-    getLoadedComponent(moduleName, onLoaded)
+    getLoadedComponent(moduleName)
     {
-        let component = (window[moduleName] && window[moduleName].default) || null;
-
-        if(component)
-        {
-            const properties = Object.getOwnPropertyNames(component.prototype);
-
-            const props = Object.assign({ }, this.props, { ref : (node) =>
-            {
-                for(const prop of properties)
-                    this[prop] = component.prototype[prop].bind(node);
-
-                onLoaded && onLoaded(node);
-            } });
-
-            component = React.createElement(component, props);
-        }
-
-        return component;
+        return(window[moduleName] && window[moduleName].default) || null;
     }
 
     /**
@@ -84,12 +67,12 @@ class ComponentLoader
 
             componentDidMount()
             {
-                const component = componentLoader.getLoadedComponent(moduleName, onLoaded);
+                const component = componentLoader.getLoadedComponent(moduleName);
 
                 if(component)
                     this.setState({ component });
                 else
-                    componentLoader.fetchScript(url).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName, onLoaded) }));
+                    componentLoader.fetchScript(url).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName) }));
             }
 
             render()
@@ -98,7 +81,17 @@ class ComponentLoader
 
                 if(component)
                 {
-                    return component;
+                    const properties = Object.getOwnPropertyNames(component.prototype);
+
+                    const props = Object.assign({ }, this.props, { ref : (node) =>
+                    {
+                        for(const prop of properties)
+                            this[prop] = component.prototype[prop].bind(node);
+
+                        onLoaded && onLoaded(node);
+                    } });
+
+                    return React.createElement(component, props);
                 }
                 else if(placeholderComponent)
                 {
