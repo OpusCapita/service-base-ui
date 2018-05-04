@@ -28,17 +28,9 @@ class ComponentLoader
      */
     load({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded = NOOP })
     {
-        const module = this.getLoadedComponent(moduleName);
-
-        if(module)
-        {
-            onLoaded();
-            return module;
-        }
-
         return this.getWrapperComponent(
         {
-            url: `/${serviceName}/static/components/${jsFileName || moduleName}.js`,
+            url: `https://develop.businessnetwork.opuscapita.com/${serviceName}/static/components/${jsFileName || moduleName}.js`,
             moduleName,
             placeholderComponent,
             onLoaded
@@ -78,17 +70,9 @@ class ComponentLoader
                 const component = componentLoader.getLoadedComponent(moduleName);
 
                 if(component)
-                {
-                    this.setState({ component }, onLoaded);
-                }
+                    this.setState({ component });
                 else
-                {
-                    componentLoader.fetchScript(url).then(() => this.setState({
-                            component: componentLoader.getLoadedComponent(moduleName)
-                        },
-                        onLoaded
-                    ));
-                }
+                    componentLoader.fetchScript(url).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName) }));
             }
 
             render()
@@ -96,11 +80,27 @@ class ComponentLoader
                 const { component } = this.state;
 
                 if(component)
-                    return React.createElement(component, this.props);
+                {
+                    const properties = Object.getOwnPropertyNames(component.prototype);
+
+                    const props = Object.assign({ }, this.props, { ref : (node) =>
+                    {
+                        for(const prop of properties)
+                            this[prop] = component.prototype[prop].bind(node);
+
+                        onLoaded && onLoaded(node);
+                    } });
+
+                    return React.createElement(component, props);
+                }
                 else if(placeholderComponent)
+                {
                     return placeholderComponent;
+                }
                 else
+                {
                     return null;
+                }
             }
         };
     }

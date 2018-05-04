@@ -10,32 +10,15 @@ class Test extends ContextComponent
         value : null
     }
 
-    setValue(value)
+    constructor(props)
     {
-        console.log(value);
-        this.setState({ value : value.dateString });
-    }
-
-    onFocus()
-    {
-      console.log("DatePicker Focused!");
-    }
-
-    constructor()
-    {
-        super();
+        super(props);
     }
 
     render()
     {
         return(
-            <DatePicker ref={node => this.picker = node}
-               showIcon={false}
-               enabled={true}
-               value={this.state.value}
-               onChange={this.setValue.bind(this)}
-               onFocus={this.onFocus}
-            />
+            null
         );
     }
 }
