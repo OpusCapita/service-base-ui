@@ -30,7 +30,7 @@ class ComponentLoader
     {
         return this.getWrapperComponent(
         {
-            url: `https://develop.businessnetwork.opuscapita.com/${serviceName}/static/components/${jsFileName || moduleName}.js`,
+            url: `/${serviceName}/static/components/${jsFileName || moduleName}.js`,
             moduleName,
             placeholderComponent,
             onLoaded
