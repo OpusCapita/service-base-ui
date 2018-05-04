@@ -42,9 +42,26 @@ class ComponentLoader
      * @param {string} moduleName Name of module being exported to window object
      * @returns {function|null}
      */
-    getLoadedComponent(moduleName)
+    getLoadedComponent(moduleName, onLoaded)
     {
-        return(window[moduleName] && window[moduleName].default) || null;
+        let component = (window[moduleName] && window[moduleName].default) || null;
+
+        if(component)
+        {
+            const properties = Object.getOwnPropertyNames(component.prototype);
+
+            const props = Object.assign({ }, this.props, { ref : (node) =>
+            {
+                for(const prop of properties)
+                    this[prop] = component.prototype[prop].bind(node);
+
+                onLoaded && onLoaded(node);
+            } });
+
+            component = React.createElement(component, props);
+        }
+
+        return component;
     }
 
     /**
@@ -67,12 +84,12 @@ class ComponentLoader
 
             componentDidMount()
             {
-                const component = componentLoader.getLoadedComponent(moduleName);
+                const component = componentLoader.getLoadedComponent(moduleName, onLoaded);
 
                 if(component)
                     this.setState({ component });
                 else
-                    componentLoader.fetchScript(url).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName) }));
+                    componentLoader.fetchScript(url).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName, onLoaded) }));
             }
 
             render()
@@ -81,17 +98,7 @@ class ComponentLoader
 
                 if(component)
                 {
-                    const properties = Object.getOwnPropertyNames(component.prototype);
-
-                    const props = Object.assign({ }, this.props, { ref : (node) =>
-                    {
-                        for(const prop of properties)
-                            this[prop] = component.prototype[prop].bind(node);
-
-                        onLoaded && onLoaded(node);
-                    } });
-
-                    return React.createElement(component, props);
+                    return component;
                 }
                 else if(placeholderComponent)
                 {
