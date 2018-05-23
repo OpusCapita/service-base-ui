@@ -21,7 +21,7 @@ export default
         "label": "Invoice",
         "children": [
         {
-            "key": "invoice-sending-configuration",
+            "key": "configuration",
             "label": "Invoice Sending Configuration",
             "link": "/einvoice-send/configuration"
         },
