@@ -55,7 +55,7 @@ export default
     },
     {
         "key": "suppliers",
-        "label": "Lieferantent",
+        "label": "Lieferanten",
         "children": [
         {
             "key": "onboarding-dashboard",
