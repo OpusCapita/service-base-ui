@@ -21,9 +21,14 @@ export default
         "label": "Invoice",
         "children": [
         {
-            "key": "in-channel-configuration",
+            "key": "configuration",
             "label": "Invoice Sending Configuration",
-            "link": "/einvoice-send"
+            "link": "/einvoice-send/configuration"
+        },
+        {
+            "key": "customer-connections",
+            "label": "Customer Connections",
+            "link": "/einvoice-send/customer-connections"
         },
         {
             "key": "key-in",
@@ -84,9 +89,14 @@ export default
         "label": "Rechnungen",
         "children": [
         {
-            "key": "in-channel-configuration",
+            "key": "invoice-sending-configuration",
             "label": "Konfiguration Rechnungsversand",
-            "link": "/einvoice-send"
+            "link": "/einvoice-send/configuration"
+        },
+        {
+            "key": "customer-connections",
+            "label": "Kundenanbindungen",
+            "link": "/einvoice-send/customer-connections"
         },
         {
             "key": "key-in",
