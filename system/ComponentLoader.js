@@ -82,14 +82,7 @@ class ComponentLoader
                 if(component)
                 {
                     const properties = Object.getOwnPropertyNames(component.prototype);
-
-                    const props = Object.assign({ }, this.props, { ref : (node) =>
-                    {
-                        for(const prop of properties)
-                            this[prop] = component.prototype[prop].bind(node);
-
-                        onLoaded && onLoaded(node);
-                    } });
+                    const props = Object.assign({ }, this.props, { ref : (node) => onLoaded && onLoaded(node) });
 
                     return React.createElement(component, props);
                 }
