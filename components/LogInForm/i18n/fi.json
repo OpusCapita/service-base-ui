@@ -1,0 +1,23 @@
+{
+    "LogInForm": {
+        "label": {
+            "email": "Sähköposti",
+            "password": "Salasana"
+        },
+        "placeholder": {
+            "email": "Sähköpostisi",
+            "password": "Salasanasi"
+        },
+        "button": {
+            "logIn": "Kirjaudu sisään"
+        },
+        "error": {
+            "email": {
+                "required": "Kenttä \"Sähköposti\" ei voi olla tyhjä."
+            },
+            "password": {
+                "required": "Kenttä \"Salasana\" ei voi olla tyhjä."
+            }
+        }
+    }
+}

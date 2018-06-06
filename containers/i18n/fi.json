@@ -1,0 +1,22 @@
+{
+    "Main": {
+        "systemError": {
+            "title": "Yleinen virhe tapahtui"
+        },
+        "notification": {
+            "sessionExpiring": "Kirjautumissessiosi on vanhentumassa.",
+            "button": {
+                "renewSession": "Uudista nyt"
+            }
+        }
+    },
+    "ServiceLayout": {
+        "LogInDialog": {
+            "title": "Ole hyvä ja kirjaudu sisään",
+            "description": "Turvallisuussyistä istuntosi on vanhentunut. Jatka kirjautumalla uudelleen järjestelmään.",
+            "button": {
+                "signIn": "Kirjaudu sisään"
+            }
+        }
+    }
+}
