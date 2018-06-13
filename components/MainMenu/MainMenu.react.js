@@ -119,7 +119,7 @@ class MainMenu extends ConditionalRenderComponent
     {
         if(this.accountIcon)
             this.accountIcon.hideChildren();
-            
+
         this.props.onLanguageChange(e.target.value);
     }
 
@@ -136,12 +136,12 @@ class MainMenu extends ConditionalRenderComponent
         let items = [ ];
 
         if(supplierid)
-            items = navItems.supplier[locale];
+            items = navItems.supplier[locale] || navItems.supplier['en'];
         else if(customerid)
-            items = navItems.customer[locale];
+            items = navItems.customer[locale] || navItems.customer['en'];
 
         if(roles && roles.indexOf('admin') > -1)
-            items = this.recursiveMergeNavItems(items, navItems.admin[locale])
+            items = this.recursiveMergeNavItems(items, navItems.admin[locale] || navItems.admin['en'])
 
         return items;
     }
