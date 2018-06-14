@@ -16,9 +16,11 @@ export default {
     'MainMenu.language' : 'Language',
     'MainMenu.laguage.english' : 'English',
     'MainMenu.laguage.german' : 'German',
+    'MainMenu.laguage.swedish' : 'Swedish',
+    'MainMenu.laguage.finnish' : 'Finnish',
 
-    'MainMenu.applications' : 'Applications',
-    'MainMenu.notifications' : 'Notifications'
+    'MainMenu.applications' : 'Anwendungen',
+    'MainMenu.notifications' : 'Benachrichtigungen'
 }
 
 // Lieferantenhandbuch.pdf

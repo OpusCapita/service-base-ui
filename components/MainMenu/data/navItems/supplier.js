@@ -66,6 +66,21 @@ export default
             "label": "Users",
             "link": "/bnp/users"
         }]
+    },
+    {
+        "key": "settings",
+        "label": "Settings",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Routes",
+            "link": "/bnp/routes"
+        },
+        {
+            "key": "business-connections",
+            "label": "Business connections",
+            "link": "/bnp/business-links"
+        }]
     }],
 
     "de": [
@@ -133,6 +148,21 @@ export default
             "key": "users",
             "label": "Benutzer",
             "link": "/bnp/users"
+        }]
+    },
+    {
+        "key": "settings",
+        "label": "Einstellungen",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Routen",
+            "link": "/bnp/routes"
+        },
+        {
+            "key": "business-connections",
+            "label": "Geschäftsbeziehungen",
+            "link": "/bnp/business-links"
         }]
     }]
 }

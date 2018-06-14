@@ -15,5 +15,10 @@ export default {
     'MainMenu.support' : 'Support',
     'MainMenu.language' : 'Sprache',
     'MainMenu.laguage.english' : 'Englisch',
-    'MainMenu.laguage.german' : 'Deutsch'
+    'MainMenu.laguage.german' : 'Deutsch',
+    'MainMenu.laguage.swedish' : 'Schwedisch',
+    'MainMenu.laguage.finnish' : 'Finnisch',
+
+    'MainMenu.applications' : 'Applications',
+    'MainMenu.notifications' : 'Notifications'
 }
