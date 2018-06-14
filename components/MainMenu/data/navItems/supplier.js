@@ -14,6 +14,11 @@ export default
             "key": "overview",
             "label": "Overview",
             "link": "/sales-order"
+        },
+        {
+            "key": "configuration",
+            "label": "Order receiving configuration",
+            "link": "/sales-order/configuration",
         }]
     },
     {
@@ -97,6 +102,11 @@ export default
             "key": "overview",
             "label": "Übersicht",
             "link": "/sales-order"
+        },
+        {
+            "key": "configuration",
+            "label": "Konfiguration Bestellannahme",
+            "link": "/sales-order/configuration",
         }]
     },
     {
