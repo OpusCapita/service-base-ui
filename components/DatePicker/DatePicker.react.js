@@ -73,7 +73,7 @@ class DatePicker extends ContextComponent
 
     init()
     {
-        const contextFormat = this.context.i18n.dateFormat.toLowerCase();
+        const contextFormat = (this.context.i18n.dateFormat && this.context.i18n.dateFormat.toLowerCase()) || 'en';
         const { debugging } = this.props;
 
         if(debugging)
