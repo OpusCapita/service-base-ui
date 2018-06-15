@@ -14,6 +14,16 @@ export default
             "key": "overview",
             "label": "Overview",
             "link": "/sales-order"
+        },
+        {
+            "key": "orderConfiguration",
+            "label": "Order receiving configuration",
+            "link": "/sales-order/configuration"
+        },
+        {
+            "key": "customerConnections",
+            "label": "Customer Connections",
+            "link": "/sales-order/customer-connections"
         }]
     },
     {
@@ -97,6 +107,16 @@ export default
             "key": "overview",
             "label": "Übersicht",
             "link": "/sales-order"
+        },
+        {
+            "key": "orderConfiguration",
+            "label": "Konfiguration Bestellannahme",
+            "link": "/sales-order/configuration"
+        },
+        {
+            "key": "customerConnections",
+            "label": "Kundenanbindungen",
+            "link": "/sales-order/customer-connections"
         }]
     },
     {
