@@ -1,6 +1,6 @@
 import en from './en';
 import de from './de';
-import de from './fn';
-import de from './sv';
+import fn from './fn';
+import sv from './sv';
 
 export default { en, de, fn, sv };
