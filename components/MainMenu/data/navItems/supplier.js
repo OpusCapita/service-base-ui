@@ -58,8 +58,7 @@ export default
         {
             "key": "upload",
             "label": "Upload",
-            "link": "/bnp/catalog-upload",
-            "target": "_blank"
+            "link": "/bnp/catalog-upload"
         }]
     },
     {
