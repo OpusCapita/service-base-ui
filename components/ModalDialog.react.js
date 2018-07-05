@@ -101,6 +101,33 @@ class ModalDialog extends ContextComponent
         this.setState({ buttons });
     }
 
+    setButtonState(button, enabled)
+    {
+        const { buttonsDisabled } = this.state;
+        const foundIndex = buttonsDisabled && buttonsDisabled.indexOf(button);
+
+        if(enabled && foundIndex > -1)
+        {
+            delete buttonsDisabled[foundIndex];
+            this.setState({ buttonsDisabled : Object.values(buttonsDisabled) });
+        }
+        else if(!enabled && foundIndex === 1)
+        {
+            buttonsDisabled.push(button);
+            this.setState({ buttonsDisabled });
+        }
+    }
+
+    enableButton(button)
+    {
+        this.setButtonState(button, true);
+    }
+
+    disableButton(button)
+    {
+        this.setButtonState(button, false);
+    }
+
     render()
     {
         const state = this.state;

@@ -10,6 +10,8 @@ class MenuAccount extends Component
         firstName: PropTypes.string,
         lastName: PropTypes.string,
         userName: PropTypes.string,
+        tenantName: PropTypes.string,
+        tenantProfileLink: PropTypes.string,
         initials: PropTypes.string,
         avatarSrc: PropTypes.string,
         onAvatarClick: PropTypes.func,
@@ -26,6 +28,8 @@ class MenuAccount extends Component
         firstName: '',
         lastName: '',
         userName: '',
+        tenantName: '',
+        tenantProfileLink : '',
         initials: '',
         avatarSrc: '',
         onAvatarClick: () => { },
@@ -37,7 +41,7 @@ class MenuAccount extends Component
 
     render()
     {
-        const { firstName, lastName, userName, initials, avatarSrc, onAvatarClick, actions, bottomElement } = this.props;
+        const { firstName, lastName, userName, tenantName, tenantProfileLink, initials, avatarSrc, onAvatarClick, actions, bottomElement } = this.props;
 
         const actionElements = actions.map((action, i) =>
         {
@@ -73,6 +77,7 @@ class MenuAccount extends Component
                     <div className="name-container">
                         <div className="full-name">{firstName} {lastName}</div>
                         <div className="user-name">{userName}</div>
+                        <div className="tenant-name"><a href={tenantProfileLink || ''}>{tenantName}</a></div>
                     </div>
                 </div>
                 <div className="middle-row">

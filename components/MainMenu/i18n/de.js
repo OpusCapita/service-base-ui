@@ -4,12 +4,21 @@ export default {
 
     'MainMenu.profile' : 'Profil',
     'MainMenu.logout' : 'Abmelden',
+    'MainMenu.switchTenant' : 'Mandaten wechseln',
     'MainMenu.manualName' : 'Lieferantenhandbuch.pdf',
     'MainMenu.manual' : 'Handbuch',
     'MainMenu.download' : 'Herunterladen',
     'MainMenu.newNotifications' : 'Neue Benachrichtigungen',
     'MainMenu.recentNotifications' : 'Letzte Benachrichtigungen',
     'MainMenu.noNewNotifications' : 'Es gibt keine neuen Benachrichtigungen',
+
+    'MainMenu.tenantSwitch.modal.title' : 'Mandanten wechslen',
+    'MainMenu.tenantSwitch.modal.button.proceed' : 'Fortfahren',
+    'MainMenu.tenantSwitch.modal.label.placeholder' : 'Mandantentyp wählen...',
+    'MainMenu.tenantSwitch.modal.label.customer' : 'Kunde',
+    'MainMenu.tenantSwitch.modal.label.supplier' : 'Lieferant',
+    'MainMenu.tenantSwitch.modal.text' : 'Bitte wählen Sie einen Mandantentyp, und wählen Sie dann einen Mandaten aus, um fort zu fahren. Bitte beachten Sie, dass der Mandantenwechel permanent ist und auch zwichen Login-Sitzungen bestehen bleibt. Ihr aktueller Mandant ist "{tenantname}".',
+    'MainMenu.tenantSwitch.generalError' : 'Ein unerwarteter Fehler ist aufgetreten. Es wurden keine Änderungen durchgeführt.',
 
     'MainMenu.search' : 'Suchen',
     'MainMenu.support' : 'Support',
