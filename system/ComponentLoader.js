@@ -29,24 +29,13 @@ class ComponentLoader
      */
     load({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded = NOOP })
     {
-        let condition;
-
-        if(this.loadedVendorScripts[serviceName])
-            condition = Promise.resolve();
-        else
-            condition = new Promise(resolve => scriptjs(`/${serviceName}/static/components/vendor-bundle.js`, resolve, resolve));
-
-        return condition.then(() =>
+        return this.getWrapperComponent(
         {
-            this.loadedVendorScripts[serviceName] = true;
-
-            return this.getWrapperComponent(
-            {
-                url: `/${serviceName}/static/components/${jsFileName || moduleName}.js`,
-                moduleName,
-                placeholderComponent,
-                onLoaded
-            });
+            serviceName,
+            url: `/${serviceName}/static/components/${jsFileName || moduleName}.js`,
+            moduleName,
+            placeholderComponent,
+            onLoaded
         });
     }
 
@@ -68,7 +57,7 @@ class ComponentLoader
      * @param {function?} onLoaded Called once component was loaded
      * @returns {function}
      */
-    getWrapperComponent({ url, moduleName, placeholderComponent, onLoaded })
+    getWrapperComponent({ serviceName, url, moduleName, placeholderComponent, onLoaded })
     {
         const componentLoader = this;
 
@@ -85,7 +74,7 @@ class ComponentLoader
                 if(component)
                     this.setState({ component });
                 else
-                    componentLoader.fetchScript(url).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName) }));
+                    componentLoader.fetchScript(serviceName, url).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName) }));
             }
 
             render()
@@ -117,14 +106,20 @@ class ComponentLoader
      * @param {string} url Script url
      * @returns {Promise<void>}
      */
-    fetchScript(url)
+    fetchScript(serviceName, url)
     {
         const existing = this.loading.get(url);
 
         if(existing)
             return existing;
 
-        const promise = new Promise(resolve => scriptjs(url, resolve));
+        const promise = this.loadedVendorScripts[serviceName] ? Promise.resolve() : new Promise(resolve => scriptjs(`/${serviceName}/static/components/vendor-bundle.js`, resolve, resolve));
+        
+        promise.then(() =>
+        {
+            this.loadedVendorScripts[serviceName] = true;
+            return new Promise(resolve => scriptjs(url, resolve));
+        });
 
         this.loading.size === 0 && this.onLoadingStarted();
         this.loading.set(url, promise);
