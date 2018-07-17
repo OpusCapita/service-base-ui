@@ -15,6 +15,7 @@ class ComponentLoader
         this.onLoadingStarted = onLoadingStarted;
         this.onLoadingFinished = onLoadingFinished;
         this.loading = new Map();
+        this.loadedVendorScripts = { };
     }
 
     /**
@@ -28,12 +29,24 @@ class ComponentLoader
      */
     load({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded = NOOP })
     {
-        return this.getWrapperComponent(
+        let condition;
+
+        if(this.loadedVendorScripts[serviceName])
+            condition = Promise.resolve();
+        else
+            condition = new Promise(resolve => scriptjs(`/${serviceName}/static/components/vendor-bundle.js`, resolve, resolve));
+
+        return condition.then(() =>
         {
-            url: `/${serviceName}/static/components/${jsFileName || moduleName}.js`,
-            moduleName,
-            placeholderComponent,
-            onLoaded
+            this.loadedVendorScripts[serviceName] = true;
+
+            return this.getWrapperComponent(
+            {
+                url: `/${serviceName}/static/components/${jsFileName || moduleName}.js`,
+                moduleName,
+                placeholderComponent,
+                onLoaded
+            });
         });
     }
 
