@@ -125,7 +125,7 @@ class ComponentLoader
                 .catch(e => null);
         }
 
-        promise.then(() => return new Promise(resolve => scriptjs(url, resolve)));
+        promise.then(() => new Promise(resolve => scriptjs(url, resolve)));
 
         this.loading.size === 0 && this.onLoadingStarted();
         this.loading.set(url, promise);
