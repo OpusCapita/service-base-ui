@@ -114,7 +114,12 @@ class ComponentLoader
             return existing;
 
         const promise = this.loadedVendorScripts[serviceName] ? Promise.resolve() : new Promise(resolve => scriptjs(`/${serviceName}/static/components/vendor-bundle.js`, resolve, resolve));
-        const promise = new Promise(resolve => scriptjs(url, resolve));
+
+        promise.then(() =>
+        {
+            this.loadedVendorScripts[serviceName] = true;
+            return new Promise(resolve => scriptjs(url, resolve));
+        });
 
         this.loading.size === 0 && this.onLoadingStarted();
         this.loading.set(url, promise);
