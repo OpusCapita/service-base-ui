@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import scriptjs from 'scriptjs';
+import superagent from 'superagent';
 
 const NOOP = () => { }
 
@@ -113,13 +114,18 @@ class ComponentLoader
         if(existing)
             return existing;
 
-        const promise = this.loadedVendorScripts[serviceName] ? Promise.resolve() : new Promise(resolve => scriptjs(`/${serviceName}/static/components/vendor-bundle.js`, resolve, resolve));
-        this.loadedVendorScripts[serviceName] = true;
+        let promise = Promise.resolve();
 
-        promise.then(() =>
+        if(!this.loadedVendorScripts[serviceName])
         {
-            return new Promise(resolve => scriptjs(url, resolve));
-        });
+            this.loadedVendorScripts[serviceName] = true;
+
+            promise = superagent.get(`/${serviceName}/static/components/vendor-bundle.js`)
+                .then(() => new Promise(resolve => scriptjs(`/${serviceName}/static/components/vendor-bundle.js`, resolve, resolve)))
+                .catch(e => null);
+        }
+
+        promise.then(() => return new Promise(resolve => scriptjs(url, resolve)));
 
         this.loading.size === 0 && this.onLoadingStarted();
         this.loading.set(url, promise);
