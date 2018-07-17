@@ -113,8 +113,9 @@ class ComponentLoader
         if(existing)
             return existing;
 
-        const promise = this.loadedVendorScripts[serviceName] ? Promise.resolve() : new Promise(resolve => scriptjs(`/${serviceName}/static/components/vendor-bundle.js`, resolve, resolve));
-        
+        const loadVendorBundle = (resolve) => scriptjs(`/${serviceName}/static/components/vendor-bundle.js`, `${serviceName}-vendor-bundle`, resolve);
+        const promise = this.loadedVendorScripts[serviceName] ? Promise.resolve() : new Promise(loadVendorBundle);
+
         promise.then(() =>
         {
             this.loadedVendorScripts[serviceName] = true;
