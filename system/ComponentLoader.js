@@ -114,10 +114,10 @@ class ComponentLoader
             return existing;
 
         const promise = this.loadedVendorScripts[serviceName] ? Promise.resolve() : new Promise(resolve => scriptjs(`/${serviceName}/static/components/vendor-bundle.js`, resolve, resolve));
+        this.loadedVendorScripts[serviceName] = true;
 
         promise.then(() =>
         {
-            this.loadedVendorScripts[serviceName] = true;
             return new Promise(resolve => scriptjs(url, resolve));
         });
 
