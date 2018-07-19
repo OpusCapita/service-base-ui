@@ -86,6 +86,11 @@ export default
             "link": "/bnp/routes"
         },
         {
+            "key": "sftp",
+            "label": "SFTP",
+            "link": "/bnp/sftp"
+        },
+        {
             "key": "business-connections",
             "label": "Business connections",
             "link": "/bnp/business-links"
@@ -177,6 +182,11 @@ export default
             "key": "routes",
             "label": "Routen",
             "link": "/bnp/routes"
+        },
+        {
+            "key": "sftp",
+            "label": "SFTP",
+            "link": "/bnp/sftp"
         },
         {
             "key": "business-connections",
