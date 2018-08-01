@@ -4,7 +4,7 @@ class Notifications extends ApiBase
 {
     getNotifications(status = 'new')
     {
-        return this.ajax.get(`/notification/api/deliveries`).then(res => res && res.body.sort(this._sortByDate)).catch(this.getErrorFromResponse);
+        return this.ajax.get(`/notification/api/deliveries`).then(res => res && res.body.result.sort(this._sortByDate)).catch(this.getErrorFromResponse);
     }
 
     acknowledgeNotification(deliveryId)
