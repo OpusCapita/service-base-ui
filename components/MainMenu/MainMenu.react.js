@@ -310,7 +310,7 @@ class MainMenu extends ConditionalRenderComponent
     {
         return this.notificationsApi.getNotifications('new').then(items =>
         {
-            const notifications = items.slice(items.length - 5).map(item =>
+            const notifications = items.map(item =>
             {
                 return {
                     id : item.id,

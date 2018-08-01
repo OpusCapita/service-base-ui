@@ -8,7 +8,7 @@ class Notifications extends Component
 {
     static propTypes = {
         items : PropTypes.arrayOf(PropTypes.shape({
-            icon : PropTypes.object,
+            id : PropTypes.any,
             icon : PropTypes.string,
             label : PropTypes.node,
             date : PropTypes.string,
@@ -32,7 +32,16 @@ class Notifications extends Component
     {
         super(props);
 
+        this.state = {
+            items : props.items
+        }
+
         context.i18n.register('Menu.Notifications', translations);
+    }
+
+    componentWillReceiveProps(nextProps)
+    {
+        this.setState({ items : nextProps.items });
     }
 
     handleItemClick(item)
@@ -48,12 +57,13 @@ class Notifications extends Component
 
     render()
     {
-        const { items, children } = this.props;
+        const { children } = this.props;
+        const { items } = this.state;
         const { i18n } = this.context;
 
         return(
             <div className="oc-notifications">
-                <div className="header">{i18n.getMessage('Menu.Notifications.newNotifications')} <a href="#" className="function" onClick={e => this.handleMarkAllClick(e)}><small>Mark all read</small></a></div>
+                <div className="header">{i18n.getMessage('Menu.Notifications.newNotifications')} <a href="#" className="function" onClick={e => this.handleMarkAllClick(e)}><small>{i18n.getMessage('Menu.Notifications.markAllRead')}</small></a></div>
                 <div className="items-container">
                     {
                         items && items.length ? items.map((item, i) => <Item key={i} {...item} onClick={item => this.handleItemClick(item)} />)

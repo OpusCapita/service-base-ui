@@ -31,19 +31,34 @@ class Item extends Component
         error : 'fill-error'
     }
 
+    constructor(props)
+    {
+        super(props);
+
+        const { id, icon, label, date, type, url } = props;
+        const item = { id, icon, label, date, type, url };
+
+        this.state = { item };
+    }
+
+    componentWillReceiveProps(nextProps)
+    {
+        const { id, icon, label, date, type, url } = nextProps;
+        const item = { id, icon, label, date, type, url };
+
+        this.state = { item };
+    }
+
     handleOnClick(e)
     {
         e.preventDefault();
 
-        const { id, icon, label, date, type, url } = this.props;
-        const item = { id, icon, label, date, type, url };
-
-        this.props.onClick(item);
+        this.props.onClick(this.state.item);
     }
 
     render()
     {
-        const { icon, label, date, type, url } = this.props;
+        const { icon, label, date, type, url } = this.state.item;
 
         return(
             <div className="oc-notification" onClick={e => this.handleOnClick(e)}>
