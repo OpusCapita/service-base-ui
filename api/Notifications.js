@@ -2,7 +2,7 @@ const { ApiBase } = require('./ApiBase');
 
 class Notifications extends ApiBase
 {
-    async getNotifications(status = 'new')
+    getNotifications(status = 'new')
     {
         return this.ajax.get(`/notification/api/deliveries`).then(res => res && res.body.sort(this._sortByDate)).catch(this.getErrorFromResponse);
     }
