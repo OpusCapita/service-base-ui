@@ -4,7 +4,7 @@ import ConditionalRenderComponent from '../ConditionalRenderComponent.react';
 import ModalDialog from '../ModalDialog.react';
 import { ResetTimer } from '../../system';
 import { Menu, MenuIcon, MenuDropdownGrid, Notifications, MenuAccount, MenuSelect } from './Menu';
-import { Users, Auth } from '../../api';
+import { Users as UsersApi, Auth as AuthApi, Notifications as NotificationsApi } from '../../api';
 import translations from './i18n';
 import navItems from './data/navItems';
 import './MainMenu.css'
@@ -26,15 +26,15 @@ class MainMenu extends ConditionalRenderComponent
         super(props);
 
         this.state = {
-            newNotifications : [ ],
             recentNotifications : [ ],
             activeMenuItem : 0,
             navItems : [ ],
             tenantSwitchMode : ''
         }
 
-        this.usersApi = new Users();
-        this.authApi = new Auth();
+        this.usersApi = new UsersApi();
+        this.authApi = new AuthApi();
+        this.notificationsApi = new NotificationsApi();
 
         const oldPush = context.router.push;
 
@@ -55,18 +55,6 @@ class MainMenu extends ConditionalRenderComponent
 
         this.CustomerDropdown = context.loadComponent({ serviceName : 'customer', moduleName : 'customer-autocomplete', jsFileName : 'autocomplete-bundle' });
         this.SupplierDropdown = context.loadComponent({ serviceName : 'supplier', moduleName : 'supplier-autocomplete', jsFileName : 'autocomplete-bundle' });
-
-        this.UserProfileEditor = context.loadComponent({
-            serviceName: 'user',
-            moduleName: 'user-profile',
-            jsFileName: 'profile-bundle'
-        });
-
-        this.UserRoleEditor = context.loadComponent({
-            serviceName: 'user',
-            moduleName: 'user-role',
-            jsFileName: 'role-bundle'
-        });
     }
 
     componentDidMount()
@@ -74,6 +62,7 @@ class MainMenu extends ConditionalRenderComponent
         const { router, routes } = this.context;
         const location = router.location;
 
+        this.loadNotifications();
         this.switchMenuItemByPath(location.basename + location.pathname);
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -317,10 +306,44 @@ class MainMenu extends ConditionalRenderComponent
         return { protocol, hostname, port, serviceName, path, search, hash, href, isExternal };
     }
 
+    loadNotifications()
+    {
+        return this.notificationsApi.getNotifications('new').then(items =>
+        {
+            const notifications = items.slice(items.length - 5).map(item =>
+            {
+                return {
+                    id : item.id,
+                    type : 'info',
+                    date : this.context.i18n.formatDateTime(item.createdOn),
+                    label : item.title,
+                    icon : this.getIcon('info'),
+                    url : item.link
+                };
+            });
+
+            this.setState({ notifications });
+        })
+        .catch(e => this.context.showNotification(e.message, 'error', 10));
+    }
+
+    handleNotificationClick(item)
+    {
+        this.notificationsApi.acknowledgeNotification(item.id).then(() => document.location = item.url)
+            .catch(e => this.context.showNotification(e.message, 'error', 10));
+    }
+
+    handleMarkAllNotifications(items)
+    {
+        Promise.all(items.map(item => this.notificationsApi.acknowledgeNotification(item.id)))
+            .then(() => this.loadNotifications())
+            .catch(e => this.context.showNotification(e.message, 'error', 10));
+    }
+
     render()
     {
         const { i18n, userData, router } = this.context;
-        const { activeMenuItem, newNotifications, recentNotifications, navItems, tenantSwitchMode, tenantSwitchValue } = this.state;
+        const { activeMenuItem, recentNotifications, navItems, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
         const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
 
         const actions = [ {
@@ -384,13 +407,14 @@ class MainMenu extends ConditionalRenderComponent
                         </MenuIcon>
                     ), (
                         <MenuIcon
-                            onClick={() => console.log('click!')}
                             svg={this.getIcon('notifications')}
-                            supTitle={newNotifications.length}
+                            supTitle={notifications && notifications.length}
                             title={i18n.getMessage('MainMenu.notifications')}
                             hideDropdownArrow={true}>
-                            <Notifications>
-                            </Notifications>
+                            <Notifications
+                                items={notifications}
+                                onClick={item => this.handleNotificationClick(item)}
+                                onMarkAll={items => this.handleMarkAllNotifications(items)} />
                         </MenuIcon>
                     ), (
                         <MenuIcon ref={node => this.accountIcon = node} label={userData.firstname}>
