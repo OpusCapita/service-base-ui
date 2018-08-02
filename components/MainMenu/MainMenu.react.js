@@ -319,9 +319,11 @@ class MainMenu extends ConditionalRenderComponent
 
     render()
     {
-        const { i18n, userData, router } = this.context;
+        const { i18n, userData, userProfile, router } = this.context;
         const { activeMenuItem, newNotifications, recentNotifications, navItems, tenantSwitchMode, tenantSwitchValue } = this.state;
+        const tenantId = userData.customerid ? `c_${userData.customerid}` : `s_${userData.supplierid}`;
         const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
+        const profileImageLink = userProfile.profileImagePath ? `/blob/public/api/${tenantId}/files${userProfile.profileImagePath}` : './static/avatar.jpg';
 
         const actions = [ {
             label : i18n.getMessage('MainMenu.profile'),
@@ -400,7 +402,7 @@ class MainMenu extends ConditionalRenderComponent
                             userName={userData.id}
                             tenantName={userData.tenantname}
                             tenantProfileLink={tenantProfileLink}
-                            avatarSrc={userData.profileImage || './static/avatar.jpg'}
+                            avatarSrc={profileImageLink}
                             actions={actions}
                             bottomElement={(
                                 <div>
