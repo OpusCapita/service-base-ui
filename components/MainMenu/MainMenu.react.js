@@ -391,7 +391,7 @@ class MainMenu extends ConditionalRenderComponent
                     alwaysAtTop={true}
                     logoSrc={this.logoImage}
                     logoTitle="OpusCapita"
-                    logoHref="http://www.opuscapita.com"
+                    logoHref="/bnp"
                     showSearch={true}
                     searchProps={{
                         placeholder : i18n.getMessage('MainMenu.search'),
