@@ -53,7 +53,7 @@ class DatePicker extends ContextComponent
     {
         super(props);
 
-        this.state.value = props.value;
+        this.state.value = typeof(props.value) === 'string' ? props.value : (props.value  && props.value.toString());
         this.state.disabled = props.disabled;
 
         this.container = null;
