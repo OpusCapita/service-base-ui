@@ -50,7 +50,10 @@ const config = {
         }),
         new Visualizer({
           filename: './statistics.html'
-        })
+      }),
+      new webpack.optimize.CommonsChunkPlugin({
+          
+      });
     ]
 }
 
