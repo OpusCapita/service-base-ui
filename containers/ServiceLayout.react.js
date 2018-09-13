@@ -157,8 +157,8 @@ class ServiceLayout extends Component
             window.origin = origin;
         if(!window.location.origin)
             window.location.origin = origin;
-        if(!document.origin)
-            document.origin = origin;
+        if(!window.origin)
+            window.origin = origin;
         if(!document.location.origin)
             document.location.origin = origin;
     }
