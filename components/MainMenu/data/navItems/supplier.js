@@ -31,6 +31,16 @@ export default
         "label": "Invoice",
         "children": [
         {
+            "key": "overview",
+            "label": "Overview",
+            "link": "/sales-invoice/search"
+        },
+        {
+            "key": "key-in",
+            "label": "Key-In",
+            "link": "/sales-invoice/create"
+        },
+        {
             "key": "configuration",
             "label": "Invoice Sending Configuration",
             "link": "/einvoice-send/configuration"
@@ -39,16 +49,6 @@ export default
             "key": "customer-connections",
             "label": "Customer Connections",
             "link": "/einvoice-send/customer-connections"
-        },
-        {
-            "key": "key-in",
-            "label": "Key-In",
-            "link": "/sales-invoice/create"
-        },
-        {
-            "key": "overview",
-            "label": "Overview",
-            "link": "/sales-invoice/search"
         }]
     },
     {
@@ -123,6 +123,16 @@ export default
         "label": "Rechnungen",
         "children": [
         {
+            "key": "overview",
+            "label": "Übersicht",
+            "link": "/sales-invoice/search"
+        },
+        {
+            "key": "key-in",
+            "label": "Rechnungserfassung",
+            "link": "/sales-invoice/create"
+        },
+        {
             "key": "invoice-sending-configuration",
             "label": "Konfiguration Rechnungsversand",
             "link": "/einvoice-send/configuration"
@@ -131,16 +141,6 @@ export default
             "key": "customer-connections",
             "label": "Kundenanbindungen",
             "link": "/einvoice-send/customer-connections"
-        },
-        {
-            "key": "key-in",
-            "label": "Rechnungserfassung",
-            "link": "/sales-invoice/create"
-        },
-        {
-            "key": "overview",
-            "label": "Übersicht",
-            "link": "/sales-invoice/search"
         }]
     },
     {
