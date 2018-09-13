@@ -1,7 +1,6 @@
 {
     "name": "@opuscapita/service-base-ui",
-    "version": "1.1.48",
-    "version": "1.1.47",
+    "version": "1.1.49",
     "description": "Basic API for UI services of OpusCapita Business Network.",
     "main": "lib/bundle.js",
     "files": [
@@ -20,10 +19,6 @@
         "prepublishOnly": "npm version patch -m 'Version set to %s. [skip ci]'"
     },
     "dependencies": {
-        "@opuscapita/config": "^3.0.10",
-        "@opuscapita/db-init": "^2.0.18",
-        "@opuscapita/i18n": "1.2.1",
-        "@opuscapita/web-init": "^3.0.57",
         "deep-equal": "^1.0.1",
         "extend": "^3.0.2",
         "history": "^3.3.0",
@@ -37,6 +32,10 @@
         "superagent": "^3.8.3"
     },
     "devDependencies": {
+        "@opuscapita/config": "^3.0.10",
+        "@opuscapita/db-init": "^2.0.18",
+        "@opuscapita/i18n": "1.2.1",
+        "@opuscapita/web-init": "^3.0.63",
         "@opuscapita/react-buttons": "^4.0.2",
         "@opuscapita/react-svg": "^4.0.0",
         "@opuscapita/svg-icons": "^1.1.4",
