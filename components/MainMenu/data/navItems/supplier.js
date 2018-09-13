@@ -84,11 +84,6 @@ export default
             "key": "routes",
             "label": "Routes",
             "link": "/bnp/routing/routes"
-        },
-        {
-            "key": "business-connections",
-            "label": "Business connections",
-            "link": "/bnp/business-links"
         }]
     }],
 
@@ -177,11 +172,6 @@ export default
             "key": "routes",
             "label": "Routen",
             "link": "/bnp/routing/routes"
-        },
-        {
-            "key": "business-connections",
-            "label": "Geschäftsbeziehungen",
-            "link": "/bnp/business-links"
         }]
     }]
 }
