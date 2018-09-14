@@ -106,7 +106,7 @@ class ComponentLoader
      * @param {string} url Script url
      * @returns {Promise<void>}
      */
-    fetchScript({ url, vendorUrl, serviceName })
+    async fetchScript({ url, vendorUrl, serviceName })
     {
         const existing = this.loading.get(url);
 
