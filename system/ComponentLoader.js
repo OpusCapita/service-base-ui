@@ -67,10 +67,8 @@ class ComponentLoader
                 component: null
             };
 
-            constructor()
+            componentDidMount()
             {
-                super();
-
                 const component = componentLoader.getLoadedComponent(moduleName);
 
                 if(component)
@@ -108,7 +106,7 @@ class ComponentLoader
      * @param {string} url Script url
      * @returns {Promise<void>}
      */
-    async fetchScript({ url, vendorUrl, serviceName })
+    fetchScript({ url, vendorUrl, serviceName })
     {
         const existing = this.loading.get(url);
 
