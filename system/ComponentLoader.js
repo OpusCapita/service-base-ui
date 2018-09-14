@@ -113,16 +113,21 @@ class ComponentLoader
         if(existing)
             return existing;
 
+        const promise = Promise.resolve((async () =>
+        {
+            if(!window[`webpackJsonp${serviceName}__name_`])
+                await ScriptLoader.load(vendorUrl, false).catch(e => null);
+
+            await ScriptLoader.load(url);
+
+            this.loading.delete(url);
+            this.loading.size === 0 && this.onLoadingFinished();
+        })());
+
         this.loading.size === 0 && this.onLoadingStarted();
-        this.loading.set(url, true);
+        this.loading.set(url, promise);
 
-        if(!window[`webpackJsonp${serviceName}__name_`])
-            await ScriptLoader.load(vendorUrl, false).catch(e => null);
-
-        await ScriptLoader.load(url);
-
-        this.loading.delete(url);
-        this.loading.size === 0 && this.onLoadingFinished();
+        return promise;
     }
 
 }
