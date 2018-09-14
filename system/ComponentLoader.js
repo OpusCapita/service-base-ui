@@ -119,7 +119,7 @@ class ComponentLoader
         this.loading.set(url, true);
 
         if(!window[`webpackJsonp${serviceName}__name_`])
-            await ScriptLoader.load(vendorUrl, false);
+            await ScriptLoader.load(vendorUrl, false).catch(e => null);
 
         await ScriptLoader.load(url);
 
