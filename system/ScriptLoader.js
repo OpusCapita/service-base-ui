@@ -6,7 +6,7 @@ class ScriptLoader
         const head = heads && heads[0];
 
         if(!head)
-            throw new Error('Required HTML tag <head> not found in document.');
+            throw new Error('Required HTML tag <head> was not found in document.');
 
         const script = document.createElement('script');
         script.async = useAsync;

@@ -13,6 +13,7 @@ services:
         - api-registry
         - customer
         - supplier
+        - isodata
     labels:
      SERVICE_NAME: 'service-base-ui'
      SERVICE_TAGS: 'external,kong'
@@ -37,6 +38,26 @@ services:
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     depends_on:
       - registrator
+
+  isodata:
+    image: opuscapita/isodata:dev
+    depends_on:
+      - mysql
+      - consul
+      - registrator
+    ports:
+      - '3006:3006'
+    labels:
+      SERVICE_NAME: isodata
+      SERVICE_TAGS: 'kong'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      SERVICE_3006_CHECK_HTTP: /api/health/check
+      SERVICE_3006_CHECK_INTERVAL: 15s
+      SERVICE_3006_CHECK_TIMEOUT: 3s
+      PORT: '3006'
+    command: 'npm run dev:production'
 
   user:
     image: opuscapita/user:dev
@@ -261,12 +282,13 @@ services:
     command: 'npm run dev'
 
   registrator:
-    image: opuscapita/consul-registrator
+    image: gliderlabs/registrator
     command: consul://consul:8500
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
     depends_on:
       - consul
+    restart: on-failure
 
   consul:
     image: consul:latest

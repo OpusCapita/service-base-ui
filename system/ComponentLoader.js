@@ -67,8 +67,10 @@ class ComponentLoader
                 component: null
             };
 
-            componentDidMount()
+            constructor()
             {
+                super();
+
                 const component = componentLoader.getLoadedComponent(moduleName);
 
                 if(component)
