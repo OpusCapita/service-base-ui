@@ -8,6 +8,9 @@ class ScriptLoader
         if(!head)
             throw new Error('Required HTML tag <head> was not found in document.');
 
+        if(document.querySelector(`script[src="${url}"]`))
+            return Promise.resolve();
+
         const script = document.createElement('script');
         script.async = useAsync;
         script.src = url;
