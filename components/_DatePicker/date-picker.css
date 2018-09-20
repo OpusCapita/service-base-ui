@@ -1,0 +1,6 @@
+div.datepicker.datepicker-dropdown.dropdown-menu:before {
+    display: none;
+}
+div.datepicker.datepicker-dropdown.dropdown-menu:after {
+    display: none;
+}
