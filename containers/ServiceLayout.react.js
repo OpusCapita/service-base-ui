@@ -203,7 +203,7 @@ class ServiceLayout extends Component
             });
         })
         .catch(e => this.showNotification(e.message, 'error', 10))
-        .finally(() => this.hideSystemSpinner());
+        .then(() => this.hideSystemSpinner());
     }
 
     showNotification(message, level = 'info', duration = 4, buttonLabel = null, onButtonClick = null)
