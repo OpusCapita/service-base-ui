@@ -1,44 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import extend from 'extend';
 import ContextComponent from '../ContextComponent.react';
 
 import './bootstrap-datepicker';
 import './bootstrap-datepicker-i18n';
 import './date-picker.css';
 
+// https://bootstrap-datepicker.readthedocs.io
 class DatePicker extends ContextComponent
 {
     static propTypes = {
         showIcon : PropTypes.bool.isRequired,
-        // Possible options: https://bootstrap-datepicker.readthedocs.io/en/latest/options.html
-        // additionally you can receive 'events' [{ name: 'hide', fn: () => {} }, ...]
-        // Possible events: https://bootstrap-datepicker.readthedocs.io/en/latest/events.html
-        value : PropTypes.string,
+        value : PropTypes.any,
         format : PropTypes.string,
         onChange : PropTypes.func.isRequired,
         onFocus : PropTypes.func.isRequired,
         onBlur : PropTypes.func.isRequired,
-        disabled : PropTypes.bool.isRequired,
-        debugging : PropTypes.bool.isRequired
+        disabled : PropTypes.bool.isRequired
     };
 
     static defaultProps = {
         showIcon : true,
-        value : '',
+        value : null,
         onChange : () => null,
         onFocus : () => null,
         onBlur : () => null,
-        disabled : false,
-        debugging : false
-    };
-
-    state = {
-        value : null,
         disabled : false
     };
 
-    static defaultOptions = {
+    defaultOptions = {
         autoclose : true,
         todayHighlight : true,
         todayBtn : 'linked',
@@ -46,139 +36,110 @@ class DatePicker extends ContextComponent
         showAnim : 'fold',
         showButtonPanel : true,
         clearBtn : true,
-        language : 'en'
+        format : 'yyyy-mm-dd'
     }
+
+    state = {
+        value : null
+    };
 
     constructor(props, context)
     {
-        super(props);
+        super(props, context);
 
-        this.state.value = typeof(props.value) === 'string' ? props.value : (props.value  && props.value.toString());
-        this.state.disabled = props.disabled;
-
-        this.container = null;
         this.picker = null;
-        this.lastValue = null;
+    }
+
+    componentWillReceiveProps(nextProps, nextContext)
+    {
+        if(this.context.locale !== nextContext.locale)
+        {
+            this.context = nextContext;
+
+            this.dispose();
+            this.init();
+        }
+
+        this.setDisabled(nextProps.disabled);
+        this.setValue(this.parseValue(nextProps.value));
     }
 
     componentDidMount()
     {
         this.init();
+        this.setDisabled(this.props.disabled);
+        this.setValue(this.parseValue(this.props.value));
     }
 
-    componentWillUnmount()
+    parseValue(value)
     {
-        this.dispose();
+        if(typeof(value) === 'string')
+            return new Date(value).toISOString().substr(0, 10);
+        else if(value && value.toISOString)
+            return value.toISOString().substr(0, 10);
+        else if(!value)
+            return new Date().toISOString().substr(0, 10);
+        else
+            throw new Error(`The provided value "${props.value}" property cannot be processed`);
     }
 
     init()
     {
-        const contextFormat = (this.context.i18n.dateFormat && this.context.i18n.dateFormat.toLowerCase()) || 'en';
-        const { debugging } = this.props;
-
-        if(debugging)
-            console.log('init()');
-
-        let pickerOptions = {
+        const pickerOptions = {
+            ...this.defaultOptions,
             showIcon : this.props.showIcon,
-            format : this.props.format || contextFormat,
-            language : this.context.locale
+            language : this.context.locale,
+            format : this.props.format || this.context.i18n.dateFormat.toLowerCase()
         }
 
-        pickerOptions = extend(true, { }, DatePicker.defaultOptions, pickerOptions);
-
-        const element = this.container || this.picker;
-
-        if(debugging)
-            console.log('Registering "changeDate"');
-
-        $(element).datepicker(pickerOptions).on('changeDate', e =>
+        $(this.picker).datepicker(pickerOptions).on('changeDate', e =>
         {
-            if(debugging)
-                console.log('changeDate()');
-
-            const dateString = e.date && e.date.toString();
-            const valueString = this.state.value && this.state.value.toString();
-
-            if(debugging)
-                console.log(`e.date : ${e.date}, dateString : ${dateString}, this.state.value : ${this.state.value}, valueString : ${valueString}`);
-
-            if(dateString !== valueString)
-            {
-                const payload = { date : e.date, dateString : dateString, timestamp : e.timeStamp };
-
-                if(debugging)
-                    console.log(`dateString : ${dateString}, this.lastValue : ${this.lastValue}`);
-
-                if(dateString !== this.lastValue)
-                {
-                    this.props.onChange(payload);
-                    this.setState({ value : dateString });
-                }
-
-                this.lastValue = dateString;
-            }
+            if(this.setValue(e.date && e.date.toISOString()))
+                this.props.onChange({ date : e.date, dateString : e.date && e.date.toString(), timestamp : e.timeStamp });
         });
-
-        if(debugging)
-            console.log(`this.state.value : ${this.state.value}, this.lastValue : ${this.lastValue}`);
-
-        if(this.state.value !== this.lastValue)
-        {
-            if(!this.state.value || this.state.value === '')
-                $(element).datepicker('update', '');
-            else
-                $(element).datepicker('update', new Date(this.state.value));
-        }
-
-        $(element).prop('disabled', this.state.disabled);
     }
 
     dispose()
     {
-        $(this.container || this.picker).datepicker('remove');
-    }
-
-    componentWillReceiveProps(nextProps, nextContext)
-    {
-        this.dispose();
-
-        this.setState({
-            value : nextProps.value,
-            disabled : nextProps.disabled
-        },
-        () => this.init());
-    }
-
-    setDisabled(disabled)
-    {
-        this.dispose();
-        this.setState({ disabled }, () => this.init());
+        $(this.picker).datepicker('destroy');
     }
 
     reset()
     {
-        this.dispose();
-        this.setState({ value : '' }, () => this.init());
+        this.setValue(null)
+    }
+
+    setValue(value)
+    {
+        if(value === this.state.value)
+            return false;
+
+        this.setState({ value }, () => $(this.picker).datepicker('update', new Date(value) || ''));
+
+        return true;
+    }
+
+    setDisabled(disabled)
+    {
+        $(this.picker).prop('disabled', disabled ? true : false);
     }
 
     render()
     {
         const { showIcon, onFocus, onBlur } = this.props;
 
-        return(
-                (showIcon &&
-                    <div className="input-group date"  ref={node => this.container = node}>
-                        <input className="form-control" onFocus={() => onFocus()} onBlur={() => onBlur()} ref={node => this.picker = node}  />
-                        <span className="input-group-addon" ref="toggleBtn">
-                            <span className="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>)
-                ||
-                    <input className="form-control" onFocus={() => onFocus()} onBlur={() => onBlur()} ref={node => this.picker = node} />
-
+        return (
+            showIcon ?
+                <div className="input-group date"  ref={node => this.picker = node}>
+                    <input className="form-control" onFocus={() => onFocus()} onBlur={() => onBlur()} />
+                    <span className="input-group-addon" ref="toggleBtn">
+                        <span className="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            :
+                <input className="form-control" onFocus={() => onFocus()} onBlur={() => onBlur()} ref={node => this.picker = node} />
         );
     }
 }
 
-export default DatePicker
+export default DatePicker;
