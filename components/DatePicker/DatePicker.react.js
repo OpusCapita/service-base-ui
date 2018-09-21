@@ -73,14 +73,22 @@ class DatePicker extends ContextComponent
 
     parseValue(value)
     {
-        if(typeof(value) === 'string')
-            return new Date(value).toISOString().substr(0, 10);
-        else if(value && value.toISOString)
-            return value.toISOString().substr(0, 10);
-        else if(!value)
-            return new Date().toISOString().substr(0, 10);
-        else
-            throw new Error(`The provided value "${props.value}" property cannot be processed`);
+        try
+        {
+            if(typeof(value) === 'string')
+                return new Date(value).toISOString().substr(0, 10);
+            else if(value && value.toISOString)
+                return value.toISOString().substr(0, 10);
+            else if(!value)
+                return '';
+            else
+                throw new Error(`The provided value "${props.value}" property cannot be processed`);
+        }
+        catch(e)
+        {
+            console.warn('Could not parse input date value:', e);
+            return e;
+        }
     }
 
     init()
@@ -122,6 +130,11 @@ class DatePicker extends ContextComponent
     setDisabled(disabled)
     {
         $(this.picker).prop('disabled', disabled ? true : false);
+    }
+
+    getValue()
+    {
+        return this.state.value;
     }
 
     render()
