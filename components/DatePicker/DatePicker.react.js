@@ -40,6 +40,7 @@ class DatePicker extends ContextComponent
     }
 
     state = {
+        disabled : false,
         value : null
     };
 
@@ -59,9 +60,11 @@ class DatePicker extends ContextComponent
             this.dispose();
             this.init();
         }
-
-        this.setDisabled(nextProps.disabled);
-        this.setValue(this.parseValue(nextProps.value));
+        else
+        {
+            this.setDisabled(nextProps.disabled);
+            this.setValue(this.parseValue(nextProps.value));
+        }
     }
 
     componentDidMount()
@@ -102,7 +105,7 @@ class DatePicker extends ContextComponent
 
         $(this.picker).datepicker(pickerOptions).on('changeDate', e =>
         {
-            if(this.setValue(e.date && e.date.toISOString()))
+            if(this.setValue(e.date))
                 this.props.onChange({ date : e.date, dateString : e.date && e.date.toString(), timestamp : e.timeStamp });
         });
     }
@@ -114,7 +117,7 @@ class DatePicker extends ContextComponent
 
     reset()
     {
-        this.setValue(null)
+        this.setValue(null);
     }
 
     setValue(value)
@@ -122,14 +125,15 @@ class DatePicker extends ContextComponent
         if(value === this.state.value)
             return false;
 
-        this.setState({ value }, () => $(this.picker).datepicker('update', new Date(value) || ''));
+        this.setState({ value }, () => $(this.picker).datepicker('update', value ? new Date(value) : ''));
 
         return true;
     }
 
     setDisabled(disabled)
     {
-        $(this.picker).prop('disabled', disabled ? true : false);
+        if(disabled !== this.state.disabled)
+            this.setState({ disabled }, $(this.picker).prop('disabled', disabled ? true : false));
     }
 
     getValue()
