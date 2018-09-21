@@ -14,7 +14,7 @@
     "scripts": {
         "start": "npm run dev",
         "dev": "npm run setup-consul ; node dev/index.js",
-        "build": "npx webpack -p --config webpack.prod.config.js --env=production --colors --bail",
+        "build": "rm ./lib/* ; npx webpack -p --config webpack.prod.config.js --env=production --colors --bail",
         "setup-consul": "curl -X PUT -d ${MYSQL_DATABASE} http://consul:8500/v1/kv/service-base-ui/db-init/database ; curl -X PUT -d root http://consul:8500/v1/kv/service-base-ui/db-init/user ; curl -X PUT -d ${MYSQL_ROOT_PASSWORD} http://consul:8500/v1/kv/service-base-ui/db-init/password ; curl -X PUT -d true http://consul:8500/v1/kv/service-base-ui/db-init/populate-test-data",
         "prepublishOnly": "npm version patch -m 'Version set to %s. [skip ci]'"
     },
