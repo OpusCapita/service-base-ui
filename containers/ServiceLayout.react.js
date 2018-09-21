@@ -275,8 +275,7 @@ class ServiceLayout extends Component
             {
                 if(session && typeof session === 'object')
                 {
-                    const now = new Date();
-                    const secondsRemaining = session.access_token_expiration - Math.floor(now / 1000) + (now.getTimezoneOffset() * 60);
+                    const secondsRemaining = session.access_token_expiration - Math.floor(new Date() / 1000);
 
                     if(!expireNoitification && secondsRemaining <= 300)
                     {
@@ -303,7 +302,7 @@ class ServiceLayout extends Component
             })
             .catch(e => null);
 
-        }, 30000);
+        }, 10000);
     }
 
     showSystemError(message)
