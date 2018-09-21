@@ -6,11 +6,12 @@ import './bootstrap-datepicker';
 import './bootstrap-datepicker-i18n';
 import './date-picker.css';
 
+// https://bootstrap-datepicker.readthedocs.io
 class DatePicker extends ContextComponent
 {
     static propTypes = {
         showIcon : PropTypes.bool.isRequired,
-        value : PropTypes.string,
+        value : PropTypes.any,
         format : PropTypes.string,
         onChange : PropTypes.func.isRequired,
         onFocus : PropTypes.func.isRequired,
@@ -35,7 +36,6 @@ class DatePicker extends ContextComponent
         showAnim : 'fold',
         showButtonPanel : true,
         clearBtn : true,
-        language : 'en',
         format : 'yyyy-mm-dd'
     }
 
@@ -43,42 +43,85 @@ class DatePicker extends ContextComponent
         value : null
     };
 
-    constrcutor(props, context)
+    constructor(props, context)
     {
         super(props, context);
 
-        this.container = null;
         this.picker = null;
-
-        if(typeof(props.value) === 'string')
-            this.state.value = new Date(props.value);
-        else if(!props.value)
-            this.state.value = new Date();
     }
 
     componentWillReceiveProps(nextProps, nextContext)
     {
-        this.setState({ });
+        if(this.context.locale !== nextContext.locale)
+        {
+            this.context = nextContext;
+
+            this.dispose();
+            this.init();
+        }
+
+        this.setDisabled(nextProps.disabled);
+        this.setValue(this.parseValue(nextProps.value));
     }
 
     componentDidMount()
     {
         this.init();
+        this.setDisabled(this.props.disabled);
+        this.setValue(this.parseValue(this.props.value));
+    }
+
+    parseValue(value)
+    {
+        if(typeof(value) === 'string')
+            return new Date(value).toISOString().substr(0, 10);
+        else if(value && value.toISOString)
+            return value.toISOString().substr(0, 10);
+        else if(!value)
+            return new Date().toISOString().substr(0, 10);
+        else
+            throw new Error(`The provided value "${props.value}" property cannot be processed`);
     }
 
     init()
     {
+        const pickerOptions = {
+            ...this.defaultOptions,
+            showIcon : this.props.showIcon,
+            language : this.context.locale,
+            format : this.props.format || this.context.i18n.dateFormat.toLowerCase()
+        }
 
+        $(this.picker).datepicker(pickerOptions).on('changeDate', e =>
+        {
+            if(this.setValue(e.date && e.date.toISOString()))
+                this.props.onChange({ date : e.date, dateString : e.date && e.date.toString(), timestamp : e.timeStamp });
+        });
     }
 
     dispose()
     {
-        $(this.container || this.picker).datepicker('remove');
+        $(this.picker).datepicker('destroy');
     }
 
     reset()
     {
-        this.setState({ value : null });
+        this.setValue(null)
+    }
+
+    setValue(value)
+    {
+        if(value === this.state.value)
+            return false;
+
+        this.setState({ value }, () => $(this.picker).datepicker('update', new Date(value) || ''));
+
+        return true;
+    }
+
+    setDisabled(disabled)
+    {
+        $(this.picker).prop('disabled', disabled ? true : false);
     }
 
     render()
@@ -87,8 +130,8 @@ class DatePicker extends ContextComponent
 
         return (
             showIcon ?
-                <div className="input-group date"  ref={node => this.container = node}>
-                    <input className="form-control" onFocus={() => onFocus()} onBlur={() => onBlur()} ref={node => this.picker = node}  />
+                <div className="input-group date"  ref={node => this.picker = node}>
+                    <input className="form-control" onFocus={() => onFocus()} onBlur={() => onBlur()} />
                     <span className="input-group-addon" ref="toggleBtn">
                         <span className="glyphicon glyphicon-calendar"></span>
                     </span>
