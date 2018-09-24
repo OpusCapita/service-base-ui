@@ -133,7 +133,7 @@ class DatePicker extends ContextComponent
     setDisabled(disabled)
     {
         if(disabled !== this.state.disabled)
-            this.setState({ disabled }, $(this.picker).prop('disabled', disabled ? true : false));
+            this.setState({ disabled }, () => $(this.picker).prop('disabled', disabled ? true : false));
     }
 
     getValue()
