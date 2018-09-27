@@ -192,7 +192,7 @@ class ServiceLayout extends Component
         })
         .then(({ userData, userProfile }) =>
         {
-            return this.bouncer.init(userData).then(() =>
+            return this.bouncer.init(userData, this.props.serviceName).then(() =>
             {
                 this.setState({
                     userData,

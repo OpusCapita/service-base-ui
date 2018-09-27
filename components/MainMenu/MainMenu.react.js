@@ -232,7 +232,7 @@ class MainMenu extends ConditionalRenderComponent
                 if(url.isExternal)
                     return true;
 
-                const resources = this.context.bouncer.findResource(url.serviceName, url.path, 'GET');
+                const resources = this.context.bouncer.findResources(url.serviceName, url.path, 'GET');
 
                 return resources.length > 0;
             }

@@ -265,12 +265,22 @@ The following APIs are currently available:
 * [ScriptLoader](https://github.com/OpusCapita/service-base-ui/blob/master/system/ScriptLoader.js)
 * [UI.nl2br](https://github.com/OpusCapita/service-base-ui/blob/master/system/ui/nl2br.js)
 
-## Client side permissions (UI bouncer)
+## Client side permissions (UI Bouncer)
 
 This library also provides a client side implementaion of the Andariel Bouncer library which enables developers to apply user permissions to their client side user interfaces. A fully prepared instance of the client side bouncer is provided through a component's context.
 
 > For additional information of how to define these permissions, please have a look at the server side [Bouncer](https://github.com/OpusCapita/bouncer#defining-ui-resource-groups-for-bouncer).
 
+There are two important methods inside UI Bouncer. The `findResources()` and the `getUserTenants()` methods.
+
+```JS
+// Returns a list of resource objects where each is representing a resource valid for the requested url and HTTP method inside the passed service.
+findResources(serviceName = null, url = null, method = 'GET')
+```
+```JS
+// Returns a list of tenants granted access to the first resource found for the requested url and HTTP method inside the passed service.
+getUserTenants(serviceName = null, url = null, method = 'GET')
+```
 
 ##### Usage example
 
@@ -283,7 +293,8 @@ class MySpaceshipControl extends Components.ContextComponent
     render()
     {
         const { bouncer } = this.context;
-        const allowTorpedos = bouncer.findResource('myService', '/api/torpedo/fire', 'POST').length > 0;
+        // The all parameters are optional. If not passed, the current client state is used to determine the current configuration.
+        const allowTorpedos = bouncer.findResources('myService', '/api/torpedo/fire', 'POST').length > 0;
 
         return (
             <div>
