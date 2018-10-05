@@ -1,0 +1,9 @@
+{
+    "Menu": {
+        "Notifications": {
+            "newNotifications": "Nya meddelanden",
+            "noNewNotifications": "Det finns inga nya meddelanden.",
+            "markAllRead": "Läs allt"
+        }
+    }
+}

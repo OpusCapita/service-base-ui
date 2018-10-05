@@ -1,0 +1,43 @@
+{
+    "MainMenu": {
+        "logoutDialog": {
+            "title": "Kirjaudu ulos",
+            "message": "Haluatko todella poistua järjestelmästä?"
+        },
+        "profile": "Profiili",
+        "logout": "Kirjaudu ulos",
+        "switchTenant": "Switch tenant",
+        "manualName": "SupplierManual.pdf",
+        "manual": "Käyttöohje",
+        "download": "Lataa",
+        "newNotifications": "Uudet ilmoitukset",
+        "recentNotifications": "Viimeaikaiset ilmoitukset",
+        "noNewNotifications": "Uusia ilmoituksia ei ole",
+        "tenantSwitch": {
+            "modal": {
+                "title": "Switch tenant",
+                "button": {
+                    "proceed": "Edetä"
+                },
+                "label": {
+                    "placeholder": "Choose tenant type...",
+                    "customer": "Asiakas",
+                    "supplier": "Toimittaja"
+                },
+                "text": "Please select a tenant type to get a list of tenants available. Then select or search a tenant to proceed. Please keep in mind, that this tenant switch is a permanent change and stays active even between login sessions. You are currently logged in as \"{tenantname}\"."
+            },
+            "generalError": "Odottamaton virhe tapahtui. Muutoksia ei tehty."
+        },
+        "search": "Etsi",
+        "support": "Tuki",
+        "language": "Kieli",
+        "laguage": {
+            "english": "Englanti",
+            "german": "Saksa",
+            "swedish": "Ruotsi",
+            "finnish": "Suomalainen"
+        },
+        "applications": "Anwendungen",
+        "notifications": "Benachrichtigungen"
+    }
+}

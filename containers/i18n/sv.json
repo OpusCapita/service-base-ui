@@ -1,0 +1,22 @@
+{
+    "Main": {
+        "systemError": {
+            "title": "Ett allmänt fel inträffade"
+        },
+        "notification": {
+            "sessionExpiring": "Din inloggningssession är på väg att upphöra.",
+            "button": {
+                "renewSession": "Förnya nu"
+            }
+        }
+    },
+    "ServiceLayout": {
+        "LogInDialog": {
+            "title": "Var god logga in",
+            "description": "Av säkerhetsskäl har din session löpt ut. Vänligen logga in på systemet för att fortsätta arbeta.",
+            "button": {
+                "signIn": "Logga in"
+            }
+        }
+    }
+}

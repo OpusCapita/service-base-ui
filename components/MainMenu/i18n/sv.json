@@ -1,0 +1,43 @@
+{
+    "MainMenu": {
+        "logoutDialog": {
+            "title": "Logga ut",
+            "message": "Vill du verkligen lämna systemet?"
+        },
+        "profile": "Profil",
+        "logout": "Logga ut",
+        "switchTenant": "Byt hyresgäst",
+        "manualName": "SupplierManual.pdf",
+        "manual": "Manuell",
+        "download": "Ladda ner",
+        "newNotifications": "Nya meddelanden",
+        "recentNotifications": "Senaste meddelanden",
+        "noNewNotifications": "Det finns inga nya meddelanden",
+        "tenantSwitch": {
+            "modal": {
+                "title": "Byt hyresgäst",
+                "button": {
+                    "proceed": "Fortsätt"
+                },
+                "label": {
+                    "placeholder": "Välj hyresgäst typ ...",
+                    "customer": "Kund",
+                    "supplier": "Leverantör"
+                },
+                "text": "Vänligen välj en hyresgästtyp för att få en lista över hyresgäster som är tillgängliga. Välj sedan eller sök en hyresgäst för att fortsätta. Tänk på att den här hyresgästen är en permanent förändring och förblir aktiv även mellan inloggningssessionerna. Du är för närvarande inloggad som \"{hyresnamn}\"."
+            },
+            "generalError": "Ett oväntat fel inträffade. Inga ändringar gjordes."
+        },
+        "search": "Sök",
+        "support": "Stöd",
+        "language": "Språk",
+        "laguage": {
+            "english": "Engelsk",
+            "german": "Tysk",
+            "swedish": "Svenska",
+            "finnish": "Finsk"
+        },
+        "applications": "Anwendungen",
+        "notifications": "Benachrichtigungen"
+    }
+}
