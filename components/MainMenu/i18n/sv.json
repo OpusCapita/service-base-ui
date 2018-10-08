@@ -1,0 +1,25 @@
+{
+    "MainMenu": {
+        "logoutDialog": {
+            "title": "Utloggning",
+            "message": "Vill du logga ut?"
+        },
+        "profile": "Profil",
+        "logout": "Utloggning",
+        "manualName": "Leverantörsinstruktion.pdf",
+        "manual": "Manual",
+        "download": "Nedladdning",
+        "newNotifications": "Ny avisering",
+        "recentNotifications": "Nollställ aviseringar",
+        "noNewNotifications": "Inga nya aviseringar",
+        "search": "Sök",
+        "support": "Support",
+        "laguage": {
+            "english": "English",
+            "german": "Deutch"
+        },
+        "applications": "Applikationer",
+        "notifications": "Aviseringar",
+        "Språk": "Språk"
+    }
+}

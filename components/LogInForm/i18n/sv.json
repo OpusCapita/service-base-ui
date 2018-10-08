@@ -1,0 +1,23 @@
+{
+    "LogInForm": {
+        "label": {
+            "email": "Epostadress",
+            "password": "Lösenord"
+        },
+        "placeholder": {
+            "email": "Din epostadress",
+            "password": "Ditt lösenord"
+        },
+        "button": {
+            "logIn": "Inloggning"
+        },
+        "error": {
+            "email": {
+                "required": "Fältet  \"Epost\" får inte vara tomt."
+            },
+            "password": {
+                "required": "Fältet \"Lösenord\" får inte vara tomt."
+            }
+        }
+    }
+}

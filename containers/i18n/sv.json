@@ -1,0 +1,22 @@
+{
+    "Main": {
+        "systemError": {
+            "title": "Ett fel uppstod"
+        },
+        "notification": {
+            "sessionExpiring": "Din session upphör snart.",
+            "button": {
+                "renewSession": "Förnya nu"
+            }
+        }
+    },
+    "ServiceLayout": {
+        "LogInDialog": {
+            "title": "Vänligen logga in",
+            "description": "Dis session upphörde av säkerhetsskäl. Vänligen logga in igen.",
+            "button": {
+                "signIn": "Inloggning"
+            }
+        }
+    }
+}

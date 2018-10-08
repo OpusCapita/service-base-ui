@@ -1,0 +1,25 @@
+{
+    "MainMenu": {
+        "logoutDialog": {
+            "title": "Kirjaudu ulos",
+            "message": "Haluatko todella poistua järjestelmästä?"
+        },
+        "profile": "Profiili",
+        "logout": "Kirjaudu ulos",
+        "manualName": "SupplierManual.pdf",
+        "manual": "Manuaalinen",
+        "download": "Lataa",
+        "newNotifications": "Uudet ilmoitukset",
+        "recentNotifications": "Viimeaikaiset ilmoitukset",
+        "noNewNotifications": "Uusia ilmoituksia ei ole",
+        "search": "Haku",
+        "support": "Tuki",
+        "language": "Kieli",
+        "laguage": {
+            "english": "Englanti",
+            "german": "Saksa"
+        },
+        "applications": "Sovellukset",
+        "notifications": "Ilmoitukset"
+    }
+}
