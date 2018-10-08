@@ -157,8 +157,8 @@ class ServiceLayout extends Component
             window.origin = origin;
         if(!window.location.origin)
             window.location.origin = origin;
-        if(!document.origin)
-            document.origin = origin;
+        if(!window.origin)
+            window.origin = origin;
         if(!document.location.origin)
             document.location.origin = origin;
     }
@@ -192,7 +192,7 @@ class ServiceLayout extends Component
         })
         .then(({ userData, userProfile }) =>
         {
-            return this.bouncer.init(userData).then(() =>
+            return this.bouncer.init(userData, this.props.serviceName).then(() =>
             {
                 this.setState({
                     userData,
@@ -203,7 +203,7 @@ class ServiceLayout extends Component
             });
         })
         .catch(e => this.showNotification(e.message, 'error', 10))
-        .finally(() => this.hideSystemSpinner());
+        .then(() => this.hideSystemSpinner());
     }
 
     showNotification(message, level = 'info', duration = 4, buttonLabel = null, onButtonClick = null)
@@ -275,8 +275,7 @@ class ServiceLayout extends Component
             {
                 if(session && typeof session === 'object')
                 {
-                    const now = new Date();
-                    const secondsRemaining = session.access_token_expiration - Math.floor(now / 1000) + (now.getTimezoneOffset() * 60);
+                    const secondsRemaining = session.access_token_expiration - Math.floor(new Date() / 1000);
 
                     if(!expireNoitification && secondsRemaining <= 300)
                     {
@@ -303,7 +302,7 @@ class ServiceLayout extends Component
             })
             .catch(e => null);
 
-        }, 30000);
+        }, 10000);
     }
 
     showSystemError(message)

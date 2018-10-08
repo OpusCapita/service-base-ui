@@ -16,12 +16,14 @@ The following container are currently available:
 
 * [ServiceLayout](#servicelayout)
 
-#### &lt;ServiceLayout&gt;
+### &lt;ServiceLayout&gt;
 The **ServiceLayout** container provides the basic frame structure for a UI service based on this library. In most applications, this should be the **entry point** for every React application. It **provides** all basic **context data** and UI APIs to control the user interface from the inside of nested components.
 
 In addition, **ServiceLayout** imports all basic **CSS** styles including **bootstrap** and its JavaScript. Because of several limitations, it does not include jQuery.
 
+
 ##### Usage example
+
 ```JS
 import React from 'react';
 import { Containers } from '@opuscapita/service-base-ui';
@@ -43,7 +45,7 @@ export default Main;
 
 In order to use the full potential of the **ServiceLayout** container, components implemented to build a service's user interface should extend the Components **ContextComponent** or **ConditionalRenderComponent** instead of React.Component.
 
-#### Context (UI API)
+### Context (UI API)
 **ServiceLayout** provides an API to all child components easily accessible through **React's context** object. It provides **UI access** like modal dialogs, notifications, menu visibility and **current user information**.
 
 All API is accessed using the **this.context** object. It all APIs are automatically available one a component extends the components **ContextComponent** or **ConditionalRenderComponent**.
@@ -67,6 +69,7 @@ The following objects are available through a component's context:
 * [userData](https://github.com/OpusCapita/useridentity-middleware)
 * [userProfile](https://github.com/OpusCapita/user/wiki/user.model#userprofile)
 * [i18n](https://github.com/OpusCapita/i18n)
+* [bouncer](#client-side-permissions-ui-bouncer)
 * locale (en, de, ...)
 
 ##### Methods
@@ -246,18 +249,63 @@ The **Components** namespace contains components that usually have to be supplie
 
 The following components are currently available:
 
-* DatePicker
-* LogInForm
-* MainMenu
-* ContextComponent
-* ConditionalRenderComponent
-* ListTable
-* ModalDialog
+* [DatePicker](https://github.com/OpusCapita/service-base-ui/blob/master/components/DatePicker/DatePicker.react.js)
+* [MainMenu](https://github.com/OpusCapita/service-base-ui/blob/master/components/MainMenu/MainMenu.react.js)
+* [ContextComponent](https://github.com/OpusCapita/service-base-ui/blob/master/components/ContextComponent.react.js)
+* [ConditionalRenderComponent](https://github.com/OpusCapita/service-base-ui/blob/master/components/ConditionalRenderComponent.react.js)
+* [ListTable](https://github.com/OpusCapita/service-base-ui/blob/master/components/ListTable.react.js)
+* [ModalDialog](https://github.com/OpusCapita/service-base-ui/blob/master/components/ModalDialog.react.js)
 
 ## System
 The **System** namespace contains API methods which can but don't have to be bound to UI related topics.
 
 The following APIs are currently available:
 
-* ResetTimer
-* UI.nl2br
+* [ResetTimer](https://github.com/OpusCapita/service-base-ui/blob/master/system/ResetTimer.js)
+* [ScriptLoader](https://github.com/OpusCapita/service-base-ui/blob/master/system/ScriptLoader.js)
+* [UI.nl2br](https://github.com/OpusCapita/service-base-ui/blob/master/system/ui/nl2br.js)
+
+## Client side permissions (UI Bouncer)
+
+This library also provides a client side implementaion of the Andariel Bouncer library which enables developers to apply user permissions to their client side user interfaces. A fully prepared instance of the client side bouncer is provided through a component's context.
+
+> For additional information of how to define these permissions, please have a look at the server side [Bouncer](https://github.com/OpusCapita/bouncer#defining-ui-resource-groups-for-bouncer).
+
+There are two important methods inside UI Bouncer. The `findResources()` and the `getUserTenants()` methods.
+
+```JS
+// Returns a list of resource objects where each is representing a resource valid for the requested url and HTTP method inside the passed service.
+findResources(serviceName = null, url = null, method = 'GET')
+```
+```JS
+// Returns a list of tenants granted access to the first resource found for the requested url and HTTP method inside the passed service.
+getUserTenants(serviceName = null, url = null, method = 'GET')
+```
+
+##### Usage example
+
+```JS
+import React from 'react';
+import { Components } from '@opuscapita/service-base-ui';
+
+class MySpaceshipControl extends Components.ContextComponent
+{
+    render()
+    {
+        const { bouncer } = this.context;
+        // The all parameters are optional. If not passed, the current client state is used to determine the current configuration.
+        const allowTorpedos = bouncer.findResources('myService', '/api/torpedo/fire', 'POST').length > 0;
+
+        return (
+            <div>
+                <button type="submit">Fire Phasers</button>
+                {
+                     allowTorpedos && <button type="submit">Fire Photon Torpedo</button>
+                }
+            </div>
+        );
+    }
+}
+
+export default MySpaceshipControl;
+```

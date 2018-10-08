@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import scriptjs from 'scriptjs';
+import ScriptLoader from './ScriptLoader';
 
 const NOOP = () => { }
 
@@ -31,6 +31,8 @@ class ComponentLoader
         return this.getWrapperComponent(
         {
             url: `/${serviceName}/static/components/${jsFileName || moduleName}.js`,
+            vendorUrl : `/${serviceName}/static/components/vendor-bundle.js`,
+            serviceName,
             moduleName,
             placeholderComponent,
             onLoaded
@@ -44,7 +46,7 @@ class ComponentLoader
      */
     getLoadedComponent(moduleName)
     {
-        return(window[moduleName] && window[moduleName].default) || null;
+        return (window[moduleName] && window[moduleName].default) || null;
     }
 
     /**
@@ -55,7 +57,7 @@ class ComponentLoader
      * @param {function?} onLoaded Called once component was loaded
      * @returns {function}
      */
-    getWrapperComponent({ url, moduleName, placeholderComponent, onLoaded })
+    getWrapperComponent({ url, vendorUrl, serviceName, moduleName, placeholderComponent, onLoaded })
     {
         const componentLoader = this;
 
@@ -72,7 +74,7 @@ class ComponentLoader
                 if(component)
                     this.setState({ component });
                 else
-                    componentLoader.fetchScript(url).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName) }));
+                    componentLoader.fetchScript({ url, vendorUrl, serviceName }).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName) }));
             }
 
             render()
@@ -104,23 +106,26 @@ class ComponentLoader
      * @param {string} url Script url
      * @returns {Promise<void>}
      */
-    fetchScript(url)
+    async fetchScript({ url, vendorUrl, serviceName })
     {
         const existing = this.loading.get(url);
 
         if(existing)
             return existing;
 
-        const promise = new Promise(resolve => scriptjs(url, resolve));
+        const promise = Promise.resolve((async () =>
+        {
+            if(!window[`webpackJsonp${serviceName}__name_`])
+                await ScriptLoader.load(vendorUrl, false).catch(e => null);
+
+            await ScriptLoader.load(url);
+
+            this.loading.delete(url);
+            this.loading.size === 0 && this.onLoadingFinished();
+        })());
 
         this.loading.size === 0 && this.onLoadingStarted();
         this.loading.set(url, promise);
-
-        promise.then(() =>
-        {
-            this.loading.delete(url);
-            this.loading.size === 0 && this.onLoadingFinished();
-        });
 
         return promise;
     }
