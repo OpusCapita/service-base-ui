@@ -2,13 +2,16 @@
     display: flex;
     align-items: center;
     padding: 8px 4px;
+    cursor: pointer;
+    border-bottom: solid 2px #fff;
+
+    &:hover {
+        background: #eee;
+        border-bottom: solid 2px #EA6622;
+    }
 
     & .icon {
         flex: 0 0 auto;
-    }
-
-    & .date-time,
-    & .icon {
         padding: 0 12px;
     }
 
@@ -23,24 +26,30 @@
         margin-bottom: auto;
     }
 
-    & .date-time {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: nowrap;
-        margin-left: auto;
-        margin-bottom: auto;
-        opacity: 0.78;
-        font-size: 12px;
-    }
-
     & .message {
         display: flex-start;
         justify-content: left;
         align-items: left;
     }
 
-    & .text-contaniner .label {
-        color: #333;
+    & .text-contaniner {
+        overflow: hidden;
+
+        & .label {
+            color: #333;
+            padding: 0;
+        }
+
+        & .date-time {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: nowrap;
+            margin-left: auto;
+            margin-bottom: auto;
+            opacity: 0.78;
+            font-size: 12px;
+            padding: 0;
+        }
     }
 }

@@ -10,15 +10,23 @@ class Test extends ContextComponent
         value : null
     }
 
-    constructor(props)
+    constructor(props, context)
     {
         super(props);
+
+        this.UserList = context.loadComponent({
+            serviceName: 'user',
+            moduleName: 'user-list',
+            jsFileName: 'list-bundle'
+        });
     }
 
     render()
     {
         return(
-            null
+            <div>
+                <this.UserList />
+            </div>
         );
     }
 }

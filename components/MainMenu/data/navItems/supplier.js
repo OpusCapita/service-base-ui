@@ -14,6 +14,16 @@ export default
             "key": "overview",
             "label": "Overview",
             "link": "/sales-order"
+        },
+        {
+            "key": "orderConfiguration",
+            "label": "Order receiving configuration",
+            "link": "/sales-order/configuration"
+        },
+        {
+            "key": "customerConnections",
+            "label": "Customer Connections",
+            "link": "/sales-order/customer-connections"
         }]
     },
     {
@@ -21,9 +31,9 @@ export default
         "label": "Invoice",
         "children": [
         {
-            "key": "in-channel-configuration",
-            "label": "Invoice Sending Configuration",
-            "link": "/einvoice-send"
+            "key": "overview",
+            "label": "Overview",
+            "link": "/sales-invoice/search"
         },
         {
             "key": "key-in",
@@ -31,9 +41,14 @@ export default
             "link": "/sales-invoice/create"
         },
         {
-            "key": "overview",
-            "label": "Overview",
-            "link": "/sales-invoice/search"
+            "key": "configuration",
+            "label": "Invoice Sending Configuration",
+            "link": "/einvoice-send/configuration"
+        },
+        {
+            "key": "customer-connections",
+            "label": "Customer Connections",
+            "link": "/einvoice-send/customer-connections"
         }]
     },
     {
@@ -43,8 +58,7 @@ export default
         {
             "key": "upload",
             "label": "Upload",
-            "link": "/bnp/catalog-upload",
-            "target": "_blank"
+            "link": "/bnp/catalog-upload"
         }]
     },
     {
@@ -60,6 +74,16 @@ export default
             "key": "users",
             "label": "Users",
             "link": "/bnp/users"
+        }]
+    },
+    {
+        "key": "settings",
+        "label": "Settings",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Routes",
+            "link": "/bnp/routing/routes"
         }]
     }],
 
@@ -77,6 +101,16 @@ export default
             "key": "overview",
             "label": "Übersicht",
             "link": "/sales-order"
+        },
+        {
+            "key": "orderConfiguration",
+            "label": "Konfiguration Bestellannahme",
+            "link": "/sales-order/configuration"
+        },
+        {
+            "key": "customerConnections",
+            "label": "Kundenanbindungen",
+            "link": "/sales-order/customer-connections"
         }]
     },
     {
@@ -84,9 +118,9 @@ export default
         "label": "Rechnungen",
         "children": [
         {
-            "key": "in-channel-configuration",
-            "label": "Konfiguration Rechnungsversand",
-            "link": "/einvoice-send"
+            "key": "overview",
+            "label": "Übersicht",
+            "link": "/sales-invoice/search"
         },
         {
             "key": "key-in",
@@ -94,9 +128,14 @@ export default
             "link": "/sales-invoice/create"
         },
         {
-            "key": "overview",
-            "label": "Übersicht",
-            "link": "/sales-invoice/search"
+            "key": "invoice-sending-configuration",
+            "label": "Konfiguration Rechnungsversand",
+            "link": "/einvoice-send/configuration"
+        },
+        {
+            "key": "customer-connections",
+            "label": "Kundenanbindungen",
+            "link": "/einvoice-send/customer-connections"
         }]
     },
     {
@@ -123,6 +162,16 @@ export default
             "key": "users",
             "label": "Benutzer",
             "link": "/bnp/users"
+        }]
+    },
+    {
+        "key": "settings",
+        "label": "Einstellungen",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Routen",
+            "link": "/bnp/routing/routes"
         }]
     }]
 }

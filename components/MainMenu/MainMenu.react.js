@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ConditionalRenderComponent from '../ConditionalRenderComponent.react';
+import ModalDialog from '../ModalDialog.react';
 import { ResetTimer } from '../../system';
 import { Menu, MenuIcon, MenuDropdownGrid, Notifications, MenuAccount, MenuSelect } from './Menu';
+import { Users as UsersApi, Auth as AuthApi, Notifications as NotificationsApi } from '../../api';
 import translations from './i18n';
 import navItems from './data/navItems';
+import './MainMenu.css'
 
 class MainMenu extends ConditionalRenderComponent
 {
@@ -23,11 +26,15 @@ class MainMenu extends ConditionalRenderComponent
         super(props);
 
         this.state = {
-            newNotifications : [ ],
             recentNotifications : [ ],
             activeMenuItem : 0,
-            navItems : [ ]
+            navItems : [ ],
+            tenantSwitchMode : ''
         }
+
+        this.usersApi = new UsersApi();
+        this.authApi = new AuthApi();
+        this.notificationsApi = new NotificationsApi();
 
         const oldPush = context.router.push;
 
@@ -45,6 +52,9 @@ class MainMenu extends ConditionalRenderComponent
 
         this.logoImage = 'data:image/svg+xml,' + encodeURIComponent(require('!!raw-loader!./img/oc-logo-white.svg'));
         this.searchTimer = new ResetTimer();
+
+        this.CustomerDropdown = context.loadComponent({ serviceName : 'customer', moduleName : 'customer-autocomplete', jsFileName : 'autocomplete-bundle' });
+        this.SupplierDropdown = context.loadComponent({ serviceName : 'supplier', moduleName : 'supplier-autocomplete', jsFileName : 'autocomplete-bundle' });
     }
 
     componentDidMount()
@@ -52,6 +62,7 @@ class MainMenu extends ConditionalRenderComponent
         const { router, routes } = this.context;
         const location = router.location;
 
+        this.loadNotifications();
         this.switchMenuItemByPath(location.basename + location.pathname);
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -119,8 +130,38 @@ class MainMenu extends ConditionalRenderComponent
     {
         if(this.accountIcon)
             this.accountIcon.hideChildren();
-            
+
         this.props.onLanguageChange(e.target.value);
+    }
+
+    showSwitchTenantDialog()
+    {
+        this.setState({ tenantSwitchMode : '' }, () => this.switchTenantModal.show());
+    }
+
+    handleTenantSwitch(button)
+    {
+        if(button === 'proceed')
+        {
+            const { tenantSwitchMode, tenantSwitchValue } = this.state;
+            const { id } = this.context.userData;
+            const customerId = tenantSwitchMode === 'customer' ? tenantSwitchValue.id : null;
+            const supplierId = tenantSwitchMode === 'supplier' ? tenantSwitchValue.id : null;
+
+            if(tenantSwitchValue && (customerId || supplierId))
+            {
+                this.context.showSpinner();
+
+                this.usersApi.updateUser(id, { customerId, supplierId }).then(() => this.authApi.refreshIdToken())
+                    .then(() => document.location.reload(true)).catch(e => this.context.showNotification(e.message, 'error', 10));
+            }
+            else
+            {
+                this.context.showNotification(this.context.i18n.getMessage('MainMenu.tenantSwitch.generalError'), 'warning');
+            }
+        }
+
+        this.setState({ tenantSwitchMode : '', tenantSwitchValue : '' });
     }
 
     getIcon(icon)
@@ -136,12 +177,12 @@ class MainMenu extends ConditionalRenderComponent
         let items = [ ];
 
         if(supplierid)
-            items = navItems.supplier[locale];
+            items = navItems.supplier[locale] || navItems.supplier['en'];
         else if(customerid)
-            items = navItems.customer[locale];
+            items = navItems.customer[locale] || navItems.customer['en'];
 
         if(roles && roles.indexOf('admin') > -1)
-            items = this.recursiveMergeNavItems(items, navItems.admin[locale])
+            items = this.recursiveMergeNavItems(items, navItems.admin[locale] || navItems.admin['en'])
 
         return items;
     }
@@ -191,7 +232,7 @@ class MainMenu extends ConditionalRenderComponent
                 if(url.isExternal)
                     return true;
 
-                const resources = this.context.bouncer.findResource(url.serviceName, url.path, 'GET');
+                const resources = this.context.bouncer.findResources(url.serviceName, url.path, 'GET');
 
                 return resources.length > 0;
             }
@@ -265,10 +306,63 @@ class MainMenu extends ConditionalRenderComponent
         return { protocol, hostname, port, serviceName, path, search, hash, href, isExternal };
     }
 
+    loadNotifications()
+    {
+        return this.notificationsApi.getNotifications('new').then(items =>
+        {
+            const notifications = items.map(item =>
+            {
+                return {
+                    id : item.id,
+                    type : 'info',
+                    date : this.context.i18n.formatDateTime(item.createdOn),
+                    label : item.title,
+                    icon : this.getIcon('info'),
+                    url : item.link
+                };
+            });
+
+            this.setState({ notifications });
+        })
+        .catch(e => this.context.showNotification(e.message, 'error', 10));
+    }
+
+    handleNotificationClick(item)
+    {
+        this.notificationsApi.acknowledgeNotification(item.id).then(() => document.location = item.url)
+            .catch(e => this.context.showNotification(e.message, 'error', 10));
+    }
+
+    handleMarkAllNotifications(items)
+    {
+        Promise.all(items.map(item => this.notificationsApi.acknowledgeNotification(item.id)))
+            .then(() => this.loadNotifications())
+            .catch(e => this.context.showNotification(e.message, 'error', 10));
+    }
+
     render()
     {
-        const { i18n, userData, router } = this.context;
-        const { activeMenuItem, newNotifications, recentNotifications, navItems } = this.state;
+        const { i18n, userData, userProfile, router } = this.context;
+        const { activeMenuItem, recentNotifications, navItems, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
+        const tenantId = userData.customerid ? `c_${userData.customerid}` : `s_${userData.supplierid}`;
+        const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
+        const profileImageLink = userProfile.profileImagePath ? `/blob/public/api/${tenantId}/files/${userProfile.profileImagePath}` : './static/avatar.jpg';
+
+        const actions = [ {
+            label : i18n.getMessage('MainMenu.profile'),
+            onClick : () => this.showProfile()
+        }, {
+            label : i18n.getMessage('MainMenu.logout'),
+            onClick : () => this.handleLogout()
+        } ];
+
+        if(userData.roles.includes('admin'))
+        {
+            actions.push({
+                label : i18n.getMessage('MainMenu.switchTenant'),
+                onClick : () => this.showSwitchTenantDialog()
+            });
+        }
 
         const applicationItems = [{
             label : 'Business Network',
@@ -289,73 +383,98 @@ class MainMenu extends ConditionalRenderComponent
             svg : this.getIcon('app_contracts')
         }];*/
 
-        return(
-            <Menu
-                appName="Business Network"
-                activeItem={activeMenuItem}
-                alwaysAtTop={true}
-                logoSrc={this.logoImage}
-                logoTitle="OpusCapita"
-                logoHref="http://www.opuscapita.com"
-                showSearch={true}
-                searchProps={{
-                    placeholder : i18n.getMessage('MainMenu.search'),
-                    onChange : (e) => this.handleSearch(e)
-                }}
-                navigationItems={this.loadNavItems()}
-                iconsBarItems={[(
-                    <MenuIcon
-                        svg={this.getIcon('apps')}
-                        title={i18n.getMessage('MainMenu.applications')}
-                        hideDropdownArrow={true}>
-                        <MenuDropdownGrid
-                            activeIndex={0}
-                            items={applicationItems}/>
-                    </MenuIcon>
-                ), (
-                    <MenuIcon
-                        onClick={() => console.log('click!')}
-                        svg={this.getIcon('notifications')}
-                        supTitle={newNotifications.length}
-                        title={i18n.getMessage('MainMenu.notifications')}
-                        hideDropdownArrow={true}>
-                        <Notifications>
-                        </Notifications>
-                    </MenuIcon>
-                ), (
-                    <MenuIcon ref={node => this.accountIcon = node} label={userData.firstname}>
-                        <MenuAccount
-                        firstName={userData.firstname}
-                        lastName={userData.lastname}
-                        userName={userData.id}
-                        avatarSrc={userData.profileImage || './static/avatar.jpg'}
-                        actions={[{
-                            label : i18n.getMessage('MainMenu.profile'),
-                            onClick : () => this.showProfile()
-                        }, {
-                            label : i18n.getMessage('MainMenu.logout'),
-                            onClick : () => this.handleLogout()
-                        }]}
-                        bottomElement={(
-                            <div>
-                                <div className="select-item">
-                                    <span><strong>{i18n.getMessage('MainMenu.support')}:</strong> +49 231 3967 350<br /><a href="mailto:customerservice.de@opuscapita.com">customerservice.de@opuscapita.com</a></span>
-                                </div>
-                                <div className="select-item">
-                                    <span><strong>{i18n.getMessage('MainMenu.manual')}:</strong> <a href="#" onClick={e => this.handleManualClick(e)}>{i18n.getMessage('MainMenu.download')}</a></span>
-                                </div>
+        return (
+            <div>
+                <Menu
+                    appName="Business Network"
+                    activeItem={activeMenuItem}
+                    alwaysAtTop={true}
+                    logoSrc={this.logoImage}
+                    logoTitle="OpusCapita"
+                    logoHref="/bnp"
+                    showSearch={true}
+                    searchProps={{
+                        placeholder : i18n.getMessage('MainMenu.search'),
+                        onChange : (e) => this.handleSearch(e)
+                    }}
+                    navigationItems={this.loadNavItems()}
+                    iconsBarItems={[(
+                        <MenuIcon
+                            svg={this.getIcon('apps')}
+                            title={i18n.getMessage('MainMenu.applications')}
+                            hideDropdownArrow={true}>
+                            <MenuDropdownGrid
+                                activeIndex={0}
+                                items={applicationItems}/>
+                        </MenuIcon>
+                    ), (
+                        <MenuIcon
+                            svg={this.getIcon('notifications')}
+                            supTitle={notifications && notifications.length}
+                            title={i18n.getMessage('MainMenu.notifications')}
+                            hideDropdownArrow={true}>
+                            <Notifications
+                                items={notifications}
+                                onClick={item => this.handleNotificationClick(item)}
+                                onMarkAll={items => this.handleMarkAllNotifications(items)} />
+                        </MenuIcon>
+                    ), (
+                        <MenuIcon ref={node => this.accountIcon = node} label={userData.firstname}>
+                            <MenuAccount
+                            firstName={userData.firstname}
+                            lastName={userData.lastname}
+                            userName={userData.id}
+                            tenantName={userData.tenantname}
+                            tenantProfileLink={tenantProfileLink}
+                            avatarSrc={profileImageLink}
+                            actions={actions}
+                            bottomElement={(
+                                <div>
+                                    <div className="select-item">
+                                        <span><strong>{i18n.getMessage('MainMenu.support')}:</strong> +49 231 3967 350<br /><a href="mailto:customerservice.de@opuscapita.com">customerservice.de@opuscapita.com</a></span>
+                                    </div>
+                                    <div className="select-item">
+                                        <span><strong>{i18n.getMessage('MainMenu.manual')}:</strong> <a href="#" onClick={e => this.handleManualClick(e)}>{i18n.getMessage('MainMenu.download')}</a></span>
+                                    </div>
 
-                                <div className="select-item">
-                                    <span className="select-item-label">{i18n.getMessage('MainMenu.language')}</span>
-                                    <MenuSelect className="select-item-select" defaultValue={userData.languageid} onChange={e => this.handleLanguageChange(e)}>
-                                        <option value="en">{i18n.getMessage('MainMenu.laguage.english')}</option>
-                                        <option value="de">{i18n.getMessage('MainMenu.laguage.german')}</option>
-                                    </MenuSelect>
+                                    <div className="select-item">
+                                        <span className="select-item-label">{i18n.getMessage('MainMenu.language')}</span>
+                                        <MenuSelect className="select-item-select" defaultValue={userData.languageid} onChange={e => this.handleLanguageChange(e)}>
+                                            <option value="en">{i18n.getMessage('MainMenu.laguage.english')}</option>
+                                            <option value="de">{i18n.getMessage('MainMenu.laguage.german')}</option>
+                                            <option value="sv">{i18n.getMessage('MainMenu.laguage.swedish')}</option>
+                                            <option value="fi">{i18n.getMessage('MainMenu.laguage.finnish')}</option>
+                                        </MenuSelect>
+                                    </div>
                                 </div>
+                            )}/>
+                        </MenuIcon>
+                    )]}/>
+                <ModalDialog title={i18n.getMessage('MainMenu.tenantSwitch.modal.title')} buttons={{ proceed : i18n.getMessage('MainMenu.tenantSwitch.modal.button.proceed'), cancel : i18n.getMessage('System.cancel') }} buttonsDisabled={tenantSwitchValue ? [ ] : [ 'proceed' ]} onButtonClick={btn => this.handleTenantSwitch(btn)} ref={node => this.switchTenantModal = node}>
+                    <div className="tenant-switch">
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <p>{i18n.getMessage('MainMenu.tenantSwitch.modal.text', userData)}</p>
                             </div>
-                        )}/>
-                    </MenuIcon>
-                )]}/>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <select onChange={e => this.setState({ tenantSwitchMode : e.target.value, tenantSwitchValue : '' })} value={tenantSwitchMode}>
+                                    <option value="" disabled>{i18n.getMessage('MainMenu.tenantSwitch.modal.label.placeholder')}</option>
+                                    <option value="customer">{i18n.getMessage('MainMenu.tenantSwitch.modal.label.customer')}</option>
+                                    <option value="supplier">{i18n.getMessage('MainMenu.tenantSwitch.modal.label.supplier')}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                { tenantSwitchMode === 'customer' && <this.CustomerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} /> }
+                                { tenantSwitchMode === 'supplier' && <this.SupplierDropdown onChange={value => this.setState({ tenantSwitchValue : value })} /> }
+                            </div>
+                        </div>
+                    </div>
+                </ModalDialog>
+            </div>
         )
     }
 }

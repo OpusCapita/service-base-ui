@@ -16,9 +16,10 @@ class Bouncer
         this.acl = new Acl();
     }
 
-    init(userData)
+    init(userData, serviceName)
     {
         this.userData = userData;
+        this.serviceName = serviceName;
         const roles = (userData && userData.roles) || [ ];
 
         return Promise.all([
@@ -32,10 +33,15 @@ class Bouncer
         });
     }
 
-    findResource(serviceName, url, method)
+    findResources(serviceName = null, url = null, method = 'GET')
     {
+        if(!serviceName)
+            serviceName = this.serviceName;
+        if(!url)
+            url = document.location.pathname;
+
         const userId = this.userData && this.userData.id;
-        const cacheKey = `service-base-ui.${serviceName}${url}:${userId}`;
+        const cacheKey = `service-base-ui#findResources.${serviceName}${url}:${userId}`;
         const cached = this.getCachedValue(cacheKey);
 
         if(cached)
@@ -71,6 +77,44 @@ class Bouncer
         foundResources.length && this.setCachedValue(cacheKey, foundResources);
 
         return foundResources;
+    }
+
+    getUserTenants(serviceName = null, url = null, method = 'GET')
+    {
+        const userData = this.userData;
+        const userId = userData && userData.id;
+        const cacheKey = `service-base-ui#getUserTenants.${serviceName}${url}:${userId}:${method}`;
+        const cached = this.getCachedValue(cacheKey);
+
+        if(cached)
+            return cached;
+
+        const resource = this.findResources(serviceName, url, method).shift();
+
+        let result = [ ];
+
+        if(resource === '*')
+        {
+            result = [ '*' ];
+        }
+        else if(resource)
+        {
+            const roleId = resource.roleId;
+            const roleConstraints = roleId && Array.isArray(userData.xroles) && userData.xroles.filter(r => r.role === roleId).map(r => r.tenants);
+
+            if(userData.roles && userData.roles.indexOf('admin') > -1)
+                result = [ '*' ];
+            else if(Array.isArray(roleConstraints) && roleConstraints.length > 0)
+                result = [ ...roleConstraints[0] ];
+            else if(userData.supplierid)
+                result = [ `s_${userData.supplierid}` ];
+            else if(userData.customerid)
+                result = [ `c_${userData.customerid}` ];
+        }
+
+        this.setCachedValue(cacheKey, result);
+
+        return result;
     }
 
     getPermissions(roles)

@@ -50,7 +50,7 @@ const config = {
         }),
         new Visualizer({
           filename: './statistics.html'
-        })
+      })
     ]
 }
 
