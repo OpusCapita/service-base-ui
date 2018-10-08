@@ -1,9 +1,5 @@
 {
-    "Menu": {
-        "Notifications": {
-            "newNotifications": "Nya meddelanden",
-            "noNewNotifications": "Det finns inga nya meddelanden.",
-            "markAllRead": "Läs allt"
-        }
-    }
+    "Menu.Notifications.newNotifications": "Nya meddelanden",
+    "Menu.Notifications.noNewNotifications": "Det finns inga nya meddelanden.",
+    "Menu.Notifications.markAllRead": "Läs allt"
 }
