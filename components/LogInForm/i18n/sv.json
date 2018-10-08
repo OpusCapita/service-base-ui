@@ -1,0 +1,9 @@
+{
+    "LogInForm.label.email": "e-post",
+    "LogInForm.label.password": "Lösenord",
+    "LogInForm.placeholder.email": "Din email",
+    "LogInForm.placeholder.password": "Ditt lösenord",
+    "LogInForm.button.logIn": "Logga in",
+    "LogInForm.error.email.required": "Fältet \"e-post\" kan inte vara tomt.",
+    "LogInForm.error.password.required": "Fältet \"Lösenord\" kan inte vara tomt."
+}
