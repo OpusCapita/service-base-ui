@@ -13,19 +13,13 @@ class Test extends ContextComponent
     constructor(props, context)
     {
         super(props);
-
-        this.UserList = context.loadComponent({
-            serviceName: 'user',
-            moduleName: 'user-list',
-            jsFileName: 'list-bundle'
-        });
     }
 
     render()
     {
         return(
             <div>
-                <this.UserList />
+                <DatePicker showIcon={false} value={'2018-10-12T23:00:00.000Z'} />
             </div>
         );
     }

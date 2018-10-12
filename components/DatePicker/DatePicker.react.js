@@ -79,10 +79,9 @@ class DatePicker extends ContextComponent
         try
         {
             if(value && typeof(value) === 'string')
-                value = new Date(value.substr(0, 10));
-            
-            if(value && value.toISOString)
-                return new Date(value - value.getTimezoneOffset() * 60000).toISOString().substr(0, 10);
+                return new Date();
+            else if(value && value.constrcutor  && value.constrcutor.name === 'Date')
+                return value;
             else if(!value)
                 return '';
             else
