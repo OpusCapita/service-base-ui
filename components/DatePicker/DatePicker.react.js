@@ -80,12 +80,12 @@ class DatePicker extends ContextComponent
         {
             if(value && typeof(value) === 'string')
                 return new Date(value);
-            else if(value && value.constrcutor  && value.constrcutor.name === 'Date')
+            else if(value && value.constructor  && value.constructor.name === 'Date')
                 return value;
             else if(!value)
                 return '';
             else
-                throw new Error(`The provided value "${props.value}" property cannot be processed`);
+                throw new Error(`The provided value "${value}" property cannot be processed`);
         }
         catch(e)
         {

@@ -19,7 +19,7 @@ class Test extends ContextComponent
     {
         return(
             <div>
-                <DatePicker showIcon={false} value={'2018-10-12T23:00:00.000Z'} />
+                <DatePicker showIcon={false} value={new Date('2018-10-12T23:00:00.000Z')} />
             </div>
         );
     }
