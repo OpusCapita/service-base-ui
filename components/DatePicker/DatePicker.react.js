@@ -79,7 +79,7 @@ class DatePicker extends ContextComponent
         try
         {
             if(value && typeof(value) === 'string')
-                return new Date();
+                return new Date(value);
             else if(value && value.constrcutor  && value.constrcutor.name === 'Date')
                 return value;
             else if(!value)
