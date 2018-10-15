@@ -44,6 +44,11 @@ export default
             "key": "users",
             "label": "Users",
             "link": "/bnp/users"
+        },
+        {
+            "key": "connections",
+            "label": "Connections",
+            "link": "/bnp/connections"
         }]
     }],
 
@@ -91,6 +96,11 @@ export default
             "key": "users",
             "label": "Benutzer",
             "link": "/bnp/users"
+        },
+        {
+            "key": "connections",
+            "label": "Verbindungen",
+            "link": "/bnp/connections"
         }]
     }]
 }
