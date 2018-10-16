@@ -19,11 +19,6 @@ export default
             "key": "orderConfiguration",
             "label": "Order receiving configuration",
             "link": "/sales-order/configuration"
-        },
-        {
-            "key": "customerConnections",
-            "label": "Customer Connections",
-            "link": "/sales-order/customer-connections"
         }]
     },
     {
@@ -44,11 +39,6 @@ export default
             "key": "configuration",
             "label": "Invoice Sending Configuration",
             "link": "/einvoice-send/configuration"
-        },
-        {
-            "key": "customer-connections",
-            "label": "Customer Connections",
-            "link": "/einvoice-send/customer-connections"
         }]
     },
     {
@@ -74,6 +64,11 @@ export default
             "key": "users",
             "label": "Users",
             "link": "/bnp/users"
+        },
+        {
+            "key": "connections",
+            "label": "Connections",
+            "link": "/bnp/connections"
         }]
     },
     {
@@ -106,11 +101,6 @@ export default
             "key": "orderConfiguration",
             "label": "Konfiguration Bestellannahme",
             "link": "/sales-order/configuration"
-        },
-        {
-            "key": "customerConnections",
-            "label": "Kundenanbindungen",
-            "link": "/sales-order/customer-connections"
         }]
     },
     {
@@ -131,11 +121,6 @@ export default
             "key": "invoice-sending-configuration",
             "label": "Konfiguration Rechnungsversand",
             "link": "/einvoice-send/configuration"
-        },
-        {
-            "key": "customer-connections",
-            "label": "Kundenanbindungen",
-            "link": "/einvoice-send/customer-connections"
         }]
     },
     {
@@ -162,6 +147,11 @@ export default
             "key": "users",
             "label": "Benutzer",
             "link": "/bnp/users"
+        },
+        {
+            "key": "connections",
+            "label": "Verbindungen",
+            "link": "/bnp/connections"
         }]
     },
     {
@@ -194,11 +184,6 @@ export default
             "key": "orderConfiguration",
             "label": "Inställningar för mottag av order",
             "link": "/sales-order/configuration"
-        },
-        {
-            "key": "customerConnections",
-            "label": "Kundanslutningar",
-            "link": "/sales-order/customer-connections"
         }]
     },
     {
@@ -219,11 +204,6 @@ export default
             "key": "configuration",
             "label": "Inställningar för att skicka Fakturor",
             "link": "/einvoice-send/configuration"
-        },
-        {
-            "key": "customer-connections",
-            "label": "Kundanslutningar",
-            "link": "/einvoice-send/customer-connections"
         }]
     },
     {
@@ -249,6 +229,11 @@ export default
             "key": "users",
             "label": "Användare",
             "link": "/bnp/users"
+        },
+        {
+            "key": "connections",
+            "label": "Connections",
+            "link": "/bnp/connections"
         }]
     },
     {
@@ -281,11 +266,6 @@ export default
             "key": "orderConfiguration",
             "label": "Vastaanotto konfiguraatio",
             "link": "/sales-order/configuration"
-        },
-        {
-            "key": "customerConnections",
-            "label": "Asiakasyhteydet",
-            "link": "/sales-order/customer-connections"
         }]
     },
     {
@@ -306,11 +286,6 @@ export default
             "key": "configuration",
             "label": "Lähetys konfiguraatio",
             "link": "/einvoice-send/configuration"
-        },
-        {
-            "key": "customer-connections",
-            "label": "Asiakasyhteydet",
-            "link": "/einvoice-send/customer-connections"
         }]
     },
     {
@@ -336,6 +311,11 @@ export default
             "key": "users",
             "label": "Käyttäjät",
             "link": "/bnp/users"
+        },
+        {
+            "key": "connections",
+            "label": "Connections",
+            "link": "/bnp/connections"
         }]
     },
     {
