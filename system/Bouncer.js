@@ -16,21 +16,19 @@ class Bouncer
         this.acl = new Acl();
     }
 
-    init(userData, serviceName)
+    async init(userData, serviceName)
     {
         this.userData = userData;
         this.serviceName = serviceName;
         const roles = (userData && userData.roles) || [ ];
 
-        return Promise.all([
+        const [ permissions, resourceGroups ] = await Promise.all([
             this.getPermissions(roles),
             this.getResourceGroups()
-        ])
-        .then(([permissions, resourceGroups]) =>
-        {
-            this.permissions = permissions;
-            this.resourceGroups = resourceGroups;
-        });
+        ]);
+
+        this.permissions = permissions;
+        this.resourceGroups = resourceGroups;
     }
 
     findResources(serviceName = null, url = null, method = 'GET')
@@ -47,16 +45,14 @@ class Bouncer
         if(cached)
             return cached;
 
-        const roles = (this.userData && this.userData.roles) || [ ];
         const prefixLength = serviceName.length + 1;
         const action = actionsMap[method.toUpperCase()];
 
         let foundResources = [ ];
         const permissions = this.permissions.filter(p => p.resourceGroupId.startsWith(serviceName));
 
-        for(const i in permissions)
+        for(const permission of permissions)
         {
-            const permission = permissions[i];
             const resourceGroupName = permission.resourceGroupId.substring(prefixLength);
 
             if(resourceGroupName === '*')
@@ -74,7 +70,7 @@ class Bouncer
             }
         }
 
-        foundResources.length && this.setCachedValue(cacheKey, foundResources);
+        this.setCachedValue(cacheKey, foundResources);
 
         return foundResources;
     }
@@ -117,7 +113,45 @@ class Bouncer
         return result;
     }
 
-    getPermissions(roles)
+    getUserResourceGroups(serviceName = null)
+    {
+        if(!serviceName)
+            serviceName = this.serviceName;
+
+        const userId = this.userData && this.userData.id;
+        const cacheKey = `service-base-ui#getUserResourceGroups.${serviceName}:${userId}`;
+        const cached = this.getCachedValue(cacheKey);
+
+        if(cached)
+            return cached;
+
+        const prefixLength = serviceName.length + 1;
+        const permissions = this.permissions.filter(p => p.resourceGroupId.startsWith(serviceName));
+        let foundResourceGroups = new Set();
+        
+        for(const permission of permissions)
+        {
+            const resourceGroupName = permission.resourceGroupId.substring(prefixLength);
+            
+            foundResourceGroups.add(resourceGroupName);
+
+            if(resourceGroupName === '*')
+                break;
+        }
+        
+        foundResourceGroups = [ ...foundResourceGroups ];
+
+        this.setCachedValue(cacheKey, foundResourceGroups);
+
+        return foundResourceGroups;
+    }
+
+    userHasResourceGroup(resourceGroupId, serviceName = null)
+    {
+        return this.getUserResourceGroups(serviceName).some(rg => rg === resourceGroupId);
+    }
+
+    async getPermissions(roles)
     {
         const cacheKey = 'service-base-ui.' + JSON.stringify(roles);
         const cached = this.getCachedValue(cacheKey);
@@ -128,18 +162,15 @@ class Bouncer
         }
         else
         {
-            return this.acl.getPermissions(roles).then(permissions =>
-            {
-                permissions = permissions.reduce((all, more) => all.concat(more), [ ]);
+            const permissions = (await this.acl.getPermissions(roles)).reduce((all, more) => all.concat(more), [ ]);
+            
+            this.setCachedValue(cacheKey, permissions);
 
-                this.setCachedValue(cacheKey, permissions);
-
-                return permissions;
-            });
+            return permissions;
         }
     }
 
-    getResourceGroups()
+    async getResourceGroups()
     {
         const cacheKey = 'service-base-ui.resourceGroups';
         const cached = this.getCachedValue(cacheKey);
@@ -150,24 +181,22 @@ class Bouncer
         }
         else
         {
-            return this.acl.getResourceGroups().then(resourceGroups =>
+            const map = { };
+            const resourceGroups = await this.acl.getResourceGroups();
+
+            resourceGroups.forEach(rg =>
             {
-                const map = { };
+                const { serviceName, resourceGroupId, resources } = rg;
 
-                resourceGroups.forEach(rg =>
-                {
-                    const { serviceName, resourceGroupId, resources } = rg;
+                if(!map[serviceName])
+                    map[serviceName] = { };
 
-                    if(!map[serviceName])
-                        map[serviceName] = { };
-
-                    map[serviceName][resourceGroupId] = { resources };
-                });
-
-                this.setCachedValue(cacheKey, map);
-
-                return map;
+                map[serviceName][resourceGroupId] = { resources };
             });
+
+            this.setCachedValue(cacheKey, map);
+
+            return map;
         }
     }
 

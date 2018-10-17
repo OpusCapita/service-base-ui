@@ -281,6 +281,14 @@ findResources(serviceName = null, url = null, method = 'GET')
 // Returns a list of tenants granted access to the first resource found for the requested url and HTTP method inside the passed service.
 getUserTenants(serviceName = null, url = null, method = 'GET')
 ```
+```JS
+// Returns true or false depending on whenever the current user has access to the requested resource group.
+userHasResourceGroup(resourceGroupId, serviceName = null)
+```
+```JS
+// Retruns an array of resource group IDs the current user has permissions for.
+getUserResourceGroups(serviceName = null)
+```
 
 ##### Usage example
 
