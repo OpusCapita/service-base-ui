@@ -30,6 +30,16 @@ class ContextComponent extends React.Component
         bouncer : PropTypes.object.isRequired
     }
 
+    componentDidMount()
+    {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+
+    componentDidUpdate()
+    {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+
     getComponentId()
     {
         if(!this.componentId)

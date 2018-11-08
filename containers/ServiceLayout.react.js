@@ -98,6 +98,12 @@ class ServiceLayout extends Component
     componentDidMount()
     {
         this.showSystemSpinner();
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+
+    componentDidUpdate()
+    {
+        $('[data-toggle="tooltip"]').tooltip();
     }
 
     getI18nManager(locale)

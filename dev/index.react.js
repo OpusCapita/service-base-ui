@@ -7,7 +7,8 @@ import { ContextComponent, LogInForm, DatePicker } from '../components';
 class Test extends ContextComponent
 {
     state = {
-        value : null
+        value : null,
+        blupp : 0
     }
 
     constructor(props, context)
@@ -15,11 +16,18 @@ class Test extends ContextComponent
         super(props);
     }
 
+    componentDidUpdate()
+    {
+        console.log('blupp');
+    }
+
     render()
     {
         return(
             <div>
                 <DatePicker showIcon={false} value={new Date('2018-10-12T23:00:00.000Z')} />
+                <a href="#" data-toggle="tooltip" title="Hooray!" onClick={() => this.setState({ blupp : 1 })}>Hover over me</a>
+                {this.state.blupp && <a href="#" data-toggle="tooltip" title="Hooray!">Hover over me 2</a>}
             </div>
         );
     }
