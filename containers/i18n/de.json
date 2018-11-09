@@ -1,6 +1,8 @@
 {
     "Main.systemError.title": "Ein allgemeiner Fehler ist aufgetreten",
+    "Main.notification.sessionError": "Es ist ein Sitzungsfehler aufgetreten und Ihre Sitzung kann möglicherweise nicht fortgesetzt werden. Bitte melden Sie sich ab und erneut an.",
     "Main.notification.sessionExpiring": "Ihre Sitzung wird in Kürze ablaufen.",
+    "Main.notification.button.logout": "Logout",
     "Main.notification.button.renewSession": "Jetzt aktualisieren",
     "ServiceLayout.LogInDialog.title": "Anmeldung",
     "ServiceLayout.LogInDialog.description": "Ihre aktuelle Sitzung ist aus Sicherheitsgünden abgelaufen. Bitten melden Sie sich erneut an um fortzufahren.",

@@ -275,7 +275,7 @@ class ServiceLayout extends Component
     {
         let expireNoitification = null;
 
-        setInterval(() =>
+        const watchInterval = setInterval(() =>
         {
             this.authApi.getSessionData().then(session =>
             {
@@ -283,7 +283,17 @@ class ServiceLayout extends Component
                 {
                     const secondsRemaining = session.access_token_expiration - Math.floor(new Date() / 1000);
 
-                    if(!expireNoitification && secondsRemaining <= 300)
+                    if(isNaN(secondsRemaining))
+                    {
+                        clearInterval(watchInterval);
+
+                        const message = this.state.i18n.getMessage('Main.notification.sessionError');
+                        const buttonLabel = this.state.i18n.getMessage('Main.notification.button.logout');
+                        const buttonClick = () => this.logOutUser(document.location);
+
+                        expireNoitification = this.showNotification(message, 'warning', 3600, buttonLabel, buttonClick);
+                    }
+                    else if(!expireNoitification && secondsRemaining <= 300)
                     {
                         const message = this.state.i18n.getMessage('Main.notification.sessionExpiring');
                         const buttonLabel = this.state.i18n.getMessage('Main.notification.button.renewSession');
@@ -306,9 +316,13 @@ class ServiceLayout extends Component
                     document.location.reload(true);
                 }
             })
-            .catch(e => null);
+            .catch(e =>
+            {
+                this.showNotification(e.message, 'warning', 3600);
+                clearInterval(watchInterval);
+            });
 
-        }, 10000);
+        }, 30000);
     }
 
     showSystemError(message)
