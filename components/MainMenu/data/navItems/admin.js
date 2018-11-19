@@ -46,6 +46,16 @@ export default
             "key": "customers",
             "label": "Customers",
             "link": "/bnp/customers"
+        },
+        {
+            "key": "businesslinks",
+            "label": "Business Links",
+            "link": "/bnp/businesslinks"
+        },
+        {
+            "key": "catalogs",
+            "label": "Catalogs",
+            "link": "/bnp/catalogs"
         }]
     }],
 
@@ -95,6 +105,16 @@ export default
             "key": "customers",
             "label": "Kunden",
             "link": "/bnp/customers"
+        },
+        {
+            "key": "businesslinks",
+            "label": "Geschäftsverbindungen",
+            "link": "/bnp/businesslinks"
+        },
+        {
+            "key": "catalogs",
+            "label": "Kataloge",
+            "link": "/bnp/catalogs"
         }]
     }]
 }
