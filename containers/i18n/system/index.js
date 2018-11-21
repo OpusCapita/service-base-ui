@@ -1,5 +1,6 @@
-import en from './en'
-import de from './de';
+const de = require('./de.json');
+const en = require('./en.json');
+const sv = require('./sv.json');
+const fi = require('./fi.json');
 
-export default { en, de };
-export { en, de };
+module.exports = { de, en, sv, fi };
