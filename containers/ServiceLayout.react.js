@@ -14,7 +14,7 @@ import systemTranslations from './i18n/system';
 import formatters from './i18n/formatters';
 import ajax from 'superagent';
 
-import './static/css/bootstrap-3.3.7.min.css';
+// import './static/css/bootstrap-3.3.7.min.css';
 import './static/css/ocui-bootstrap-bundle-0.1.2.min.css';
 import './static/js/bootstrap-3.3.7.min.js';
 import './static/css/Main.min.css';
@@ -99,6 +99,14 @@ class ServiceLayout extends Component
     {
         this.showSystemSpinner();
         $('[data-toggle="tooltip"]').tooltip();
+
+        window.onscroll = () =>
+        {
+            if($(document).scrollTop() > 65 || $('body').scrollTop() > 65)
+                $('#system-progress-bar').css({ top : '40px', transition : 'top 0.2s ease 0s' });
+            else
+                $('#system-progress-bar').css({ top : '70px', transition : 'top 0.3s ease 0s' });
+        }
     }
 
     componentDidUpdate()

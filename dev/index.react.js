@@ -7,27 +7,24 @@ import { ContextComponent, LogInForm, DatePicker } from '../components';
 class Test extends ContextComponent
 {
     state = {
-        value : null,
-        blupp : 0
     }
 
     constructor(props, context)
     {
         super(props);
-    }
 
-    componentDidUpdate()
-    {
-        console.log('blupp');
+        this.UserList = context.loadComponent({
+            serviceName: 'user',
+            moduleName: 'user-list',
+            jsFileName: 'list-bundle'
+        });
     }
 
     render()
     {
         return(
             <div>
-                <DatePicker showIcon={false} value={new Date('2018-10-12T23:00:00.000Z')} />
-                <a href="#" data-toggle="tooltip" title="Hooray!" onClick={() => this.setState({ blupp : 1 })}>Hover over me</a>
-                {this.state.blupp && <a href="#" data-toggle="tooltip" title="Hooray!">Hover over me 2</a>}
+                <this.UserList />
             </div>
         );
     }
