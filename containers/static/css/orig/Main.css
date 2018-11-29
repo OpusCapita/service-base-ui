@@ -5,6 +5,11 @@ body {
     overflow: visible !important;
 }
 
+body.no-scroll {
+    overflow: hidden !important;
+    /* height: 100% !important; */
+}
+
 #system-error-message {
     position: absolute;
     top: 0;

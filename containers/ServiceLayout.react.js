@@ -100,13 +100,15 @@ class ServiceLayout extends Component
         this.showSystemSpinner();
         $('[data-toggle="tooltip"]').tooltip();
 
-        window.onscroll = () =>
+        const onscroll = () =>
         {
             if($(document).scrollTop() > 65 || $('body').scrollTop() > 65)
                 $('#system-progress-bar').css({ top : '40px', transition : 'top 0.2s ease 0s' });
             else
                 $('#system-progress-bar').css({ top : '70px', transition : 'top 0.3s ease 0s' });
         }
+
+        window.addEventListener('scroll', onscroll);
     }
 
     componentDidUpdate()
@@ -370,8 +372,14 @@ class ServiceLayout extends Component
 
     showSystemSpinner()
     {
+        const spinner = $('#system-spinner');
+        const top = $(document).scrollTop();
+        
         if(this.systemSpinnerCount === 0)
-            $('#system-spinner').fadeIn();
+        {
+            spinner.css({ top }).fadeIn();
+            $('body').addClass('no-scroll');
+        }
 
         this.systemSpinnerCount++;
     }
@@ -381,7 +389,10 @@ class ServiceLayout extends Component
         if(this.systemSpinnerCount > 0)
         {
             if(this.systemSpinnerCount === 1)
+            {
                 $('#system-spinner').fadeOut();
+                $('body').removeClass('no-scroll');
+            }
 
             this.systemSpinnerCount--;
         }
