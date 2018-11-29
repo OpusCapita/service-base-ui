@@ -24,7 +24,7 @@ class Test extends ContextComponent
     {
         return(
             <div>
-                <this.UserList />
+                <DatePicker showIcon={false} />
             </div>
         );
     }

@@ -33,7 +33,7 @@ server.init({
 .then(app => app.get('*', (req, res) => res.sendFile(process.cwd() + '/dev/index.html')))
 .then(() => configService.init())
 .then(config => config.waitForEndpoints([ 'acl', 'user', 'auth' ]))
-.delay(10000)
+.delay(30000)
 .then(() =>
 {
     return db.init({

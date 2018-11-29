@@ -7660,6 +7660,114 @@ html {
     font-size: .8em;
     text-align: right;
   }
+  @font-face {
+    font-family: 'icomoon';
+    src: url('../fonts/ocicons/icomoon.eot?39hl9t');
+    src: url('../fonts/ocicons/icomoon.eot?39hl9t#iefix') format('embedded-opentype'), url('../fonts/ocicons/icomoon.ttf?39hl9t') format('truetype'), url('../fonts/ocicons/icomoon.woff?39hl9t') format('woff'), url('../fonts/ocicons/icomoon.svg?39hl9t#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+  [class^="oci-"],
+  [class*=" oci-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .oci-order-v2:before {
+    content: "\e29";
+  }
+  .oci-responsibility:before {
+    content: "\e28";
+  }
+  .oci-order-v1:before {
+    content: "\e27";
+  }
+  .oci-inventory-v1:before {
+    content: "\e22";
+  }
+  .oci-lists:before {
+    content: "\e25";
+  }
+  .oci-campaigns:before {
+    content: "\e24";
+  }
+  .oci-supdirect:before {
+    content: "\e23";
+  }
+  .oci-inventory:before {
+    content: "\e26";
+  }
+  .oci-cart:before {
+    content: "\e21";
+  }
+  .oci-order:before {
+    content: "\e20";
+  }
+  .oci-supplier:before {
+    content: "\e19";
+  }
+  .oci-rating:before {
+    content: "\e18";
+  }
+  .oci-respons4:before {
+    content: "\e17";
+  }
+  .oci-respons2:before {
+    content: "\e16";
+  }
+  .oci-respons:before {
+    content: "\e15";
+  }
+  .oci-catalog:before {
+    content: "\e14";
+  }
+  .oci-reports:before {
+    content: "\e13";
+  }
+  .oci-approve:before {
+    content: "\e12";
+  }
+  .oci-products:before {
+    content: "\e11";
+  }
+  .oci-import:before {
+    content: "\e10";
+  }
+  .oci-docu:before {
+    content: "\e9";
+  }
+  .oci-texts:before {
+    content: "\e8";
+  }
+  .oci-analyze:before {
+    content: "\e7";
+  }
+  .oci-store:before {
+    content: "\e6";
+  }
+  .oci-user:before {
+    content: "\e5";
+  }
+  .oci-invoice:before {
+    content: "\e4";
+  }
+  .oci-quote:before {
+    content: "\e3";
+  }
+  .oci-bell:before {
+    content: "\e2";
+  }
+  .oci-admin:before {
+    content: "\e1";
+  }
   span.shadow {
     background: rgba(255, 255, 255, 0.75);
     padding: 10px;
@@ -8652,6 +8760,9 @@ html {
     padding: 4px;
     border-radius: 4px;
     direction: ltr;
+    /* >div {
+          display: none;
+      } */
     /*.dow {
           border-top: 1px solid #ddd !important;
       }*/
@@ -8715,9 +8826,6 @@ html {
     bottom: -6px;
     border-bottom: 0;
     border-top: 6px solid #fff;
-  }
-  .datepicker > div {
-    display: none;
   }
   .datepicker.days div.datepicker-days {
     display: block;
@@ -12169,6 +12277,99 @@ html {
   .control-bar ul.pagination li:last-child a {
     border-top-right-radius: 99em;
     border-bottom-right-radius: 99em;
+  }
+  section.oc-flow-chart .flow-chart-canvas {
+    min-height: 500px;
+    background: #eee;
+    box-shadow: inset 0px 5px 15px rgba(0, 0, 0, 0.15);
+    position: relative;
+  }
+  section.oc-flow-chart .flow-chart-canvas .node {
+    background: #fff;
+    position: absolute;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+    padding: .75em;
+    border-top: 3px solid #e70;
+  }
+  section.oc-flow-chart .flow-chart-canvas .node h4 {
+    padding: 0px;
+    margin: 0px;
+    font-size: 1.25em;
+  }
+  section.oc-flow-chart .flow-chart-canvas .node .progress {
+    height: 2px;
+    background: #f5f5f5;
+    margin: 8px 0px;
+  }
+  section.oc-flow-chart .flow-chart-canvas .node .progress .progress-bar {
+    height: 2px;
+    background: #067;
+  }
+  section.oc-flow-chart .flow-chart-canvas .connector {
+    position: absolute;
+  }
+  section.oc-flow-chart .flow-chart-canvas .connector .bezier-connector {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  section.oc-flow-chart .flow-chart-canvas .connector .badge {
+    width: 40px;
+    margin-left: -20px;
+    height: 18px;
+    margin-top: -9px;
+    margin-bottom: -9px;
+    margin-right: -20px;
+    position: absolute;
+    display: block;
+    background: #666;
+    color: #eee;
+    line-height: 1em;
+    top: 50%;
+    left: 50%;
+  }
+  .time-feed {
+    margin: 5em;
+    position: relative;
+  }
+  .time-feed .progress {
+    position: relative;
+    height: 2px;
+    background: #eee;
+  }
+  .time-feed .progress-bar {
+    background: #067;
+    height: 2px;
+  }
+  .time-feed .event {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 16px;
+    background: #eee;
+    position: absolute;
+    top: 50%;
+    margin-top: -8px;
+    margin-left: -8px;
+  }
+  .time-feed .event.done {
+    background: #067;
+  }
+  .time-feed .event .tooltip {
+    opacity: 1;
+    top: 50%;
+    margin-top: 0px;
+    width: 120px;
+    margin-left: -52px;
+    margin-top: 10px;
+    border-radius: 3px;
+  }
+  .time-feed .event .tooltip .tooltip-arrow {
+    border-bottom-color: #ccc;
+  }
+  .time-feed .event .tooltip .tooltip-inner {
+    background: #ccc;
+    color: #333;
   }
   /*!
    * Bootstrap v3.0.2 by @fat and @mdo
