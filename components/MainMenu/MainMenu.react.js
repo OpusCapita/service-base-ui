@@ -65,13 +65,13 @@ class MainMenu extends ConditionalRenderComponent
 
     componentDidMount()
     {
-        const { router, bouncer } = this.context;
+        const { router, userData } = this.context;
         const location = router.location;
 
         this.loadNotifications();
         this.switchMenuItemByPath(location.basename + location.pathname);
 
-        const displayInvoiceIcon = this.invoiceResourceGroups.some(rg => bouncer.userHasResourceGroup(rg, 'invoice'));
+        const displayInvoiceIcon = this.invoiceResourceGroups.some(rg => userData.roles.includes(rg));
 
         this.setState({ displayInvoiceIcon });
 
