@@ -28,7 +28,7 @@ class MenuDropdownGrid extends Component
         return (
             <div className="oc-menu-dropdown-grid">
                 <div className="items">
-                    {items.map((item, i) => <Item {...item} isActive={activeIndex === i} />)}
+                    {items.map((item, i) => <Item key={item.id} {...item} isActive={activeIndex === i} />)}
                 </div>
             </div>
         );

@@ -21,6 +21,12 @@ class MainMenu extends ConditionalRenderComponent
         onSearch : (term) => null
     }
 
+    invoiceResourceGroups = [
+        'invoice-approver',
+        'invoice-inspector',
+        'invoice-matcher'
+    ]
+
     constructor(props, context)
     {
         super(props);
@@ -59,11 +65,16 @@ class MainMenu extends ConditionalRenderComponent
 
     componentDidMount()
     {
-        const { router, routes } = this.context;
+        const { router, bouncer } = this.context;
         const location = router.location;
 
         this.loadNotifications();
         this.switchMenuItemByPath(location.basename + location.pathname);
+
+        const displayInvoiceIcon = this.invoiceResourceGroups.some(rg => bouncer.userHasResourceGroup(rg, 'invoice'));
+
+        this.setState({ displayInvoiceIcon });
+
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
 
@@ -343,7 +354,7 @@ class MainMenu extends ConditionalRenderComponent
     render()
     {
         const { i18n, userData, userProfile, router } = this.context;
-        const { activeMenuItem, recentNotifications, navItems, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
+        const { activeMenuItem, displayInvoiceIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
         const tenantId = userData.customerid ? `c_${userData.customerid}` : `s_${userData.supplierid}`;
         const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
         const profileImageLink = userProfile.profileImagePath ? `/blob/public/api/${tenantId}/files/${userProfile.profileImagePath}` : './static/avatar.jpg';
@@ -367,21 +378,19 @@ class MainMenu extends ConditionalRenderComponent
         const applicationItems = [{
             label : 'Business Network',
             icon : this.getIcon('app_business_network_portal'),
-            onClick : () => router.push('/bnp')
+            onClick : () => router.push('/bnp'),
+            id : 'app_business_network_portal'
         }];
-        /*const applicationItems = [{
-            label : 'Analytics',
-            svg : this.getIcon('link')
-        }, {
-            label : 'Business Network Portal',
-            svg : this.getIcon('app_business_network_portal')
-        }, {
-            label : 'Catalog Portal',
-            svg : this.getIcon('app_catalog_portal')
-        }, {
-            label : 'Contracts',
-            svg : this.getIcon('app_contracts')
-        }];*/
+
+        if(displayInvoiceIcon)
+        {
+            applicationItems.push({
+                label : 'Invoice',
+                icon : this.getIcon('app_invoice'),
+                onClick : () => router.push('/invoice'),
+                id : 'app_invoice'
+            })
+        }
 
         return (
             <div>
