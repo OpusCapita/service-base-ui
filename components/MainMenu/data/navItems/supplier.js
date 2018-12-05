@@ -242,7 +242,7 @@ export default
         },
         {
             "key": "connections",
-            "label": "Connections",
+            "label": "Anslutningar",
             "link": "/bnp/connections"
         }]
     },
