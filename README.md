@@ -71,6 +71,7 @@ The following objects are available through a component's context:
 * [i18n](https://github.com/OpusCapita/i18n)
 * [bouncer](#client-side-permissions-ui-bouncer)
 * locale (en, de, ...)
+* environment (develop, stage, production)
 
 ##### Methods
 The following methods are available through a component's context:

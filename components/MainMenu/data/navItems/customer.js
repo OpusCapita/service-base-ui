@@ -29,6 +29,12 @@ export default
             "key": "supplier-directory",
             "label": "Supplier Directory",
             "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Supplier status",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
         }]
     },
     {
@@ -81,6 +87,12 @@ export default
             "key": "supplier-directory",
             "label": "Lieferantenverzeichnis",
             "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Lieferantenstatus",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
         }]
     },
     {

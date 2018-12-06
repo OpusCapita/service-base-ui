@@ -183,7 +183,7 @@ class MainMenu extends ConditionalRenderComponent
     getNavItems()
     {
         const { supplierid, customerid, roles } = this.context.userData;
-        const { locale } = this.context;
+        const { locale, environment } = this.context;
 
         let items = [ ];
 
@@ -195,7 +195,7 @@ class MainMenu extends ConditionalRenderComponent
         if(roles && roles.indexOf('admin') > -1)
             items = this.recursiveMergeNavItems(items, navItems.admin[locale] || navItems.admin['en'])
 
-        return items;
+        return items.filter(item => !item.environments || item.environments.includes(environment));
     }
 
     recursiveMergeNavItems(items, overlays)
