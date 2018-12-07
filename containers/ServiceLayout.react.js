@@ -540,7 +540,7 @@ class ServiceLayout extends Component
                 }
                 <div id="system-spinner" className="text-center">
                     <div className="inner text-center">
-                        <i className="fa fa-cog fa-spin fa-3x fa-fw" />
+                        <i className="fa fa-cog" />
                     </div>
                 </div>
             </div>

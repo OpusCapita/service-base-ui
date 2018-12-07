@@ -47,6 +47,7 @@ body.no-scroll {
     margin-top: -50px;
     background: #fff;
     border-radius: 50px;
+    animation: roll 0.25s infinite linear;
 }
 
 #system-spinner .inner i {
@@ -124,4 +125,10 @@ body.no-scroll {
   color: #ffffff !important;
   background-color: #00434e !important;
   border-color: #001c20 !important;
+}
+
+@keyframes roll {
+    0% {
+        transform: rotate(-46deg);
+    }
 }
