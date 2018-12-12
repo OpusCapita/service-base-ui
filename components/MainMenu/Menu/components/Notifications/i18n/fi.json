@@ -1,5 +1,9 @@
 {
-    "Menu.Notifications.newNotifications": "Uudet ilmoitukset",
-    "Menu.Notifications.noNewNotifications": "Uusia ilmoituksia ei ole.",
-    "Menu.Notifications.markAllRead": "Lue kaikki"
+    "Menu": {
+        "Notifications": {
+            "newNotifications": "Uudet ilmoitukset",
+            "noNewNotifications": "Uusia ilmoituksia ei ole.",
+            "markAllRead": "Lue kaikki"
+        }
+    }
 }
