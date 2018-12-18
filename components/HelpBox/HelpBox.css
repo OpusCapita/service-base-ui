@@ -7,12 +7,12 @@
 }
 
 .helpBox .header {
-    font-weight: normal;
-    font-family: Lato,Helvetica Neue,Helvetica,Arial,sans-serif;
+    overflow: hidden;
     background: #eee;
     color: #444;
     display: block;
     cursor: pointer;
+    position: relative;
     height: 40px;
     line-height: 40px;
     font-size: 20px;
@@ -22,6 +22,18 @@
 }
 .helpBox .header:hover {
     background: #ddd;
+}
+.helpBox .header.single {
+    cursor: default;
+}
+.helpBox .header .text {
+    display: block;
+    height: 40px;
+    position: absolute;
+    left: 10px; right: 40px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .helpBox .header-check:checked + .header {

@@ -8,8 +8,9 @@ class HelpBox extends React.Component
     {
         super(props);
 
-        this.state = {
-            num: Math.floor((Math.random() * 10000) + 1),
+        this.state =
+        {
+            num: Math.floor((Math.random() * 50000) + 1),
             selected: 0,
             active: "item_0"
         };
@@ -18,7 +19,8 @@ class HelpBox extends React.Component
         this.checkIfActive = this.checkIfActive.bind(this);
     }
 
-    handleChange(event) {
+    handleChange(event)
+    {
         this.setState({
             active: event.target.value
         });
@@ -26,7 +28,7 @@ class HelpBox extends React.Component
 
     checkIfActive(event)
     {
-        if(this.state.active === event.target.value)
+        if(this.state.active === event.target.value && event.target.className.indexOf("multiple") >= 0)
         {
             this.setState({
                 active: false
@@ -36,13 +38,13 @@ class HelpBox extends React.Component
 
     renderHelpItem(child, multipleItems, index)
     {
-        let classAppendix = multipleItems ? "multiple" : "single";
+        const classAppendix = multipleItems ? "multiple" : "single";
 
         return(
             <li key={index}>
                 <input
                     id={`item-${this.state.num}-${index}`}
-                    className={"header-check"}
+                    className={`header-check ${classAppendix}`}
                     name={`helpboxitems-${this.state.num}`}
                     type="radio"
                     value={"item_" + index}
@@ -50,7 +52,11 @@ class HelpBox extends React.Component
                     onChange={this.handleChange}
                     onClick={this.checkIfActive}
                 />
-                <label className={`header ${classAppendix}`}htmlFor={`item-${this.state.num}-${index}`}>{child.props.title}</label>
+                <label className={`header ${classAppendix}`} htmlFor={`item-${this.state.num}-${index}`}>
+                    <span className={"text"}>
+                        {child.props.title}
+                    </span>
+                </label>
                 <article>
                     {child}
                 </article>
@@ -61,9 +67,10 @@ class HelpBox extends React.Component
     render()
     {
         return (
-            <ul className={"helpBox"}>
-                {Array.isArray(this.props.children) ?
-                    this.props.children.map((child, index) => this.renderHelpItem(child, true, index)) : this.renderHelpItem(this.props.children, false, 0)
+            <ul className="helpBox">
+                {
+                    Array.isArray(this.props.children) ?
+                        this.props.children.map((child, index) => this.renderHelpItem(child, true, index)) : this.renderHelpItem(this.props.children, false, 0)
                 }
             </ul>
         )
