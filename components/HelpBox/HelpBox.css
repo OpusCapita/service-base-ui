@@ -52,6 +52,7 @@
     -o-transition: transform 0.2s ease-in-out;
     transition: transform 0.2s ease-in-out;
 }
+
 .helpBox article {
     background: #f7f7f7;
     max-height: 0;
@@ -76,3 +77,4 @@
     -o-transition: max-height 0.5s ease-in-out, color 0.5s linear;
     transition: max-height 0.5s ease-in-out, color 0.5s linear;
 }
+
