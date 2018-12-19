@@ -1,43 +1,29 @@
 {
-    "MainMenu": {
-        "logoutDialog": {
-            "title": "Kirjaudu ulos",
-            "message": "Haluatko todella poistua järjestelmästä?"
-        },
-        "profile": "Profiili",
-        "logout": "Kirjaudu ulos",
-        "switchTenant": "Switch tenant",
-        "manualName": "SupplierManual.pdf",
-        "manual": "Käyttöohje",
-        "download": "Lataa",
-        "newNotifications": "Uudet ilmoitukset",
-        "recentNotifications": "Viimeaikaiset ilmoitukset",
-        "noNewNotifications": "Uusia ilmoituksia ei ole",
-        "tenantSwitch": {
-            "modal": {
-                "title": "Switch tenant",
-                "button": {
-                    "proceed": "Edetä"
-                },
-                "label": {
-                    "placeholder": "Choose tenant type...",
-                    "customer": "Asiakas",
-                    "supplier": "Toimittaja"
-                },
-                "text": "Please select a tenant type to get a list of tenants available. Then select or search a tenant to proceed. Please keep in mind, that this tenant switch is a permanent change and stays active even between login sessions. You are currently logged in as \"{tenantname}\"."
-            },
-            "generalError": "Odottamaton virhe tapahtui. Muutoksia ei tehty."
-        },
-        "search": "Haku",
-        "support": "Tuki",
-        "language": "Kieli",
-        "laguage": {
-            "english": "Englanti",
-            "german": "Saksa",
-            "swedish": "Ruotsi",
-            "finnish": "Suomi"
-        },
-        "applications": "Sovellukset",
-        "notifications": "Ilmoitukset"
-    }
+    "MainMenu.logoutDialog.title": "Kirjaudu ulos",
+    "MainMenu.logoutDialog.message": "Haluatko todella poistua järjestelmästä?",
+    "MainMenu.profile": "Profiili",
+    "MainMenu.logout": "Kirjaudu ulos",
+    "MainMenu.switchTenant": "Switch tenant",
+    "MainMenu.manualName": "SupplierManual.pdf",
+    "MainMenu.manual": "Käyttöohje",
+    "MainMenu.download": "Lataa",
+    "MainMenu.newNotifications": "Uudet ilmoitukset",
+    "MainMenu.recentNotifications": "Viimeaikaiset ilmoitukset",
+    "MainMenu.noNewNotifications": "Uusia ilmoituksia ei ole",
+    "MainMenu.tenantSwitch.modal.title": "Switch tenant",
+    "MainMenu.tenantSwitch.modal.button.proceed": "Edetä",
+    "MainMenu.tenantSwitch.modal.label.placeholder": "Choose tenant type...",
+    "MainMenu.tenantSwitch.modal.label.customer": "Asiakas",
+    "MainMenu.tenantSwitch.modal.label.supplier": "Toimittaja",
+    "MainMenu.tenantSwitch.modal.text": "Please select a tenant type to get a list of tenants available. Then select or search a tenant to proceed. Please keep in mind, that this tenant switch is a permanent change and stays active even between login sessions. You are currently logged in as \"{tenantname}\".",
+    "MainMenu.tenantSwitch.generalError": "Odottamaton virhe tapahtui. Muutoksia ei tehty.",
+    "MainMenu.search": "Haku",
+    "MainMenu.support": "Tuki",
+    "MainMenu.language": "Kieli",
+    "MainMenu.laguage.english": "Englanti",
+    "MainMenu.laguage.german": "Saksa",
+    "MainMenu.laguage.swedish": "Ruotsi",
+    "MainMenu.laguage.finnish": "Suomi",
+    "MainMenu.applications": "Sovellukset",
+    "MainMenu.notifications": "Ilmoitukset"
 }
