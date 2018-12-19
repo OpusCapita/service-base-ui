@@ -30,6 +30,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               git reset HEAD --hard
               echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login
+              npm install
               npm publish --access public
               git push
             fi
