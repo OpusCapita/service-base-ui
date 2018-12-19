@@ -7,7 +7,7 @@ WORKDIR /home/node/service-base-ui
 COPY . .
 
 ENV NODE_ENV=development NODE_PATH=/home/node/node_modules PATH=${PATH}:${NODE_PATH}/.bin
-RUN npm install webpack-cli && npm install && npm cache clean --force
+RUN pm install -D && npm cache clean --force
 
 # A container must expose a port if it wants to be registered in Consul by Registrator.
 # The port is fed both to node express server and Consul => DRY principle is observed with ENV VAR.
