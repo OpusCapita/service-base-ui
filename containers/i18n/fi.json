@@ -3,6 +3,6 @@
     "Main.notification.sessionExpiring": "Kirjautumissessiosi on vanhentumassa.",
     "Main.notification.button.renewSession": "Uudista nyt",
     "ServiceLayout.LogInDialog.title": "Ole hyvä ja kirjaudu sisään",
-    "ServiceLayout.LogInDialog.description": "Turvallisuussyistä istuntosi on vanhentunut. Jatka kirjautumalla uudestaan.",
+    "ServiceLayout.LogInDialog.description": "Turvallisuussyistä istuntosi on vanhentunut. Jatka kirjautumalla uudelleen.",
     "ServiceLayout.LogInDialog.button.signIn": "Kirjaudu sisään"
 }
