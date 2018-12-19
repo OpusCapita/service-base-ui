@@ -1,3 +1,4 @@
+import extend from 'extend';
 import { Acl } from '../api';
 
 const actionsMap = {
@@ -66,7 +67,12 @@ class Bouncer
                 const resources = foundResourceGroup && foundResourceGroup.resources;
 
                 if(resources)
-                    foundResources = foundResources.concat(resources.filter(r => url.match(new RegExp(this.replacePlaceholders(r.resourceId, this.userData))) && r.actions.indexOf(action) > -1));
+                {
+                    const filtered = resources.filter(r => url.match(new RegExp(this.replacePlaceholders(r.resourceId, this.userData), 'i')) && r.actions.indexOf(action) > -1)
+                            .map(r => ({ ...r, roleId : permission.role }));
+
+                    foundResources = foundResources.concat(filtered);
+                }
             }
         }
 
@@ -85,7 +91,7 @@ class Bouncer
         if(cached)
             return cached;
 
-        const resource = this.findResources(serviceName, url, method).shift();
+        const resource = this.mergeResources(this.findResources(serviceName, url, method));
 
         let result = [ ];
 
@@ -199,6 +205,29 @@ class Bouncer
             return map;
         }
     }
+
+    mergeResources(resources)
+    {
+        if(resources.indexOf('*') > -1)
+            return { };
+
+        const result = extend(true, { }, ...resources);
+
+        for(const res of resources)
+        {
+            if(!res.requestFields.allow)
+                delete result.requestFields.allow;
+            if(!res.requestFields.remove)
+                delete result.requestFields.remove;
+            if(!res.responseFields.allow)
+                delete result.responseFields.allow;
+            if(!res.responseFields.remove)
+                delete result.responseFields.remove;
+        }
+
+        return result;
+    }
+
 
     replacePlaceholders(resourceId, userData)
     {

@@ -7,19 +7,24 @@ import { ContextComponent, LogInForm, DatePicker } from '../components';
 class Test extends ContextComponent
 {
     state = {
-        value : null
     }
 
     constructor(props, context)
     {
         super(props);
+
+        this.UserList = context.loadComponent({
+            serviceName: 'user',
+            moduleName: 'user-list',
+            jsFileName: 'list-bundle'
+        });
     }
 
     render()
     {
         return(
             <div>
-                <DatePicker showIcon={false} value={new Date('2018-10-12T23:00:00.000Z')} />
+                <DatePicker showIcon={false} />
             </div>
         );
     }

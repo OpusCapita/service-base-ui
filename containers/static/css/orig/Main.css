@@ -1,10 +1,13 @@
-#root, #main {
-    height: 100%
+body {
+    display: auto !important;
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
 }
 
-#react-root {
-    height: 100%;
-    width: 100%;
+body.no-scroll {
+    overflow: hidden !important;
+    /* height: 100% !important; */
 }
 
 #system-error-message {

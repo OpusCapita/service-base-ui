@@ -11,9 +11,14 @@ export default
         "label": "Orders",
         "children": [
         {
-            "key": "overview",
-            "label": "Overview",
+            "key": "order-overview",
+            "label": "Orders",
             "link": "/sales-order"
+        },
+        {
+            "key": "receipt-advice-overview",
+            "label": "Receipt advices",
+            "link": "/sales-order/receipt-advice/overview"
         },
         {
             "key": "orderConfiguration",
@@ -93,9 +98,14 @@ export default
         "label": "Aufträge",
         "children": [
         {
-            "key": "overview",
-            "label": "Übersicht",
+            "key": "order-overview",
+            "label": "Aufträge",
             "link": "/sales-order"
+        },
+        {
+            "key": "receipt-advice-overview",
+            "label": "Empfangsbestätigungen",
+            "link": "/sales-order/receipt-advice/overview"
         },
         {
             "key": "orderConfiguration",
@@ -232,7 +242,7 @@ export default
         },
         {
             "key": "connections",
-            "label": "Connections",
+            "label": "Anslutningar",
             "link": "/bnp/connections"
         }]
     },

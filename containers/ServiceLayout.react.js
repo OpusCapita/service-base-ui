@@ -14,7 +14,7 @@ import systemTranslations from './i18n/system';
 import formatters from './i18n/formatters';
 import ajax from 'superagent';
 
-import './static/css/bootstrap-3.3.7.min.css';
+// import './static/css/bootstrap-3.3.7.min.css';
 import './static/css/ocui-bootstrap-bundle-0.1.2.min.css';
 import './static/js/bootstrap-3.3.7.min.js';
 import './static/css/Main.min.css';
@@ -98,6 +98,22 @@ class ServiceLayout extends Component
     componentDidMount()
     {
         this.showSystemSpinner();
+        $('[data-toggle="tooltip"]').tooltip();
+
+        const onscroll = () =>
+        {
+            if($(document).scrollTop() > 65 || $('body').scrollTop() > 65)
+                $('#system-progress-bar').css({ top : '40px', transition : 'top 0.2s ease 0s' });
+            else
+                $('#system-progress-bar').css({ top : '70px', transition : 'top 0.3s ease 0s' });
+        }
+
+        window.addEventListener('scroll', onscroll);
+    }
+
+    componentDidUpdate()
+    {
+        $('[data-toggle="tooltip"]').tooltip();
     }
 
     getI18nManager(locale)
@@ -269,7 +285,7 @@ class ServiceLayout extends Component
     {
         let expireNoitification = null;
 
-        setInterval(() =>
+        const watchInterval = setInterval(() =>
         {
             this.authApi.getSessionData().then(session =>
             {
@@ -277,7 +293,17 @@ class ServiceLayout extends Component
                 {
                     const secondsRemaining = session.access_token_expiration - Math.floor(new Date() / 1000);
 
-                    if(!expireNoitification && secondsRemaining <= 300)
+                    if(isNaN(secondsRemaining))
+                    {
+                        clearInterval(watchInterval);
+
+                        const message = this.state.i18n.getMessage('Main.notification.sessionError');
+                        const buttonLabel = this.state.i18n.getMessage('Main.notification.button.logout');
+                        const buttonClick = () => this.logOutUser(document.location);
+
+                        expireNoitification = this.showNotification(message, 'warning', 3600, buttonLabel, buttonClick);
+                    }
+                    else if(!expireNoitification && secondsRemaining <= 300)
                     {
                         const message = this.state.i18n.getMessage('Main.notification.sessionExpiring');
                         const buttonLabel = this.state.i18n.getMessage('Main.notification.button.renewSession');
@@ -300,9 +326,13 @@ class ServiceLayout extends Component
                     document.location.reload(true);
                 }
             })
-            .catch(e => null);
+            .catch(e =>
+            {
+                this.showNotification(e.message, 'warning', 3600);
+                clearInterval(watchInterval);
+            });
 
-        }, 10000);
+        }, 30000);
     }
 
     showSystemError(message)
@@ -342,8 +372,14 @@ class ServiceLayout extends Component
 
     showSystemSpinner()
     {
+        const spinner = $('#system-spinner');
+        const top = $(document).scrollTop();
+        
         if(this.systemSpinnerCount === 0)
-            $('#system-spinner').fadeIn();
+        {
+            spinner.css({ top }).fadeIn();
+            $('body').addClass('no-scroll');
+        }
 
         this.systemSpinnerCount++;
     }
@@ -353,7 +389,10 @@ class ServiceLayout extends Component
         if(this.systemSpinnerCount > 0)
         {
             if(this.systemSpinnerCount === 1)
+            {
                 $('#system-spinner').fadeOut();
+                $('body').removeClass('no-scroll');
+            }
 
             this.systemSpinnerCount--;
         }
