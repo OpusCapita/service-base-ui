@@ -67,7 +67,7 @@ class HelpBox extends React.Component
     render()
     {
         return (
-            <ul className="helpBox">
+            <ul className="help-box">
                 {
                     Array.isArray(this.props.children) ?
                         this.props.children.map((child, index) => this.renderHelpItem(child, true, index)) : this.renderHelpItem(this.props.children, false, 0)
