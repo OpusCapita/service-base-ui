@@ -1,12 +1,12 @@
-.helpBox {
+.help-box {
     list-style-type: none;
     padding-left: 0;
 }
-.helpBox .header-check {
+.help-box .header-check {
     display: none;
 }
 
-.helpBox .header {
+.help-box .header {
     overflow: hidden;
     background: #eee;
     color: #444;
@@ -20,13 +20,13 @@
     z-index: 20;
     margin-bottom: 0;
 }
-.helpBox .header:hover {
+.help-box .header:hover {
     background: #ddd;
 }
-.helpBox .header.single {
+.help-box .header.single {
     cursor: default;
 }
-.helpBox .header .text {
+.help-box .header .text {
     display: block;
     height: 40px;
     position: absolute;
@@ -36,10 +36,10 @@
     overflow: hidden;
 }
 
-.helpBox .header-check:checked + .header {
+.help-box .header-check:checked + .header {
     background: #eee;
 }
-.helpBox .header-check:checked + .header.multiple:after {
+.help-box .header-check:checked + .header.multiple:after {
     content: "▲";
     height: 40px;
     line-height: 40px;
@@ -54,7 +54,7 @@
     -o-transition: transform 0.2s ease-in-out;
     transition: transform 0.2s ease-in-out;
 }
-.helpBox .header-check + .header.multiple:after {
+.help-box .header-check + .header.multiple:after {
     content: "▲";
     float: right;
     margin-right: 10px;
@@ -65,7 +65,7 @@
     transition: transform 0.2s ease-in-out;
 }
 
-.helpBox article {
+.help-box article {
     background: #f7f7f7;
     max-height: 0;
     overflow:hidden;
@@ -77,10 +77,10 @@
     -o-transition: max-height 0.5s ease-in-out, color 0.5s linear;
     transition: max-height 0.5s ease-in-out, color 0.5s linear;
 }
-.helpBox article .content {
+.help-box article .content {
     padding: 10px 18px;
 }
-.helpBox .header-check:checked ~ article {
+.help-box .header-check:checked ~ article {
     max-height: 5000px;
     color: black;
     -webkit-transition: max-height 0.5s ease-in-out, color 0.5s linear;
