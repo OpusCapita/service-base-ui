@@ -27,12 +27,6 @@ class MainMenu extends ConditionalRenderComponent
         'invoice-matcher'
     ]
 
-    applications = [
-        '/bnp',
-        '/invoice',
-        '/tnt'
-    ]
-
     constructor(props, context)
     {
         super(props);
@@ -365,7 +359,6 @@ class MainMenu extends ConditionalRenderComponent
         const tenantId = userData.customerid ? `c_${userData.customerid}` : `s_${userData.supplierid}`;
         const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
         const profileImageLink = userProfile.profileImagePath ? `/blob/public/api/${tenantId}/files/${userProfile.profileImagePath}` : './static/avatar.jpg';
-        const activeAppIndex = this.applications.findIndex(val => router.location.pathname.startsWith(val));
 
         const actions = [ {
             label : i18n.getMessage('MainMenu.profile'),
@@ -387,7 +380,7 @@ class MainMenu extends ConditionalRenderComponent
             label : 'Business Network',
             icon : this.getIcon('app_business_network_portal'),
             onClick : () => router.push('/bnp'),
-            id : 'app_business_network_portal'
+            id : '/bnp'
         }];
 
         if(displayInvoiceIcon)
@@ -396,7 +389,7 @@ class MainMenu extends ConditionalRenderComponent
                 label : 'Invoice',
                 icon : this.getIcon('app_invoice'),
                 onClick : () => router.push('/invoice'),
-                id : 'app_invoice'
+                id : '/invoice'
             });
         }
 
@@ -406,9 +399,11 @@ class MainMenu extends ConditionalRenderComponent
                 label : 'Track & Trace',
                 icon : this.getIcon('import_export'),
                 onClick : () => router.push('/tnt'),
-                id : 'tnt'
+                id : '/tnt'
             });
         }
+
+        const activeAppIndex = applicationItems.findIndex(item => router.location.basename.startsWith(item.id));
 
         return (
             <div>
@@ -431,7 +426,7 @@ class MainMenu extends ConditionalRenderComponent
                             title={i18n.getMessage('MainMenu.applications')}
                             hideDropdownArrow={true}>
                             <MenuDropdownGrid
-                                activeIndex={activeAppIndex > -1 ? activeAppIndex : 0}
+                                activeIndex={activeAppIndex}
                                 items={applicationItems}/>
                         </MenuIcon>
                     ), (
