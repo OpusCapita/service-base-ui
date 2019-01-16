@@ -72,8 +72,9 @@ class MainMenu extends ConditionalRenderComponent
         this.switchMenuItemByPath(location.basename + location.pathname);
 
         const displayInvoiceIcon = this.invoiceResourceGroups.some(rg => userData.roles.includes(rg));
+        const displayTntIcon = this.context.bouncer.getUserResourceGroups('tnt').length > 0;
 
-        this.setState({ displayInvoiceIcon });
+        this.setState({ displayInvoiceIcon, displayTntIcon });
 
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -183,7 +184,7 @@ class MainMenu extends ConditionalRenderComponent
     getNavItems()
     {
         const { supplierid, customerid, roles } = this.context.userData;
-        const { locale } = this.context;
+        const { locale, environment } = this.context;
 
         let items = [ ];
 
@@ -195,7 +196,7 @@ class MainMenu extends ConditionalRenderComponent
         if(roles && roles.indexOf('admin') > -1)
             items = this.recursiveMergeNavItems(items, navItems.admin[locale] || navItems.admin['en'])
 
-        return items;
+        return items.filter(item => !item.environments || item.environments.includes(environment));
     }
 
     recursiveMergeNavItems(items, overlays)
@@ -354,7 +355,7 @@ class MainMenu extends ConditionalRenderComponent
     render()
     {
         const { i18n, userData, userProfile, router } = this.context;
-        const { activeMenuItem, displayInvoiceIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
+        const { activeMenuItem, displayInvoiceIcon, displayTntIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
         const tenantId = userData.customerid ? `c_${userData.customerid}` : `s_${userData.supplierid}`;
         const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
         const profileImageLink = userProfile.profileImagePath ? `/blob/public/api/${tenantId}/files/${userProfile.profileImagePath}` : './static/avatar.jpg';
@@ -389,7 +390,17 @@ class MainMenu extends ConditionalRenderComponent
                 icon : this.getIcon('app_invoice'),
                 onClick : () => router.push('/invoice'),
                 id : 'app_invoice'
-            })
+            });
+        }
+
+        if(displayTntIcon)
+        {
+            applicationItems.push({
+                label : 'Track & Trace',
+                icon : this.getIcon('import_export'),
+                onClick : () => router.push('/tnt'),
+                id : 'tnt'
+            });
         }
 
         return (

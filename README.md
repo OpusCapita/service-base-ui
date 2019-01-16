@@ -71,6 +71,7 @@ The following objects are available through a component's context:
 * [i18n](https://github.com/OpusCapita/i18n)
 * [bouncer](#client-side-permissions-ui-bouncer)
 * locale (en, de, ...)
+* environment (develop, stage, production)
 
 ##### Methods
 The following methods are available through a component's context:
@@ -255,6 +256,7 @@ The following components are currently available:
 * [ConditionalRenderComponent](https://github.com/OpusCapita/service-base-ui/blob/master/components/ConditionalRenderComponent.react.js)
 * [ListTable](https://github.com/OpusCapita/service-base-ui/blob/master/components/ListTable.react.js)
 * [ModalDialog](https://github.com/OpusCapita/service-base-ui/blob/master/components/ModalDialog.react.js)
+* [HelpBox](https://github.com/OpusCapita/service-base-ui/blob/master/components/HelpBox/HelpBox.react.js)
 
 ## System
 The **System** namespace contains API methods which can but don't have to be bound to UI related topics.

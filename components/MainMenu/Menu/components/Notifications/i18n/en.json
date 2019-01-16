@@ -1,5 +1,6 @@
 {
     "Menu.Notifications.newNotifications": "New notifications",
     "Menu.Notifications.noNewNotifications": "There are no new notifications.",
+    "Menu.Notifications.settings": "Settings",
     "Menu.Notifications.markAllRead": "Read all"
 }

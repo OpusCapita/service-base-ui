@@ -12,9 +12,7 @@ import { AjaxExtender } from '../system/ui';
 import translations from './i18n';
 import systemTranslations from './i18n/system';
 import formatters from './i18n/formatters';
-import ajax from 'superagent';
 
-// import './static/css/bootstrap-3.3.7.min.css';
 import './static/css/ocui-bootstrap-bundle-0.1.2.min.css';
 import './static/js/bootstrap-3.3.7.min.js';
 import './static/css/Main.min.css';
@@ -25,6 +23,11 @@ class ServiceLayout extends Component
         serviceName : PropTypes.string.isRequired,
         component : PropTypes.func,
         size : PropTypes.oneOf([ null, '', 'default', 'full-width', 'full-screen' ]),
+        environment : PropTypes.string.isRequired
+    }
+
+    static defaultProps = {
+        environment : 'develop'
     }
 
     static childContextTypes = {
@@ -50,12 +53,22 @@ class ServiceLayout extends Component
         showLogInDialog : PropTypes.func.isRequired,
         hideLogInDialog : PropTypes.func.isRequired,
         loadComponent : PropTypes.func.isRequired,
-        bouncer : PropTypes.object.isRequired
+        bouncer : PropTypes.object.isRequired,
+        environment : PropTypes.string.isRequired
     };
 
     constructor(props)
     {
         super(props);
+
+        if(window.location.host.startsWith('stage'))
+            this.environment = 'stage';
+        else if(window.location.host.startsWith('businessnetwork'))
+            this.environment = 'production';
+        else if(props.environment)
+            this.environment = props.environment;
+        else
+            this.environment = 'develop';
 
         this.fixDocumentOrigin();
 
@@ -161,7 +174,8 @@ class ServiceLayout extends Component
             showLogInDialog : this.showLogInDialog.bind(this),
             hideLogInDialog : this.hideLogInDialog.bind(this),
             loadComponent : this.loadComponent.bind(this),
-            bouncer : this.bouncer
+            bouncer : this.bouncer,
+            environment : this.environment
         }
     }
 
@@ -526,7 +540,7 @@ class ServiceLayout extends Component
                 }
                 <div id="system-spinner" className="text-center">
                     <div className="inner text-center">
-                        <i className="fa fa-cog fa-spin fa-3x fa-fw" />
+                        <i className="fa fa-cog" />
                     </div>
                 </div>
             </div>

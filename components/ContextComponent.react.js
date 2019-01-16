@@ -27,7 +27,8 @@ class ContextComponent extends React.Component
         showLogInDialog : PropTypes.func.isRequired,
         hideLogInDialog : PropTypes.func.isRequired,
         loadComponent : PropTypes.func.isRequired,
-        bouncer : PropTypes.object.isRequired
+        bouncer : PropTypes.object.isRequired,
+        environment : PropTypes.string.isRequired
     }
 
     componentDidMount()

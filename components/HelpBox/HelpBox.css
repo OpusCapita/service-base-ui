@@ -1,0 +1,92 @@
+.help-box {
+    list-style-type: none;
+    padding-left: 0;
+}
+.help-box .header-check {
+    display: none;
+}
+
+.help-box .header {
+    overflow: hidden;
+    background: #eee;
+    color: #444;
+    display: block;
+    cursor: pointer;
+    position: relative;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    padding-left: 10px;
+    z-index: 20;
+    margin-bottom: 0;
+}
+.help-box .header:hover {
+    background: #ddd;
+}
+.help-box .header.single {
+    cursor: default;
+}
+.help-box .header .text {
+    display: block;
+    height: 40px;
+    position: absolute;
+    left: 10px; right: 40px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.help-box .header-check:checked + .header {
+    background: #eee;
+}
+.help-box .header-check:checked + .header.multiple:after {
+    content: "▲";
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    color: #444;
+    float: right;
+    margin-right: 10px;
+    transform: rotate(-180deg);
+    -webkit-transition: transform 0.2s ease-in-out;
+    -moz-transition: transform 0.2s ease-in-out;
+    -ms-transition: transform 0.2s ease-in-out;
+    -o-transition: transform 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out;
+}
+.help-box .header-check + .header.multiple:after {
+    content: "▲";
+    float: right;
+    margin-right: 10px;
+    -webkit-transition: transform 0.2s ease-in-out;
+    -moz-transition: transform 0.2s ease-in-out;
+    -ms-transition: transform 0.2s ease-in-out;
+    -o-transition: transform 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out;
+}
+
+.help-box article {
+    background: #f7f7f7;
+    max-height: 0;
+    overflow:hidden;
+    z-index:10;
+    color: transparent;
+    -webkit-transition: max-height 0.5s ease-in-out, color 0.5s linear;
+    -moz-transition: max-height 0.5s ease-in-out, color 0.5s linear;
+    -ms-transition: max-height 0.5s ease-in-out, color 0.5s linear;
+    -o-transition: max-height 0.5s ease-in-out, color 0.5s linear;
+    transition: max-height 0.5s ease-in-out, color 0.5s linear;
+}
+.help-box article .content {
+    padding: 10px 18px;
+}
+.help-box .header-check:checked ~ article {
+    max-height: 5000px;
+    color: black;
+    -webkit-transition: max-height 0.5s ease-in-out, color 0.5s linear;
+    -moz-transition: max-height 0.5s ease-in-out, color 0.5s linear;
+    -ms-transition: max-height 0.5s ease-in-out, color 0.5s linear;
+    -o-transition: max-height 0.5s ease-in-out, color 0.5s linear;
+    transition: max-height 0.5s ease-in-out, color 0.5s linear;
+}
+
