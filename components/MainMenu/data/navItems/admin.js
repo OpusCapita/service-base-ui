@@ -28,6 +28,11 @@ export default
             "link": "/bnp/redis"
         },
         {
+            "key": "sso",
+            "label": "Single sign-on",
+            "link": "/identity-federation"
+        },
+        {
             "key": "users",
             "label": "Users",
             "link": "/bnp/users"
@@ -85,6 +90,11 @@ export default
             "key": "redis",
             "label": "Redis",
             "link": "/bnp/redis"
+        },
+        {
+            "key": "sso",
+            "label": "Single Sign-on",
+            "link": "/identity-federation"
         },
         {
             "key": "users",

@@ -56,6 +56,15 @@ export default
             "label": "Connections",
             "link": "/bnp/connections"
         }]
+    },
+    {
+        "key": "admin",
+        "label": "Admin",
+        "children": [{
+            "key": "sso",
+            "label": "Single sign-on",
+            "link": "/identity-federation"
+        }],
     }],
 
     "de": [
@@ -114,5 +123,14 @@ export default
             "label": "Verbindungen",
             "link": "/bnp/connections"
         }]
+    },
+    {
+        "key": "admin",
+        "label": "Admin",
+        "children": [{
+            "key": "sso",
+            "label": "Single Sign-on",
+            "link": "/identity-federation"
+        }],
     }]
 }
