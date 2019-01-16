@@ -27,6 +27,12 @@ class MainMenu extends ConditionalRenderComponent
         'invoice-matcher'
     ]
 
+    applications = [
+        '/bnp',
+        '/invoice',
+        '/tnt'
+    ]
+
     constructor(props, context)
     {
         super(props);
@@ -359,6 +365,7 @@ class MainMenu extends ConditionalRenderComponent
         const tenantId = userData.customerid ? `c_${userData.customerid}` : `s_${userData.supplierid}`;
         const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
         const profileImageLink = userProfile.profileImagePath ? `/blob/public/api/${tenantId}/files/${userProfile.profileImagePath}` : './static/avatar.jpg';
+        const activeAppIndex = this.applications.findIndex(val => router.location.pathname.startsWith(val));
 
         const actions = [ {
             label : i18n.getMessage('MainMenu.profile'),
@@ -424,7 +431,7 @@ class MainMenu extends ConditionalRenderComponent
                             title={i18n.getMessage('MainMenu.applications')}
                             hideDropdownArrow={true}>
                             <MenuDropdownGrid
-                                activeIndex={0}
+                                activeIndex={activeAppIndex > -1 ? activeAppIndex : 0}
                                 items={applicationItems}/>
                         </MenuIcon>
                     ), (
