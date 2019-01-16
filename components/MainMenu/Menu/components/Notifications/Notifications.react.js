@@ -63,7 +63,7 @@ class Notifications extends Component
 
         return(
             <div className="oc-notifications">
-                <div className="header">{i18n.getMessage('Menu.Notifications.newNotifications')} <a href="#" className="function" onClick={e => this.handleMarkAllClick(e)}><small>{i18n.getMessage('Menu.Notifications.markAllRead')}</small></a></div>
+                <div className="header">{i18n.getMessage('Menu.Notifications.newNotifications')} <a href="#" className="function" onClick={e => this.handleMarkAllClick(e)}><small>{i18n.getMessage('Menu.Notifications.markAllRead')}</small></a><a href="/notification/settings" className="function"><small>{i18n.getMessage('Menu.Notifications.settings')}</small></a></div>
                 <div className="items-container">
                     {
                         items && items.length ? items.map((item, i) => <Item key={i} {...item} onClick={item => this.handleItemClick(item)} />)
