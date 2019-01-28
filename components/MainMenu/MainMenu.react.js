@@ -75,7 +75,7 @@ class MainMenu extends ConditionalRenderComponent
         const displayTntIcon = this.context.bouncer.getUserResourceGroups('tnt').length > 0;
         const displayArchiveIcon = this.context.bouncer.getUserResourceGroups('archive').length > 0;
 
-        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon });
+        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon }); 
 
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
