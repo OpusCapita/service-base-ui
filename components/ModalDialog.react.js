@@ -83,7 +83,10 @@ class ModalDialog extends ContextComponent
         if(Object.keys(this.manualProps).length)
             this.setState(extend(false, { }, this.state, this.manualProps));
 
-        $(this.dialog).modal('show');
+        $(this.dialog).modal({
+            show: true,
+            backdrop: this.props.allowClose ? true : 'static',
+        });
     }
 
     reload()
