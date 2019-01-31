@@ -65,17 +65,19 @@ class MainMenu extends ConditionalRenderComponent
 
     componentDidMount()
     {
-        const { router, userData } = this.context;
+        const { router, userData, bouncer } = this.context;
         const location = router.location;
 
         this.loadNotifications();
         this.switchMenuItemByPath(location.basename + location.pathname);
 
         const displayInvoiceIcon = this.invoiceResourceGroups.some(rg => userData.roles.includes(rg));
-        const displayTntIcon = this.context.bouncer.getUserResourceGroups('tnt').length > 0;
-        const displayArchiveIcon = this.context.bouncer.getUserResourceGroups('archive').length > 0;
+        const displayTntIcon = bouncer.getUserResourceGroups('tnt').length > 0;
+        const displayArchiveIcon = bouncer.getUserResourceGroups('archive').length > 0;
+        const tenantsForSupplierSwitch = bouncer.getUserTenants('supplier', '/api/suppliers');
+        const tenantsForCustomerSwitch = bouncer.getUserTenants('customer', '/api/customers');
 
-        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon }); 
+        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon, tenantsForSupplierSwitch, tenantsForCustomerSwitch });
 
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -353,6 +355,32 @@ class MainMenu extends ConditionalRenderComponent
             .catch(e => this.context.showNotification(e.message, 'error', 10));
     }
 
+    filterCustomerDropdown(value)
+    {
+        if(this.context.userData.roles.includes('admin'))
+            return true;
+
+        const { tenantsForCustomerSwitch } = this.state;
+
+        if(tenantsForCustomerSwitch.includes('*'))
+            return true;
+
+        return tenantsForCustomerSwitch.includes(value);
+    }
+
+    filterSupplierDropdown(value)
+    {
+        if(this.context.userData.roles.includes('admin'))
+            return true;
+
+        const { tenantsForSupplierSwitch } = this.state;
+
+        if(tenantsForSupplierSwitch.includes('*'))
+            return true;
+
+        return tenantsForSupplierSwitch.includes(value);
+    }
+
     render()
     {
         const { i18n, userData, userProfile, router } = this.context;
@@ -369,7 +397,7 @@ class MainMenu extends ConditionalRenderComponent
             onClick : () => this.handleLogout()
         } ];
 
-        if(userData.roles.includes('admin'))
+        if(userData.roles.includes('impersonator'))
         {
             actions.push({
                 label : i18n.getMessage('MainMenu.switchTenant'),
@@ -501,8 +529,8 @@ class MainMenu extends ConditionalRenderComponent
                         </div>
                         <div className="row">
                             <div className="col-lg-12">
-                                { tenantSwitchMode === 'customer' && <this.CustomerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} /> }
-                                { tenantSwitchMode === 'supplier' && <this.SupplierDropdown onChange={value => this.setState({ tenantSwitchValue : value })} /> }
+                                { tenantSwitchMode === 'customer' && <this.CustomerDropdown onFilter={value => this.filterCustomerDropdown(`c_${value.id}`)} onChange={value => this.setState({ tenantSwitchValue : value })} /> }
+                                { tenantSwitchMode === 'supplier' && <this.SupplierDropdown onFilter={value => this.filterSupplierDropdown(`s_${value.id}`)} onChange={value => this.setState({ tenantSwitchValue : value })} /> }
                             </div>
                         </div>
                     </div>
