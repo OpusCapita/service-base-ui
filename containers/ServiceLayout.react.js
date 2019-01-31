@@ -387,11 +387,10 @@ class ServiceLayout extends Component
     showSystemSpinner()
     {
         const spinner = $('#system-spinner');
-        const top = $(document).scrollTop();
-        
+
         if(this.systemSpinnerCount === 0)
         {
-            spinner.css({ top }).fadeIn();
+            spinner.fadeIn();
             $('body').addClass('no-scroll');
         }
 
