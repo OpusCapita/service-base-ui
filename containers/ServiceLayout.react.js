@@ -94,6 +94,7 @@ class ServiceLayout extends Component
         this.usersApi = new Users();
         this.systemSpinnerCount = 0;
         this.bouncer = new Bouncer();
+        this.session = null;
         this.componentLoader = new ComponentLoader({
             onLoadingStarted: this.showSystemSpinner.bind(this),
             onLoadingFinished: this.hideSystemSpinner.bind(this)
@@ -286,9 +287,21 @@ class ServiceLayout extends Component
         const onRequestEnd = (err, requestId, req) =>
         {
             if(err)
-                return this.showSystemError(err.message);
-            //else if(req.status === 401)
-                //this.showLogInDialog(true);
+            {
+                this.hideSystemSpinner();
+
+                if(err.status >= 500)
+                {
+                    this.showSystemError(err.message);
+                }
+                else
+                {
+                    if(this.session)
+                        this.showNotification((err.json && err.json.message) || err.message , 'error', 3600);
+                    else
+                        this.logOutUser(document.location);
+                }
+            }
         };
 
         this.ajaxExtender = new AjaxExtender({ onRequestStart, onProgress, onRequestEnd });
@@ -299,10 +312,12 @@ class ServiceLayout extends Component
     {
         let expireNoitification = null;
 
-        const watchInterval = setInterval(() =>
+        const runIt = () =>
         {
             this.authApi.getSessionData().then(session =>
             {
+                this.session = session;
+
                 if(session && typeof session === 'object')
                 {
                     const secondsRemaining = session.access_token_expiration - Math.floor(new Date() / 1000);
@@ -342,11 +357,15 @@ class ServiceLayout extends Component
             })
             .catch(e =>
             {
+                this.session = null;
                 this.showNotification(e.message, 'warning', 3600);
                 clearInterval(watchInterval);
             });
+        }
 
-        }, 30000);
+        const watchInterval = setInterval(() => runIt, 30000);
+
+        runIt();
     }
 
     showSystemError(message)
