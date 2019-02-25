@@ -296,9 +296,7 @@ class ServiceLayout extends Component
                 }
                 else
                 {
-                    if(this.session)
-                        this.showNotification((err.json && err.json.message) || err.message , 'error', 3600);
-                    else
+                    if(!this.session)
                         this.logOutUser(document.location);
                 }
             }
