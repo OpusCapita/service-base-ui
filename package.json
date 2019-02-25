@@ -4,6 +4,7 @@
     "description": "Basic API for UI services of OpusCapita Business Network.",
     "main": "lib/bundle.js",
     "files": [
+        "api",
         "lib",
         "components",
         "containers",
