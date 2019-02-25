@@ -58,7 +58,14 @@ class Bouncer
 
             if(resourceGroupName === '*')
             {
-                foundResources = [ '*' ];
+                foundResources.push({
+                    type: [ "rest", "ui" ],
+                    resourceId: '^/',
+                    actions: [ 'create', 'view', 'edit', 'delete', 'head', 'options', 'patch' ],
+                    requestFields: { allow: null, remove: null },
+                    responseFields: { allow: null, remove: null },
+                    roleIds : [ permission.role ]
+                });
                 break;
             }
             else
@@ -107,7 +114,7 @@ class Bouncer
             if(userData.roles && userData.roles.indexOf('admin') > -1)
                 result = [ '*' ];
             else if(Array.isArray(roleConstraints) && roleConstraints.length > 0)
-                result = [ ...roleConstraints[0] ];
+                result = this.mergeRoleConstraints(roleConstraints);
             else if(userData.supplierid)
                 result = [ `s_${userData.supplierid}` ];
             else if(userData.customerid)
@@ -117,6 +124,26 @@ class Bouncer
         this.setCachedValue(cacheKey, result);
 
         return result;
+    }
+
+    mergeRoleConstraints(roleConstraints)
+    {
+        let resultArray = [ ];
+
+        for(const roles of roleConstraints)
+        {
+            if(roles.includes( '*' ))
+            {
+                resultArray = [ '*' ];
+                break;
+            }
+            else
+            {
+                resultArray = resultArray.concat(roles);
+            }
+        }
+
+        return [...new Set(resultArray)]
     }
 
     getUserResourceGroups(serviceName = null)
