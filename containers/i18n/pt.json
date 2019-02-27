@@ -1,0 +1,10 @@
+{
+    "Main.systemError.title": "Um erro geral ocorreu",
+    "Main.notification.sessionError": "Ocorreu um erro de sessão e a sua sessão não poderá continuar. Saia e depois faça login novamente.",
+    "Main.notification.sessionExpiring": "Sua sessão de login está prestes a expirar.",
+    "Main.notification.button.logout": "Sair",
+    "Main.notification.button.renewSession": "Renovar agora",
+    "ServiceLayout.LogInDialog.title": "Faça login",
+    "ServiceLayout.LogInDialog.description": "Por motivos de segurança, sua sessão expirou. Faça login novamente no sistema para continuar trabalhando.",
+    "ServiceLayout.LogInDialog.button.signIn": "Login"
+}
