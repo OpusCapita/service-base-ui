@@ -76,7 +76,7 @@ class Bouncer
                 if(resources)
                 {
                     const filtered = resources.filter(r => url.match(new RegExp(this.replacePlaceholders(r.resourceId, this.userData), 'i')) && r.actions.indexOf(action) > -1)
-                            .map(r => ({ ...r, roleId : permission.role }));
+                            .map(r => ({ ...r, roleIds : [ permission.role ] }));
 
                     foundResources = foundResources.concat(filtered);
                 }
@@ -108,8 +108,8 @@ class Bouncer
         }
         else if(resource)
         {
-            const roleId = resource.roleId;
-            const roleConstraints = roleId && Array.isArray(userData.xroles) && userData.xroles.filter(r => r.role === roleId).map(r => r.tenants);
+            const roleIds = resource.roleIds;
+            const roleConstraints = roleIds && Array.isArray(userData.xroles) && userData.xroles.filter(r => roleIds.includes(r.role)).map(r => r.tenants);
 
             if(userData.roles && userData.roles.indexOf('admin') > -1)
                 result = [ '*' ];
@@ -161,17 +161,17 @@ class Bouncer
         const prefixLength = serviceName.length + 1;
         const permissions = this.permissions.filter(p => p.resourceGroupId.startsWith(serviceName));
         let foundResourceGroups = new Set();
-        
+
         for(const permission of permissions)
         {
             const resourceGroupName = permission.resourceGroupId.substring(prefixLength);
-            
+
             foundResourceGroups.add(resourceGroupName);
 
             if(resourceGroupName === '*')
                 break;
         }
-        
+
         foundResourceGroups = [ ...foundResourceGroups ];
 
         this.setCachedValue(cacheKey, foundResourceGroups);
@@ -196,7 +196,7 @@ class Bouncer
         else
         {
             const permissions = (await this.acl.getPermissions(roles)).reduce((all, more) => all.concat(more), [ ]);
-            
+
             this.setCachedValue(cacheKey, permissions);
 
             return permissions;
@@ -239,6 +239,7 @@ class Bouncer
             return { };
 
         const result = extend(true, { }, ...resources);
+        result.roleIds = [ ];
 
         for(const res of resources)
         {
@@ -250,7 +251,11 @@ class Bouncer
                 delete result.responseFields.allow;
             if(!res.responseFields.remove)
                 delete result.responseFields.remove;
+
+            result.roleIds = result.roleIds.concat(res.roleIds);
         }
+
+        result.roleIds = [ ...new Set(result.roleIds) ];
 
         return result;
     }
