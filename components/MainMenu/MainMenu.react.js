@@ -397,7 +397,7 @@ class MainMenu extends ConditionalRenderComponent
             onClick : () => this.handleLogout()
         } ];
 
-        if(userData.roles.includes('impersonator'))
+        if(userData.roles.includes('admin') || userData.roles.includes('impersonator'))
         {
             actions.push({
                 label : i18n.getMessage('MainMenu.switchTenant'),
