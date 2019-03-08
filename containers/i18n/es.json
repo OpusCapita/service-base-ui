@@ -1,0 +1,10 @@
+{
+    "Main.systemError.title": "Ocurrió un error general",
+    "Main.notification.sessionError": "Se ha producido un error de sesión y es posible que su sesión no continúe. Por favor, cierre la sesión y vuelva a iniciar sesión.",
+    "Main.notification.sessionExpiring": "Su inicio de sesión está a punto de acabar.",
+    "Main.notification.button.logout": "Salir del sistema",
+    "Main.notification.button.renewSession": "Renovar ahora",
+    "ServiceLayout.LogInDialog.title": "Por favor, inicie sesión",
+    "ServiceLayout.LogInDialog.description": "Por razones de seguridad su sesión ha expirado. Vuelva a iniciar sesión en el sistema para continuar trabajando.",
+    "ServiceLayout.LogInDialog.button.signIn": "Inicio de sesión"
+}
