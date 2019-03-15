@@ -55,6 +55,16 @@ export default
             "key": "connections",
             "label": "Connections",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitute-management",
+            "label": "Substitute management",
+            "link": "/bnp/userRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -122,6 +132,16 @@ export default
             "key": "connections",
             "label": "Verbindungen",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitute-management",
+            "label": "Substitute management",
+            "link": "/bnp/userRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
