@@ -78,7 +78,7 @@ export default
         {
             "key": "substitution-management",
             "label": "Substitution management",
-            "link": "/bnp/userRelations"
+            "link": "/bnp/substituteUserRelations"
         },
         {
             "key": "absences",
@@ -175,12 +175,12 @@ export default
         },
         {
             "key": "substitute-management",
-            "label": "Substitute management",
-            "link": "/bnp/userRelations"
+            "label": "Vertretungsmanager",
+            "link": "/bnp/substituteUserRelations"
         },
         {
             "key": "absences",
-            "label": "Absences",
+            "label": "Abwesenheiten",
             "link": "/bnp/substitutionPeriods"
         }]
     },
