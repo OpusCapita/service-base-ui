@@ -501,10 +501,14 @@ class MainMenu extends ConditionalRenderComponent
                                     <div className="select-item">
                                         <span className="select-item-label">{i18n.getMessage('MainMenu.language')}</span>
                                         <MenuSelect className="select-item-select" defaultValue={userData.languageid} onChange={e => this.handleLanguageChange(e)}>
-                                            <option value="en">{i18n.getMessage('MainMenu.laguage.english')}</option>
-                                            <option value="de">{i18n.getMessage('MainMenu.laguage.german')}</option>
-                                            <option value="sv">{i18n.getMessage('MainMenu.laguage.swedish')}</option>
-                                            <option value="fi">{i18n.getMessage('MainMenu.laguage.finnish')}</option>
+                                            <option value="de">Deutsch</option>
+                                            <option value="en">English</option>
+                                            <option value="es">Español</option>
+                                            <option value="fr">Français</option>
+                                            <option value="it">Italiano</option>
+                                            <option value="pt">Português</option>
+                                            <option value="fi">Suomi</option>
+                                            <option value="sv">Svenska</option>
                                         </MenuSelect>
                                     </div>
                                 </div>
