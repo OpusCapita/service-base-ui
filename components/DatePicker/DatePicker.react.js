@@ -16,7 +16,8 @@ class DatePicker extends ContextComponent
         onChange : PropTypes.func.isRequired,
         onFocus : PropTypes.func.isRequired,
         onBlur : PropTypes.func.isRequired,
-        disabled : PropTypes.bool.isRequired
+        disabled : PropTypes.bool.isRequired,
+        startToday : PropTypes.bool
     };
 
     static defaultProps = {
@@ -25,7 +26,8 @@ class DatePicker extends ContextComponent
         onChange : () => null,
         onFocus : () => null,
         onBlur : () => null,
-        disabled : false
+        disabled : false,
+        startToday: false
     };
 
     defaultOptions = {
@@ -100,7 +102,8 @@ class DatePicker extends ContextComponent
             ...this.defaultOptions,
             showIcon : this.props.showIcon,
             language : this.context.locale,
-            format : this.props.format || this.context.i18n.dateFormat.toLowerCase()
+            format : this.props.format || this.context.i18n.dateFormat.toLowerCase(),
+            startDate: '0d' || '-Infinity'
         }
 
         $(this.picker).datepicker(pickerOptions).on('changeDate', e =>
