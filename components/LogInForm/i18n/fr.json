@@ -1,0 +1,9 @@
+{
+    "LogInForm.label.email": "Courriel",
+    "LogInForm.label.password": "Mot de passe",
+    "LogInForm.placeholder.email": "Votre courriel",
+    "LogInForm.placeholder.password": "Votre mot de passe",
+    "LogInForm.button.logIn": "Connectez-vous",
+    "LogInForm.error.email.required": "Le champ \"courriel\" ne peut pas être vide.",
+    "LogInForm.error.password.required": "Le champ \"motdepasse\" ne peut pas être vide."
+}
