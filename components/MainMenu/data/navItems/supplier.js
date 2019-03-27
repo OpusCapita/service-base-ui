@@ -150,8 +150,7 @@ export default
         {
             "key": "upload",
             "label": "Upload",
-            "link": "/bnp/catalog-upload",
-            "target": "_blank"
+            "link": "/bnp/catalog-upload"
         }]
     },
     {
@@ -211,6 +210,11 @@ export default
             "link": "/sales-order"
         },
         {
+            "key": "receipt-advice-overview",
+            "label": "Receipt advices",
+            "link": "/sales-order/receipt-advice/overview"
+        },
+        {
             "key": "orderConfiguration",
             "label": "Inställningar för mottag av order",
             "link": "/sales-order/configuration"
@@ -264,6 +268,16 @@ export default
             "key": "connections",
             "label": "Anslutningar",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -291,6 +305,11 @@ export default
             "key": "overview",
             "label": "Yhteenveto",
             "link": "/sales-order"
+        },
+        {
+            "key": "receipt-advice-overview",
+            "label": "Receipt advices",
+            "link": "/sales-order/receipt-advice/overview"
         },
         {
             "key": "orderConfiguration",
@@ -346,6 +365,16 @@ export default
             "key": "connections",
             "label": "Connections",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -434,6 +463,16 @@ export default
             "key": "connections",
             "label": "Collegamenti",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -521,6 +560,16 @@ export default
             "key": "connections",
             "label": "Connexions",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -608,6 +657,16 @@ export default
             "key": "connections",
             "label": "Conexiones",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -695,6 +754,16 @@ export default
             "key": "connections",
             "label": "Conexões",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
