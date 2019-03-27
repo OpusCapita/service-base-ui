@@ -10,6 +10,10 @@ body.no-scroll {
     /* height: 100% !important; */
 }
 
+section.content {
+    overflow: visible;
+}
+
 #system-error-message {
     position: absolute;
     top: 0;
@@ -26,7 +30,7 @@ body.no-scroll {
 }
 
 #system-spinner {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
