@@ -135,7 +135,8 @@ class MainMenu extends ConditionalRenderComponent
     {
         e.preventDefault();
 
-        const manualName = this.context.i18n.getMessage('MainMenu.manualName');
+        const { supplierid, languageid } = this.context.userData;
+        const manualName = (supplierid ? "SupplierManual_" : "BuyerManual_") + languageid + ".pdf";
         const url = '/blob/public/api/opuscapita/files/public/docs/' + manualName;
 
         document.location.replace(url);
