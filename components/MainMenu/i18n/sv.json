@@ -19,6 +19,8 @@
     "MainMenu.tenantSwitch.generalError": "Ett oväntat fel inträffade. Inga ändringar gjordes.",
     "MainMenu.search": "Sök",
     "MainMenu.support": "Stöd",
+    "MainMenu.support.PhoneNumber": "+46 8 475 28 90",
+    "MainMenu.support.EmailAddress": "customerservice.se@opuscapita.com",
     "MainMenu.language": "Språk",
     "MainMenu.laguage.english": "Engelsk",
     "MainMenu.laguage.german": "Tysk",

@@ -19,6 +19,8 @@
     "MainMenu.tenantSwitch.generalError": "Ein unerwarteter Fehler ist aufgetreten. Es wurden keine Änderungen durchgeführt.",
     "MainMenu.search": "Suchen",
     "MainMenu.support": "Support",
+    "MainMenu.support.PhoneNumber": "+49 231 3967 350",
+    "MainMenu.support.EmailAddress": "customerservice.de@opuscapita.com",
     "MainMenu.language": "Sprache",
     "MainMenu.laguage.english": "Englisch",
     "MainMenu.laguage.german": "Deutsch",

@@ -491,11 +491,28 @@ class MainMenu extends ConditionalRenderComponent
                             actions={actions}
                             bottomElement={(
                                 <div>
-                                    <div className="select-item">
-                                        <span><strong>{i18n.getMessage('MainMenu.support')}:</strong> +49 231 3967 350<br /><a href="mailto:customerservice.de@opuscapita.com">customerservice.de@opuscapita.com</a></span>
+                                    <div className="row horizontal-gap">
+                                        <div className="col-xs-3">
+                                            {i18n.getMessage('MainMenu.manual')}
+                                        </div>
+                                        <div className="col-xs-9">
+                                            <a href="#" onClick={e => this.handleManualClick(e)}>{i18n.getMessage('MainMenu.download')}</a>
+                                        </div>
                                     </div>
-                                    <div className="select-item">
-                                        <span><strong>{i18n.getMessage('MainMenu.manual')}:</strong> <a href="#" onClick={e => this.handleManualClick(e)}>{i18n.getMessage('MainMenu.download')}</a></span>
+
+                                    <div className="row">
+                                        <div className="col-xs-3">
+                                            {i18n.getMessage('MainMenu.support')}
+                                        </div>
+                                        <div className="col-xs-9">
+                                            {i18n.getMessage('MainMenu.support.PhoneNumber')}
+                                        </div>
+                                    </div>
+                                    <div className="row horizontal-gap">
+                                        <div className="col-xs-3"></div>
+                                        <div className="col-xs-9">
+                                            <a href={`mailto:${i18n.getMessage('MainMenu.support.EmailAddress')}`}>{i18n.getMessage('MainMenu.support.EmailAddress')}</a>
+                                        </div>
                                     </div>
 
                                     <div className="select-item">
