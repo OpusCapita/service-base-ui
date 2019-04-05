@@ -21,6 +21,11 @@ export default
             "link": "/sales-order/receipt-advice/overview"
         },
         {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
             "key": "orderConfiguration",
             "label": "Order receiving configuration",
             "link": "/sales-order/configuration"
@@ -116,6 +121,11 @@ export default
             "key": "receipt-advice-overview",
             "label": "Empfangsbestätigungen",
             "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Lieferavise",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
@@ -215,6 +225,11 @@ export default
             "link": "/sales-order/receipt-advice/overview"
         },
         {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
             "key": "orderConfiguration",
             "label": "Inställningar för mottag av order",
             "link": "/sales-order/configuration"
@@ -310,6 +325,11 @@ export default
             "key": "receipt-advice-overview",
             "label": "Receipt advices",
             "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
@@ -410,6 +430,11 @@ export default
             "link": "/sales-order/receipt-advice/overview"
         },
         {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
             "key": "orderConfiguration",
             "label": "Configurazione ricezione ordine",
             "link": "/sales-order/configuration"
@@ -505,6 +530,11 @@ export default
             "key": "receipt-advice-overview",
             "label": "Avis de réception",
             "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
@@ -604,6 +634,11 @@ export default
             "link": "/sales-order/receipt-advice/overview"
         },
         {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
             "key": "orderConfiguration",
             "label": "Configuración de recepción de pedidos",
             "link": "/sales-order/configuration"
@@ -699,6 +734,11 @@ export default
             "key": "receipt-advice-overview",
             "label": "Recibos",
             "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
