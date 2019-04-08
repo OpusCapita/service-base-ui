@@ -1,0 +1,7 @@
+.page-size
+{
+    width: 200px;
+}
+.pagination > li {
+    cursor: pointer;
+}

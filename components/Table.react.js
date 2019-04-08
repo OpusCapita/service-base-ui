@@ -2,22 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ContextComponent from './ContextComponent.react';
 
+import './Table.css';
+
 class Table extends ContextComponent {
 
     static propTypes = {
         items: PropTypes.array.isRequired,
         columns: PropTypes.array.isRequired,
-        pageSize: PropTypes.number,
-        fixed: PropTypes.bool,
         defaultSort: PropTypes.object,
         groupBy: PropTypes.func,
         groupOrderBy: PropTypes.string,
+        styling: PropTypes.object,
+        options: PropTypes.object,
     };
 
     static defaultProps = {
         groupOrderBy: 'id',
-        pageSize: 10,
-        fixed: true,
+        styling: {
+            striped: true,
+            condensed: true,
+            bordered: true
+        },
+        options: {
+            pageSize: 10,
+            showPageSize: true,
+            fixed: true
+        },
     };
 
     constructor(props) {
@@ -26,15 +36,22 @@ class Table extends ContextComponent {
         this.state = {
             columns: props.columns,
             items: props.items,
+            pageSize: props.options.pageSize,
+            fixed: props.options.fixed,
             renderItems: [],
             startIndex: 0,
             numPages: 0,
             sorting: {},
+            showPrev: true,
+            showNext: true,
         };
     }
 
     componentDidMount() {
         const {defaultSort} = this.props;
+
+        this.checkPagePosition(0);
+
         this.groupItems();
         if (defaultSort) {
             this.applySort(defaultSort.key, defaultSort.order)
@@ -60,8 +77,8 @@ class Table extends ContextComponent {
     }
 
     calcPageNumbers() {
-        const {items, pageSize} = this.props;
-        const {startIndex} = this.state;
+        const {items} = this.props;
+        const {startIndex, pageSize} = this.state;
 
         const numPages = Math.ceil(items.length / pageSize);
         const currentPage = startIndex / pageSize;
@@ -84,7 +101,6 @@ class Table extends ContextComponent {
         }
         this.setState({currentPage, pages: this.range(1, numPages + 1)});
     }
-
 
     applySort(key, order) {
         const {columns, items, sorting} = this.state;
@@ -176,8 +192,8 @@ class Table extends ContextComponent {
     }
 
     filterItems() {
-        const {items, pageSize} = this.props;
-        const {startIndex} = this.state;
+        const {items} = this.props;
+        const {startIndex, pageSize} = this.state;
 
         const renderItems = items.slice(startIndex, startIndex + pageSize);
         const lastOffset = this.pagination.offsetTop;
@@ -188,47 +204,89 @@ class Table extends ContextComponent {
     }
 
     next() {
-        const {pageSize, items} = this.props;
-        const {startIndex} = this.state;
+        const {items} = this.props;
+        const {pageSize, startIndex} = this.state;
         const newIndex = startIndex + pageSize;
         if (newIndex < items.length) {
             this.setState({startIndex: newIndex}, () => {
                 this.filterItems();
+                this.checkPagePosition(newIndex);
                 this.calcPageNumbers();
             });
         }
     }
 
     previous() {
-        const {pageSize, items} = this.props;
-        const {startIndex} = this.state;
+        const {items} = this.props;
+        const {pageSize, startIndex} = this.state;
         const newIndex = startIndex - pageSize;
         if (newIndex >= 0) {
             this.setState({startIndex: newIndex}, () => {
                 this.filterItems();
+                this.checkPagePosition(newIndex);
                 this.calcPageNumbers();
             });
         }
     }
 
+    checkPagePosition(pageNum)
+    {
+        const { pageSize } = this.state;
+        const { items } = this.props;
+
+        this.setState({
+            showPrev: (pageNum * pageSize !== 0),
+            showNext: (pageNum + pageSize) <= items.length
+        });
+    }
+
     setPage(pageNum) {
-        const {pageSize} = this.props;
+        const { pageSize } = this.state;
+
         if (Number.isInteger(pageNum)) {
             this.setState({startIndex: pageNum * pageSize}, () => {
                 this.filterItems();
                 this.calcPageNumbers();
+                this.checkPagePosition(pageNum * pageSize)
             });
         }
     }
 
+    setPageSizeOptions = () =>
+    {
+        let options = [];
+
+        for(let i = 10; i < this.props.items.length; i <<= 1)
+        {
+            options.push(<option key={i} value={i}>{i}</option>);
+        }
+        options.push(<option key={options.length + 1} value={this.props.items.length}>All</option>);
+
+        return options;
+    };
+
+    changePageSize = (event) =>
+    {
+        this.setState({ pageSize: event.target.value }, () =>
+        {
+            this.setPage(0);
+            this.filterItems();
+            this.calcPageNumbers();
+        });
+    };
+
     render() {
-        const {columns, renderItems, currentPage, sorting} = this.state;
-        const {fixed} = this.props;
+        const {columns, renderItems, currentPage, sorting, fixed } = this.state;
+        const { styling } = this.props;
 
         return (
             <div>
                 <table
-                    className="table table-striped table-hover table-condensed"
+                    className={`table table-hover
+                        ${styling.striped ? ' table-striped' : ''}
+                        ${styling.condensed ? ' table-condensed' : ''}
+                        ${styling.bordered ? ' table-bordered' : ''}
+                    `}
                     style={{tableLayout: fixed ? 'fixed' : 'auto'}}
                 >
                     <thead className="thead-inverse">
@@ -275,10 +333,10 @@ class Table extends ContextComponent {
                                     columns.map((col) => (
                                         <td key={col.key} className={col.className} style={{
                                             overflow: (fixed && !col.showOverflow) ? 'hidden' : 'visible',
-                                            textOverflow: !col.disableEllipsis && 'ellipsis',
+                                            textOverflow: !col.disableEllipsis && 'ellipsis'
                                         }}>
                                             <span
-                                                style={{'white-space': 'nowrap'}}
+                                                style={{'whiteSpace': 'nowrap'}}
                                                 data-placement='auto'
                                                 data-toggle={'tooltip'}
                                                 data-html="true"
@@ -290,7 +348,6 @@ class Table extends ContextComponent {
                                                 {col.value ? col.value(item) : item[col.key]}
                                             </span>
                                         </td>
-
                                     ))
                                 }
                             </tr>),
@@ -303,7 +360,7 @@ class Table extends ContextComponent {
                                             textOverflow: !col.disableEllipsis && 'ellipsis',
                                         }}>
                                             <span
-                                                style={{'white-space': 'nowrap'}}
+                                                style={{'whiteSpace': 'nowrap'}}
                                                 data-placement='auto'
                                                 data-toggle={'tooltip'}
                                                 data-html="true"
@@ -318,7 +375,6 @@ class Table extends ContextComponent {
                                                 }
                                             </span>
                                         </td>
-
                                     ))}
                                 </tr>
                             ))
@@ -326,10 +382,28 @@ class Table extends ContextComponent {
                     }
                     </tbody>
                 </table>
+
                 <div className='text-right'>
                     <nav aria-label="Page navigation">
                         <ul className="pagination" ref={ref => this.pagination = ref}>
-                            <li>
+                            {
+                                this.props.options.showPageSize &&
+                                <li>
+                                    <div className="form-group page-size">
+                                        <div className="input-group">
+                                            <div className="input-group-addon">Show</div>
+                                            <select
+                                                className="form-control"
+                                                value={ this.state.pageSize }
+                                                onChange={ this.changePageSize.bind(this) }
+                                            >
+                                                { this.setPageSizeOptions() }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                            <li className={this.state.showPrev ? '' : 'disabled'}>
                                 <a aria-label="Previous" onClick={(e) => {e.preventDefault(); this.previous()}}>
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
@@ -343,7 +417,7 @@ class Table extends ContextComponent {
                                     </li>
                                 ))
                             }
-                            <li>
+                            <li className={this.state.showNext ? '' : 'disabled'}>
                                 <a aria-label="Next" onClick={(e) => {e.preventDefault(); this.next()}}>
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
