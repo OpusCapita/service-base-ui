@@ -7,7 +7,7 @@ import { ContextComponent, LogInForm, DatePicker, Table } from '../components';
 class Test extends ContextComponent
 {
     state = {
-    }
+    };
 
     constructor(props, context)
     {
@@ -24,8 +24,25 @@ class Test extends ContextComponent
     {
         return(
             <div>
-                <DatePicker showIcon={false} />
+                {/*<DatePicker showIcon={false} />*/}
                 <Table
+                    //groupBy={({type}) => type}
+                    styling={
+                        {
+                            bordered: true,
+                            striped: true,
+                            condensed: false
+                        }
+                    }
+                    options={
+                        {
+                            pageSize: 20,
+                            showPageSize: true,
+                            showEditMenu: true,
+                            openEditMenu: false,
+                            fixed: true
+                        }
+                    }
                     columns={
                         [
                             {
@@ -35,7 +52,15 @@ class Test extends ContextComponent
                             {
                                 key: 'type',
                                 name: 'Type',
-                            }
+                            },
+                            {
+                                key: 'createdBy',
+                                name: 'createdBy',
+                            },
+                            {
+                                key: 'changedBy',
+                                name: 'changedBy',
+                            },
                         ]
                     }
                     items={
@@ -43,22 +68,71 @@ class Test extends ContextComponent
                             {
                                 name: 'Scott Tiger',
                                 type: 'Supplier',
+                                createdBy: 'demodata',
+                                changedBy: 'demodata',
                             },
                             {
                                 name: 'John Doe',
                                 type: 'Customer',
+                                createdBy: 'demodata',
+                                changedBy: 'demodata',
                             },
                             {
                                 name: 'Andy Approver',
                                 type: 'Customer',
+                                createdBy: 'demodata',
+                                changedBy: 'demodata',
                             },
                             {
                                 name: 'Mark Matcher',
                                 type: 'Customer',
+                                createdBy: 'demodata',
+                                changedBy: 'demodata',
+                            },
+                            {
+                                name: 'Oliver Operator',
+                                type: 'Supplier',
+                                createdBy: 'The Doctor',
+                                changedBy: 'Opuscapita user ',
+                            },
+                            {
+                                name: 'Dave Developer',
+                                type: 'Supplier',
+                                createdBy: 'demodata',
+                                changedBy: 'demodata',
+                            },
+                            {
+                                name: 'Tommy Tester',
+                                type: 'Customer',
+                                createdBy: 'demodata',
+                                changedBy: 'demodata',
+                            },
+                            {
+                                name: 'Eileen Email',
+                                type: 'Supplier',
+                                createdBy: 'The Doctor',
+                                changedBy: 'Opuscapita user',
+                            },
+                            {
+                                name: 'Ann Auditor',
+                                type: 'Customer',
+                                createdBy: 'The Doctor',
+                                changedBy: 'Opuscapita user',
+                            },
+                            {
+                                name: 'Antonio Analyst',
+                                type: 'Supplier',
+                                createdBy: 'The Doctor',
+                                changedBy: 'Opuscapita user',
+                            },
+                            {
+                                name: 'Indy Inspector',
+                                type: 'Customer',
+                                createdBy: 'demodata',
+                                changedBy: 'demodata',
                             }
                         ]
                     }
-                    groupBy={({type}) => type}
                 />
             </div>
         );
@@ -69,6 +143,6 @@ class Test extends ContextComponent
 const layout =
 <ServiceLayout serviceName="service-base-ui" component={Test}>
     <Route path="/" component={Test} />
-</ServiceLayout>
+</ServiceLayout>;
 
 ReactDOM.render(layout, document.getElementById('root'));
