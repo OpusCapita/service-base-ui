@@ -51,7 +51,8 @@ class Table extends ContextComponent {
             openEditMenu: props.options.openEditMenu,
             canBeSaved: false,
             exportableitems: [  ],
-            tempItems: [  ]
+            tempItems: [  ],
+            filtertext: ''
         };
 
         context.i18n.register('Table', translations);
@@ -349,6 +350,16 @@ class Table extends ContextComponent {
         }
     };
 
+    handleSearchInput = (event) =>
+    {
+        this.setState({
+            filtertext: event.target.value,
+            tempItems: this.state.items
+        }, () => {
+            this.searchItems();
+        });
+    };
+
     // Handle row selection.
     handleSelectionChange = (index) =>
     {
@@ -614,9 +625,42 @@ class Table extends ContextComponent {
         })
     };
 
+    searchItems = () =>
+    {
+
+        const { filtertext, tempItems, items } = this.state;
+
+        let foundItem = false;
+
+        if(filtertext === '')
+        {
+            foundItem = false;
+        }
+
+        if(tempItems)
+        {
+            let newList = tempItems.filter((item) =>
+            {
+                if(item['name'].indexOf(filtertext) >= 0)
+                {
+                    item['_id'] = this.randomId();
+                    return item;
+                }
+                else
+                {
+                    foundItem = false;
+                }
+            });
+
+            this.setState({
+                renderItems: foundItem ? items : newList
+            });
+        }
+    };
+
     render() {
         const { i18n } = this.context;
-        const { columns, renderItems, currentPage, sorting, fixed, selectedItems, items, openEditMenu, canBeSaved } = this.state;
+        const { columns, renderItems, currentPage, sorting, fixed, selectedItems, items, openEditMenu, canBeSaved, filtertext } = this.state;
         const { styling, options } = this.props;
 
         return (
@@ -627,7 +671,13 @@ class Table extends ContextComponent {
                         <span className="table-filler">
                         {
                             <span className="table-search">
-                                <input className="table-search-input" type="text" placeholder={ i18n.getMessage('Table.search.placeholder') } />
+                                <input
+                                    className="table-search-input"
+                                    type="text"
+                                    placeholder={ i18n.getMessage('Table.search.placeholder') }
+                                    value={ filtertext }
+                                    onChange={ this.handleSearchInput.bind(this) }
+                                />
                                 <span className="glyphicon glyphicon-search" aria-hidden="true"/>
                             </span>
                         }
