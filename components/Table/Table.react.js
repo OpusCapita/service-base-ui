@@ -322,6 +322,33 @@ class Table extends ContextComponent {
         });
     };
 
+    handleListValueChange = (key, value, id) =>
+    {
+        const { items } = this.state;
+
+        if(items)
+        {
+            let newList = items.map((item) =>
+            {
+                if(item._id === id)
+                {
+                    item[key] = value;
+                }
+
+                return item;
+            });
+
+            this.setState({
+                items: newList
+            }, () =>
+            {
+                this.setPage(0);
+                this.filterItems();
+                this.calcPageNumbers();
+            });
+        }
+    };
+
     // Handle row selection.
     handleSelectionChange = (index) =>
     {
@@ -728,7 +755,13 @@ class Table extends ContextComponent {
                                         }}>
                                             {
                                                 openEditMenu ?
-                                                <input type="text" className="table-input" value={ col.value ? col.value(item) : item[col.key] } placeholder={ col.key }/>
+                                                <input
+                                                    type="text"
+                                                    className="table-input"
+                                                    value={ col.value ? col.value(item) : item[col.key] }
+                                                    placeholder={ col.key }
+                                                    onChange={ (e) => this.handleListValueChange(col.key, e.target.value, item._id) }
+                                                />
                                                 :
                                                 <span
                                                     style={{'whiteSpace': 'nowrap'}}
