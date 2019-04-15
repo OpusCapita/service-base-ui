@@ -641,7 +641,7 @@ class Table extends ContextComponent {
         {
             let newList = tempItems.filter((item) =>
             {
-                if(item['name'].indexOf(filtertext) >= 0)
+                if(item['name'].toLowerCase().indexOf(filtertext.toLowerCase()) >= 0)
                 {
                     item['_id'] = this.randomId();
                     return item;
@@ -737,130 +737,133 @@ class Table extends ContextComponent {
                         </span>
                     </div>
                 }
-
-                <table
-                    className={`table table-hover
-                        ${styling.striped ? ' table-striped' : ''}
-                        ${styling.condensed ? ' table-condensed' : ''}
-                        ${styling.bordered ? ' table-bordered' : ''}
-                    `}
-                    style={{tableLayout: (options.fixed ? 'fixed' : 'auto')}}
-                >
-                    <thead className="thead-inverse">
-                    <tr>
-                        {this.props.groupBy && <th style={{width: '3.5rem'}} />}
-                        { openEditMenu && <th style={{width: '3.5rem'}} />}
-                        {columns.map((col, index) => {
-                            return (
-                                <th key={col.key} style={{width: col.width}}>
-                                    <a onClick={(e) => {
-                                        e.preventDefault();
-                                        this.applySort(col.key)
-                                    }}>
-                                        {col.name}
-                                        {sorting.key === col.key && (sorting.order === 'asc' ?
-                                            <span>&nbsp;<i className="fa fa-caret-down"/></span>
-                                            :
-                                            <span>&nbsp;<i className="fa fa-caret-up"/></span>
-                                        )}
-                                    </a>
-                                </th>
-                            )
-                        })}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        renderItems.map((item, index) => ([
-                            (<tr key={index} className={`${selectedItems.indexOf(item._id) >= 0 ? 'info' : ''} ${ openEditMenu ? 'row-selected' : ''}`}>
-                                {this.props.groupBy &&
-                                <td
-                                    style={{textAlign: 'center', width: '3.5rem'}}
-                                    onClick={e => {
-                                        item.__showAll = !item.__showAll;
-                                        this.setState({renderItems});
-                                    }}
-                                >
-                                    {item.__showAll ?
-                                        <span>&nbsp;<i className="fa fa-caret-down fa-lg"/></span>
-                                        :
-                                        <span>&nbsp;<i className="fa fa-caret-right fa-lg"/></span>
-                                    }
-                                </td>}
-                                {
-                                    openEditMenu &&
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedItems.indexOf(item._id) >= 0 ? 'checked' : ''}
-                                            onClick={ this.handleSelectionChange.bind(this, item._id) }
-                                        />
-                                    </td>
-                                }
-                                {
-                                    columns.map((col) => (
-                                        <td key={col.key} className={col.className} style={{
-                                            overflow: (fixed && !col.showOverflow) ? 'hidden' : 'visible',
-                                            textOverflow: !col.disableEllipsis && 'ellipsis'
-                                        }}>
-                                            {
-                                                openEditMenu ?
-                                                <input
-                                                    type="text"
-                                                    className="table-input"
-                                                    value={ col.value ? col.value(item) : item[col.key] }
-                                                    placeholder={ col.key }
-                                                    onChange={ (e) => this.handleListValueChange(col.key, e.target.value, item._id) }
-                                                />
+                <div className="outer">
+                    <div className="inner">
+                        <table
+                            className={`table table-hover
+                                ${styling.striped ? ' table-striped' : ''}
+                                ${styling.condensed ? ' table-condensed' : ''}
+                                ${styling.bordered ? ' table-bordered' : ''}
+                            `}
+                            style={{tableLayout: (options.fixed ? 'fixed' : 'auto')}}
+                        >
+                            <thead className="thead-inverse">
+                            <tr>
+                                {this.props.groupBy && <th style={{width: '3.5rem'}} />}
+                                { openEditMenu && <th style={{width: '3.5rem'}} />}
+                                {columns.map((col, index) => {
+                                    return (
+                                        <th key={col.key} style={{width: col.width}}>
+                                            <a onClick={(e) => {
+                                                e.preventDefault();
+                                                this.applySort(col.key)
+                                            }}>
+                                                {col.name}
+                                                {sorting.key === col.key && (sorting.order === 'asc' ?
+                                                    <span>&nbsp;<i className="fa fa-caret-down"/></span>
+                                                    :
+                                                    <span>&nbsp;<i className="fa fa-caret-up"/></span>
+                                                )}
+                                            </a>
+                                        </th>
+                                    )
+                                })}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                renderItems.map((item, index) => ([
+                                    (<tr key={index} className={`${selectedItems.indexOf(item._id) >= 0 ? 'info' : ''} ${ openEditMenu ? 'row-selected' : ''}`}>
+                                        {this.props.groupBy &&
+                                        <td
+                                            style={{textAlign: 'center', width: '3.5rem'}}
+                                            onClick={e => {
+                                                item.__showAll = !item.__showAll;
+                                                this.setState({renderItems});
+                                            }}
+                                        >
+                                            {item.__showAll ?
+                                                <span>&nbsp;<i className="fa fa-caret-down fa-lg"/></span>
                                                 :
-                                                <span
-                                                    style={{'whiteSpace': 'nowrap'}}
-                                                    data-placement='auto'
-                                                    data-toggle={'tooltip'}
-                                                    data-html="true"
-                                                    title={
-                                                        typeof (col.value ? col.value(item) : item[col.key]) === 'string' &&
-                                                        col.value ? col.value(item) : item[col.key]
-                                                    }
-                                                >
-                                                    {col.value ? col.value(item) : item[col.key] || "\xa0"}
-                                                </span>
+                                                <span>&nbsp;<i className="fa fa-caret-right fa-lg"/></span>
                                             }
-                                        </td>
+                                        </td>}
+                                        {
+                                            openEditMenu &&
+                                            <td>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedItems.indexOf(item._id) >= 0 ? 'checked' : ''}
+                                                    onClick={ this.handleSelectionChange.bind(this, item._id) }
+                                                />
+                                            </td>
+                                        }
+                                        {
+                                            columns.map((col) => (
+                                                <td key={col.key} className={col.className} style={{
+                                                    overflow: (fixed && !col.showOverflow) ? 'hidden' : 'visible',
+                                                    textOverflow: !col.disableEllipsis && 'ellipsis'
+                                                }}>
+                                                    {
+                                                        openEditMenu ?
+                                                        <input
+                                                            type="text"
+                                                            className="table-input"
+                                                            value={ col.value ? col.value(item) : item[col.key] }
+                                                            placeholder={ col.key }
+                                                            onChange={ (e) => this.handleListValueChange(col.key, e.target.value, item._id) }
+                                                        />
+                                                        :
+                                                        <span
+                                                            style={{'whiteSpace': 'nowrap'}}
+                                                            data-placement='auto'
+                                                            data-toggle={'tooltip'}
+                                                            data-html="true"
+                                                            title={
+                                                                typeof (col.value ? col.value(item) : item[col.key]) === 'string' &&
+                                                                col.value ? col.value(item) : item[col.key]
+                                                            }
+                                                        >
+                                                            {col.value ? col.value(item) : item[col.key] || "\xa0"}
+                                                        </span>
+                                                    }
+                                                </td>
+                                            ))
+                                        }
+                                    </tr>),
+                                    item.__showAll && (item.__subItems || []).map((item) => (
+                                        <tr>
+                                            <td/>
+                                            {columns.map((col) => (
+                                                <td key={col.key} className={col.className} style={{
+                                                    overflow: (fixed && !col.showOverflow) ? 'hidden' : 'visible',
+                                                    textOverflow: !col.disableEllipsis && 'ellipsis',
+                                                }}>
+                                                    <span
+                                                        style={{'whiteSpace': 'nowrap'}}
+                                                        data-placement='auto'
+                                                        data-toggle={'tooltip'}
+                                                        data-html="true"
+                                                        title={
+                                                            typeof (col.value ? col.value(item) : item[col.key]) === 'string' &&
+                                                            col.value ? col.value(item) : item[col.key]
+                                                        }
+                                                    >
+                                                        {
+                                                            col.subItemValue ? col.subItemValue(item) :
+                                                                col.value ? col.value(item) : item[col.key]
+                                                        }
+                                                    </span>
+                                                </td>
+                                            ))}
+                                        </tr>
                                     ))
-                                }
-                            </tr>),
-                            item.__showAll && (item.__subItems || []).map((item) => (
-                                <tr>
-                                    <td/>
-                                    {columns.map((col) => (
-                                        <td key={col.key} className={col.className} style={{
-                                            overflow: (fixed && !col.showOverflow) ? 'hidden' : 'visible',
-                                            textOverflow: !col.disableEllipsis && 'ellipsis',
-                                        }}>
-                                            <span
-                                                style={{'whiteSpace': 'nowrap'}}
-                                                data-placement='auto'
-                                                data-toggle={'tooltip'}
-                                                data-html="true"
-                                                title={
-                                                    typeof (col.value ? col.value(item) : item[col.key]) === 'string' &&
-                                                    col.value ? col.value(item) : item[col.key]
-                                                }
-                                            >
-                                                {
-                                                    col.subItemValue ? col.subItemValue(item) :
-                                                        col.value ? col.value(item) : item[col.key]
-                                                }
-                                            </span>
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
-                        ]))
-                    }
-                    </tbody>
-                </table>
+                                ]))
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
                 <div className='text-right'>
                     <nav aria-label="Page navigation">

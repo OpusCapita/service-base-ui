@@ -43,7 +43,7 @@
 }
 .table-editor
 {
-    width: calc(100% - 1px);
+    width: 100%;
 }
 .table-search
 {
@@ -72,4 +72,22 @@
     position: absolute;
     left: 0;
     padding: 8px 10px;
+}
+.outer {
+    position: relative;
+}
+.inner {
+    overflow-x: scroll;
+    overflow-y: visible;
+    width: 100%;
+}
+table {
+    table-layout: fixed;
+    width: 100%;
+    *margin-left: -100px;
+}
+td, th {
+    vertical-align: top;
+    border-top: 1px solid #ccc;
+    padding: 10px;
 }

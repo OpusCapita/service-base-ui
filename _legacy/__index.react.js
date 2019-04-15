@@ -47,36 +47,19 @@ class Test extends ContextComponent
                         [
                             {
                                 key: 'name',
-                                name: 'name',
-                                width: 250
+                                name: 'Name',
                             },
                             {
-                                key: 'federationName',
-                                name: 'federationName',
-                                width: 150
-                            },
-                            {
-                                key: 'supplierId',
-                                name: 'supplierId',
-                                width: 150
-                            },
-                            {
-                                key: 'customerId',
-                                name: 'customerId',
-                                width: 150
-                            },
-                            {
-                                key: 'status',
-                                name: 'status',
-                                width: 100
+                                key: 'type',
+                                name: 'Type',
                             },
                             {
                                 key: 'createdBy',
-                                name: 'createdBy'
+                                name: 'createdBy',
                             },
                             {
                                 key: 'changedBy',
-                                name: 'changedBy'
+                                name: 'changedBy',
                             },
                         ]
                     }
@@ -84,100 +67,67 @@ class Test extends ContextComponent
                         [
                             {
                                 name: 'Scott Tiger',
-                                federationName: '',
-                                supplierId: 'hard001',
-                                customerId: '',
-                                status: 'firstLogin',
+                                type: 'Supplier',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
                             },
                             {
                                 name: 'John Doe',
-                                federationName: '',
-                                supplierId: '',
-                                customerId: 'ncc',
-                                status: 'firstLogin',
+                                type: 'Customer',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
                             },
                             {
                                 name: 'Andy Approver',
-                                federationName: '',
-                                supplierId: 'OC001',
-                                customerId: '',
-                                status: 'firstLogin',
+                                type: 'Customer',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
                             },
                             {
                                 name: 'Mark Matcher',
-                                federationName: '',
-                                supplierId: 'OC001',
-                                customerId: '',
-                                status: 'firstLogin',
+                                type: 'Customer',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
                             },
                             {
                                 name: 'Oliver Operator',
-                                federationName: '',
-                                supplierId: 'acme_us',
-                                customerId: '',
-                                status: 'firstLogin',
+                                type: 'Supplier',
                                 createdBy: 'The Doctor',
-                                changedBy: 'Opuscapita user',
+                                changedBy: 'Opuscapita user ',
                             },
                             {
                                 name: 'Dave Developer',
-                                federationName: '',
-                                supplierId: 'acme_us',
-                                customerId: '',
-                                status: 'firstLogin',
+                                type: 'Supplier',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
                             },
                             {
                                 name: 'Tommy Tester',
-                                federationName: '',
-                                supplierId: '',
-                                customerId: 'acme_de',
-                                status: 'firstLogin',
+                                type: 'Customer',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
                             },
                             {
                                 name: 'Eileen Email',
-                                federationName: '',
-                                supplierId: '',
-                                customerId: 'acme_de',
-                                status: 'firstLogin',
+                                type: 'Supplier',
                                 createdBy: 'The Doctor',
                                 changedBy: 'Opuscapita user',
                             },
                             {
                                 name: 'Ann Auditor',
-                                federationName: '',
-                                supplierId: '',
-                                customerId: 'OC001',
-                                status: 'firstLogin',
+                                type: 'Customer',
                                 createdBy: 'The Doctor',
                                 changedBy: 'Opuscapita user',
                             },
                             {
                                 name: 'Antonio Analyst',
-                                federationName: '',
-                                supplierId: '',
-                                customerId: 'OC001',
-                                status: 'firstLogin',
+                                type: 'Supplier',
                                 createdBy: 'The Doctor',
                                 changedBy: 'Opuscapita user',
                             },
                             {
                                 name: 'Indy Inspector',
-                                federationName: '',
-                                supplierId: '',
-                                customerId: 'OC001',
-                                status: 'firstLogin',
+                                type: 'Customer',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
                             }
