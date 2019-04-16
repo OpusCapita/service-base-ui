@@ -91,7 +91,8 @@ class ModalDialog extends ContextComponent
         $(this.dialog).modal({
             show: true,
             backdrop: this.props.allowClose ? true : 'static',
-        });
+        })
+        .on('hidden.bs.modal', () => this.setState({ visible : false }));
     }
 
     reload()
