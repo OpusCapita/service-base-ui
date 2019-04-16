@@ -139,7 +139,7 @@ class MainMenu extends ConditionalRenderComponent
         const manualName = (supplierid ? "SupplierManual_" : "BuyerManual_") + languageid + ".pdf";
         const url = '/blob/public/api/opuscapita/files/public/docs/' + manualName;
 
-        document.location.replace(url);
+        window.open(url, '_blank');
     }
 
     handleLanguageChange(e)
