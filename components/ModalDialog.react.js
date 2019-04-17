@@ -16,6 +16,7 @@ class ModalDialog extends ContextComponent
         allowClose: PropTypes.bool.isRequired,
         showFooter: PropTypes.bool.isRequired,
         onButtonClick : PropTypes.func.isRequired,
+        onClose : PropTypes.func.isRequired,
     }
 
     static defaultProps = {
@@ -28,6 +29,7 @@ class ModalDialog extends ContextComponent
         allowClose : true,
         showFooter: true,
         onButtonClick : () => { },
+        onClose : () => { },
     }
 
     static sizes = {
@@ -92,7 +94,17 @@ class ModalDialog extends ContextComponent
             show: true,
             backdrop: this.props.allowClose ? true : 'static',
         })
-        .on('hidden.bs.modal', () => this.setState({ visible : false }));
+        .on('hidden.bs.modal', () =>
+        {
+            const closeResult = this.state.onClose();
+
+            if(closeResult && closeResult.then)
+                closeResult.then(result => result !== false && this.setState({ visible : false }));
+            else if(closeResult !== false)
+                this.setState({ visible : false });
+            else
+                this.show();
+        });
     }
 
     reload()
