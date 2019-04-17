@@ -1,0 +1,10 @@
+{
+    "Main.systemError.title": "Une erreur générale s'est produite",
+    "Main.notification.sessionError": "Une erreur de session s'est produite et votre session ne peut pas continuer. Veuillez vous déconnecter et vous reconnecter.",
+    "Main.notification.sessionExpiring": "Votre ouverture de session est sur le point d'expirer.",
+    "Main.notification.button.logout": "Fin de session",
+    "Main.notification.button.renewSession": "Renouvelez maintenant",
+    "ServiceLayout.LogInDialog.title": "Veuillez ouvrir la session",
+    "ServiceLayout.LogInDialog.description": "Pour des raisons de sécurité, votre session a expiré. Veuillez vous reconnecter au système pour continuer à travailler.",
+    "ServiceLayout.LogInDialog.button.signIn": "Ouvrez la session"
+}

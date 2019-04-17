@@ -21,6 +21,11 @@ export default
             "link": "/sales-order/receipt-advice/overview"
         },
         {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
             "key": "orderConfiguration",
             "label": "Order receiving configuration",
             "link": "/sales-order/configuration"
@@ -118,6 +123,11 @@ export default
             "link": "/sales-order/receipt-advice/overview"
         },
         {
+            "key": "despatch-advice-overview",
+            "label": "Lieferavise",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
             "key": "orderConfiguration",
             "label": "Konfiguration Bestellannahme",
             "link": "/sales-order/configuration"
@@ -150,8 +160,7 @@ export default
         {
             "key": "upload",
             "label": "Upload",
-            "link": "/bnp/catalog-upload",
-            "target": "_blank"
+            "link": "/bnp/catalog-upload"
         }]
     },
     {
@@ -211,6 +220,16 @@ export default
             "link": "/sales-order"
         },
         {
+            "key": "receipt-advice-overview",
+            "label": "Receipt advices",
+            "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
             "key": "orderConfiguration",
             "label": "Inställningar för mottag av order",
             "link": "/sales-order/configuration"
@@ -264,6 +283,16 @@ export default
             "key": "connections",
             "label": "Anslutningar",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -291,6 +320,16 @@ export default
             "key": "overview",
             "label": "Yhteenveto",
             "link": "/sales-order"
+        },
+        {
+            "key": "receipt-advice-overview",
+            "label": "Receipt advices",
+            "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
@@ -346,6 +385,16 @@ export default
             "key": "connections",
             "label": "Connections",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -355,6 +404,415 @@ export default
         {
             "key": "routes",
             "label": "Reititys",
+            "link": "/bnp/routing/routes"
+        }]
+    }],
+
+
+    "it": [
+    {
+        "key": "home",
+        "label": "Home",
+        "link": "/bnp"
+    },
+    {
+        "key": "orders",
+        "label": "Ordini",
+        "children": [
+        {
+            "key": "order-overview",
+            "label": "Riepilogo Ordine",
+            "link": "/sales-order"
+        },
+        {
+            "key": "receipt-advice-overview",
+            "label": "Avvisi di ricezione",
+            "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
+            "key": "orderConfiguration",
+            "label": "Configurazione ricezione ordine",
+            "link": "/sales-order/configuration"
+        }]
+    },
+    {
+        "key": "invoices",
+        "label": "Fattura",
+        "children": [
+        {
+            "key": "overview",
+            "label": "Riepilogo",
+            "link": "/sales-invoice/search"
+        },
+        {
+            "key": "key-in",
+            "label": "Inserimento",
+            "link": "/sales-invoice/create"
+        },
+        {
+            "key": "configuration",
+            "label": "Configurazione Invio Fattura",
+            "link": "/einvoice-send/configuration"
+        }]
+    },
+    {
+        "key": "catalog",
+        "label": "Catalogo",
+        "children": [
+        {
+            "key": "upload",
+            "label": "Carica",
+            "link": "/bnp/catalog-upload"
+        }]
+    },
+    {
+        "key": "company",
+        "label": "Impresa",
+        "children": [
+        {
+            "key": "profile",
+            "label": "Profilo",
+            "link": "/bnp/supplierInformation"
+        },
+        {
+            "key": "users",
+            "label": "Utenti",
+            "link": "/bnp/users"
+        },
+        {
+            "key": "connections",
+            "label": "Collegamenti",
+            "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
+        }]
+    },
+    {
+        "key": "settings",
+        "label": "Impostazioni",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Route",
+            "link": "/bnp/routing/routes"
+        }]
+    }],
+
+    "fr": [
+    {
+        "key": "home",
+        "label": "Accueil",
+        "link": "/bnp"
+    },
+    {
+        "key": "orders",
+        "label": "Commandes",
+        "children": [
+        {
+            "key": "order-overview",
+            "label": "Vue d'ensemble de la commande",
+            "link": "/sales-order"
+        },
+        {
+            "key": "receipt-advice-overview",
+            "label": "Avis de réception",
+            "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
+            "key": "orderConfiguration",
+            "label": "Configuration de la réception de la commande",
+            "link": "/sales-order/configuration"
+        }]
+    },
+    {
+        "key": "invoices",
+        "label": "Facture",
+        "children": [
+        {
+            "key": "overview",
+            "label": "Vue d'ensemble",
+            "link": "/sales-invoice/search"
+        },
+        {
+            "key": "key-in",
+            "label": "Introduisez",
+            "link": "/sales-invoice/create"
+        },
+        {
+            "key": "configuration",
+            "label": "Configuration d'envoi de facture",
+            "link": "/einvoice-send/configuration"
+        }]
+    },
+    {
+        "key": "catalog",
+        "label": "Catalogue",
+        "children": [
+        {
+            "key": "upload",
+            "label": "Téléchargez",
+            "link": "/bnp/catalog-upload"
+        }]
+    },
+    {
+        "key": "company",
+        "label": "Société",
+        "children": [
+        {
+            "key": "profile",
+            "label": "Profil",
+            "link": "/bnp/supplierInformation"
+        },
+        {
+            "key": "users",
+            "label": "Utilisateurs",
+            "link": "/bnp/users"
+        },
+        {
+            "key": "connections",
+            "label": "Connexions",
+            "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
+        }]
+    },
+    {
+        "key": "settings",
+        "label": "Paramètres",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Routes",
+            "link": "/bnp/routing/routes"
+        }]
+    }],
+
+    "es": [
+    {
+        "key": "home",
+        "label": "Página Principal",
+        "link": "/bnp"
+    },
+    {
+        "key": "orders",
+        "label": "Pedidos",
+        "children": [
+        {
+            "key": "order-overview",
+            "label": "Vista general de pedido",
+            "link": "/sales-order"
+        },
+        {
+            "key": "receipt-advice-overview",
+            "label": "Avisos de recibo",
+            "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
+            "key": "orderConfiguration",
+            "label": "Configuración de recepción de pedidos",
+            "link": "/sales-order/configuration"
+        }]
+    },
+    {
+        "key": "invoices",
+        "label": "Factura",
+        "children": [
+        {
+            "key": "overview",
+            "label": "Visión general",
+            "link": "/sales-invoice/search"
+        },
+        {
+            "key": "key-in",
+            "label": "Entrada de datos de factura",
+            "link": "/sales-invoice/create"
+        },
+        {
+            "key": "configuration",
+            "label": "Configuración de envío de facturas",
+            "link": "/einvoice-send/configuration"
+        }]
+    },
+    {
+        "key": "catalog",
+        "label": "Catálogo",
+        "children": [
+        {
+            "key": "upload",
+            "label": "Cargar",
+            "link": "/bnp/catalog-upload"
+        }]
+    },
+    {
+        "key": "company",
+        "label": "Empresa",
+        "children": [
+        {
+            "key": "profile",
+            "label": "Perfil",
+            "link": "/bnp/supplierInformation"
+        },
+        {
+            "key": "users",
+            "label": "Usuarios",
+            "link": "/bnp/users"
+        },
+        {
+            "key": "connections",
+            "label": "Conexiones",
+            "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
+        }]
+    },
+    {
+        "key": "settings",
+        "label": "Parámetros",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Rutas",
+            "link": "/bnp/routing/routes"
+        }]
+    }],
+
+    "pt": [
+    {
+        "key": "home",
+        "label": "Página inicial",
+        "link": "/bnp"
+    },
+    {
+        "key": "orders",
+        "label": "Pedidos",
+        "children": [
+        {
+            "key": "order-overview",
+            "label": "Visão geral do pedido",
+            "link": "/sales-order"
+        },
+        {
+            "key": "receipt-advice-overview",
+            "label": "Recibos",
+            "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
+            "key": "orderConfiguration",
+            "label": "Configuração de recebimento de pedido",
+            "link": "/sales-order/configuration"
+        }]
+    },
+    {
+        "key": "invoices",
+        "label": "Fatura",
+        "children": [
+        {
+            "key": "overview",
+            "label": "Visão geral",
+            "link": "/sales-invoice/search"
+        },
+        {
+            "key": "key-in",
+            "label": "Inserção",
+            "link": "/sales-invoice/create"
+        },
+        {
+            "key": "configuration",
+            "label": "Configuração de envio de fatura",
+            "link": "/einvoice-send/configuration"
+        }]
+    },
+    {
+        "key": "catalog",
+        "label": "Catálogo",
+        "children": [
+        {
+            "key": "upload",
+            "label": "Carregar",
+            "link": "/bnp/catalog-upload"
+        }]
+    },
+    {
+        "key": "company",
+        "label": "Empresa",
+        "children": [
+        {
+            "key": "profile",
+            "label": "Perfil",
+            "link": "/bnp/supplierInformation"
+        },
+        {
+            "key": "users",
+            "label": "Usuários",
+            "link": "/bnp/users"
+        },
+        {
+            "key": "connections",
+            "label": "Conexões",
+            "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
+        }]
+    },
+    {
+        "key": "settings",
+        "label": "Configurações",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Encaminhamentos",
             "link": "/bnp/routing/routes"
         }]
     }]

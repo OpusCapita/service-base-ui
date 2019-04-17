@@ -1,0 +1,9 @@
+{
+    "LogInForm.label.email": "Correo electrónico",
+    "LogInForm.label.password": "Contraseña",
+    "LogInForm.placeholder.email": "Su correo electrónico",
+    "LogInForm.placeholder.password": "Su contraseña",
+    "LogInForm.button.logIn": "Registrarse",
+    "LogInForm.error.email.required": "El campo \"correo electrónico\"  no puede quedar vacío.",
+    "LogInForm.error.password.required": "El campo \"contraseña\" no puede quedar vacío"
+}

@@ -47,6 +47,11 @@ class ModalDialog extends ContextComponent
     componentWillReceiveProps(nextProps)
     {
         this.setState(extend(false, { }, nextProps, this.manualProps));
+        
+        if(this.state.visible)
+            this.show();
+        else
+            this.hide();
     }
 
     componentDidMount()
@@ -86,7 +91,8 @@ class ModalDialog extends ContextComponent
         $(this.dialog).modal({
             show: true,
             backdrop: this.props.allowClose ? true : 'static',
-        });
+        })
+        .on('hidden.bs.modal', () => this.setState({ visible : false }));
     }
 
     reload()

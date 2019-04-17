@@ -1,0 +1,10 @@
+{
+    "Main.systemError.title": "Si è verificato un errore generico",
+    "Main.notification.sessionError": "Si è verificato un errore di sessione e la vostra sessione non può non continuare. Si prega di uscire e riaccedere.",
+    "Main.notification.sessionExpiring": "Ls vostra sessione di accesso sta per scadere.",
+    "Main.notification.button.logout": "Esci",
+    "Main.notification.button.renewSession": "Rinnova ora",
+    "ServiceLayout.LogInDialog.title": "Si prega di accedere",
+    "ServiceLayout.LogInDialog.description": "Per ragioni di sicurezza la vostra sessione è scaduta. Si prega di riaccedere al sistema per continuare a lavorare.",
+    "ServiceLayout.LogInDialog.button.signIn": "Accedi"
+}
