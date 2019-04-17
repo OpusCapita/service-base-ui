@@ -48,7 +48,7 @@ class ModalDialog extends ContextComponent
     {
         this.setState(extend(false, { }, nextProps, this.manualProps));
         
-        if(this.state.visible)
+        if(nextProps.visible)
             this.show();
         else
             this.hide();
