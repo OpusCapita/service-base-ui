@@ -243,13 +243,13 @@ class Bouncer
 
         for(const res of resources)
         {
-            if(!res.requestFields.allow)
+            if(!res.requestFields || !res.requestFields.allow)
                 delete result.requestFields.allow;
-            if(!res.requestFields.remove)
+            if(!res.requestFields || !res.requestFields.remove)
                 delete result.requestFields.remove;
-            if(!res.responseFields.allow)
+            if(!res.responseFields || !res.responseFields.allow)
                 delete result.responseFields.allow;
-            if(!res.responseFields.remove)
+            if(!res.responseFields || !res.responseFields.remove)
                 delete result.responseFields.remove;
 
             result.roleIds = result.roleIds.concat(res.roleIds);
