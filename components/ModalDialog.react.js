@@ -48,12 +48,13 @@ class ModalDialog extends ContextComponent
 
     componentWillReceiveProps(nextProps)
     {
-        this.setState(extend(false, { }, nextProps, this.manualProps));
-        
-        if(this.state.visible)
-            this.show();
-        else
-            this.hide();
+        this.setState(extend(false, { }, nextProps, this.manualProps), () =>
+        {
+            if(this.state.visible)
+                this.show();
+            else
+                this.hide();
+        });
     }
 
     componentDidMount()
