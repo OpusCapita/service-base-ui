@@ -117,7 +117,7 @@ class ModalDialog extends ContextComponent
 
     hide()
     {
-        this.manualProps.visible = false;
+        delete this.manualProps.visible;
         this.setState({ visible : false }, () => $(this.dialog).modal('hide'));
     }
 
