@@ -50,7 +50,7 @@ class ModalDialog extends ContextComponent
     {
         this.setState(extend(false, { }, nextProps, this.manualProps));
         
-        if(nextProps.visible)
+        if(this.state.visible)
             this.show();
         else
             this.hide();
@@ -86,6 +86,8 @@ class ModalDialog extends ContextComponent
             this.manualProps.onButtonClick = onButtonClick;
         if(buttonsDisabled)
             this.manualProps.buttonsDisabled = buttonsDisabled;
+        
+        this.manualProps.visible = true;
 
         if(Object.keys(this.manualProps).length)
             this.setState(extend(false, { }, this.state, this.manualProps));
@@ -99,9 +101,9 @@ class ModalDialog extends ContextComponent
             const closeResult = this.state.onClose();
 
             if(closeResult && closeResult.then)
-                closeResult.then(result => result !== false && this.setState({ visible : false }));
+                closeResult.then(result => result !== false && this.hide());
             else if(closeResult !== false)
-                this.setState({ visible : false });
+                this.hide();
             else
                 this.show();
         });
@@ -114,7 +116,8 @@ class ModalDialog extends ContextComponent
 
     hide()
     {
-        $(this.dialog).modal('hide');
+        this.manualProps.visible = false;
+        this.setState({ visible : false }, () => $(this.dialog).modal('hide'));
     }
 
     setButtons(buttons)
