@@ -52,6 +52,11 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Berechtigungen",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Connections",
             "link": "/bnp/connections"
@@ -127,6 +132,11 @@ export default
             "key": "users",
             "label": "Benutzer",
             "link": "/bnp/users"
+        },
+        {
+            "key": "permissions",
+            "label": "Berechtigungen",
+            "link": "/bnp/permissions"
         },
         {
             "key": "connections",
