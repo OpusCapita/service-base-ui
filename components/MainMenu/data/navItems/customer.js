@@ -53,7 +53,7 @@ export default
         },
         {
             "key": "permissions",
-            "label": "Berechtigungen",
+            "label": "Permissions",
             "link": "/bnp/permissions"
         },
         {
@@ -217,6 +217,11 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Collegamenti",
             "link": "/bnp/connections"
@@ -292,6 +297,11 @@ export default
             "key": "users",
             "label": "Utilisateurs",
             "link": "/bnp/users"
+        },
+        {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
         },
         {
             "key": "connections",
@@ -371,6 +381,11 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Conexiones",
             "link": "/bnp/connections"
@@ -446,6 +461,11 @@ export default
             "key": "users",
             "label": "Usuários",
             "link": "/bnp/users"
+        },
+        {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
         },
         {
             "key": "connections",
