@@ -73,18 +73,10 @@ class Table extends ContextComponent
 
     async componentDidMount()
     {
-        this.setState({
-            loading: true
-        });
+        this.setState({ loading: true });
 
-        if(this.props.data === [])
-        {
-            await this.loadItems();
-        }
-        else
-        {
-            await this.loadItemsFromDatabase();
-        }
+        if(this.props.data === []) await this.loadItemsFromProps();
+        else await this.loadItemsFromDatabase();
     }
 
     componentWillReceiveProps(nextProps)
@@ -94,11 +86,11 @@ class Table extends ContextComponent
         }, () =>
         {
             const { defaultSort } = this.props;
+
             this.groupItems();
-            if(defaultSort)
-            {
-                this.applySort(defaultSort.key, defaultSort.order)
-            }
+
+            if(defaultSort) this.applySort(defaultSort.key, defaultSort.order);
+
             this.filterItems();
             this.calcPageNumbers();
         });
@@ -114,13 +106,11 @@ class Table extends ContextComponent
     {
         const url = this.props.data;
 
-        let items = [];
-
         try
         {
             const data = await request.get(url);
 
-            items = data.body;
+            const items = data.body;
 
             await this.enumerateItems(items);
         }
@@ -134,15 +124,13 @@ class Table extends ContextComponent
      * Load items to populate item-list.
      *
      * @async
-     * @function loadItems
+     * @function loadItemsFromProps
      */
-    async loadItems()
+    async loadItemsFromProps()
     {
-        let items = [];
-
         try
         {
-            items = this.props.items;
+            const items = this.props.items;
 
             await this.enumerateItems(items)
         }
@@ -353,6 +341,11 @@ class Table extends ContextComponent
         }
     }
 
+    /**
+     * Filter items according to page size
+     *
+     * @function filterItems
+     */
     filterItems()
     {
         const { startIndex, pageSize, items } = this.state;
@@ -368,6 +361,11 @@ class Table extends ContextComponent
         });
     }
 
+    /**
+     * Go to next page
+     *
+     * @function next
+     */
     next()
     {
         const { pageSize, startIndex, items } = this.state;
@@ -385,6 +383,11 @@ class Table extends ContextComponent
         }
     }
 
+    /**
+     * Go to previous page
+     *
+     * @function previous
+     */
     previous()
     {
         const { pageSize, startIndex, items } = this.state;
@@ -433,7 +436,10 @@ class Table extends ContextComponent
      */
     checkPageChangeButtonVisibility = (pageNum) =>
     {
-        const { pageSize, items } = this.state;
+        const {
+            pageSize,
+            items
+        } = this.state;
 
         this.setState({
             showPrev: (pageNum * pageSize !== 0),
@@ -838,10 +844,7 @@ class Table extends ContextComponent
         {
             let tempItems = items.filter((data) =>
             {
-                if(selectedItems.indexOf(data._id) >= 0)
-                {
-                    return data;
-                }
+                if(selectedItems.indexOf(data._id) >= 0) return data;
             });
 
             itemList = JSON.stringify(tempItems);
@@ -879,9 +882,7 @@ class Table extends ContextComponent
             exportableItems += line + '\r\n';
         });
 
-        this.setState({
-            exportableItems
-        });
+        this.setState({ exportableItems });
     };
 
     /**
@@ -891,35 +892,43 @@ class Table extends ContextComponent
      */
     exportDataToCSV = () =>
     {
-        const { i18n, showNotification } = this.context;
-        const { exportableItems, selectedItems, renderItems } = this.state;
+        const {
+            i18n,
+            showNotification
+        } = this.context;
+        const {
+            exportableItems,
+            selectedItems,
+            renderItems
+        } = this.state;
 
-        const columnDelimiter = ';';
-        const lineDelimiter = '\n';
-        const keys = Object.keys(renderItems[ 0 ]);
+        const columnDelimiter = ';',
+            lineDelimiter = '\n',
+            keys = Object.keys(renderItems[ 0 ]);
 
         let result = '';
+
         result += keys.join(columnDelimiter);
         result += lineDelimiter;
 
         try
         {
             const dl = 'data:text/csv;charset=utf-8,' + result + exportableItems;
+
             window.open(encodeURI(dl));
 
-            showNotification(selectedItems.length === 1 ?
-                i18n.getMessage('Table.notification.export.success.single')
-                :
-                (selectedItems.length >= 1 ?
-                        i18n.getMessage('Table.notification.export.success.multiple', { amount: selectedItems.length })
-                        :
-                        i18n.getMessage('Table.notification.export.success.all')
-                ));
+            showNotification(
+                selectedItems.length === 1 ?
+                    i18n.getMessage('Table.notification.export.success.single')
+                    :
+                    (selectedItems.length >= 1 ?
+                            i18n.getMessage('Table.notification.export.success.multiple', { amount: selectedItems.length })
+                            :
+                            i18n.getMessage('Table.notification.export.success.all')
+                    )
+            );
 
-            this.setState({
-                selectedItems: [],
-                exportableItems: []
-            }, () =>
+            this.setState({ selectedItems: [], exportableItems: [] }, () =>
             {
                 this.setPage(0);
                 this.filterItems();
@@ -939,22 +948,39 @@ class Table extends ContextComponent
      */
     searchItems = () =>
     {
-        const { i18n, showNotification } = this.context;
-        const { filtertext, tempItems, items } = this.state;
+        const {
+            filtertext,
+            tempItems,
+            items
+        } = this.state;
 
         Editor.searchForMatches(filtertext, tempItems, items).then((newItems) =>
         {
-            this.setState({
-                renderItems: newItems
-            })
+            this.setState({ renderItems: newItems })
         })
     };
 
     render()
     {
-        const { i18n, userData } = this.context;
-        const { columns, renderItems, currentPage, sorting, fixed, selectedItems, items, openEditMenu, showEditMenu, canBeSaved, filtertext, loading } = this.state;
-        const { styling, options } = this.props;
+        const { i18n } = this.context;
+        const {
+            styling,
+            options
+        } = this.props;
+        const {
+            columns,
+            renderItems,
+            currentPage,
+            sorting,
+            fixed,
+            selectedItems,
+            items,
+            openEditMenu,
+            showEditMenu,
+            canBeSaved,
+            filtertext,
+            loading
+        } = this.state;
 
         return (
             <div>
