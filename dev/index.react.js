@@ -22,11 +22,14 @@ class Test extends ContextComponent
 
     render()
     {
+        const url = '/user/api/users';
+
         return(
             <div>
                 {/*<DatePicker showIcon={false} />*/}
                 <Table
-                    //groupBy={({type}) => type}
+                    //groupBy={({supplierId}) => supplierId}
+                    data={ url }
                     styling={
                         {
                             bordered: true,
@@ -40,15 +43,27 @@ class Test extends ContextComponent
                             showPageSize: true,
                             showEditMenu: true,
                             openEditMenu: false,
-                            fixed: true
+                            fixed: true,
+                            locked: [
+                                'createdBy',
+                                'changedBy',
+                                'createdOn',
+                                'changedOn'
+                            ],
+                            required: [
+                                'id'
+                            ],
+                            unique: [
+                                'id'
+                            ]
                         }
                     }
                     columns={
                         [
                             {
-                                key: 'name',
-                                name: 'name',
-                                width: 250
+                                key: 'id',
+                                name: 'id',
+                                width: 200
                             },
                             {
                                 key: 'federationName',
@@ -58,12 +73,12 @@ class Test extends ContextComponent
                             {
                                 key: 'supplierId',
                                 name: 'supplierId',
-                                width: 150
+                                width: 125
                             },
                             {
                                 key: 'customerId',
                                 name: 'customerId',
-                                width: 150
+                                width: 125
                             },
                             {
                                 key: 'status',
@@ -72,114 +87,148 @@ class Test extends ContextComponent
                             },
                             {
                                 key: 'createdBy',
-                                name: 'createdBy'
+                                name: 'createdBy',
+                                width: 120
                             },
                             {
                                 key: 'changedBy',
-                                name: 'changedBy'
+                                name: 'changedBy',
+                                width: 120
+                            },
+                            {
+                                key: 'createdOn',
+                                name: 'createdOn',
+                                width: 180
+                            },
+                            {
+                                key: 'changedOn',
+                                name: 'changedOn',
+                                width: 180
                             },
                         ]
                     }
                     items={
                         [
                             {
-                                name: 'Scott Tiger',
+                                id: 'Scott Tiger',
                                 federationName: '',
                                 supplierId: 'hard001',
                                 customerId: '',
                                 status: 'firstLogin',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             },
                             {
-                                name: 'John Doe',
+                                id: 'John Doe',
                                 federationName: '',
                                 supplierId: '',
                                 customerId: 'ncc',
                                 status: 'firstLogin',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             },
                             {
-                                name: 'Andy Approver',
+                                id: 'Andy Approver',
                                 federationName: '',
                                 supplierId: 'OC001',
                                 customerId: '',
                                 status: 'firstLogin',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             },
                             {
-                                name: 'Mark Matcher',
+                                id: 'Mark Matcher',
                                 federationName: '',
                                 supplierId: 'OC001',
                                 customerId: '',
                                 status: 'firstLogin',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             },
                             {
-                                name: 'Oliver Operator',
+                                id: 'Oliver Operator',
                                 federationName: '',
                                 supplierId: 'acme_us',
                                 customerId: '',
                                 status: 'firstLogin',
                                 createdBy: 'The Doctor',
                                 changedBy: 'Opuscapita user',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             },
                             {
-                                name: 'Dave Developer',
+                                id: 'Dave Developer',
                                 federationName: '',
                                 supplierId: 'acme_us',
                                 customerId: '',
                                 status: 'firstLogin',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             },
                             {
-                                name: 'Tommy Tester',
+                                id: 'Tommy Tester',
                                 federationName: '',
                                 supplierId: '',
                                 customerId: 'acme_de',
                                 status: 'firstLogin',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             },
                             {
-                                name: 'Eileen Email',
+                                id: 'Eileen Email',
                                 federationName: '',
                                 supplierId: '',
                                 customerId: 'acme_de',
                                 status: 'firstLogin',
                                 createdBy: 'The Doctor',
                                 changedBy: 'Opuscapita user',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             },
                             {
-                                name: 'Ann Auditor',
+                                id: 'Ann Auditor',
                                 federationName: '',
                                 supplierId: '',
                                 customerId: 'OC001',
                                 status: 'firstLogin',
                                 createdBy: 'The Doctor',
                                 changedBy: 'Opuscapita user',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             },
                             {
-                                name: 'Antonio Analyst',
+                                id: 'Antonio Analyst',
                                 federationName: '',
                                 supplierId: '',
                                 customerId: 'OC001',
                                 status: 'firstLogin',
                                 createdBy: 'The Doctor',
                                 changedBy: 'Opuscapita user',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             },
                             {
-                                name: 'Indy Inspector',
+                                id: 'Indy Inspector',
                                 federationName: '',
                                 supplierId: '',
                                 customerId: 'OC001',
                                 status: 'firstLogin',
                                 createdBy: 'demodata',
                                 changedBy: 'demodata',
+                                createdOn: '2019-04-09T18:30:00.000Z',
+                                changedOn: '2019-04-09T18:30:00.000Z'
                             }
                         ]
                     }
