@@ -390,7 +390,7 @@ class Table extends ContextComponent
      */
     previous()
     {
-        const { pageSize, startIndex, items } = this.state;
+        const { pageSize, startIndex } = this.state;
         const newIndex = startIndex - pageSize;
         if(newIndex >= 0)
         {
@@ -858,7 +858,7 @@ class Table extends ContextComponent
 
         const array = typeof itemList != 'object' ? JSON.parse(itemList) : itemList;
 
-        array.forEach((content, index) =>
+        array.forEach((content) =>
         {
             let line = '';
 
@@ -1024,7 +1024,7 @@ class Table extends ContextComponent
                                     <tr>
                                         {this.props.groupBy && <th style={{ width: '3.5rem' }}/>}
                                         {openEditMenu && <th style={{ width: '3.5rem' }}/>}
-                                        {columns.map((col, index) =>
+                                        {columns.map((col) =>
                                         {
                                             return (
                                                 <th key={col.key} style={{ width: col.width }}>
