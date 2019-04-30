@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import ContextComponent from './../ContextComponent.react';
 import translations from './i18n';
 
+import Editor from './helpers/Editor';
+
 import './Table.css';
 
 export class EditorMenu extends ContextComponent
@@ -30,68 +32,126 @@ export class EditorMenu extends ContextComponent
         context.i18n.register('Table', translations);
     };
 
-    handleAddButton       = () => this.props.handleAddButton();
+    /**
+     * Passes the add buttons state to parent.
+     *
+     * @function handleAddButton
+     */
+    handleAddButton = () => this.props.handleAddButton();
+
+    /**
+     * Passes the duplicate buttons state to parent.
+     *
+     * @function handleDuplicateButton
+     */
     handleDuplicateButton = () => this.props.handleDuplicateButton();
-    handleDeleteButton    = () => this.props.handleDeleteButton();
-    handleExportButton    = () => this.props.handleExportButton();
-    handleSaveButton      = () => this.props.handleSaveButton();
-    handleEditorButton    = () => this.props.handleEditorButton();
+
+    /**
+     * Passes the delete buttons state to parent.
+     *
+     * @function handleDeleteButton
+     */
+    handleDeleteButton = () => this.props.handleDeleteButton();
+
+    /**
+     * Passes the export buttons state to parent.
+     *
+     * @function handleExportButton
+     */
+    handleExportButton = () => this.props.handleExportButton();
+
+    /**
+     * Passes the save buttons state to parent.
+     *
+     * @function handleSaveButton
+     */
+    handleSaveButton = () => this.props.handleSaveButton();
+
+    /**
+     * Passes the editor buttons state to parent.
+     *
+     * @function handleEditorButton
+     */
+    handleEditorButton = () => this.props.handleEditorButton();
 
     render()
     {
         const { i18n } = this.context;
-        const { items, selectedItems, canBeSaved, isShown, isOpen } = this.props;
+        const {
+            hasItems,
+            hasSelectedItems,
+            canAddItems,
+            canBeSaved,
+            isOpen
+        } = this.props;
 
         return (
             <span>
                 {
                     isOpen &&
                     <span>
-                        <button
-                            className={ 'btn btn-default' }
-                            onClick={ this.handleAddButton }
-                        >
-                            <span className="glyphicon glyphicon-plus" aria-hidden="true"/>&nbsp;&nbsp;{ i18n.getMessage('Table.menu.add') }
-                        </button>
+                        {
+                            canAddItems &&
+                            Editor.EditorButton(
+                                i18n.getMessage('Table.menu.add'),
+                                'plus',
+                                'default',
+                                this.handleAddButton
+                            )
+                        }
 
-                        <button
-                            className={`btn ${ selectedItems.length === 0 ? 'btn-default disabled' : 'btn-default' }` }
-                            onClick={ selectedItems.length !== 0 && this.handleDuplicateButton }
-                        >
-                            <span className="glyphicon glyphicon-duplicate" aria-hidden="true"/>&nbsp;&nbsp;{ selectedItems.length === 0 ? i18n.getMessage('Table.menu.duplicate') : i18n.getMessage('Table.menu.duplicateSelected') }
-                        </button>
+                        {
+                            hasItems && hasSelectedItems &&
+                            Editor.EditorButton(
+                                i18n.getMessage('Table.menu.duplicate'),
+                                'duplicate',
+                                'default',
+                                this.handleDuplicateButton
+                            )
+                        }
 
-                        <button
-                            className={`btn ${ selectedItems.length === 0 ? 'btn-default disabled' : 'btn-default' }` }
-                            onClick={ selectedItems.length !== 0 && this.handleDeleteButton }
-                        >
-                            <span className="glyphicon glyphicon-remove" aria-hidden="true"/>&nbsp;&nbsp;{ selectedItems.length === 0 ? i18n.getMessage('Table.menu.delete') : i18n.getMessage('Table.menu.deleteSelected') }
-                        </button>
+                        {
+                            hasSelectedItems &&
+                            Editor.EditorButton(
+                                i18n.getMessage('Table.menu.delete'),
+                                'remove',
+                                'default',
+                                this.handleDeleteButton
+                            )
+                        }
 
-                        <button
-                            className={`btn ${ items.length > 0 ? 'btn-default' : 'btn-default disabled' }` }
-                            onClick={ items.length > 0 && this.handleExportButton }
-                        >
-                            <span className="glyphicon glyphicon-cloud-download" aria-hidden="true"/>&nbsp;&nbsp;{ selectedItems.length === 0 ? i18n.getMessage('Table.menu.export') : i18n.getMessage('Table.menu.exportSelected') }
-                        </button>
+                        {
+                            hasItems &&
+                            Editor.EditorButton(
+                                (
+                                    hasSelectedItems ?
+                                    i18n.getMessage('Table.menu.exportSelected')
+                                    :
+                                    i18n.getMessage('Table.menu.export')
+                                ),
+                                'cloud-download',
+                                'default',
+                                this.handleExportButton
+                            )
+                        }
 
-                        <button
-                            className={`btn ${ canBeSaved === false ? 'btn-default disabled' : 'btn-success' }` }
-                            onClick={ canBeSaved && this.handleSaveButton }
-                        >
-                            <span className="glyphicon glyphicon-cloud-upload" aria-hidden="true"/>&nbsp;&nbsp;{ i18n.getMessage('Table.menu.save') }
-                        </button>
+                        {
+                            Editor.EditorButton(
+                                i18n.getMessage('Table.menu.save'),
+                                'cloud-upload',
+                                canBeSaved ? 'success' : 'default disabled',
+                                canBeSaved && this.handleSaveButton
+                            )
+                        }
                     </span>
                 }
                 {
-                    isShown &&
-                    <button
-                        type="submit"
-                        className={`btn ${ isOpen ? 'btn-info' : 'btn-default' }` }
-                        onClick={ this.handleEditorButton }
-                    >
-                        <span className="glyphicon glyphicon-pencil" aria-hidden="true"/>
-                    </button>
+                    Editor.EditorButton(
+                        '',
+                        'pencil',
+                        isOpen ? 'info' : 'default',
+                        this.handleEditorButton
+                    )
                 }
             </span>
         );

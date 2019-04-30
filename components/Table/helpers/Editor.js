@@ -1,4 +1,5 @@
 import request from 'superagent';
+import React from 'react';
 
 import Common from './Common';
 
@@ -17,23 +18,20 @@ export default class Editor
     {
         try
         {
-            const keys = Object.keys(items[0]);
-            const newItem = {  };
+            const keys = Object.keys(items[ 0 ]),
+                  newItem = {  };
 
-            for(let i = 0; i < keys.length; i++)
-            {
-                newItem[keys[i]] = '';
-            }
+            keys.forEach(key => newItem[ key ] = '');
 
-            newItem["_id"] = Common.randomId();
-            newItem["createdOn"] = new Date().toISOString();
-            newItem["createdBy"] = user;
+            newItem[ '_id' ] = Common.randomId();
+            newItem[ 'createdOn' ] = new Date().toISOString();
+            newItem[ 'createdBy' ] = user;
 
             return newItem;
         }
         catch(e)
         {
-            throw new Error(e)
+            throw new Error(e);
         }
     };
 
@@ -51,21 +49,20 @@ export default class Editor
     {
         try
         {
-            let newItems = [  ];
+            const newItems = [  ];
 
-            selectedItems.forEach((selected) =>
+            selectedItems.forEach(selected =>
             {
                 const oldItem = items.find(item => item._id === selected);
 
-                let newItem = {};
+                let newItem = {  },
+                    item = Object.assign(newItem, oldItem);
 
-                let item = Object.assign(newItem, oldItem);
-
-                item["_id"] = Common.randomId();
-                item["createdOn"] = new Date().toISOString();
-                item["createdBy"] = user;
-                item["changedOn"] = '';
-                item["changedBy"] = '';
+                item[ '_id' ] = Common.randomId();
+                item[ 'createdOn' ] = new Date().toISOString();
+                item[ 'createdBy' ] = user;
+                item[ 'changedOn' ] = '';
+                item[ 'changedBy' ] = '';
 
                 newItems.push(item);
             });
@@ -76,8 +73,7 @@ export default class Editor
         }
         catch(e)
         {
-            console.log(e.message);
-            throw new Error(e)
+            throw new Error(e);
         }
     };
 
@@ -94,76 +90,86 @@ export default class Editor
     {
         try
         {
-            let newItems;
-
-            newItems = items.filter((item) =>
-            {
-                if(selectedItems.indexOf(item._id) === -1)
-                {
-                    return item;
-                }
-            });
-
-            return newItems;
+            return items.filter(item => selectedItems.indexOf(item._id) === -1);
         }
         catch(e)
         {
-            throw new Error(e)
+            throw new Error(e);
         }
+    };
+
+    /**
+     * Creates button for editor menu.
+     *
+     * @function EditorButton
+     * @param {string} text - text on button.
+     * @param {string} icon - icon displayed.
+     * @param {string} buttonState - button class to be displayed.
+     * @param {function} callback - function called onClick.
+     * @returns {object}
+     */
+    static EditorButton = (text, icon, buttonState, callback) =>
+    {
+        return (
+            <button
+                className={ `btn btn-${buttonState}` }
+                onClick={ callback }
+            >
+                <span className={`glyphicon glyphicon-${ icon }`}/>
+                {
+                    text && ` ${text}`
+                }
+            </button>
+        )
     };
 
     /**
      * Searches for matching items in table-list
      *
      * @function searchForMatches
-     * @param {string} filtertext
+     * @param {string} filterText
      * @param {array} items - Copy of list of current items in table-list.
      * @param {array} items - List of current items in table-list.
      * @returns {array}
      */
-    static searchForMatches = (filtertext, tempItems, items) =>
+    static searchForMatches = (filterText, tempItems, items, defaultSearch) =>
     {
-        return new Promise((success, failure) =>
+        try
         {
-            let foundItem = false;
-            let newList = [  ];
+            const splitSearch = filterText.split(':');
 
-            try
+            let newList = [  ],
+                searchKey,
+                searchValue;
+
+            if(filterText.indexOf(':') >= 0)
             {
-                if(filtertext === '')
-                {
-                    foundItem = false;
-                }
+                searchKey = splitSearch[ 0 ].trim();
+                searchValue = splitSearch[ 1 ].trim();
+            }
+            else
+            {
+                searchKey = defaultSearch;
+                searchValue = filterText;
+            }
 
-                if(tempItems)
+            if(tempItems)
+            {
+                newList = tempItems.filter((item) =>
                 {
-                    newList = tempItems.filter((item) =>
+                    if(item[ searchKey ].toLowerCase().indexOf(searchValue.toLowerCase()) >= 0)
                     {
-                        if(item['id'].toLowerCase().indexOf(filtertext.toLowerCase()) >= 0)
-                        {
-                            item['_id'] = Common.randomId();
-                            return item;
-                        }
-                        else
-                        {
-                            foundItem = false;
-                        }
-                    });
-                }
+                        item[ '_id' ] = Common.randomId();
+                        return item;
+                    }
+                });
+            }
 
-                if(foundItem === false)
-                {
-                    success(newList);
-                }
-                else if(foundItem === true)
-                {
-                    success(items);
-                }
-            }
-            catch(e)
-            {
-                failure(e);
-            }
-        });
+            return newList;
+        }
+        catch(e)
+        {
+            throw new Error(e);
+        }
     };
 }

@@ -1,114 +1,207 @@
 .page-size-options
 {
-    width: 200px;
+	width: 200px;
 }
+
 .table > thead > tr > th,
 .pagination > li
 {
-    user-select: none;
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -o-user-select: none;
-    cursor: pointer;
+	user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	cursor: pointer;
 }
+
 .table > thead > tr > th > a
 {
-    display: block;
-    text-decoration: none;
+	color: black;
+	display: block;
+	text-decoration: none;
 }
+
 .row-selected .table-input
 {
-    height: 36px !important;
-    width: 100% !important;
-    border: none !important;
-    margin-left: 9px;
-    outline: none;
-    background: transparent;
+	height: 36px !important;
+	width: 100% !important;
+	border: none !important;
+	margin-left: 9px;
+	outline: none;
+	background: transparent;
 }
+
 .table-input.locked
 {
-    color: #6e6e6e;
+	color: #6E6E6E;
 }
+
 .row-selected td:not(:first-child)
 {
-    padding: 0 !important;
+	padding: 0 !important;
 }
+
 .table-filler
 {
-    color: #333;
-    background: #fff;
-    box-shadow:
-        inset 0 1px 0 #ccc,
-        inset 0 -1px 0 #ccc,
-        inset 0 -3px 0 rgba(0,0,0,.05);
-    display: block;
-    width: 100%;
+	color: #333;
+	background: #FFF;
+	box-shadow: inset 0 1px 0 #CCC,
+	inset 0 -1px 0 #CCC,
+	inset 0 -3px 0 rgba(0, 0, 0, .05);
+	display: block;
+	width: 100%;
 }
+
 .table-editor
 {
-    width: 100%;
+	width: 100%;
 }
+
 .table-search
 {
-    float:left;
-    min-width: 400px;
-    max-width: 700%;
-    position: relative;
+	float: left;
+	min-width: 400px;
+	max-width: 700%;
+	position: relative;
 }
+
 .table-search-input
 {
-    float: left;
-    padding: 8px;
-    outline: none !important;
-    height: 100% !important;
-    min-width: 400px;
-    border: 1px solid #ccc;
-    border-width: 0 0 0 1px;
-    background: transparent !important;
+	float: left;
+	padding: 8px;
+	outline: none !important;
+	height: 100% !important;
+	min-width: 400px;
+	border: 1px solid #CCC;
+	border-width: 0 0 0 1px;
+	background: transparent !important;
 }
+
 .table-search-input
 {
-    padding-left: 30px;
+	padding-left: 30px;
 }
+
 .table-search-input + .glyphicon
 {
-    position: absolute;
-    left: 0;
-    padding: 8px 10px;
+	position: absolute;
+	left: 0;
+	padding: 8px 10px;
 }
+
+.inner::-webkit-scrollbar,
+.outer::-webkit-scrollbar
+{
+	display: none;
+}
+
 .outer
 {
-    position: relative;
+	position: relative;
 }
+
 .inner
 {
-    overflow-x: scroll;
-    overflow-y: visible;
-    width: 100%;
+	overflow-x: scroll;
+	overflow-y: visible;
+	width: 100%;
 }
+
 table
 {
-    table-layout: fixed;
-    width: 100%;
-    *margin-left: -100px;
+	table-layout: fixed;
+	width: 100%;
+	/* margin-left: -100px; */
 }
+
 td, th
 {
-    vertical-align: top;
-    border-top: 1px solid #ccc;
-    padding: 10px;
+	vertical-align: top;
+	border-top: 1px solid #CCC;
+	padding: 10px;
 }
+
 .loadingScreen
 {
-    position: relative;
-    width: 100%;
-    height: 200px;
+	position: relative;
+	width: 100%;
+	height: 200px;
 }
+
 .loadingScreen .loader
 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
+
+select.form-control
+{
+	border-radius: 0 !important;
+	-webkit-appearance: none !important;
+}
+
+.pagination-selector span:hover
+{
+	background: none !important;
+	cursor: default;
+}
+
+.pagination-selector-options
+{
+	-webkit-appearance: none;
+	margin-left: 10px;
+	outline: none;
+	border: none;
+	padding: 0 10px;
+	cursor: pointer;
+}
+
+.table
+{
+	margin-bottom: 0 !important;
+}
+
+.pagination
+{
+	float: right;
+	margin: 0 0 0 0 !important;
+}
+
+tr.row-selected td:first-child
+{
+	position: relative;
+	padding: 0 !important;
+}
+
+.dlk
+{
+	cursor: pointer;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin-bottom: 0;
+	line-height: 34px;
+	text-align: center;
+}
+
+.dlk input[type="checkbox"]
+{
+	margin-left: -99999px;
+	display: none;
+}
+
+.dlk input[type="checkbox"] + .fa
+{
+	opacity: 0.15
+}
+
+.dlk input[type="checkbox"]:hover + .fa,
+.dlk input[type="checkbox"]:checked + .fa
+{
+	opacity: 1
+}
+

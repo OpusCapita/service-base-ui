@@ -2,10 +2,8 @@
     "Table.search.placeholder": "Search for...",
     "Table.menu.add": "Add row",
     "Table.menu.duplicate": "Duplicate",
-    "Table.menu.duplicateSelected": "Duplicate selected",
     "Table.menu.delete": "Delete",
-    "Table.menu.deleteSelected": "Delete selected",
-    "Table.menu.export": "Export",
+    "Table.menu.export": "Export table",
     "Table.menu.exportSelected": "Export selected",
     "Table.menu.save": "Save",
     "Table.pagination.showAmount": "Show",
@@ -36,5 +34,7 @@
     "Table.notification.export.success.single": "Successfully exported row",
     "Table.notification.export.error": "Failed to export",
     "Table.notification.save.success": "Successfully saved table",
-    "Table.notification.save.error": "Could not save table"
+    "Table.notification.save.error": "Could not save table",
+    "Table.notification.fetch.error.database": "Could not fetch items from database",
+    "Table.notification.fetch.error.local": "Could not fetch local items"
 }

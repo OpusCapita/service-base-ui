@@ -2,10 +2,8 @@
     "Table.search.placeholder": "Suche nach...",
     "Table.menu.add": "Hinzufügen",
     "Table.menu.duplicate": "Kopieren",
-    "Table.menu.duplicateSelected": "Auswahl kopieren",
     "Table.menu.delete": "Löschen",
-    "Table.menu.deleteSelected": "Auswahl löschen",
-    "Table.menu.export": "Exportieren",
+    "Table.menu.export": "Tabelle Exportieren",
     "Table.menu.exportSelected": "Auswahl exportieren",
     "Table.menu.save": "Speichern",
     "Table.pagination.showAmount": "Zeige",
@@ -36,5 +34,7 @@
     "Table.notification.export.success.single": "Zeile exportiert",
     "Table.notification.export.error": "Exportieren fehlgeschlagen",
     "Table.notification.save.success": "Tabelle erfolgreich gespeichert",
-    "Table.notification.save.error": "Speichern fehlgeschlagen"
+    "Table.notification.save.error": "Speichern fehlgeschlagen",
+    "Table.notification.fetch.error.database": "Konnte Datenbankeinträge nicht laden",
+    "Table.notification.fetch.error.local": "Konnte lokale Einträge nicht laden"
 }

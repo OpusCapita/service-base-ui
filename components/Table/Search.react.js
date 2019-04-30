@@ -8,16 +8,14 @@ import './Table.css';
 export class Search extends ContextComponent
 {
     static propTypes =
-        {
-            filtertext: PropTypes.string
-        };
+    {
+        filterText: PropTypes.string
+    };
 
     static defaultProps =
-        {
-            filtertext: ''
-        };
-
-    handleSearchInput = () => this.props.handleSearchInput();
+    {
+        filterText: ''
+    };
 
     constructor(props, context)
     {
@@ -26,12 +24,24 @@ export class Search extends ContextComponent
         context.i18n.register('Table', translations);
     };
 
+    /**
+     * Passes the seach input to parent.
+     *
+     * @function handleSearchInput
+     */
+    handleSearchInput = () => this.props.handleSearchInput();
+
+    /**
+     * Passes the filtered search input to parent.
+     *
+     * @function handleSearchInput
+     */
     handleSearchInput = (filter) => this.props.handleSearchInput(filter);
 
     render()
     {
         const { i18n } = this.context;
-        const { filtertext } = this.props;
+        const { filterText } = this.props;
 
         return(
             <span className="table-search">
@@ -39,7 +49,7 @@ export class Search extends ContextComponent
                     className="table-search-input"
                     type="text"
                     placeholder={ i18n.getMessage('Table.search.placeholder') }
-                    value={ filtertext }
+                    value={ filterText }
                     onChange={ this.handleSearchInput.bind(this) }
                 />
                 <span className="glyphicon glyphicon-search" aria-hidden="true"/>

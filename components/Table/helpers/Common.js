@@ -1,5 +1,4 @@
-
-
+import React from 'react';
 
 export default class Common
 {
@@ -12,10 +11,10 @@ export default class Common
      */
     static setTableStyle = (styling) =>
     {
-        return `table table-hover
-            ${styling.striped ? ' table-striped' : ''}
-            ${styling.condensed ? ' table-condensed' : ''}
-            ${styling.bordered ? ' table-bordered' : ''}
+        return `table table-hover 
+            ${ styling.striped && ' table-striped' }
+            ${ styling.condensed && ' table-condensed' }
+            ${ styling.bordered && 'table-bordered' }
         `;
     };
 
@@ -27,7 +26,7 @@ export default class Common
      * @param {int} end - End of range.
      * @returns {array}
      */
-    static range = (start, end) => Array.from({length: end - start}, (i, idx) => idx + start);
+    static range = (start, end) => Array.from({ length: end - start }, (i, idx) => idx + start);
 
     /**
      * Create random identifier.
@@ -41,7 +40,7 @@ export default class Common
      * set identifier for each item in list.
      *
      * @function setListItemIdentifiers
-     * @param {array} items - Array of items to recieve identifiers
+     * @param {array} items - Array of items to recieve identifiers.
      * @returns {array}
      */
     static setListItemIdentifiers = (items) =>

@@ -55,7 +55,8 @@ class Test extends ContextComponent
                             ],
                             unique: [
                                 'id'
-                            ]
+                            ],
+                            defaultSearch: 'id',
                         }
                     }
                     columns={
