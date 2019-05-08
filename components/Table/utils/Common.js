@@ -9,14 +9,10 @@ export default class Common
      * @param {object} styling - Prop-object containing style options.
      * @returns {string}
      */
-    static setTableStyle = (styling) =>
-    {
-        return `table table-hover 
-            ${ styling.striped && ' table-striped' }
-            ${ styling.condensed && ' table-condensed' }
-            ${ styling.bordered && 'table-bordered' }
-        `;
-    };
+    static setTableStyle = styling => `table table-hover
+        ${ styling.striped && ' table-striped' }
+        ${ styling.condensed && ' table-condensed' }
+        ${ styling.bordered && ' table-bordered' }`;
 
     /**
      * Calculates range.
@@ -34,7 +30,7 @@ export default class Common
      * @function randomId
      * @returns {string}
      */
-    static randomId =() => btoa(Math.random()).substring(0,12);
+    static randomId = () => btoa(Math.random()).substring(0,12);
 
     /**
      * set identifier for each item in list.
@@ -43,14 +39,14 @@ export default class Common
      * @param {array} items - Array of items to recieve identifiers.
      * @returns {array}
      */
-    static setListItemIdentifiers = (items) =>
+    static setListItemIdentifiers = items =>
     {
         const rows = [  ];
 
-        items.forEach((item) =>
+        for(const item of items)
         {
             rows.push({ ...item, _id: Common.randomId() });
-        });
+        }
 
         return rows;
     };
@@ -60,18 +56,24 @@ export default class Common
      *
      * @function formatColumnValue
      * @param {string} input - Value if columnn.
+     * @param {string} type
      * @param {object} translations - Derived i18n component object.
      * @returns {string}
      */
-    static formatColumnValue = (input, translations) =>
+    static formatColumnValue = (input, type, translations) =>
     {
-        if(new Date(input) !== 'Invalid Date' && !isNaN(new Date(input)))
+        switch(type)
         {
-            return translations.formatDateTime(input);
+            case 'bool':
+                return input.toString();
+            case 'date':
+                if(!(new Date(input) === 'Invalid Date') && !isNaN(new Date(input)))
+                {
+                    return translations.formatDateTime(input);
+                }
+                break;
+            default:
+                return input || '';
         }
-        else
-        {
-            return input || '\xa0';
-        }
-    }
+    };
 }

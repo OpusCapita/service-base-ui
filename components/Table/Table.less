@@ -26,10 +26,26 @@
 				&:hover
 				{
 					background: @lightGrey !important;
+
+					> a
+					{
+						color: black;
+					}
 				}
 
-				> a {
-					color: black;
+				&.sorting
+				{
+					background: @lightGrey !important;
+
+					> a
+					{
+						color: black;
+					}
+				}
+
+				> a
+				{
+					color: @midGrey;
 					display: block;
 					text-decoration: none;
 				}
@@ -75,6 +91,24 @@
 			padding: 0 !important;
 		}
 	}
+}
+
+.table-checkbox
+{
+    .table-checkbox-button
+    {
+      margin-left: 10px !important;
+    }
+
+    .table-checkbox-text
+    {
+        margin-left: 5px !important;
+
+        &.locked
+        {
+            color: @darkGrey;
+        }
+    }
 }
 
 .table-input.locked
@@ -205,10 +239,11 @@ select.form-control
 .pagination-selector-options
 {
 	-webkit-appearance: none;
-	margin-left: 10px;
+	margin: 0 10px;
 	outline: none;
 	border: none;
 	padding: 0 10px;
+	text-align: center;
 	cursor: pointer;
 }
 

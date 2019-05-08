@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ContextComponent from './../ContextComponent.react';
-import translations from './i18n';
+import ContextComponent from '../../ContextComponent.react';
+import translations from '../i18n';
 
-import Editor from './helpers/Editor';
+import Editor from '../utils/Editor';
 
-import './Table.css';
+import '../Table.css';
 
 export class EditorMenu extends ContextComponent
 {
@@ -14,6 +14,7 @@ export class EditorMenu extends ContextComponent
         items: PropTypes.array.isRequired,
         selectedItems: PropTypes.array.isRequired,
         canBeSaved: PropTypes.bool,
+        canBeExported: PropTypes.bool,
         isShown: PropTypes.bool
     };
 
@@ -22,6 +23,7 @@ export class EditorMenu extends ContextComponent
         items: [  ],
         selectedItems: [  ],
         canBeSaved: false,
+        canBeExported: false,
         isShown: false
     };
 
@@ -82,6 +84,7 @@ export class EditorMenu extends ContextComponent
             hasSelectedItems,
             canAddItems,
             canBeSaved,
+            canBeExported,
             isOpen
         } = this.props;
 
@@ -92,7 +95,7 @@ export class EditorMenu extends ContextComponent
                     <span>
                         {
                             canAddItems &&
-                            Editor.EditorButton(
+                            Editor.editorButton(
                                 i18n.getMessage('Table.menu.add'),
                                 'plus',
                                 'default',
@@ -102,7 +105,7 @@ export class EditorMenu extends ContextComponent
 
                         {
                             hasItems && hasSelectedItems &&
-                            Editor.EditorButton(
+                            Editor.editorButton(
                                 i18n.getMessage('Table.menu.duplicate'),
                                 'duplicate',
                                 'default',
@@ -112,7 +115,7 @@ export class EditorMenu extends ContextComponent
 
                         {
                             hasSelectedItems &&
-                            Editor.EditorButton(
+                            Editor.editorButton(
                                 i18n.getMessage('Table.menu.delete'),
                                 'remove',
                                 'default',
@@ -122,7 +125,7 @@ export class EditorMenu extends ContextComponent
 
                         {
                             hasItems &&
-                            Editor.EditorButton(
+                            Editor.editorButton(
                                 (
                                     hasSelectedItems ?
                                     i18n.getMessage('Table.menu.exportSelected')
@@ -130,13 +133,13 @@ export class EditorMenu extends ContextComponent
                                     i18n.getMessage('Table.menu.export')
                                 ),
                                 'cloud-download',
-                                'default',
-                                this.handleExportButton
+                                canBeExported ? 'default' : 'default disabled',
+                                canBeExported && this.handleExportButton
                             )
                         }
 
                         {
-                            Editor.EditorButton(
+                            Editor.editorButton(
                                 i18n.getMessage('Table.menu.save'),
                                 'cloud-upload',
                                 canBeSaved ? 'success' : 'default disabled',
@@ -146,7 +149,7 @@ export class EditorMenu extends ContextComponent
                     </span>
                 }
                 {
-                    Editor.EditorButton(
+                    Editor.editorButton(
                         '',
                         'pencil',
                         isOpen ? 'info' : 'default',

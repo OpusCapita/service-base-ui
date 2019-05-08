@@ -4,11 +4,14 @@ import request from 'superagent';
 import ContextComponent from './../ContextComponent.react';
 import translations from './i18n';
 
-import { EditorMenu } from './EditorMenu.react';
-import { Search } from './Search.react'
+import { EditorMenu } from './components/EditorMenu.react';
+import { Search } from './components/Search.react'
+import { TableHeader } from './components/TableHeader.react';
+import { TableLoading } from './components/TableLoading.react';
+import { TableBody } from './components/TableBody.react';
 
-import Editor from './helpers/Editor';
-import Common from './helpers/Common';
+import Editor from './utils/Editor';
+import Common from './utils/Common';
 
 import './Table.less';
 
@@ -22,22 +25,22 @@ export default class Table extends ContextComponent
         groupOrderBy: PropTypes.string,
         styling: PropTypes.object,
         options: PropTypes.object,
-        defaultSearch: PropTypes.string,
     };
 
     static defaultProps = {
         groupOrderBy: 'id',
         data: [  ],
         styling: {
-            striped: true,      // show table striped?
-            condensed: true,    // show table condensed?
-            bordered: true      // show table bordered?
+            striped: true,       // show table striped?
+            condensed: true,     // show table condensed?
+            bordered: true       // show table bordered?
         },
         options: {
-            pageSize: 10,       // show how many rows per page?
-            showPageSize: true, // show page size selector?
-            showEditMenu: true, // show the edit menu?
-            openEditMenu: true, // open edit menu and allow rows to be edited?,
+            pageSize: 10,        // show how many rows per page?
+            showRowNumber: true, // show row number in table?
+            showPageSize: true,  // show page size selector?
+            showEditMenu: true,  // show the edit menu?
+            openEditMenu: true,  // open edit menu and allow rows to be edited?,
             locked: [  ],
             fixed: true,
             defaultSearch: 'id',
@@ -51,6 +54,7 @@ export default class Table extends ContextComponent
         this.state = {
             columns: props.columns,
             items: [  ],
+            oldItems: [  ],
             pageSize: props.options.pageSize,
             fixed: props.options.fixed,
             renderItems: [  ],
@@ -63,9 +67,10 @@ export default class Table extends ContextComponent
             openEditMenu: props.options.openEditMenu,
             showEditMenu: props.options.showEditMenu,
             canBeSaved: false,
+            canBeExported: true,
             tempItems: [  ],
             filterText: '',
-            lockedRows: props.options.locked,
+            lockedCols: props.options.locked,
             loading: false,
         };
 
@@ -106,6 +111,8 @@ export default class Table extends ContextComponent
      */
     loadItemsFromDatabase = async () =>
     {
+        const { i18n, showNotification } = this.context;
+
         try
         {
             const url = this.props.data,
@@ -128,6 +135,8 @@ export default class Table extends ContextComponent
      */
     loadItemsFromProps = async () =>
     {
+        const { i18n, showNotification } = this.context;
+
         try
         {
             const items = this.props.items;
@@ -147,7 +156,7 @@ export default class Table extends ContextComponent
      * @function enumerateItems
      * @param {array} items - List of current items in table-list.
      */
-    enumerateItems = async (items) =>
+    enumerateItems = async items =>
     {
         const { defaultSort } = this.props;
 
@@ -167,7 +176,10 @@ export default class Table extends ContextComponent
             {
                 this.groupItems();
 
-                if(defaultSort) this.applySort(defaultSort.key, defaultSort.order);
+                if(defaultSort)
+                {
+                    this.applySort(defaultSort.key, defaultSort.order);
+                }
 
                 this.filterItems();
                 this.calcPageNumbers();
@@ -186,11 +198,7 @@ export default class Table extends ContextComponent
      */
     calcPageNumbers = () =>
     {
-        const {
-            startIndex,
-            pageSize,
-            items
-        } = this.state;
+        const { startIndex, pageSize, items } = this.state;
 
         const numPages = Math.ceil(items.length / pageSize),
               currentPage = startIndex / pageSize;
@@ -198,13 +206,22 @@ export default class Table extends ContextComponent
         if(numPages > 7)
         {
             let startPage = Math.max(2, currentPage - 1);
+
             startPage = startPage < (numPages - 5) ? startPage : numPages - 5;
+
             const endPage = Math.min(startPage + 5, numPages);
 
             let pages = Common.range(startPage, endPage);
 
-            if(startPage > 2) pages[ 0 ] = '..';
-            if(numPages > endPage) pages[ pages.length - 1 ] = '..';
+            if(startPage > 2)
+            {
+                pages[ 0 ] = '..';
+            }
+
+            if(numPages > endPage)
+            {
+                pages[ pages.length - 1 ] = '..';
+            }
 
             pages = [ 1, ...pages, numPages ];
             this.setState({ pages, currentPage });
@@ -230,15 +247,15 @@ export default class Table extends ContextComponent
             if(key === sorting.key && sorting.order === 'asc') order = 'desc';
         }
 
-        let col = columns.find(c => c.key === key);
+        const col = columns.find(c => c.key === key);
 
         const defaultSortMethod = (a, b) =>
         {
             let comparison = 0;
 
             let valA = col.sortValue ? col.sortValue(a) :
-                col.value ? col.value(a) : a[ col.key ];
-            let valB = col.sortValue ? col.sortValue(b) :
+                col.value ? col.value(a) : a[ col.key ],
+                valB = col.sortValue ? col.sortValue(b) :
                 col.value ? col.value(b) : b[ col.key ];
 
             valA = (typeof valA === 'string') ? valA.toLowerCase() : valA;
@@ -256,7 +273,8 @@ export default class Table extends ContextComponent
             return comparison;
         };
 
-        let sortMethod = col.sortMethod || defaultSortMethod;
+        const sortMethod = col.sortMethod || defaultSortMethod;
+
         const compare = (a, b) =>
         {
             let comparison = sortMethod(a, b);
@@ -264,6 +282,7 @@ export default class Table extends ContextComponent
         };
 
         items.sort(compare);
+
         this.setState({
             items, sorting: { key, order }
         }, () =>
@@ -283,11 +302,13 @@ export default class Table extends ContextComponent
         if(groupBy)
         {
             const { items } = this.state;
+
             for(let idxA = 0; idxA < items.length; idxA++)
             {
                 const keyA = groupBy(items[ idxA ]);
 
                 let idxB = idxA + 1;
+
                 while(idxB < items.length)
                 {
                     const keyB = groupBy(items[ idxB ]);
@@ -295,6 +316,7 @@ export default class Table extends ContextComponent
                     if(keyA === keyB)
                     {
                         let subItems = items[ idxA ].__subItems || [  ];
+
                         if(items[ idxA ][ groupOrderBy ] > items[ idxB ][ groupOrderBy ])
                         {
                             subItems.push(items[ idxB ]);
@@ -304,6 +326,7 @@ export default class Table extends ContextComponent
                             subItems.push(items[ idxA ]);
                             items[ idxA ] = items[ idxB ];
                         }
+
                         items[ idxA ].__subItems = subItems;
                         items.splice(idxB, 1);
                     }
@@ -319,14 +342,21 @@ export default class Table extends ContextComponent
                 {
                     let comparison = 0;
 
-                    let valA = a[ groupOrderBy ];
-                    let valB = b[ groupOrderBy ];
+                    const valA = a[ groupOrderBy ];
+                    const valB = b[ groupOrderBy ];
 
-                    if(valA < valB) comparison = 1;
-                    else if(valA > valB) comparison = -1;
+                    if(valA < valB)
+                    {
+                        comparison = 1;
+                    }
+                    else if(valA > valB)
+                    {
+                        comparison = -1;
+                    }
 
                     return comparison;
                 };
+
                 item.__subItems && item.__subItems.sort(sortMethod);
             }
             this.setState({ items });
@@ -342,8 +372,9 @@ export default class Table extends ContextComponent
     {
         const { startIndex, pageSize, items } = this.state;
 
-        const renderItems = items.slice(startIndex, startIndex + pageSize);
-        const lastOffset = this.pagination.offsetTop;
+        const renderItems = items.slice(startIndex, startIndex + pageSize),
+              lastOffset = this.pagination.offsetTop;
+
         this.setState({
             renderItems
         }, () =>
@@ -361,7 +392,9 @@ export default class Table extends ContextComponent
     next = () =>
     {
         const { pageSize, startIndex, items } = this.state;
+
         const newIndex = startIndex + pageSize;
+
         if(newIndex < items.length)
         {
             this.setState({
@@ -383,7 +416,9 @@ export default class Table extends ContextComponent
     previous = () =>
     {
         const { pageSize, startIndex } = this.state;
+
         const newIndex = startIndex - pageSize;
+
         if(newIndex >= 0)
         {
             this.setState({
@@ -403,7 +438,7 @@ export default class Table extends ContextComponent
      * @function setPage
      * @param {int} pageNum - Number of page.
      */
-    setPage = (pageNum) =>
+    setPage = pageNum =>
     {
         const { pageSize } = this.state;
 
@@ -426,12 +461,9 @@ export default class Table extends ContextComponent
      * @function checkPageChangeButtonState
      * @param {int} pageNum - Current number of page
      */
-    checkPageChangeButtonState = (pageNum) =>
+    checkPageChangeButtonState = pageNum =>
     {
-        const {
-            pageSize,
-            items
-        } = this.state;
+        const { pageSize, items } = this.state;
 
         this.setState({
             showPrev: (pageNum * pageSize !== 0),
@@ -440,43 +472,6 @@ export default class Table extends ContextComponent
     };
 
     /**
-     * Checks the current columns state.
-     *
-     * @function checkColumnState
-     * @param column - Current column
-     * @param item - Current item
-     * @returns {string}
-     */
-    checkColumnState = (column, item) =>
-    {
-        const { options } = this.props;
-        const { items } = this.state;
-
-        if(options.required.indexOf(column.key) >= 0 && item[ column.key ] === (null || ''))
-        {
-            return 'danger';
-        }
-
-        let val = item[ column.key ];
-
-        let tempArray = [  ];
-
-        if(options.unique.indexOf(column.key) >= 0)
-        {
-            items.forEach((itx) =>
-            {
-                if(itx[ column.key ] === val) tempArray.push(item[ column.key ]);
-            });
-
-            if(tempArray.length > 1 && tempArray.indexOf(item[ column.key ]) >= 0)
-            {
-                return 'danger';
-            }
-        }
-    };
-
-    /**
-     *
      * Set availible options for visible page size.
      *
      * @function setPageSizeOptions
@@ -486,56 +481,19 @@ export default class Table extends ContextComponent
     {
         const { items } = this.state;
 
-        let options = [  ];
+        const options = [  ];
 
         items.forEach((item, index) =>
         {
-            if(index % 25 === 0 && index !== 0)
+            if(index % this.props.options.pageSize === 0 && index !== 0)
             {
                 options.push(<option key={ index } value={ index }>{ index }</option>);
             }
         });
 
-        options.push(<option key={ options.length + 1 } value={ items.length }>All</option>);
+        options.push(<option key={ options.length + 1 } value={ items.length }>All ({items.length})</option>);
 
         return options;
-    };
-
-    /**
-     * Handles the change of values in table-list.
-     *
-     * @function handleListValueChange
-     * @param key - Current list-key.
-     * @param value - Current list-value.
-     * @param id - Current list-id.
-     */
-    handleListValueChange = (key, value, id) =>
-    {
-        const { items } = this.state;
-
-        if(items)
-        {
-            let newList = items.map((item) =>
-            {
-                if(item._id === id)
-                {
-                    item[ key ] = value;
-                    item[ 'changedOn' ] = new Date().toISOString();
-                    item[ 'changedBy' ] = this.context.userData.id
-                }
-
-                return item;
-            });
-
-            this.setState({
-                items: newList
-            }, () =>
-            {
-                this.setPage(0);
-                this.filterItems();
-                this.calcPageNumbers();
-            });
-        }
     };
 
     /**
@@ -557,12 +515,71 @@ export default class Table extends ContextComponent
     };
 
     /**
+     * Handles the change of values in table-list.
+     *
+     * @function handleListValueChange
+     * @param key - Current list-key.
+     * @param colType
+     * @param value - Current list-value.
+     * @param id - Current list-id.
+     */
+    handleListValueChange = (key, colType, value, id) =>
+    {
+        const { items } = this.state;
+
+        if(items)
+        {
+            const newList = items.map(item =>
+            {
+                if(item._id === id)
+                {
+                    if(colType === 'bool')
+                    {
+                        item[ key ] = !item[ key ];
+                    }
+                    else
+                    {
+                        item[ key ] = value;
+                    }
+
+                    item[ 'changedOn' ] = new Date().toISOString();
+                    item[ 'changedBy' ] = this.context.userData.id;
+
+                    if(item[ 'edited' ])
+                    {
+                        if(!item.edited.includes(key))
+                        {
+                            item[ 'edited' ] = [key, ...item.edited];
+                        }
+                    }
+                    else
+                    {
+                        item[ 'edited' ] = [key];
+                    }
+                }
+
+                return item;
+            });
+
+            this.setState({
+                items: newList
+            }, () =>
+            {
+                this.checkCanBeExportedOrSaved();
+                this.setPage(0);
+                this.filterItems();
+                this.calcPageNumbers();
+            });
+        }
+    };
+
+    /**
      * Handles value given by search-input.
      *
      * @function handleSearchInput
      * @param {object} event - Currently fired event
      */
-    handleSearchInput = (event) =>
+    handleSearchInput = event =>
     {
         this.setState({
             filterText: event.target.value,
@@ -579,23 +596,87 @@ export default class Table extends ContextComponent
      * @function handleSelectedChange
      * @param {int} index - Current row index.
      */
-    handleSelectionChange = (index) =>
+    handleSelectionChange = index =>
     {
-        if(this.state.selectedItems.indexOf(index) >= 0)
+        const { selectedItems } = this.state;
+
+        if(selectedItems.indexOf(index) >= 0)
         {
-            let deleteIndex = this.state.selectedItems.map((item) =>
-            {
-                return item
-            }).indexOf(index);
+            const deleteIndex = selectedItems.map(item => item).indexOf(index);
 
             this.setState({
-                selectedItems: this.state.selectedItems.filter((item, i) => i !== deleteIndex)
+                selectedItems: selectedItems.filter((item, i) => i !== deleteIndex)
+            }, () => this.checkCanBeExportedOrSaved());
+        }
+        else
+        {
+            this.setState({
+                selectedItems: [ ...selectedItems, index ]
+            }, () => this.checkCanBeExportedOrSaved());
+        }
+    };
+
+    checkCanBeExportedOrSaved = () =>
+    {
+        const { selectedItems, items } = this.state;
+
+        const stateList = [  ],
+            idExistsList = [  ];
+
+        for(const item of items)
+        {
+            if(item[ 'id' ] === '')
+            {
+                idExistsList.push(false);
+            }
+            else
+            {
+                idExistsList.push(true);
+            }
+
+            if(selectedItems.length > 0)
+            {
+                for(let i = 0; i < selectedItems.length; i++)
+                {
+                    if(item[ '_id' ] === selectedItems[i])
+                    {
+                        if(item.edited)
+                        {
+                            stateList.push(false);
+                        }
+                        else
+                        {
+                            stateList.push(true);
+                        }
+                    }
+                }
+            }
+            else if(selectedItems.length === 0)
+            {
+                if(item.edited)
+                {
+                    stateList.push(false);
+                }
+                else
+                {
+                    stateList.push(true);
+                }
+            }
+
+        }
+
+        if(stateList.includes(false))
+        {
+            this.setState({
+                canBeExported: false,
+                canBeSaved: !idExistsList.includes(false)
             });
         }
         else
         {
             this.setState({
-                selectedItems: [ ...this.state.selectedItems, index ]
+                canBeExported: true,
+                canBeSaved: false
             });
         }
     };
@@ -608,8 +689,9 @@ export default class Table extends ContextComponent
     handleEditableButton = () =>
     {
         this.setState({
-            openEditMenu: !this.state.openEditMenu
-        })
+            openEditMenu: !this.state.openEditMenu,
+            oldItems: this.state.items.slice(),
+        }, () => this.checkCanBeExportedOrSaved());
     };
 
     /**
@@ -620,9 +702,9 @@ export default class Table extends ContextComponent
     handleAddButton = () =>
     {
         const { i18n, userData, showNotification } = this.context;
-        const { items } = this.props;
+        const { items } = this.state;
 
-        Editor.addItem(items, userData.id).then((newItem) =>
+        Editor.addItem(items, userData.id, this.props.columns).then(newItem =>
         {
             showNotification(i18n.getMessage('Table.notification.add.success'), 'info');
 
@@ -630,15 +712,13 @@ export default class Table extends ContextComponent
                 items: [ newItem, ...this.state.items ]
             }, () =>
             {
+                this.checkCanBeExportedOrSaved();
                 this.setPage(0);
                 this.filterItems();
                 this.calcPageNumbers();
             });
         })
-        .catch((e) =>
-        {
-            showNotification(i18n.getMessage('Table.notification.add.error'), 'error');
-        });
+        .catch(() => showNotification(i18n.getMessage('Table.notification.add.error'), 'error'));
     };
 
     /**
@@ -651,7 +731,7 @@ export default class Table extends ContextComponent
         const { i18n, userData, showNotification } = this.context;
         const { items, selectedItems } = this.state;
 
-        Editor.duplicateItem(items, selectedItems, userData.id).then((newItems) =>
+        Editor.duplicateItem(items, selectedItems, userData.id).then(newItems =>
         {
             showNotification(selectedItems.length === 1 ?
                 i18n.getMessage('Table.notification.duplicate.success.single')
@@ -671,10 +751,7 @@ export default class Table extends ContextComponent
                 this.calcPageNumbers();
             })
         })
-        .catch((e) =>
-        {
-            showNotification(i18n.getMessage('Table.notification.duplicate.error'), 'error');
-        });
+        .catch(() => showNotification(i18n.getMessage('Table.notification.duplicate.error'), 'error'));
     };
 
     /**
@@ -732,9 +809,7 @@ export default class Table extends ContextComponent
     handleExportButton = () =>
     {
         const { i18n } = this.context;
-        const { selectedItems } = this.state;
-
-        this.createExportableItemList();
+        const { items, columns, selectedItems } = this.state;
 
         const title = (
             selectedItems.length === 1 ? i18n.getMessage('Table.dialog.export.title.single') : (
@@ -761,7 +836,14 @@ export default class Table extends ContextComponent
         {
             if(button === 'yes')
             {
-                this.exportDataToCSV();
+                Editor.createExportableItemList(items, columns, selectedItems, this.context.i18n)
+                .then(exportableItems =>
+                {
+                    this.setState({ exportableItems }, () =>
+                    {
+                        this.exportDataToCSV();
+                    });
+                });
             }
 
             return true;
@@ -771,7 +853,7 @@ export default class Table extends ContextComponent
     };
 
     /**
-     * Triggers action for item deletion.
+     * Triggers action to delete item.
      *
      * @function deleteItems
      */
@@ -780,7 +862,7 @@ export default class Table extends ContextComponent
         const { i18n, showNotification } = this.context;
         const { items, selectedItems } = this.state;
 
-        Editor.deleteItem(items, selectedItems).then((newItems) =>
+        Editor.deleteItem(items, selectedItems).then(newItems =>
         {
             showNotification(selectedItems.length === 1 ?
             i18n.getMessage('Table.notification.delete.success.single')
@@ -797,67 +879,7 @@ export default class Table extends ContextComponent
                 this.calcPageNumbers();
             })
         })
-        .catch(() =>
-        {
-            showNotification(i18n.getMessage('Table.notification.delete.error'), 'error');
-        });
-    };
-
-    /**
-     * Creates a list based on either all, or selected rows for export.
-     *
-     * @function createExportableItemList
-     */
-    createExportableItemList = () =>
-    {
-        const { items, selectedItems } = this.state;
-
-        let exportableItems = [  ];
-        let itemList = [  ];
-
-        if(selectedItems.length >= 1)
-        {
-            let tempItems = items.filter((data) =>
-            {
-                if(selectedItems.indexOf(data._id) >= 0) return data;
-            });
-
-            itemList = JSON.stringify(tempItems);
-        }
-        else
-        {
-            itemList = JSON.stringify(items);
-        }
-
-        const re = new RegExp(',', 'g');
-
-        const array = typeof itemList != 'object' ? JSON.parse(itemList) : itemList;
-
-        array.forEach((content) =>
-        {
-            let line = '';
-
-            for(let item in content)
-            {
-                if(line !== '') line += ';';
-
-                if(content[ item ])
-                {
-                    if(typeof content[ item ] === 'object' && content[ item ].constructor === Object)
-                    {
-                        content[ item ] = JSON.stringify(content[ item ]);
-                    }
-
-                    content[ item ] = content[ item ].toString().replace(re, ',');
-                }
-
-                line += content[ item ];
-            }
-
-            exportableItems += line + '\r\n';
-        });
-
-        this.setState({ exportableItems });
+        .catch(() => showNotification(i18n.getMessage('Table.notification.delete.error'), 'error'));
     };
 
     /**
@@ -867,28 +889,25 @@ export default class Table extends ContextComponent
      */
     exportDataToCSV = () =>
     {
-        const {
-            i18n,
-            showNotification
-        } = this.context;
-        const {
-            exportableItems,
-            selectedItems,
-            renderItems
-        } = this.state;
+        const { i18n, showNotification } = this.context;
+        const { exportableItems, selectedItems, columns, } = this.state;
 
-        const columnDelimiter = ';',
-            lineDelimiter = '\n',
-            keys = Object.keys(renderItems[ 0 ]);
+        const lineDelimiter = '\n';
+        let keys = '';
+
+        columns.forEach(column =>
+        {
+            keys += column.key + ';';
+        });
 
         let result = '';
 
-        result += keys.join(columnDelimiter);
+        result += keys.slice(0, -1);
         result += lineDelimiter;
 
         try
         {
-            const dl = 'data:text/csv;charset=utf-8,' + result + exportableItems;
+            const dl = `data:text/csv;charset=utf-8,${result}${exportableItems}`;
 
             window.open(encodeURI(dl));
 
@@ -923,13 +942,9 @@ export default class Table extends ContextComponent
      */
     searchItems = () =>
     {
-        const {
-            filterText,
-            tempItems,
-            items
-        } = this.state;
+        const { filterText, tempItems } = this.state;
 
-        const foundItems = Editor.searchForMatches(filterText, tempItems, items, this.props.options.defaultSearch);
+        const foundItems = Editor.searchForMatches(filterText, tempItems, this.props.options.defaultSearch);
 
         this.setState({ renderItems: foundItems });
     };
@@ -937,24 +952,19 @@ export default class Table extends ContextComponent
     render()
     {
         const { i18n } = this.context;
-        const {
-            styling,
-            options
-        } = this.props;
-        const {
-            columns,
-            renderItems,
-            currentPage,
-            sorting,
-            fixed,
-            selectedItems,
-            items,
-            openEditMenu,
-            showEditMenu,
-            canBeSaved,
-            filterText,
-            loading
-        } = this.state;
+        const { styling, options } = this.props;
+        const { columns, renderItems, currentPage, sorting, selectedItems, items,
+                openEditMenu, showEditMenu, canBeSaved, canBeExported, filterText, loading } = this.state;
+
+        let editedAmount = 0;
+
+        for(const item of items)
+        {
+            if(item.edited)
+            {
+                editedAmount++;
+            }
+        }
 
         return (
             <div>
@@ -971,6 +981,7 @@ export default class Table extends ContextComponent
                                     hasItems={ items.length > 0 }
                                     hasSelectedItems={ selectedItems.length !== 0 }
                                     canBeSaved={ canBeSaved }
+                                    canBeExported={ canBeExported }
                                     canAddItems={ true }
                                     isOpen={ openEditMenu }
                                     handleAddButton={ this.handleAddButton.bind(this) }
@@ -990,166 +1001,34 @@ export default class Table extends ContextComponent
                     <div className="inner">
                         {
                             loading ?
-                            <div className="loadingScreen">
-                                <span className="loader fa fa-spinner fa-lg fa-spin"/>
-                            </div>
+                            <TableLoading
+                                isLoading={ loading }
+                            />
                             :
                             <table
                                 className={ Common.setTableStyle(styling) }
                                 style={{ tableLayout: (options.fixed ? 'fixed' : 'auto') }}
                             >
-                                <thead className="thead-inverse">
-                                    <tr>
-                                        { this.props.groupBy && <th style={{ width: '3.5rem' }}/> }
-                                        { openEditMenu && <th style={{ width: '3.5rem' }}/> }
-                                        {
-                                            columns.map((col) =>
-                                            {
-                                                return (
-                                                    <th key={ col.key } style={{ width: col.width }}>
-                                                        <a onClick={ (e) =>
-                                                            {
-                                                                e.preventDefault();
-                                                                this.applySort(col.key)
-                                                            }
-                                                        }>
-                                                            { col.name }
-                                                            {
-                                                                sorting.key === col.key && (
-                                                                    sorting.order === 'asc' ?
-                                                                    <span>&nbsp;<i className="fa fa-caret-down"/></span>
-                                                                    :
-                                                                    <span>&nbsp;<i className="fa fa-caret-up"/></span>
-                                                                )
-                                                            }
-                                                        </a>
-                                                    </th>
-                                                )
-                                            })
-                                        }
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        renderItems.map((item, index) => ([
-                                            (<tr key={ index }
-                                                 className={ `${ selectedItems.indexOf(item._id) >= 0 ? 'info' : '' } ${ openEditMenu ? 'row-selected' : '' }` }>
-                                                {
-                                                    this.props.groupBy &&
-                                                    <td
-                                                        style={{ textAlign: 'center', width: '3.5rem' }}
-                                                        onClick={ (e) =>
-                                                            {
-                                                                item.__showAll = !item.__showAll;
-                                                                this.setState({ renderItems });
-                                                            }
-                                                        }
-                                                    >
-                                                        {
-                                                            item.__showAll ?
-                                                            <span>&nbsp;<i className="fa fa-caret-down fa-lg"/></span>
-                                                            :
-                                                            <span>&nbsp;<i className="fa fa-caret-right fa-lg"/></span>
-                                                        }
-                                                    </td>
-                                                }
-                                                {
-                                                    openEditMenu &&
-                                                    <td>
-                                                        <label className="dlk">
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={ selectedItems.indexOf(item._id) >= 0 ? 'checked' : '' }
-                                                                onClick={ this.handleSelectionChange.bind(this, item._id) }
-                                                            />
-                                                            {
-                                                                selectedItems.indexOf(item._id) >= 0 ?
-                                                                <i className="fa fa-times glyphicon glyphicon-remove"/>
-                                                                :
-                                                                <i className="fa fa-check glyphicon glyphicon-ok"/>
-                                                            }
-                                                        </label>
-                                                    </td>
-                                                }
-                                                {
-                                                    columns.map((col) => (
-                                                        <td key={ col.key }
-                                                            className={ `${ col.className} ${ this.checkColumnState(col, item) }` }
-                                                            style={{
-                                                                overflow: (fixed && !col.showOverflow) ? 'hidden' : 'visible',
-                                                                textOverflow: !col.disableEllipsis && 'ellipsis'
-                                                            }}
-                                                        >
-                                                            {
-                                                                openEditMenu ?
-                                                                <input
-                                                                    type="text"
-                                                                    className={ `table-input ${ this.state.lockedRows.indexOf(col.name) > -1 ? 'locked' : '' }` }
-                                                                    value={
-                                                                        Common.formatColumnValue(item[ col.key ], this.context.i18n)
-                                                                    }
-                                                                    onChange={ (e) => this.handleListValueChange(col.key, e.target.value, item._id) }
-                                                                    disabled={ this.state.lockedRows.indexOf(col.name) > -1 }
-                                                                />
-                                                                :
-                                                                <span
-                                                                    style={{ 'whiteSpace': 'nowrap' }}
-                                                                    data-placement='auto'
-                                                                    data-toggle={'tooltip'}
-                                                                    data-html="true"
-                                                                    title={
-                                                                        Common.formatColumnValue(item[ col.key ], this.context.i18n)
-                                                                    }
-                                                                >
-                                                                    {
-                                                                        Common.formatColumnValue(item[ col.key ], this.context.i18n)
-                                                                    }
-                                                                </span>
-                                                            }
-                                                        </td>
-                                                    ))
-                                                }
-                                            </tr>),
-                                            item.__showAll && (item.__subItems || [  ]).map((item) => (
-                                                <tr>
-                                                    <td/>
-                                                    {
-                                                        columns.map((col) => (
-                                                            <td
-                                                                key={ col.key }
-                                                                className={ col.className }
-                                                                style={{
-                                                                    overflow: (fixed && !col.showOverflow) ? 'hidden' : 'visible',
-                                                                    textOverflow: !col.disableEllipsis && 'ellipsis'
-                                                                }}
-                                                            >
-                                                                <span
-                                                                    style={{ 'whiteSpace': 'nowrap' }}
-                                                                    data-placement='auto'
-                                                                    data-toggle={ 'tooltip' }
-                                                                    data-html="true"
-                                                                    title={
-                                                                        typeof (col.value ? col.value(item) : item[ col.key ]) === 'string' &&
-                                                                        col.value ? col.value(item) : item[ col.key ]
-                                                                    }
-                                                                >
-                                                                    {
-                                                                        col.subItemValue ?
-                                                                        col.subItemValue(item)
-                                                                        :
-                                                                        col.value ? col.value(item)
-                                                                        :
-                                                                        item[ col.key ]
-                                                                    }
-                                                                </span>
-                                                            </td>
-                                                        ))
-                                                    }
-                                                </tr>
-                                            ))
-                                        ]))
-                                    }
-                                </tbody>
+                                <TableHeader
+                                    groupBy={ this.props.groupBy }
+                                    showOpenEditMenu={ openEditMenu }
+                                    showRowNumber={ options.showRowNumber }
+                                    columns={ columns }
+                                    sorting={ sorting }
+                                    handleApplySorting={ this.applySort.bind(this) }
+                                />
+
+                                <TableBody
+                                    groupBy={ this.props.groupBy }
+                                    rows={ renderItems }
+                                    columns={ columns }
+                                    items={ items }
+                                    selectedItems={ selectedItems }
+                                    showEditMenu={ openEditMenu }
+                                    showRowNumber={ options.showRowNumber }
+                                    handleSelectionChange={ this.handleSelectionChange.bind(this) }
+                                    handleListValueChange={ this.handleListValueChange.bind(this) }
+                                />
                             </table>
                         }
                     </div>
@@ -1164,44 +1043,54 @@ export default class Table extends ContextComponent
                                     <select
                                         className="pagination-selector-options"
                                         value={this.state.pageSize}
-                                        onChange={this.changePageSize.bind(this)}
+                                        onChange={ this.changePageSize.bind(this) }
                                     >
                                         {this.setPageSizeOptions()}
                                     </select>
+                                    {
+                                        Editor.getSelectedAndEditedAmountText(selectedItems.length, editedAmount, this.context.i18n)
+                                    }
                                 </span>
                             </li>
-                            <li className={this.state.showPrev ? '' : 'disabled'}>
-                                <a aria-label="Previous" onClick={(e) =>
+                            {
+                                items.length !== renderItems.length &&
+                                <li className={this.state.showPrev ? '' : 'disabled'}>
+                                    <a aria-label="Previous" onClick={ e =>
                                     {
                                         e.preventDefault();
                                         this.previous()
                                     }}
-                                >
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
+                                    >
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            }
                             {
+                                items.length !== renderItems.length &&
                                 (this.state.pages || [  ]).map((page, idx) => (
-                                    <li className={(currentPage + 1 === page) && 'active'} key={idx}>
-                                        <a onClick={(e) =>
+                                    <li className={ (currentPage + 1 === page) && 'active' } key={ idx }>
+                                        <a onClick={ e =>
                                         {
                                             e.preventDefault();
                                             this.setPage(page - 1)
                                         }}>
-                                            {page}
+                                            { page }
                                         </a>
                                     </li>
                                 ))
                             }
-                            <li className={this.state.showNext ? '' : 'disabled'}>
-                                <a aria-label="Next" onClick={(e) =>
-                                {
-                                    e.preventDefault();
-                                    this.next()
-                                }}>
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
+                            {
+                                items.length !== renderItems.length &&
+                                <li className={this.state.showNext ? '' : 'disabled'}>
+                                    <a aria-label="Next" onClick={ e =>
+                                    {
+                                        e.preventDefault();
+                                        this.next()
+                                    }}>
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </nav>
                 </div>

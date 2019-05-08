@@ -7,6 +7,8 @@
     "Table.menu.exportSelected": "Auswahl exportieren",
     "Table.menu.save": "Speichern",
     "Table.pagination.showAmount": "Zeige",
+    "Table.pagination.selected": "ausgewählt",
+    "Table.pagination.edited": "bearbeitet",
     "Table.dialog.delete.title.multiple": "Einträge löschen",
     "Table.dialog.delete.title.single": "Eintrag löschen",
     "Table.dialog.delete.message.multiple": "Wollen Sie die ausgewählten Einträge wirklich löschen?",

@@ -28,7 +28,7 @@ class Test extends ContextComponent
             <div>
                 {/*<DatePicker showIcon={false} />*/}
                 <Table
-                    //groupBy={({supplierId}) => supplierId}
+                    //groupBy={({createdBy}) => createdBy}
                     data={ url }
                     styling={
                         {
@@ -40,22 +40,11 @@ class Test extends ContextComponent
                     options={
                         {
                             pageSize: 20,
+                            showRowNumber: true,
                             showPageSize: true,
                             showEditMenu: true,
                             openEditMenu: false,
                             fixed: true,
-                            locked: [
-                                'createdBy',
-                                'changedBy',
-                                'createdOn',
-                                'changedOn'
-                            ],
-                            required: [
-                                'id'
-                            ],
-                            unique: [
-                                'id'
-                            ],
                             defaultSearch: 'id',
                         }
                     }
@@ -64,7 +53,15 @@ class Test extends ContextComponent
                             {
                                 key: 'id',
                                 name: 'id',
-                                width: 200
+                                width: 200,
+                                required: true,
+                                unique: true
+                            },
+                            {
+                                key: 'federationId',
+                                name: 'federationId',
+                                type: 'number',
+                                width: 120
                             },
                             {
                                 key: 'federationName',
@@ -84,27 +81,38 @@ class Test extends ContextComponent
                             {
                                 key: 'status',
                                 name: 'status',
+                                width: 100,
+                            },
+                            {
+                                key: 'enabled',
+                                name: 'enabled',
+                                type: 'bool',
                                 width: 100
                             },
                             {
                                 key: 'createdBy',
                                 name: 'createdBy',
-                                width: 120
+                                width: 120,
+                                locked: true
                             },
                             {
                                 key: 'changedBy',
                                 name: 'changedBy',
-                                width: 120
+                                width: 120,
+                                locked: true
                             },
                             {
                                 key: 'createdOn',
                                 name: 'createdOn',
+                                type: 'date',
                                 width: 180
                             },
                             {
                                 key: 'changedOn',
                                 name: 'changedOn',
-                                width: 180
+                                type: 'date',
+                                width: 180,
+                                locked: true
                             },
                         ]
                     }
