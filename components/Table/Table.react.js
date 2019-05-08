@@ -567,9 +567,6 @@ export default class Table extends ContextComponent
             }, () =>
             {
                 this.checkCanBeExportedOrSaved();
-                this.setPage(0);
-                this.filterItems();
-                this.calcPageNumbers();
             });
         }
     };

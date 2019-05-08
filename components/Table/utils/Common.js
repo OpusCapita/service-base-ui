@@ -51,12 +51,25 @@ export default class Common
         return rows;
     };
 
+    /**
+     * ?
+     *
+     * @function getSelectedRowAmount
+     * @param selectedItems
+     * @returns {array}
+     */
     static getSelectedRowAmount = (selectedItems) =>
     {
         return selectedItems.length;
     };
 
-
+    /**
+     * ?
+     *
+     * @function getEditedRowAmount
+     * @param items
+     * @returns {array}
+     */
     static getEditedRowAmount = (items) =>
     {
         let editedAmount = 0;
@@ -71,6 +84,15 @@ export default class Common
 
         return editedAmount;
     };
+
+    /**
+     * ?
+     *
+     * @function getFaultyRowAmount
+     * @param columns
+     * @param items
+     * @returns {array}
+     */
     static getFaultyRowAmount = (columns, items) =>
     {
         let faultyAmount = 0,

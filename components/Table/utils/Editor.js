@@ -144,7 +144,7 @@ export default class Editor
 
         if(faultyAmount > 0)
         {
-            faultyAmountText = `${faultyAmount} ${translations.getMessage('Table.pagination.faulty')}`;
+            faultyAmountText = `${faultyAmount} ${translations.getMessage('Table.pagination.invalid')}`;
             active = true;
         }
 
