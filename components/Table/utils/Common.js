@@ -51,6 +51,71 @@ export default class Common
         return rows;
     };
 
+    static getSelectedRowAmount = (selectedItems) =>
+    {
+        return selectedItems.length;
+    };
+
+
+    static getEditedRowAmount = (items) =>
+    {
+        let editedAmount = 0;
+
+        for(const item of items)
+        {
+            if(item.edited)
+            {
+                editedAmount++;
+            }
+        }
+
+        return editedAmount;
+    };
+    static getFaultyRowAmount = (columns, items) =>
+    {
+        let faultyAmount = 0,
+            tempArray = [  ];
+
+        columns.forEach(column =>
+        {
+            items.forEach(item =>
+            {
+                if(column.required && item[ column.key ] === (null|| ''))
+                {
+                    faultyAmount++;
+                }
+
+                if(column.unique && item[ column.key ] !== (null|| ''))
+                {
+                    if(tempArray.length === 0)
+                    {
+                        tempArray.push(item[ column.key ]);
+                    }
+                    else
+                    {
+                        if(tempArray.includes(item[ column.key ]))
+                        {
+                            tempArray.push(item[ column.key ]);
+
+                            let count = tempArray.filter(value => value === item[ column.key ]).length;
+
+                            if(count > 1)
+                            {
+                                faultyAmount += count;
+                            }
+                        }
+                        else
+                        {
+                            tempArray.push(item[ column.key ]);
+                        }
+                    }
+                }
+            });
+        });
+
+        return faultyAmount;
+    };
+
     /**
      * Formats value of current column to either date or string.
      *

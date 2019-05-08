@@ -116,34 +116,55 @@ export default class Editor
      * @function getSelectedAndEditedAmountText
      * @param {int} selectedAmount - Amount of selected rows.
      * @param {int} editedAmount - Amount of edited rows.
+     * @param {int} faultyAmount - Amount of faulty rows.
      * @param {object} translations - Derived i18n component object.
      * @returns {string}
      */
-    static getSelectedAndEditedAmountText = (selectedAmount, editedAmount, translations) =>
+    static getSelectedAndEditedAmountText = (selectedAmount, editedAmount, faultyAmount, translations) =>
     {
         let selectedAmountText = '';
         let editedAmountText = '';
-        let spacerText = '';
+        let faultyAmountText = '';
+        let firstSpacerText = '';
+        let secondSpacerText = '';
 
         let active = false;
 
         if(selectedAmount > 0)
         {
-            selectedAmountText = selectedAmount + ` ${translations.getMessage('Table.pagination.selected')}`;
+            selectedAmountText = `${selectedAmount} ${translations.getMessage('Table.pagination.selected')}`;
             active = true;
         }
+
         if(editedAmount > 0)
         {
-            editedAmountText = editedAmount + ` ${translations.getMessage('Table.pagination.edited')}`;
+            editedAmountText = `${editedAmount} ${translations.getMessage('Table.pagination.edited')}`;
             active = true;
         }
 
-        if(selectedAmount > 0 && editedAmount > 0)
+        if(faultyAmount > 0)
         {
-            spacerText = ', ';
+            faultyAmountText = `${faultyAmount} ${translations.getMessage('Table.pagination.faulty')}`;
+            active = true;
         }
 
-        return `${active ? '(' : ''}${selectedAmountText}${spacerText}${editedAmountText}${active ? ')' : ''}`;
+        if(selectedAmount > 0 && editedAmount > 0 && faultyAmount > 0)
+        {
+            firstSpacerText = ', ';
+            secondSpacerText = ', ';
+        }
+        else if(selectedAmount > 0 && editedAmount > 0 && faultyAmount === 0 ||
+                selectedAmount > 0 && editedAmount === 0 && faultyAmount > 0)
+        {
+            firstSpacerText = ', ';
+        }
+        else if(editedAmount > 0 && faultyAmount > 0)
+        {
+
+            secondSpacerText = ', ';
+        }
+
+        return `${active ? '(' : ''}${selectedAmountText}${firstSpacerText}${editedAmountText}${secondSpacerText}${faultyAmountText}${active ? ')' : ''}`;
     };
 
     /**

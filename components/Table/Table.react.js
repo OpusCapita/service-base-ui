@@ -9,6 +9,7 @@ import { Search } from './components/Search.react'
 import { TableHeader } from './components/TableHeader.react';
 import { TableLoading } from './components/TableLoading.react';
 import { TableBody } from './components/TableBody.react';
+import { Pagination } from './components/Pagination.react';
 
 import Editor from './utils/Editor';
 import Common from './utils/Common';
@@ -958,14 +959,6 @@ export default class Table extends ContextComponent
 
         let editedAmount = 0;
 
-        for(const item of items)
-        {
-            if(item.edited)
-            {
-                editedAmount++;
-            }
-        }
-
         return (
             <div>
                 {
@@ -992,7 +985,6 @@ export default class Table extends ContextComponent
                                     handleEditorButton={ this.handleEditableButton.bind(this) }
                                 />
                             }
-
                         </span>
                     </div>
                 }
@@ -1048,7 +1040,12 @@ export default class Table extends ContextComponent
                                         {this.setPageSizeOptions()}
                                     </select>
                                     {
-                                        Editor.getSelectedAndEditedAmountText(selectedItems.length, editedAmount, this.context.i18n)
+                                        Editor.getSelectedAndEditedAmountText(
+                                            Common.getSelectedRowAmount(selectedItems),
+                                            Common.getEditedRowAmount(items),
+                                            Common.getFaultyRowAmount(this.props.columns, items),
+                                            this.context.i18n
+                                        )
                                     }
                                 </span>
                             </li>

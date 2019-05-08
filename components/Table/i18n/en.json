@@ -9,6 +9,7 @@
     "Table.pagination.showAmount": "Show",
     "Table.pagination.selected": "selected",
     "Table.pagination.edited": "edited",
+    "Table.pagination.faulty": "faulty",
     "Table.dialog.delete.title.multiple": "Delete items",
     "Table.dialog.delete.title.single": "Delete item",
     "Table.dialog.delete.message.multiple": "Are you sure you want to delete the selected items?",
