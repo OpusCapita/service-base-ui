@@ -55,39 +55,46 @@ class Test extends ContextComponent
                                 name: 'id',
                                 width: 200,
                                 required: true,
-                                unique: true
+                                unique: true,
+                                resizable: true
                             },
                             {
                                 key: 'federationId',
                                 name: 'federationId',
                                 type: 'number',
-                                width: 120
+                                width: 120,
+                                resizable: true
                             },
                             {
                                 key: 'federationName',
                                 name: 'federationName',
-                                width: 150
+                                width: 150,
+                                resizable: true
                             },
                             {
                                 key: 'supplierId',
                                 name: 'supplierId',
-                                width: 125
+                                width: 125,
+                                resizable: true
                             },
                             {
                                 key: 'customerId',
                                 name: 'customerId',
-                                width: 125
+                                width: 125,
+                                resizable: true
                             },
                             {
                                 key: 'status',
                                 name: 'status',
                                 width: 100,
+                                resizable: true
                             },
                             {
                                 key: 'enabled',
                                 name: 'enabled',
                                 type: 'bool',
-                                width: 100
+                                width: 100,
+                                resizable: true
                             },
                             {
                                 key: 'createdBy',

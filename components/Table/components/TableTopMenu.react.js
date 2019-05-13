@@ -52,6 +52,11 @@ export class TableTopMenu extends ContextComponent
         });
     }
 
+    /**
+     * Checks width of editor menu
+     *
+     * @function checkEditorMenuWidth
+     */
     checkEditorMenuWidth = () =>
     {
         const menuWidth = this.divElement.offsetWidth + 1;

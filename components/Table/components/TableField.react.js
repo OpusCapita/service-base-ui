@@ -20,7 +20,7 @@ export class TableField extends ContextComponent
     {
         isInEditMode: false,
         column: {  },
-        row: {},
+        row: {  },
     };
 
     constructor(props, context)
@@ -40,7 +40,7 @@ export class TableField extends ContextComponent
      *
      * @function checkFieldState
      * @param column - Current column
-     * @param item - Current item
+     * @param row - Current item
      * @returns {string}
      */
     checkFieldState = (column, row) =>

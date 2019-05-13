@@ -29,9 +29,9 @@ export class TableHeaderField extends ContextComponent
 
         return(
             <th
-                className={ sorting.key === column.key && 'sorting' }
+                className={`${sorting.key === column.key && 'sorting'} ${ column.resizable && 'resizable' }`}
                 key={ column.key }
-                style={{ width: column.width }}
+                style={{ width: column.width, minWidth: column.width }}
             >
                 <a onClick={ e =>
                 {
@@ -47,7 +47,6 @@ export class TableHeaderField extends ContextComponent
                             :
                             <span>&nbsp;<i className="fa fa-caret-up"/></span>
                         )
-
                     }
                 </a>
             </th>

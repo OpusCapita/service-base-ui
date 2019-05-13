@@ -1,26 +1,41 @@
 # TABLE/CRUD EDITOR
 
 ## Table parameters
-| Parameter  |               | Type     | Description                                                 |
-|------------|---------------|----------|-------------------------------------------------------------|
-| data       |               | string   | Url to table data.                                          |
-| groupBy    |               | function |
-| styling    |               | object   | An object containing table styling, derived from bootstrap. |
-|            | bordered      | bool     | Show table bordered?                                        |
-|            | striped       | bool     | Show table striped?                                         |
-|            | condensed     | bool     | Show table condensed?                                       |
-| options    |               | object   | An object containing table options.                         |
-|            | pageSize      | int      | initial amount of rows shown.                               |
-|            | showRowNumber | bool     | Show number for each row?                                   |
-|            | showPageSize  | bool     | Show page size?                                             |
-|            | showEditMenu  | bool     | Show editor menu?                                           |
-|            | openEditMenu  | bool     | Open editor menu on start?                                  |
-|            | fixed         | bool     | ?                                                           |
-|            | required      | array    | A list of rows required to be not null.                     |
-|            | unique        | array    | A list of rows required to be unique.                       |
-|            |defaultSearch  | string   | The default column for searching without tag.               |
-| columns    |               | object   | An object containing the tables columns                     |
-| items      |               | object   | An object containing items to be shown in table.            |
+| Required | Parameter  |               | Type     | Description                                                 |
+|----------|------------|---------------|----------|-------------------------------------------------------------|
+|          | data       |               | string   | Url to table data.                                          |
+|          | groupBy    |               | function |
+|          | styling    |               | object   | An object containing table styling, derived from bootstrap. |
+|          |            | bordered      | bool     | Show table bordered?                                        |
+|          |            | striped       | bool     | Show table striped?                                         |
+|          |            | condensed     | bool     | Show table condensed?                                       |
+|          | options    |               | object   | An object containing table options.                         |
+|          |            | pageSize      | int      | initial amount of rows shown.                               |
+|          |            | showRowNumber | bool     | Show number for each row?                                   |
+|          |            | showPageSize  | bool     | Show page size?                                             |
+|          |            | showEditMenu  | bool     | Show editor menu?                                           |
+|          |            | openEditMenu  | bool     | Open editor menu on start?                                  |
+|          |            | fixed         | bool     | ?                                                           |
+|          |            | required      | array    | A list of rows required to be not null.                     |
+|          |            | unique        | array    | A list of rows required to be unique.                       |
+|          |            | defaultSearch | string   | The default column for searching without tag.               |
+|          | columns    |               | object   | An object containing the tables columns                     |
+|          | items      |               | object   | An object containing items to be shown in table.            |
+
+## Column parameters
+| Required | Parameter |        | Type   | Description                                                           |
+|----------|-----------|--------|--------|-----------------------------------------------------------------------|
+| true     | key       |        | string | Key name of column, according to data-field.                          |
+| true     | name      |        | string | name of column, shown in header.                                      |
+| false    | width     |        | int    | Defined width of column.                                              |
+| false    | required  |        | bool   | Is column content required?                                           |
+| false    | unique    |        | bool   | Does column content have to be unique?                                |
+| false    | resizable |        | bool   | Can column be resized?                                                |
+| false    | type      |        | string | Type of column content.                                               |
+|          |           | string |        |                                                                       |
+|          |           | number |        |                                                                       | 
+|          |           | bool   |        |                                                                       |
+|          |           | date   |        |                                                                       |
 
 ## Table editor functions
 When the Edit button is clicked, the following buttons are availible for either selected rows or the whole table.
