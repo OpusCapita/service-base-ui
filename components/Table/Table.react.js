@@ -4,12 +4,10 @@ import request from 'superagent';
 import ContextComponent from './../ContextComponent.react';
 import translations from './i18n';
 
-import { EditorMenu } from './components/EditorMenu.react';
-import { Search } from './components/Search.react'
+import { TableTopMenu } from './components/TableTopMenu.react';
 import { TableHeader } from './components/TableHeader.react';
 import { TableLoading } from './components/TableLoading.react';
 import { TableBody } from './components/TableBody.react';
-import { Pagination } from './components/Pagination.react';
 
 import Editor from './utils/Editor';
 import Common from './utils/Common';
@@ -959,33 +957,23 @@ export default class Table extends ContextComponent
         return (
             <div>
                 {
-                    <div className="table-editor text-right">
-                        <span className="table-filler">
-                            <Search
-                                handleSearchInput={ this.handleSearchInput.bind(this) }
-                                filterText={ filterText }
-                            />
-                            {
-                                showEditMenu &&
-                                <EditorMenu
-                                    hasItems={ items.length > 0 }
-                                    hasSelectedItems={ selectedItems.length !== 0 }
-                                    canBeSaved={ canBeSaved }
-                                    canBeExported={ canBeExported }
-                                    canAddItems={ true }
-                                    isOpen={ openEditMenu }
-                                    handleAddButton={ this.handleAddButton.bind(this) }
-                                    handleDuplicateButton={ this.handleDuplicateButton.bind(this) }
-                                    handleDeleteButton={ this.handleDeleteButton.bind(this) }
-                                    handleExportButton={ this.handleExportButton.bind(this) }
-                                    handleSaveButton={ this.handleSaveButton.bind(this) }
-                                    handleEditorButton={ this.handleEditableButton.bind(this) }
-                                />
-                            }
-                        </span>
-                    </div>
+                    <TableTopMenu
+                        showEditMenu={ showEditMenu }
+                        canAddItems={ true }
+                        canBeSaved={ canBeSaved }
+                        canBeExported={ canBeExported }
+                        hasItems={ items.length > 0 }
+                        hasSelectedItems={ selectedItems.length !== 0 }
+                        filterText={ filterText }
+                        handleAddButton={ this.handleAddButton.bind(this) }
+                        handleDuplicateButton={ this.handleDuplicateButton.bind(this) }
+                        handleDeleteButton={ this.handleDeleteButton.bind(this) }
+                        handleExportButton={ this.handleExportButton.bind(this) }
+                        handleSaveButton={ this.handleSaveButton.bind(this) }
+                        handleEditorButton={ this.handleEditableButton.bind(this) }
+                        handleSearchInput={ this.handleSearchInput.bind(this) }
+                    />
                 }
-
                 <div className="outer">
                     <div className="inner">
                         {

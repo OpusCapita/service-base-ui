@@ -105,7 +105,8 @@ class Test extends ContextComponent
                                 key: 'createdOn',
                                 name: 'createdOn',
                                 type: 'date',
-                                width: 180
+                                width: 180,
+                                locked: true
                             },
                             {
                                 key: 'changedOn',

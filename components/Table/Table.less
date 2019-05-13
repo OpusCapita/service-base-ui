@@ -2,175 +2,45 @@
 @darkGrey: #6E6E6E;
 @midGrey: #333;
 @lightGrey: #EEE;
+@grey: #CCC;
+@black: #000;
 
-.page-size-options
+.table-top-menu
 {
-	width: 200px;
-}
+    height: 30px;
+    width: 100%;
 
-.table
-{
-	> thead
-	{
-		> tr
-		{
-			> th
-			{
-				user-select: none;
-				-moz-user-select: none;
-				-khtml-user-select: none;
-				-webkit-user-select: none;
-				-o-user-select: none;
-				cursor: pointer;
-
-				&:hover
-				{
-					background: @lightGrey !important;
-
-					> a
-					{
-						color: black;
-					}
-				}
-
-				&.sorting
-				{
-					background: @lightGrey !important;
-
-					> a
-					{
-						color: black;
-					}
-				}
-
-				> a
-				{
-					color: @midGrey;
-					display: block;
-					text-decoration: none;
-				}
-			}
-		}
-	}
-
-	margin-bottom: 0 !important;
-}
-
-.pagination
-{
-	> li
-	{
-		user-select: none;
-		-moz-user-select: none;
-		-khtml-user-select: none;
-		-webkit-user-select: none;
-		-o-user-select: none;
-		cursor: pointer;
-	}
-
-	float: right;
-	margin: 0 0 0 0 !important;
-}
-
-.row-selected
-{
-	.table-input
-	{
-		height: 36px !important;
-		width: 100% !important;
-		border: none !important;
-		margin-left: 9px;
-		outline: none;
-		background: transparent;
-	}
-
-	td
-	{
-		&:not(:first-child)
-		{
-			padding: 0 !important;
-		}
-	}
-}
-
-.table-checkbox
-{
-    .table-checkbox-button
+    .table-top-menu-search
     {
-      margin-left: 10px !important;
-    }
+        position: relative;
+        float: left;
+        box-shadow:
+            inset 0 1px 0 @grey,
+            inset 0 -1px 0 @grey,
+            inset 0 -3px 0 rgba(0, 0, 0, .05);
 
-    .table-checkbox-text
-    {
-        margin-left: 5px !important;
-
-        &.locked
+        .table-top-menu-search-input
         {
-            color: @darkGrey;
+            padding: 9px 6px 6px 30px;
+            height: 100% !important;
+            width: 100%;
+            outline: none !important;
+            background: transparent;
+            border: 1px solid @grey;
+
+            &+.glyphicon
+            {
+                position: absolute;
+                left: 0;
+                padding: 8px 10px;
+            }
         }
     }
-}
 
-.table-input.locked
-{
-	color: @darkGrey;
-}
-
-.table-filler
-{
-	color: @midGrey;
-	background: #FFF;
-	box-shadow:
-			inset 0 1px 0 #CCC,
-			inset 0 -1px 0 #CCC,
-			inset 0 -3px 0 rgba(0, 0, 0, .05);
-	display: block;
-	width: 100%;
-}
-
-.table-editor
-{
-	width: 100%;
-}
-
-.table-search
-{
-	float: left;
-	min-width: 400px;
-	max-width: 700%;
-	position: relative;
-}
-
-.table-search-input
-{
-	float: left;
-	padding: 8px;
-	outline: none !important;
-	height: 100% !important;
-	min-width: 400px;
-	border: 1px solid #CCC;
-	border-width: 0 0 0 1px;
-	background: transparent !important;
-	padding-left: 30px;
-
-	&+.glyphicon
-	{
-		position: absolute;
-		left: 0;
-		padding: 8px 10px;
-	}
-}
-
-.inner
-{
-	&::-webkit-scrollbar
-	{
-		display: none;
-	}
-
-	overflow-x: scroll;
-	overflow-y: visible;
-	width: 100%;
+    .table-top-menu-editor
+    {
+        float: right;
+    }
 }
 
 .outer
@@ -181,26 +51,211 @@
 	}
 
 	position: relative;
+
+	.inner
+	{
+		&::-webkit-scrollbar
+		{
+			display: none;
+		}
+
+		overflow-x: scroll;
+		overflow-y: visible;
+		width: 100%;
+
+		.table
+		{
+			table-layout: fixed;
+			width: 100%;
+
+			> thead
+			{
+				> tr
+				{
+					> th
+					{
+						user-select: none;
+						-moz-user-select: none;
+						-khtml-user-select: none;
+						-webkit-user-select: none;
+						-o-user-select: none;
+						cursor: pointer;
+
+						vertical-align: top;
+						border-top: 1px solid @grey;
+						padding: 5px 10px;
+
+						&:hover
+						{
+							background: @lightGrey !important;
+
+							> a
+							{
+								color: @black;
+							}
+						}
+
+						&.sorting
+						{
+							background: @lightGrey !important;
+
+							> a
+							{
+								color: @black;
+							}
+						}
+
+						> a
+						{
+							color: @midGrey;
+							display: block;
+							text-decoration: none;
+						}
+					}
+				}
+			}
+
+			> tbody
+			{
+				> tr
+				{
+					.dlk
+					{
+						cursor: pointer;
+						position: absolute;
+						left: 0;
+						right: 0;
+						top: 0;
+						bottom: 0;
+						margin-bottom: 0;
+						line-height: 34px;
+						text-align: center;
+
+						input[type="checkbox"]
+						{
+							margin-left: -99999px;
+							display: none;
+
+							&+.fa
+							{
+								opacity: 0.15;
+							}
+
+							&:hover,
+							&:checked
+							{
+								&+.fa
+								{
+									opacity: 1 !important;
+								}
+							}
+						}
+					}
+
+					&.row-selected
+					{
+						td
+						{
+							&:first-child
+							{
+								position: relative;
+								padding: 0 !important;
+							}
+
+							&:not(:first-child)
+							{
+								padding: 0 !important;
+							}
+
+							.table-input
+							{
+								height: 36px !important;
+								width: 100% !important;
+								border: none !important;
+								margin-left: 9px;
+								outline: none;
+								background: transparent;
+
+								&.locked
+								{
+									color: @darkGrey;
+								}
+							}
+
+							.table-checkbox
+							{
+								line-height: 35px;
+
+								.table-checkbox-button
+								{
+									margin-left: 10px !important;
+								}
+
+								.table-checkbox-text
+								{
+									margin-left: 5px !important;
+
+									&.locked
+									{
+										color: @darkGrey;
+									}
+								}
+							}
+
+							position: relative;
+						}
+					}
+
+					> td
+					{
+						vertical-align: top;
+						border-top: 1px solid @grey;
+					}
+				}
+			}
+
+			margin-bottom: 0 !important;
+		}
+	}
 }
 
-table
+.pagination
 {
-	table-layout: fixed;
-	width: 100%;
-}
+	float: right;
+	margin: 0 0 0 0 !important;
 
-td
-{
-	vertical-align: top;
-	border-top: 1px solid #CCC;
-	padding: 10px;
-}
+	> li
+	{
+		user-select: none;
+		-moz-user-select: none;
+		-khtml-user-select: none;
+		-webkit-user-select: none;
+		-o-user-select: none;
+		cursor: pointer;
 
-th
-{
-	vertical-align: top;
-	border-top: 1px solid #CCC;
-	padding: 10px;
+		.pagination-selector
+		{
+			span
+			{
+				&:hover
+				{
+					background: none !important;
+					cursor: default;
+				}
+			}
+
+			.pagination-selector-options
+			{
+				-webkit-appearance: none;
+				margin: 0 10px;
+				outline: none;
+				border: none;
+				padding: 0 10px;
+				text-align: center;
+				cursor: pointer;
+			}
+		}
+	}
 }
 
 .loadingScreen
@@ -215,79 +270,5 @@ th
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-	}
-}
-
-select.form-control
-{
-	border-radius: 0 !important;
-	-webkit-appearance: none !important;
-}
-
-.pagination-selector
-{
-	span
-	{
-		&:hover
-		{
-			background: none !important;
-			cursor: default;
-		}
-	}
-}
-
-.pagination-selector-options
-{
-	-webkit-appearance: none;
-	margin: 0 10px;
-	outline: none;
-	border: none;
-	padding: 0 10px;
-	text-align: center;
-	cursor: pointer;
-}
-
-tr.row-selected
-{
-	td
-	{
-		&:first-child
-		{
-			position: relative;
-			padding: 0 !important;
-		}
-	}
-}
-
-.dlk
-{
-	cursor: pointer;
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	margin-bottom: 0;
-	line-height: 34px;
-	text-align: center;
-
-	input[type="checkbox"]
-	{
-		margin-left: -99999px;
-		display: none;
-
-		&+.fa
-		{
-			opacity: 0.15;
-		}
-
-		&:hover,
-		&:checked
-		{
-			&+.fa
-			{
-				opacity: 1 !important;
-			}
-		}
 	}
 }

@@ -72,6 +72,8 @@ export class TableField extends ContextComponent
         {
             return 'warning';
         }
+
+        return 'default';
     };
 
     /**
@@ -134,7 +136,7 @@ export class TableField extends ContextComponent
         return(
             <td
                 key={ column.key }
-                className={ `${ column.className } ${this.checkFieldState(column, row) }` }
+                className={ `${ column.key } ${this.checkFieldState(column, row) }` }
                 style={{
                     overflow: (fixed && !column.showOverflow) ? 'hidden' : 'visible',
                     textOverflow: !column.disableEllipsis && 'ellipsis'
