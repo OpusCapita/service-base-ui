@@ -21,12 +21,6 @@ class MainMenu extends ConditionalRenderComponent
         onSearch : (term) => null
     }
 
-    invoiceResourceGroups = [
-        'invoice-approver',
-        'invoice-inspector',
-        'invoice-matcher'
-    ]
-
     constructor(props, context)
     {
         super(props);
@@ -71,7 +65,7 @@ class MainMenu extends ConditionalRenderComponent
         this.loadNotifications();
         this.switchMenuItemByPath(location.basename + location.pathname);
 
-        const displayInvoiceIcon = this.invoiceResourceGroups.some(rg => userData.roles.includes(rg));
+        const displayInvoiceIcon = bouncer.getUserResourceGroups('invoice').length > 0;
         const displayTntIcon = bouncer.getUserResourceGroups('tnt').length > 0;
         const displayArchiveIcon = bouncer.getUserResourceGroups('archive').length > 0;
         const tenantsForSupplierSwitch = bouncer.getUserTenants('supplier', '/api/suppliers');
