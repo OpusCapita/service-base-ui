@@ -30,7 +30,8 @@ export default
         {
             "key": "chronos",
             "label": "Chronos",
-            "link": "/chronos"
+            "link": "/chronos",
+            "target": "_blank"
         },
         {
             "key": "sso",
@@ -99,7 +100,8 @@ export default
         {
             "key": "chronos",
             "label": "Chronos",
-            "link": "/chronos"
+            "link": "/chronos",
+            "target": "_blank"
         },
         {
             "key": "sso",
