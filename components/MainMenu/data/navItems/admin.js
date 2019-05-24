@@ -28,6 +28,12 @@ export default
             "link": "/bnp/redis"
         },
         {
+            "key": "chronos",
+            "label": "Chronos",
+            "link": "/chronos",
+            "target": "_blank"
+        },
+        {
             "key": "sso",
             "label": "Single sign-on",
             "link": "/identity-federation"
@@ -90,6 +96,12 @@ export default
             "key": "redis",
             "label": "Redis",
             "link": "/bnp/redis"
+        },
+        {
+            "key": "chronos",
+            "label": "Chronos",
+            "link": "/chronos",
+            "target": "_blank"
         },
         {
             "key": "sso",
