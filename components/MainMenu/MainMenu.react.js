@@ -65,8 +65,11 @@ class MainMenu extends ConditionalRenderComponent
         this.logoImage = 'data:image/svg+xml,' + encodeURIComponent(require('!!raw-loader!./img/oc-logo-white.svg'));
         this.searchTimer = new ResetTimer();
 
-        this.CustomerDropdown = context.loadComponent({ serviceName : 'customer', moduleName : 'customer-autocomplete', jsFileName : 'autocomplete-bundle' });
-        this.SupplierDropdown = context.loadComponent({ serviceName : 'supplier', moduleName : 'supplier-autocomplete', jsFileName : 'autocomplete-bundle' });
+        this.BusinessPartnerDropdown = context.loadComponent({
+            serviceName: 'business-partner',
+            moduleName: 'business-partner-autocomplete',
+            jsFileName: 'business-partner-autocomplete-bundle'
+        });
     }
 
     componentDidMount()
@@ -495,8 +498,8 @@ class MainMenu extends ConditionalRenderComponent
                         </div>
                         <div className="row">
                             <div className="col-lg-12">
-                                { tenantSwitchMode === 'customer' && <this.CustomerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} /> }
-                                { tenantSwitchMode === 'supplier' && <this.SupplierDropdown onChange={value => this.setState({ tenantSwitchValue : value })} /> }
+                                { tenantSwitchMode === 'customer' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isCustomer)} /> }
+                                { tenantSwitchMode === 'supplier' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isSupplier)} /> }
                             </div>
                         </div>
                     </div>
