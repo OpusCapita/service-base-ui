@@ -55,7 +55,7 @@ class Sortable extends ConditionalRenderComponent
         this.setState(({ selectedItems }) => (
             {
                 selectedItems: arrayMove(selectedItems, oldIndex, newIndex),
-            }));
+            }), () => this.props.onChange( this.state.selectedItems ))
     };
 
     handleAddItemClick = (event) =>
@@ -115,7 +115,7 @@ class Sortable extends ConditionalRenderComponent
                         lockToContainerEdges={ true }
                     >
                         {
-                            selectedItems.reverse().map((value, index) => (
+                            selectedItems.map((value, index) => (
                                 <SortableItem
                                     key={ `item-${ index }` }
                                     index={ index }
