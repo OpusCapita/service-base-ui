@@ -78,7 +78,7 @@ class Test extends ContextComponent
 
         return(
             <div>
-                <Sortable items={ items } />
+                <Sortable items={ items } onChange={ (items) => console.log(items) }/>
             </div>
         );
     }

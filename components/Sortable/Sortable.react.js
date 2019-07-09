@@ -29,11 +29,13 @@ const SortableContainer = sortableContainer(({ children }) =>
 class Sortable extends ConditionalRenderComponent
 {
     static propTypes = {
-        items: PropTypes.array.isRequired
+        items: PropTypes.array.isRequired,
+        onChange: PropTypes.func.isRequired
     }
 
     static defaultProps = {
-        items: []
+        items: [],
+        onChange: () => null
     }
 
     constructor(props)
@@ -62,7 +64,9 @@ class Sortable extends ConditionalRenderComponent
             value: '',
             selectableItems: this.state.selectableItems.filter((val) => val.label != event),
             selectedItems: this.state.selectedItems.concat(this.state.selectableItems.filter((val) => val.label === event))
-        });
+        }, () => this.props.onChange( this.state.selectedItems ));
+
+
     }
 
     handleDeleteItemClick = (event) =>
@@ -70,7 +74,7 @@ class Sortable extends ConditionalRenderComponent
         this.setState({
             selectableItems: this.state.selectableItems.concat(this.state.selectedItems.filter((val) => val.label === event)),
             selectedItems: this.state.selectedItems.filter((val) => val.label != event)
-        });
+        }, () => this.props.onChange( this.state.selectedItems ));
     }
 
     render()
