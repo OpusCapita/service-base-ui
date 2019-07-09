@@ -61,6 +61,9 @@
         "url-loader": "^0.6.2",
         "webpack": "^3.7.1",
         "webpack-cli": "^3.1.2",
-        "webpack-visualizer-plugin": "^0.1.11"
+        "webpack-visualizer-plugin": "^0.1.11",
+        "array-move": "^2.1.0",
+        "react-autocomplete": "^1.8.1",
+        "react-sortable-hoc": "^1.9.1"
     }
 }

@@ -1,0 +1,59 @@
+
+::selection
+{
+    background: none;
+}
+
+.Sortable
+{
+    div:first-child
+    {
+        display: inherit !important;
+    }
+
+    .list-group
+    {
+        &.dropdown
+        {
+            z-index: 1000;
+            position: absolute;
+            width: calc(100% - 30px);
+        }
+
+        .list-group-item
+        {
+            &:hover
+            {
+                background: #f5f5f5;
+            }
+    
+            .list-group-item-handle
+            {
+                float: left;
+                width: 20px;
+                cursor: row-resize;
+            }
+            
+            .list-group-item-button
+            {
+                float: right;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.list-group-item-active
+{
+    .list-group-item-handle
+    {
+        float: left;
+        width: 20px;
+        cursor: row-resize;
+    }
+    
+    .list-group-item-button
+    {
+        display: none;
+    }
+}
