@@ -10,54 +10,71 @@ class Test extends ContextComponent
         items: [
             {
                 id: 1,
-                label: 'James T. Kirk',
+                label: '1',
                 value: 'KirkJamesT'
             },
             {
                 id: 2,
-                label: 'Spock',
+                label: '2',
                 value: 'SpockLT'
             },
             {
                 id: 3,
-                label: 'Leonard McCoy',
+                label: '3',
                 value: 'doctorBones'
             },
             {
                 id: 4,
-                label: 'Hikaru Sulu',
+                label: '4',
                 value: 'SwordMasterSulu'
             },
             {
                 id: 5,
-                label: 'Nyota Uhura',
+                label: '5',
                 value: 'HelloWorld'
             },
             {
                 id: 6,
-                label: 'Pavel Chekov',
+                label: '6',
                 value: 'PaneChekov'
             },
             {
                 id: 7,
-                label: 'Montgomery Scott',
+                label: '7',
                 value: 'NotBeamingUpScotty'
             },
             {
                 id: 8,
-                label: 'Christine Chappel',
+                label: '8',
                 value: 'BeenThereDoneThat'
             },
             {
                 id: 9,
-                label: 'Carol Marcus',
+                label: '9',
                 value: 'Khaaaaaaaaaan'
             },
             {
                 id: 10,
-                label: 'Harcourt Fenton Mudd',
+                label: '10',
                 value: 'HarryMuddIII'
             }
+        ],
+        selectedItems: [
+            {
+                id: 1,
+                label: '1',
+                value: 'KirkJamesT'
+            },
+            {
+                id: 5,
+                label: '5',
+                value: 'HelloWorld'
+            },
+            {
+                id: 7,
+                label: '7',
+                value: 'NotBeamingUpScotty'
+            },
         ]
     }
 
@@ -74,16 +91,15 @@ class Test extends ContextComponent
 
     render()
     {
-        const { items } = this.state;
+        const { items, selectedItems } = this.state;
 
         return(
             <div>
-                <Sortable items={ items } onChange={ (items) => console.log(items) }/>
+                {<Sortable items={ items } selectedItems={ selectedItems } onChange={ (items) => console.log(items) }/>}
             </div>
         );
     }
 }
-
 
 const layout =
 <ServiceLayout serviceName="service-base-ui" component={Test}>

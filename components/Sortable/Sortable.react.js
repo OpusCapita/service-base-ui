@@ -30,11 +30,13 @@ class Sortable extends ConditionalRenderComponent
 {
     static propTypes = {
         items: PropTypes.array.isRequired,
+        selectedItems: PropTypes.array,
         onChange: PropTypes.func.isRequired
     }
 
     static defaultProps = {
         items: [],
+        selectedItems: [],
         onChange: () => null
     }
 
@@ -45,17 +47,25 @@ class Sortable extends ConditionalRenderComponent
         this.state =
             {
                 value: '',
-                selectableItems: this.props.items,
-                selectedItems: []
+                items: this.props.items,
+                selectableItems: [],
+                selectedItems: this.props.selectedItems
             }
     };
+
+    componentDidMount = () =>
+    {
+        this.setState({
+            selectableItems: this.state.items.filter(originalItem => !this.state.selectedItems.find(selectedItem => originalItem.value === selectedItem.value))
+        });
+    }
 
     onSortEnd = ({ oldIndex, newIndex }) =>
     {
         this.setState(({ selectedItems }) => (
             {
                 selectedItems: arrayMove(selectedItems, oldIndex, newIndex),
-            }), () => this.props.onChange( this.state.selectedItems ))
+            }), () => this.props.onChange(this.state.selectedItems))
     };
 
     handleAddItemClick = (event) =>
@@ -64,9 +74,7 @@ class Sortable extends ConditionalRenderComponent
             value: '',
             selectableItems: this.state.selectableItems.filter((val) => val.label != event),
             selectedItems: this.state.selectedItems.concat(this.state.selectableItems.filter((val) => val.label === event))
-        }, () => this.props.onChange( this.state.selectedItems ));
-
-
+        }, () => this.props.onChange(this.state.selectedItems));
     }
 
     handleDeleteItemClick = (event) =>
@@ -74,24 +82,24 @@ class Sortable extends ConditionalRenderComponent
         this.setState({
             selectableItems: this.state.selectableItems.concat(this.state.selectedItems.filter((val) => val.label === event)),
             selectedItems: this.state.selectedItems.filter((val) => val.label != event)
-        }, () => this.props.onChange( this.state.selectedItems ));
+        }, () => this.props.onChange(this.state.selectedItems));
     }
 
     render()
     {
-        const { selectableItems, selectedItems } = this.state;
+        const { selectableItems, selectedItems, items } = this.state;
 
         return (
             <div className="row">
                 <div className="col-md-12 Sortable">
                     <Autocomplete
-                        items={ selectableItems }
+                        items={ selectableItems.sort((a, b) => a.label - b.label) }
                         shouldItemRender={ (item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1 }
                         getItemValue={ item => item.label }
                         renderInput={ (props) =>
                             <input className="form-control" type="text" { ...props } />
                         }
-                        renderMenu={ (items, value, style) =>
+                        renderMenu={ (items) =>
                             <ul className="list-group dropdown" children={ items } />
                         }
                         renderItem={ (item, highlighted) =>
