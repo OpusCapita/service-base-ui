@@ -93,7 +93,7 @@ class Sortable extends ConditionalRenderComponent
             <div className="row">
                 <div className="col-md-12 Sortable">
                     <Autocomplete
-                        items={ selectableItems.sort((a, b) => a.label - b.label) }
+                        items={ selectableItems.sort((a, b) => a.label.localeCompare(b.label)) }
                         shouldItemRender={ (item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1 }
                         getItemValue={ item => item.label }
                         renderInput={ (props) =>
@@ -137,7 +137,9 @@ class Sortable extends ConditionalRenderComponent
                                             <span
                                                 className="list-group-item-button"
                                                 onClick={ event => this.handleDeleteItemClick(value.label) }
-                                            >&#10006;</span>
+                                            >
+                                                &#10006;
+                                            </span>
                                         </span>
                                     }
                                 />

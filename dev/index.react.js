@@ -10,69 +10,69 @@ class Test extends ContextComponent
         items: [
             {
                 id: 1,
-                label: '1',
+                label: 'James Tiberius Kirk',
                 value: 'KirkJamesT'
             },
             {
                 id: 2,
-                label: '2',
+                label: "S'chn T'gai Spock",
                 value: 'SpockLT'
             },
             {
                 id: 3,
-                label: '3',
+                label: 'Leonard McCoy',
                 value: 'doctorBones'
             },
             {
                 id: 4,
-                label: '4',
+                label: 'Hikaru Sulu',
                 value: 'SwordMasterSulu'
             },
             {
                 id: 5,
-                label: '5',
+                label: 'Nyota Uhura',
                 value: 'HelloWorld'
             },
             {
                 id: 6,
-                label: '6',
+                label: 'Pavel Chekov',
                 value: 'PaneChekov'
             },
             {
                 id: 7,
-                label: '7',
+                label: 'Montgomery Scott',
                 value: 'NotBeamingUpScotty'
             },
             {
                 id: 8,
-                label: '8',
+                label: 'Christine Chapel',
                 value: 'BeenThereDoneThat'
             },
             {
                 id: 9,
-                label: '9',
+                label: 'Carol Marcus',
                 value: 'Khaaaaaaaaaan'
             },
             {
                 id: 10,
-                label: '10',
+                label: 'Harcourt Fenton Mudd III',
                 value: 'HarryMuddIII'
             }
         ],
         selectedItems: [
             {
                 id: 1,
-                label: '1',
+                label: 'James Tiberius Kirk',
                 value: 'KirkJamesT'
             },
             {
                 id: 5,
-                label: '5',
+                label: 'Nyota Uhura',
                 value: 'HelloWorld'
             },
             {
                 id: 7,
-                label: '7',
+                label: 'Montgomery Scott',
                 value: 'NotBeamingUpScotty'
             },
         ]
