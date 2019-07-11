@@ -64,7 +64,11 @@ class Sortable extends ConditionalRenderComponent
     componentDidMount = () =>
     {
         this.setState({
-            selectableItems: this.state.items.filter(originalItem => !this.state.selectedItems.find(selectedItem => originalItem.value === selectedItem.value))
+            selectableItems: this.state.items.filter(originalItem =>
+                !this.state.selectedItems.find(
+                    selectedItem => originalItem.value === selectedItem.value
+                )
+            )
         });
     }
 
@@ -104,7 +108,6 @@ class Sortable extends ConditionalRenderComponent
                 <div className="col-md-12 Sortable">
                     <Autocomplete
                         items={ selectableItems.sort((a, b) => a.label.localeCompare(b.label)) }
-                        shouldItemRender={ (item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1 }
                         getItemValue={ item => item.label }
                         renderInput={ (props) =>
                             <input
