@@ -27,13 +27,15 @@ const SortableContainer = sortableContainer(({ children }) =>
 
 class Sortable extends ConditionalRenderComponent
 {
-    static propTypes = {
+    static propTypes =
+    {
         items: PropTypes.array.isRequired,
         selectedItems: PropTypes.array,
         onChange: PropTypes.func.isRequired
     }
 
-    static defaultProps = {
+    static defaultProps =
+    {
         items: [],
         selectedItems: [],
         onChange: () => null
@@ -44,12 +46,12 @@ class Sortable extends ConditionalRenderComponent
         super(props);
 
         this.state =
-            {
-                value: '',
-                items: this.props.items,
-                selectableItems: [],
-                selectedItems: this.props.selectedItems
-            }
+        {
+            value: '',
+            items: this.props.items,
+            selectableItems: [],
+            selectedItems: this.props.selectedItems
+        }
     };
     
     arrayMove = (array, from, to) => 
@@ -68,10 +70,10 @@ class Sortable extends ConditionalRenderComponent
 
     onSortEnd = ({ oldIndex, newIndex }) =>
     {
-        this.setState(({ selectedItems }) => (
-            {
-                selectedItems: this.arrayMove(selectedItems, oldIndex, newIndex),
-            }), () => this.props.onChange(this.state.selectedItems))
+        this.setState(({ selectedItems }) =>({
+            selectedItems: this.arrayMove(selectedItems, oldIndex, newIndex),
+        }),
+        () => this.props.onChange(this.state.selectedItems))
     };
 
     handleAddItemClick = (event) =>
@@ -80,7 +82,8 @@ class Sortable extends ConditionalRenderComponent
             value: '',
             selectableItems: this.state.selectableItems.filter((val) => val.label != event),
             selectedItems: this.state.selectedItems.concat(this.state.selectableItems.filter((val) => val.label === event))
-        }, () => this.props.onChange(this.state.selectedItems));
+        },
+        () => this.props.onChange(this.state.selectedItems));
     }
 
     handleDeleteItemClick = (event) =>
@@ -88,7 +91,8 @@ class Sortable extends ConditionalRenderComponent
         this.setState({
             selectableItems: this.state.selectableItems.concat(this.state.selectedItems.filter((val) => val.label === event)),
             selectedItems: this.state.selectedItems.filter((val) => val.label != event)
-        }, () => this.props.onChange(this.state.selectedItems));
+        },
+        () => this.props.onChange(this.state.selectedItems));
     }
 
     render()
@@ -103,10 +107,17 @@ class Sortable extends ConditionalRenderComponent
                         shouldItemRender={ (item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1 }
                         getItemValue={ item => item.label }
                         renderInput={ (props) =>
-                            <input className="form-control" type="text" { ...props } />
+                            <input
+                                className="form-control"
+                                type="text"
+                                { ...props }
+                            />
                         }
                         renderMenu={ (items) =>
-                            <ul className="list-group dropdown" children={ items } />
+                            <ul
+                                className="list-group dropdown"
+                                children={ items }
+                            />
                         }
                         renderItem={ (item, highlighted) =>
                             <li
@@ -142,7 +153,7 @@ class Sortable extends ConditionalRenderComponent
                                             </span>
                                             <span
                                                 className="list-group-item-button"
-                                                onClick={ event => this.handleDeleteItemClick(value.label) }
+                                                onClick={ () => this.handleDeleteItemClick(value.label) }
                                             >
                                                 &#10006;
                                             </span>
