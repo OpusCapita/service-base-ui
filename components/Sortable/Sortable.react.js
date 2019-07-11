@@ -82,16 +82,11 @@ class Sortable extends ConditionalRenderComponent
 
     handleAddItemClick = (selectedItem) =>
     {
-
-        /*
-        const selectedItems = this.state.selectableItems.push(selectedItem);
-        const selectebleItems = this.state.items.filter(val => selectableItems.includes(val))
-        */
-
         this.setState({
             value: '',
-            selectableItems: this.state.selectableItems.filter(
-                (val) => val.label != selectedItem).sort((a, b) => a.label.localeCompare(b.label)
+            selectableItems: this.state.selectableItems
+                .filter((val) => val.label !== selectedItem)
+                .sort((a, b) => a.label.localeCompare(b.label)
             ),
             selectedItems: this.state.selectedItems.concat(this.state.selectableItems.filter((val) => val.label === selectedItem))
         },
@@ -101,7 +96,11 @@ class Sortable extends ConditionalRenderComponent
     handleDeleteItemClick = (event) =>
     {
         this.setState({
-            selectableItems: this.state.selectableItems.concat(this.state.selectedItems.filter((val) => val.label === event)).sort((a, b) => a.label.localeCompare(b.label)),
+            selectableItems: this.state.selectableItems.concat(
+                this.state.selectedItems
+                    .filter((val) => val.label === event))
+                    .sort((a, b) => a.label.localeCompare(b.label)
+            ),
             selectedItems: this.state.selectedItems.filter((val) => val.label != event)
         },
         () => this.props.onChange(this.state.selectedItems));
