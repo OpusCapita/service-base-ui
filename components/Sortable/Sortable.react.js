@@ -80,12 +80,20 @@ class Sortable extends ConditionalRenderComponent
         () => this.props.onChange(this.state.selectedItems))
     };
 
-    handleAddItemClick = (event) =>
+    handleAddItemClick = (selectedItem) =>
     {
+
+        /*
+        const selectedItems = this.state.selectableItems.push(selectedItem);
+        const selectebleItems = this.state.items.filter(val => selectableItems.includes(val))
+        */
+
         this.setState({
             value: '',
-            selectableItems: this.state.selectableItems.filter((val) => val.label != event),
-            selectedItems: this.state.selectedItems.concat(this.state.selectableItems.filter((val) => val.label === event))
+            selectableItems: this.state.selectableItems.filter(
+                (val) => val.label != selectedItem).sort((a, b) => a.label.localeCompare(b.label)
+            ),
+            selectedItems: this.state.selectedItems.concat(this.state.selectableItems.filter((val) => val.label === selectedItem))
         },
         () => this.props.onChange(this.state.selectedItems));
     }
@@ -93,7 +101,7 @@ class Sortable extends ConditionalRenderComponent
     handleDeleteItemClick = (event) =>
     {
         this.setState({
-            selectableItems: this.state.selectableItems.concat(this.state.selectedItems.filter((val) => val.label === event)),
+            selectableItems: this.state.selectableItems.concat(this.state.selectedItems.filter((val) => val.label === event)).sort((a, b) => a.label.localeCompare(b.label)),
             selectedItems: this.state.selectedItems.filter((val) => val.label != event)
         },
         () => this.props.onChange(this.state.selectedItems));
@@ -107,7 +115,7 @@ class Sortable extends ConditionalRenderComponent
             <div className="row">
                 <div className="col-md-12 Sortable">
                     <Autocomplete
-                        items={ selectableItems.sort((a, b) => a.label.localeCompare(b.label)) }
+                        items={ selectableItems }
                         getItemValue={ item => item.label }
                         renderInput={ (props) =>
                             <input
