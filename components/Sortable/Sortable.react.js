@@ -7,7 +7,6 @@ import
     sortableElement,
     sortableHandle,
 } from 'react-sortable-hoc';
-import arrayMove from 'array-move';
 import Autocomplete from 'react-autocomplete';
 
 import './Sortable.less';
@@ -52,6 +51,13 @@ class Sortable extends ConditionalRenderComponent
                 selectedItems: this.props.selectedItems
             }
     };
+    
+    arrayMove = (array, from, to) => 
+    {
+        array = array.slice();
+        array.splice(to < 0 ? array.length + to : to, 0, array.splice(from, 1)[0]);
+        return array;
+    };
 
     componentDidMount = () =>
     {
@@ -64,7 +70,7 @@ class Sortable extends ConditionalRenderComponent
     {
         this.setState(({ selectedItems }) => (
             {
-                selectedItems: arrayMove(selectedItems, oldIndex, newIndex),
+                selectedItems: this.arrayMove(selectedItems, oldIndex, newIndex),
             }), () => this.props.onChange(this.state.selectedItems))
     };
 
@@ -87,7 +93,7 @@ class Sortable extends ConditionalRenderComponent
 
     render()
     {
-        const { selectableItems, selectedItems, items } = this.state;
+        const { selectableItems, selectedItems } = this.state;
 
         return (
             <div className="row">
