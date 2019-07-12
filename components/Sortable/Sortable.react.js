@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ConditionalRenderComponent from '../ConditionalRenderComponent.react';
-import
-{
-    sortableContainer,
-    sortableElement,
-    sortableHandle,
-} from 'react-sortable-hoc';
+import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import Autocomplete from 'react-autocomplete';
 
 import './Sortable.less';
@@ -53,7 +48,7 @@ class Sortable extends ConditionalRenderComponent
             selectedItems: this.props.selectedItems
         }
     };
-    
+
     arrayMove = (arr, from, to) => 
     {
         let array = [...arr];
@@ -93,20 +88,22 @@ class Sortable extends ConditionalRenderComponent
                 .filter((val) => val.label !== selectedItem)
                 .sort((a, b) => a.label.localeCompare(b.label)
             ),
-            selectedItems: this.state.selectedItems.concat(this.state.selectableItems.filter((val) => val.label === selectedItem))
+            selectedItems: this.state.selectedItems.concat(
+                this.state.selectableItems.filter((val) => val.label === selectedItem)
+            )
         },
         () => this.props.onChange(this.state.selectedItems));
     }
 
-    handleDeleteItemClick = (event) =>
+    handleDeleteItemClick = (selectedItem) =>
     {
         this.setState({
             selectableItems: this.state.selectableItems.concat(
                 this.state.selectedItems
-                    .filter((val) => val.label === event))
+                    .filter((val) => val.label === selectedItem))
                     .sort((a, b) => a.label.localeCompare(b.label)
             ),
-            selectedItems: this.state.selectedItems.filter((val) => val.label != event)
+            selectedItems: this.state.selectedItems.filter((val) => val.label !== selectedItem)
         },
         () => this.props.onChange(this.state.selectedItems));
     }
