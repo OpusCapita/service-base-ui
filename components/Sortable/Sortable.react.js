@@ -51,7 +51,7 @@ class Sortable extends ConditionalRenderComponent
 
     arrayMove = (arr, from, to) => 
     {
-        let array = [...arr];
+        const array = [...arr];
 
         array.splice(
             to < 0 ? array.length + to : to,
