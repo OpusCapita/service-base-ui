@@ -31,8 +31,8 @@ class Sortable extends ConditionalRenderComponent
 
     static defaultProps =
     {
-        items: [],
-        selectedItems: [],
+        items: [  ],
+        selectedItems: [  ],
         onChange: () => null
     }
 
@@ -44,14 +44,14 @@ class Sortable extends ConditionalRenderComponent
         {
             value: '',
             items: this.props.items,
-            selectableItems: [],
+            selectableItems: [  ],
             selectedItems: this.props.selectedItems
         }
     };
 
     arrayMove = (arr, from, to) => 
     {
-        const array = [...arr];
+        const array = [ ...arr ];
 
         array.splice(
             to < 0 ? array.length + to : to,
@@ -92,7 +92,8 @@ class Sortable extends ConditionalRenderComponent
                 this.state.selectableItems.filter((val) => val.label === selectedItem)
             )
         },
-        () => this.props.onChange(this.state.selectedItems));
+        () => this.props.onChange(this.state.selectedItems)
+        );
     }
 
     handleDeleteItemClick = (selectedItem) =>
@@ -100,12 +101,13 @@ class Sortable extends ConditionalRenderComponent
         this.setState({
             selectableItems: this.state.selectableItems.concat(
                 this.state.selectedItems
-                    .filter((val) => val.label === selectedItem))
+                    .filter((val) => val.label === selectedItem.label))
                     .sort((a, b) => a.label.localeCompare(b.label)
             ),
-            selectedItems: this.state.selectedItems.filter((val) => val.label !== selectedItem)
+            selectedItems: this.state.selectedItems.filter((val) => val.label !== selectedItem.label)
         },
-        () => this.props.onChange(this.state.selectedItems));
+        () => this.props.onChange(this.state.selectedItems)
+        );
     }
 
     render()
@@ -152,7 +154,7 @@ class Sortable extends ConditionalRenderComponent
                         lockToContainerEdges={ true }
                     >
                         {
-                            selectedItems.map((value, index) => (
+                            selectedItems.map((item, index) => (
                                 <SortableItem
                                     key={ `item-${ index }` }
                                     index={ index }
@@ -161,11 +163,11 @@ class Sortable extends ConditionalRenderComponent
                                             <span
                                                 className="list-group-item-text"
                                             >
-                                                { value.label }
+                                                { item.label }
                                             </span>
                                             <span
                                                 className="list-group-item-button"
-                                                onClick={ () => this.handleDeleteItemClick(value.label) }
+                                                onClick={ () => this.handleDeleteItemClick(item) }
                                             >
                                                 &#10006;
                                             </span>
