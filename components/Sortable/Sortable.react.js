@@ -122,6 +122,7 @@ class Sortable extends ConditionalRenderComponent
                 <div className="col-md-12 Sortable">
                     <Autocomplete
                         items={ selectableItems }
+                        shouldItemRender={ (item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) > -1 }
                         getItemValue={ item => item.label }
                         renderInput={ (props) =>
                             <input
