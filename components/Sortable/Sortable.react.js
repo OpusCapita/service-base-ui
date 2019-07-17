@@ -105,8 +105,6 @@ class Sortable extends ConditionalRenderComponent
             return selectedItems.findIndex(selectedItem => selectedItem.value === item.value) < 0
         });
 
-        console.log(selectableItems);
-
         this.setState({
             selectedItems,
             selectableItems
