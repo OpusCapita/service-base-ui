@@ -82,15 +82,15 @@ class Sortable extends ConditionalRenderComponent
 
     handleAddItemClick = (selectedItem) =>
     {
+        const selectableItems = this.state.selectableItems.filter((item) => item.value !== selectedItem.value);
+
+        const selectedItems = this.state.selectedItems;
+        selectedItems.push(selectedItem);
+
         this.setState({
             value: '',
-            selectableItems: this.state.selectableItems
-                .filter((val) => val.label !== selectedItem)
-                .sort((a, b) => a.label.localeCompare(b.label)
-            ),
-            selectedItems: this.state.selectedItems.concat(
-                this.state.selectableItems.filter((val) => val.label === selectedItem)
-            )
+            selectableItems,
+            selectedItems
         },
         () => this.props.onChange(this.state.selectedItems)
         );
@@ -98,13 +98,18 @@ class Sortable extends ConditionalRenderComponent
 
     handleDeleteItemClick = (selectedItem) =>
     {
+        const selectedItems = this.state.selectedItems.filter((item) => item.value !== selectedItem.value)
+
+        const selectableItems = this.state.items.filter((item) =>
+        {
+            return selectedItems.findIndex(selectedItem => selectedItem.value === item.value) < 0
+        });
+
+        console.log(selectableItems);
+
         this.setState({
-            selectableItems: this.state.selectableItems.concat(
-                this.state.selectedItems
-                    .filter((val) => val.label === selectedItem.label))
-                    .sort((a, b) => a.label.localeCompare(b.label)
-            ),
-            selectedItems: this.state.selectedItems.filter((val) => val.label !== selectedItem.label)
+            selectedItems,
+            selectableItems
         },
         () => this.props.onChange(this.state.selectedItems)
         );
@@ -143,7 +148,7 @@ class Sortable extends ConditionalRenderComponent
                         }
                         value={ this.state.value }
                         onChange={ e => this.setState({ value: e.target.value }) }
-                        onSelect={ (event => this.handleAddItemClick(event)) }
+                        onSelect={ (val, item) => this.handleAddItemClick(item) }
                     />
 
                     <SortableContainer
