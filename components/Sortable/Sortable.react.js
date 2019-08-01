@@ -31,8 +31,6 @@ class Sortable extends ConditionalRenderComponent
 
     static defaultProps =
     {
-        items: [  ],
-        selectedItems: [  ],
         onChange: () => null
     }
 
@@ -43,7 +41,6 @@ class Sortable extends ConditionalRenderComponent
         this.state =
         {
             value: '',
-            items: this.props.items,
             selectableItems: [  ],
             selectedItems: this.props.selectedItems
         }
@@ -64,7 +61,7 @@ class Sortable extends ConditionalRenderComponent
     componentDidMount = () =>
     {
         this.setState({
-            selectableItems: this.state.items.filter(originalItem =>
+            selectableItems: this.props.items.filter(originalItem =>
                 !this.state.selectedItems.find(
                     selectedItem => originalItem.value === selectedItem.value
                 )
@@ -77,7 +74,8 @@ class Sortable extends ConditionalRenderComponent
         this.setState(({ selectedItems }) =>({
             selectedItems: this.arrayMove(selectedItems, oldIndex, newIndex),
         }),
-        () => this.props.onChange(this.state.selectedItems))
+            () => this.props.onChange(this.state.selectedItems, this.state.selectableItems)
+        )
     };
 
     handleAddItemClick = (selectedItem) =>
@@ -92,7 +90,7 @@ class Sortable extends ConditionalRenderComponent
             selectableItems,
             selectedItems
         },
-        () => this.props.onChange(this.state.selectedItems)
+        () => this.props.onChange(this.state.selectedItems, this.state.selectableItems)
         );
     }
 
@@ -100,7 +98,7 @@ class Sortable extends ConditionalRenderComponent
     {
         const selectedItems = this.state.selectedItems.filter((item) => item.value !== selectedItem.value)
 
-        const selectableItems = this.state.items.filter((item) =>
+        const selectableItems = this.props.items.filter((item) =>
         {
             return selectedItems.findIndex(selectedItem => selectedItem.value === item.value) < 0
         });
@@ -109,7 +107,7 @@ class Sortable extends ConditionalRenderComponent
             selectedItems,
             selectableItems
         },
-        () => this.props.onChange(this.state.selectedItems)
+        () => this.props.onChange(this.state.selectedItems, this.state.selectableItems)
         );
     }
 
