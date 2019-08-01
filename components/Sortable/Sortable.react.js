@@ -41,8 +41,7 @@ class Sortable extends ConditionalRenderComponent
         this.state =
         {
             value: '',
-            selectableItems: [  ],
-            selectedItems: this.props.selectedItems
+            selectableItems: [  ]
         }
     };
 
