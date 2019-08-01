@@ -92,10 +92,12 @@ class Test extends ContextComponent
     render()
     {
         const { items, selectedItems } = this.state;
+        
+        console.log(selectedItems);
 
         return(
             <div>
-                {<Sortable items={ items } selectedItems={ selectedItems } onChange={ (selectedItems, selectableItems) => console.log({selectedItems, selectableItems}) }/>}
+                {<Sortable items={ items } selectedItems={ selectedItems } onChange={ selectedItems => this.setState({selectedItems}) }/>}
             </div>
         );
     }
