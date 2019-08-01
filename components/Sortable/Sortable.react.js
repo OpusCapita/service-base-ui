@@ -24,13 +24,15 @@ class Sortable extends ConditionalRenderComponent
 {
     static propTypes =
     {
-        items: PropTypes.array.isRequired,
+        items: PropTypes.array,
         selectedItems: PropTypes.array,
-        onChange: PropTypes.func.isRequired
+        onChange: PropTypes.func
     }
 
     static defaultProps =
     {
+        items: [  ],
+        selectedItems: [  ],
         onChange: () => null
     }
 
