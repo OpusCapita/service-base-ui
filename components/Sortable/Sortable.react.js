@@ -62,7 +62,7 @@ class Sortable extends ConditionalRenderComponent
     {
         this.setState({
             selectableItems: this.props.items.filter(originalItem =>
-                !this.state.selectedItems.find(
+                !this.props.selectedItems.find(
                     selectedItem => originalItem.value === selectedItem.value
                 )
             )
@@ -71,32 +71,27 @@ class Sortable extends ConditionalRenderComponent
 
     onSortEnd = ({ oldIndex, newIndex }) =>
     {
-        this.setState(({ selectedItems }) =>({
-            selectedItems: this.arrayMove(selectedItems, oldIndex, newIndex),
-        }),
-            () => this.props.onChange(this.state.selectedItems, this.state.selectableItems)
-        )
+        this.props.onChange(this.arrayMove(this.props.selectedItems, oldIndex, newIndex));
     };
 
     handleAddItemClick = (selectedItem) =>
     {
         const selectableItems = this.state.selectableItems.filter((item) => item.value !== selectedItem.value);
 
-        const selectedItems = this.state.selectedItems;
+        const selectedItems = this.props.selectedItems;
         selectedItems.push(selectedItem);
 
         this.setState({
             value: '',
             selectableItems,
-            selectedItems
         },
-        () => this.props.onChange(this.state.selectedItems, this.state.selectableItems)
+        () => this.props.onChange(selectedItems)
         );
     }
 
     handleDeleteItemClick = (selectedItem) =>
     {
-        const selectedItems = this.state.selectedItems.filter((item) => item.value !== selectedItem.value)
+        const selectedItems = this.props.selectedItems.filter((item) => item.value !== selectedItem.value)
 
         const selectableItems = this.props.items.filter((item) =>
         {
@@ -104,16 +99,16 @@ class Sortable extends ConditionalRenderComponent
         });
 
         this.setState({
-            selectedItems,
             selectableItems
         },
-        () => this.props.onChange(this.state.selectedItems, this.state.selectableItems)
+        () => this.props.onChange(selectedItems)
         );
     }
 
     render()
     {
-        const { selectableItems, selectedItems } = this.state;
+        const { selectedItems } = this.props;
+        const { selectableItems } = this.state;
 
         return (
             <div className="row">
