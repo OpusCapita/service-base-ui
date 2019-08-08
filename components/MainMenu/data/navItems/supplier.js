@@ -21,6 +21,11 @@ export default
             "link": "/sales-order/receipt-advice/overview"
         },
         {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
             "key": "orderConfiguration",
             "label": "Order receiving configuration",
             "link": "/sales-order/configuration"
@@ -74,6 +79,16 @@ export default
             "key": "connections",
             "label": "Connections",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -108,6 +123,11 @@ export default
             "link": "/sales-order/receipt-advice/overview"
         },
         {
+            "key": "despatch-advice-overview",
+            "label": "Lieferavise",
+            "link": "/sales-order/despatch-advices/overview"
+        },
+        {
             "key": "orderConfiguration",
             "label": "Konfiguration Bestellannahme",
             "link": "/sales-order/configuration"
@@ -140,8 +160,7 @@ export default
         {
             "key": "upload",
             "label": "Upload",
-            "link": "/bnp/catalog-upload",
-            "target": "_blank"
+            "link": "/bnp/catalog-upload"
         }]
     },
     {
@@ -162,6 +181,16 @@ export default
             "key": "connections",
             "label": "Verbindungen",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitute-management",
+            "label": "Vertretungsmanager",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Abwesenheiten",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -189,6 +218,16 @@ export default
             "key": "overview",
             "label": "Översikt",
             "link": "/sales-order"
+        },
+        {
+            "key": "receipt-advice-overview",
+            "label": "Receipt advices",
+            "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
@@ -244,6 +283,16 @@ export default
             "key": "connections",
             "label": "Anslutningar",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -271,6 +320,16 @@ export default
             "key": "overview",
             "label": "Yhteenveto",
             "link": "/sales-order"
+        },
+        {
+            "key": "receipt-advice-overview",
+            "label": "Receipt advices",
+            "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
@@ -326,6 +385,16 @@ export default
             "key": "connections",
             "label": "Connections",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -359,6 +428,11 @@ export default
             "key": "receipt-advice-overview",
             "label": "Avvisi di ricezione",
             "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
@@ -414,6 +488,16 @@ export default
             "key": "connections",
             "label": "Collegamenti",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -446,6 +530,11 @@ export default
             "key": "receipt-advice-overview",
             "label": "Avis de réception",
             "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
@@ -501,6 +590,16 @@ export default
             "key": "connections",
             "label": "Connexions",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -533,6 +632,11 @@ export default
             "key": "receipt-advice-overview",
             "label": "Avisos de recibo",
             "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
@@ -588,6 +692,16 @@ export default
             "key": "connections",
             "label": "Conexiones",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -620,6 +734,11 @@ export default
             "key": "receipt-advice-overview",
             "label": "Recibos",
             "link": "/sales-order/receipt-advice/overview"
+        },
+        {
+            "key": "despatch-advice-overview",
+            "label": "Despatch advices",
+            "link": "/sales-order/despatch-advices/overview"
         },
         {
             "key": "orderConfiguration",
@@ -675,6 +794,16 @@ export default
             "key": "connections",
             "label": "Conexões",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitution-management",
+            "label": "Substitution management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {

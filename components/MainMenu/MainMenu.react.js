@@ -21,18 +21,6 @@ class MainMenu extends ConditionalRenderComponent
         onSearch : (term) => null
     }
 
-    invoiceResourceGroups = [
-        'invoice-approver',
-        'invoice-inspector',
-        'invoice-matcher'
-    ]
-
-    applications = [
-        '/bnp',
-        '/invoice',
-        '/tnt'
-    ]
-
     constructor(props, context)
     {
         super(props);
@@ -74,16 +62,19 @@ class MainMenu extends ConditionalRenderComponent
 
     componentDidMount()
     {
-        const { router, userData } = this.context;
+        const { router, userData, bouncer } = this.context;
         const location = router.location;
 
         this.loadNotifications();
         this.switchMenuItemByPath(location.basename + location.pathname);
 
-        const displayInvoiceIcon = this.invoiceResourceGroups.some(rg => userData.roles.includes(rg));
-        const displayTntIcon = this.context.bouncer.getUserResourceGroups('tnt').length > 0;
+        const displayInvoiceIcon = bouncer.getUserResourceGroups('invoice').length > 0;
+        const displayTntIcon = bouncer.getUserResourceGroups('tnt').length > 0;
+        const displayArchiveIcon = bouncer.getUserResourceGroups('archive').length > 0;
+        const tenantsForSupplierSwitch = bouncer.getUserTenants('supplier', '/api/suppliers');
+        const tenantsForCustomerSwitch = bouncer.getUserTenants('customer', '/api/customers');
 
-        this.setState({ displayInvoiceIcon, displayTntIcon });
+        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon, tenantsForSupplierSwitch, tenantsForCustomerSwitch });
 
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -141,10 +132,11 @@ class MainMenu extends ConditionalRenderComponent
     {
         e.preventDefault();
 
-        const manualName = this.context.i18n.getMessage('MainMenu.manualName');
+        const { supplierid, languageid } = this.context.userData;
+        const manualName = (supplierid ? "SupplierManual_" : "BuyerManual_") + languageid + ".pdf";
         const url = '/blob/public/api/opuscapita/files/public/docs/' + manualName;
 
-        document.location.replace(url);
+        window.open(url, '_blank');
     }
 
     handleLanguageChange(e)
@@ -361,14 +353,39 @@ class MainMenu extends ConditionalRenderComponent
             .catch(e => this.context.showNotification(e.message, 'error', 10));
     }
 
+    filterCustomerDropdown(value)
+    {
+        if(this.context.userData.roles.includes('admin'))
+            return true;
+
+        const { tenantsForCustomerSwitch } = this.state;
+
+        if(tenantsForCustomerSwitch.includes('*'))
+            return true;
+
+        return tenantsForCustomerSwitch.includes(value);
+    }
+
+    filterSupplierDropdown(value)
+    {
+        if(this.context.userData.roles.includes('admin'))
+            return true;
+
+        const { tenantsForSupplierSwitch } = this.state;
+
+        if(tenantsForSupplierSwitch.includes('*'))
+            return true;
+
+        return tenantsForSupplierSwitch.includes(value);
+    }
+
     render()
     {
         const { i18n, userData, userProfile, router } = this.context;
-        const { activeMenuItem, displayInvoiceIcon, displayTntIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
+        const { activeMenuItem, displayInvoiceIcon, displayTntIcon, displayArchiveIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
         const tenantId = userData.customerid ? `c_${userData.customerid}` : `s_${userData.supplierid}`;
         const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
         const profileImageLink = userProfile.profileImagePath ? `/blob/public/api/${tenantId}/files/${userProfile.profileImagePath}` : './static/avatar.jpg';
-        const activeAppIndex = this.applications.findIndex(val => router.location.pathname.startsWith(val));
 
         const actions = [ {
             label : i18n.getMessage('MainMenu.profile'),
@@ -378,7 +395,7 @@ class MainMenu extends ConditionalRenderComponent
             onClick : () => this.handleLogout()
         } ];
 
-        if(userData.roles.includes('admin'))
+        if(userData.roles.includes('admin') || userData.roles.includes('impersonator'))
         {
             actions.push({
                 label : i18n.getMessage('MainMenu.switchTenant'),
@@ -390,7 +407,7 @@ class MainMenu extends ConditionalRenderComponent
             label : 'Business Network',
             icon : this.getIcon('app_business_network_portal'),
             onClick : () => router.push('/bnp'),
-            id : 'app_business_network_portal'
+            id : '/bnp'
         }];
 
         if(displayInvoiceIcon)
@@ -399,7 +416,7 @@ class MainMenu extends ConditionalRenderComponent
                 label : 'Invoice',
                 icon : this.getIcon('app_invoice'),
                 onClick : () => router.push('/invoice'),
-                id : 'app_invoice'
+                id : '/invoice'
             });
         }
 
@@ -409,9 +426,21 @@ class MainMenu extends ConditionalRenderComponent
                 label : 'Track & Trace',
                 icon : this.getIcon('import_export'),
                 onClick : () => router.push('/tnt'),
-                id : 'tnt'
+                id : '/tnt'
             });
         }
+
+        if(displayArchiveIcon)
+        {
+            applicationItems.push({
+                label : 'Archive',
+                icon : this.getIcon('folder_open'),
+                onClick : () => router.push('/archive'),
+                id : '/archive'
+            });
+        }
+
+        const activeAppIndex = applicationItems.findIndex(item => router.location.basename.startsWith(item.id));
 
         return (
             <div>
@@ -434,7 +463,7 @@ class MainMenu extends ConditionalRenderComponent
                             title={i18n.getMessage('MainMenu.applications')}
                             hideDropdownArrow={true}>
                             <MenuDropdownGrid
-                                activeIndex={activeAppIndex > -1 ? activeAppIndex : 0}
+                                activeIndex={activeAppIndex}
                                 items={applicationItems}/>
                         </MenuIcon>
                     ), (
@@ -460,20 +489,41 @@ class MainMenu extends ConditionalRenderComponent
                             actions={actions}
                             bottomElement={(
                                 <div>
-                                    <div className="select-item">
-                                        <span><strong>{i18n.getMessage('MainMenu.support')}:</strong> +49 231 3967 350<br /><a href="mailto:customerservice.de@opuscapita.com">customerservice.de@opuscapita.com</a></span>
+                                    <div className="row horizontal-gap">
+                                        <div className="col-xs-3">
+                                            {i18n.getMessage('MainMenu.manual')}
+                                        </div>
+                                        <div className="col-xs-9">
+                                            <a href="#" onClick={e => this.handleManualClick(e)}>{i18n.getMessage('MainMenu.download')}</a>
+                                        </div>
                                     </div>
-                                    <div className="select-item">
-                                        <span><strong>{i18n.getMessage('MainMenu.manual')}:</strong> <a href="#" onClick={e => this.handleManualClick(e)}>{i18n.getMessage('MainMenu.download')}</a></span>
+
+                                    <div className="row">
+                                        <div className="col-xs-3">
+                                            {i18n.getMessage('MainMenu.support')}
+                                        </div>
+                                        <div className="col-xs-9">
+                                            {i18n.getMessage('MainMenu.support.PhoneNumber')}
+                                        </div>
+                                    </div>
+                                    <div className="row horizontal-gap">
+                                        <div className="col-xs-3"></div>
+                                        <div className="col-xs-9">
+                                            <a href={`mailto:${i18n.getMessage('MainMenu.support.EmailAddress')}`}>{i18n.getMessage('MainMenu.support.EmailAddress')}</a>
+                                        </div>
                                     </div>
 
                                     <div className="select-item">
                                         <span className="select-item-label">{i18n.getMessage('MainMenu.language')}</span>
                                         <MenuSelect className="select-item-select" defaultValue={userData.languageid} onChange={e => this.handleLanguageChange(e)}>
-                                            <option value="en">{i18n.getMessage('MainMenu.laguage.english')}</option>
-                                            <option value="de">{i18n.getMessage('MainMenu.laguage.german')}</option>
-                                            <option value="sv">{i18n.getMessage('MainMenu.laguage.swedish')}</option>
-                                            <option value="fi">{i18n.getMessage('MainMenu.laguage.finnish')}</option>
+                                            <option value="de">Deutsch</option>
+                                            <option value="en">English</option>
+                                            <option value="es">Español</option>
+                                            <option value="fr">Français</option>
+                                            <option value="it">Italiano</option>
+                                            <option value="pt">Português</option>
+                                            <option value="fi">Suomi</option>
+                                            <option value="sv">Svenska</option>
                                         </MenuSelect>
                                     </div>
                                 </div>
@@ -500,7 +550,7 @@ class MainMenu extends ConditionalRenderComponent
                             <div className="col-lg-12">
                                 { tenantSwitchMode === 'customer' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isCustomer)} /> }
                                 { tenantSwitchMode === 'supplier' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isSupplier)} /> }
-                            </div>
+                         </div>
                         </div>
                     </div>
                 </ModalDialog>

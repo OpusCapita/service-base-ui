@@ -52,9 +52,24 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Connections",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitute-management",
+            "label": "Substitute management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -119,9 +134,24 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Berechtigungen",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Verbindungen",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitute-management",
+            "label": "Vertretungsmanager",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Abwesenheiten",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -187,9 +217,24 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Collegamenti",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitute-management",
+            "label": "Substitute management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -254,9 +299,24 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Connexions",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitute-management",
+            "label": "Substitute management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -321,9 +381,24 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Conexiones",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitute-management",
+            "label": "Substitute management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {
@@ -388,9 +463,24 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Conexões",
             "link": "/bnp/connections"
+        },
+        {
+            "key": "substitute-management",
+            "label": "Substitute management",
+            "link": "/bnp/substituteUserRelations"
+        },
+        {
+            "key": "absences",
+            "label": "Absences",
+            "link": "/bnp/substitutionPeriods"
         }]
     },
     {

@@ -69,7 +69,7 @@ class AjaxExtender
                 {
                     let err;
 
-                    if(target.status >= 500)
+                    if(target.status >= 400)
                     {
                         let errorMessage = target.response;
 
@@ -79,6 +79,7 @@ class AjaxExtender
                         err = new Error(errorMessage);
                         err.target = target;
                         err.requestId = requestId;
+                        err.status = target.status;
 
                         if(target.getResponseHeader('content-type').indexOf('application/json') !== -1)
                             err.json = JSON.parse(target.response);

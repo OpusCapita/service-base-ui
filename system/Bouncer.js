@@ -58,7 +58,14 @@ class Bouncer
 
             if(resourceGroupName === '*')
             {
-                foundResources = [ '*' ];
+                foundResources.push({
+                    type: [ "rest", "ui" ],
+                    resourceId: '^/',
+                    actions: [ 'create', 'view', 'edit', 'delete', 'head', 'options', 'patch' ],
+                    requestFields: { allow: null, remove: null },
+                    responseFields: { allow: null, remove: null },
+                    roleIds : [ permission.role ]
+                });
                 break;
             }
             else
@@ -69,7 +76,7 @@ class Bouncer
                 if(resources)
                 {
                     const filtered = resources.filter(r => url.match(new RegExp(this.replacePlaceholders(r.resourceId, this.userData), 'i')) && r.actions.indexOf(action) > -1)
-                            .map(r => ({ ...r, roleId : permission.role }));
+                            .map(r => ({ ...r, roleIds : [ permission.role ] }));
 
                     foundResources = foundResources.concat(filtered);
                 }
@@ -101,13 +108,13 @@ class Bouncer
         }
         else if(resource)
         {
-            const roleId = resource.roleId;
-            const roleConstraints = roleId && Array.isArray(userData.xroles) && userData.xroles.filter(r => r.role === roleId).map(r => r.tenants);
+            const roleIds = resource.roleIds;
+            const roleConstraints = roleIds && Array.isArray(userData.xroles) && userData.xroles.filter(r => roleIds.includes(r.role)).map(r => r.tenants);
 
             if(userData.roles && userData.roles.indexOf('admin') > -1)
                 result = [ '*' ];
             else if(Array.isArray(roleConstraints) && roleConstraints.length > 0)
-                result = [ ...roleConstraints[0] ];
+                result = this.mergeRoleConstraints(roleConstraints);
             else if(userData.supplierid)
                 result = [ `s_${userData.supplierid}` ];
             else if(userData.customerid)
@@ -117,6 +124,26 @@ class Bouncer
         this.setCachedValue(cacheKey, result);
 
         return result;
+    }
+
+    mergeRoleConstraints(roleConstraints)
+    {
+        let resultArray = [ ];
+
+        for(const roles of roleConstraints)
+        {
+            if(roles.includes( '*' ))
+            {
+                resultArray = [ '*' ];
+                break;
+            }
+            else
+            {
+                resultArray = resultArray.concat(roles);
+            }
+        }
+
+        return [...new Set(resultArray)]
     }
 
     getUserResourceGroups(serviceName = null)
@@ -134,17 +161,17 @@ class Bouncer
         const prefixLength = serviceName.length + 1;
         const permissions = this.permissions.filter(p => p.resourceGroupId.startsWith(serviceName));
         let foundResourceGroups = new Set();
-        
+
         for(const permission of permissions)
         {
             const resourceGroupName = permission.resourceGroupId.substring(prefixLength);
-            
+
             foundResourceGroups.add(resourceGroupName);
 
             if(resourceGroupName === '*')
                 break;
         }
-        
+
         foundResourceGroups = [ ...foundResourceGroups ];
 
         this.setCachedValue(cacheKey, foundResourceGroups);
@@ -169,7 +196,7 @@ class Bouncer
         else
         {
             const permissions = (await this.acl.getPermissions(roles)).reduce((all, more) => all.concat(more), [ ]);
-            
+
             this.setCachedValue(cacheKey, permissions);
 
             return permissions;
@@ -212,18 +239,23 @@ class Bouncer
             return { };
 
         const result = extend(true, { }, ...resources);
+        result.roleIds = [ ];
 
         for(const res of resources)
         {
-            if(!res.requestFields.allow)
+            if(!res.requestFields || !res.requestFields.allow)
                 delete result.requestFields.allow;
-            if(!res.requestFields.remove)
+            if(!res.requestFields || !res.requestFields.remove)
                 delete result.requestFields.remove;
-            if(!res.responseFields.allow)
+            if(!res.responseFields || !res.responseFields.allow)
                 delete result.responseFields.allow;
-            if(!res.responseFields.remove)
+            if(!res.responseFields || !res.responseFields.remove)
                 delete result.responseFields.remove;
+
+            result.roleIds = result.roleIds.concat(res.roleIds);
         }
+
+        result.roleIds = [ ...new Set(result.roleIds) ];
 
         return result;
     }

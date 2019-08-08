@@ -16,6 +16,7 @@ class ModalDialog extends ContextComponent
         allowClose: PropTypes.bool.isRequired,
         showFooter: PropTypes.bool.isRequired,
         onButtonClick : PropTypes.func.isRequired,
+        onClose : PropTypes.func.isRequired,
     }
 
     static defaultProps = {
@@ -28,6 +29,7 @@ class ModalDialog extends ContextComponent
         allowClose : true,
         showFooter: true,
         onButtonClick : () => { },
+        onClose : () => { },
     }
 
     static sizes = {
@@ -46,7 +48,13 @@ class ModalDialog extends ContextComponent
 
     componentWillReceiveProps(nextProps)
     {
-        this.setState(extend(false, { }, nextProps, this.manualProps));
+        this.setState(extend(false, { }, nextProps, this.manualProps), () =>
+        {
+            if(this.state.visible)
+                this.show();
+            else
+                this.hide();
+        });
     }
 
     componentDidMount()
@@ -79,11 +87,27 @@ class ModalDialog extends ContextComponent
             this.manualProps.onButtonClick = onButtonClick;
         if(buttonsDisabled)
             this.manualProps.buttonsDisabled = buttonsDisabled;
+        
+        this.manualProps.visible = true;
 
         if(Object.keys(this.manualProps).length)
             this.setState(extend(false, { }, this.state, this.manualProps));
 
-        $(this.dialog).modal('show');
+        $(this.dialog).modal({
+            show: true,
+            backdrop: this.props.allowClose ? true : 'static',
+        })
+        .on('hidden.bs.modal', () =>
+        {
+            const closeResult = this.state.onClose();
+
+            if(closeResult && closeResult.then)
+                closeResult.then(result => result !== false && this.hide());
+            else if(closeResult !== false)
+                this.hide();
+            else
+                this.show();
+        });
     }
 
     reload()
@@ -93,7 +117,8 @@ class ModalDialog extends ContextComponent
 
     hide()
     {
-        $(this.dialog).modal('hide');
+        delete this.manualProps.visible;
+        this.setState({ visible : false }, () => $(this.dialog).modal('hide'));
     }
 
     setButtons(buttons)

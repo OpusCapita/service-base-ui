@@ -15,7 +15,7 @@
     position: relative;
     height: 40px;
     line-height: 40px;
-    font-size: 20px;
+    font-size: 16px;
     padding-left: 10px;
     z-index: 20;
     margin-bottom: 0;
@@ -39,15 +39,16 @@
 .help-box .header-check:checked + .header {
     background: #eee;
 }
+
 .help-box .header-check:checked + .header.multiple:after {
     content: "▲";
     height: 40px;
     line-height: 40px;
-    font-size: 20px;
+    font-size: 14px;
     color: #444;
     float: right;
     margin-right: 10px;
-    transform: rotate(-180deg);
+    transform: rotate(180deg);
     -webkit-transition: transform 0.2s ease-in-out;
     -moz-transition: transform 0.2s ease-in-out;
     -ms-transition: transform 0.2s ease-in-out;
@@ -57,7 +58,9 @@
 .help-box .header-check + .header.multiple:after {
     content: "▲";
     float: right;
+    font-size: 14px;
     margin-right: 10px;
+    transform: rotate(90deg);
     -webkit-transition: transform 0.2s ease-in-out;
     -moz-transition: transform 0.2s ease-in-out;
     -ms-transition: transform 0.2s ease-in-out;
@@ -89,4 +92,3 @@
     -o-transition: max-height 0.5s ease-in-out, color 0.5s linear;
     transition: max-height 0.5s ease-in-out, color 0.5s linear;
 }
-
