@@ -548,8 +548,8 @@ class MainMenu extends ConditionalRenderComponent
                         </div>
                         <div className="row">
                             <div className="col-lg-12">
-                                { tenantSwitchMode === 'customer' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isCustomer)} /> }
-                                { tenantSwitchMode === 'supplier' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isSupplier)} /> }
+                                { tenantSwitchMode === 'customer' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isCustomer)} value={tenantSwitchValue} /> }
+                                { tenantSwitchMode === 'supplier' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isSupplier)} value={tenantSwitchValue} /> }
                          </div>
                         </div>
                     </div>
