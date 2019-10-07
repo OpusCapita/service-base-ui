@@ -67,6 +67,21 @@ export default
             "key": "catalogs",
             "label": "Catalogs",
             "link": "/bnp/catalogs"
+        },
+        {
+            "key": "deliveryconfigtemplates",
+            "label": "Delivery Config Templates",
+            "link": "/bnp/deliveryconfigtemplates"
+        },
+        {
+            "key": "businesschannels",
+            "label": "Business Channels",
+            "link": "/bnp/businesschannels"
+        },
+        {
+            "key": "businesschannelgroups",
+            "label": "Business Channel Groups",
+            "link": "/bnp/businesschannelgroups"
         }]
     }],
 
