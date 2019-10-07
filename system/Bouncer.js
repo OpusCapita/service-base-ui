@@ -126,6 +126,46 @@ class Bouncer
         return result;
     }
 
+    getUserBusinessPartnerIds(serviceName = null, url = null, method = 'GET')
+    {
+        const userData = this.userData;
+        const userId = userData && userData.id;
+        const cacheKey = `service-base-ui#getUserBusinessPartnerIds.${serviceName}${url}:${userId}:${method}`;
+        const cached = this.getCachedValue(cacheKey);
+
+        if(cached)
+            return cached;
+
+        const resource = this.mergeResources(this.findResources(serviceName, url, method));
+
+        let result = [ ];
+
+        if(resource === '*')
+        {
+            result = [ '*' ];
+        }
+        else if(resource)
+        {
+            const roleIds = resource.roleIds;
+            const roleConstraints = roleIds && Array.isArray(userData.xroles) && userData.xroles.filter(r => roleIds.includes(r.role)).map(r => r.businessPartners);
+
+            if(userData.roles && userData.roles.indexOf('admin') > -1)
+                result = [ '*' ];
+            else if(Array.isArray(roleConstraints) && roleConstraints.length > 0)
+                result = this.mergeRoleConstraints(roleConstraints);
+            else if(userData.supplierid)
+                result = [ `s_${userData.supplierid}` ];
+            else if(userData.customerid)
+                result = [ `c_${userData.customerid}` ];
+            else if(userData.businesspartner && userData.businesspartner.id)
+                result = [ userData.businesspartner.id ];
+        }
+
+        this.setCachedValue(cacheKey, result);
+
+        return result;
+    }
+
     mergeRoleConstraints(roleConstraints)
     {
         let resultArray = [ ];
@@ -266,11 +306,19 @@ class Bouncer
         const tenantId = (userData.supplierid && 's_' + userData.supplierid)
             || (userData.customerid && 'c_' + userData.customerid);
 
-        return resourceId.replace(/\${_current_tenant_id}/g, tenantId)
-            .replace(/\${_current_user_id}/g, userData.id)
-            .replace(/\${_current_customer_id}/g, userData.customerid)
-            .replace(/\${_current_supplier_id}/g, userData.supplierid);
+        return resourceId.replace(/\${_current_tenant_id}/g, this.escapeRegExp(tenantId)) // TODO: Remove this after full migration to Business Partner
+            .replace(/\${_current_user_id}/g, this.escapeRegExp(userData.id))
+            .replace(/\${_current_customer_id}/g, this.escapeRegExp(userData.customerid)) // TODO: Remove this after full migration to Business Partner
+            .replace(/\${_current_supplier_id}/g, this.escapeRegExp(userData.supplierid)) // TODO: Remove this after full migration to Business Partner
+            .replace(/\${_current_business_partner_id}/g, this.escapeRegExp(userData.businesspartner && userData.businesspartner.id));
+
     }
+
+    escapeRegExp(value)
+    {
+        return value && value.replace(/[.*+?^${}()|[\]\\]/g, '\$&');
+    }
+
 
     setCachedValue(key, value)
     {

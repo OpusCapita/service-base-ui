@@ -71,10 +71,8 @@ class MainMenu extends ConditionalRenderComponent
         const displayInvoiceIcon = bouncer.getUserResourceGroups('invoice').length > 0;
         const displayTntIcon = bouncer.getUserResourceGroups('tnt').length > 0;
         const displayArchiveIcon = bouncer.getUserResourceGroups('archive').length > 0;
-        const tenantsForSupplierSwitch = bouncer.getUserTenants('supplier', '/api/suppliers');
-        const tenantsForCustomerSwitch = bouncer.getUserTenants('customer', '/api/customers');
-
-        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon, tenantsForSupplierSwitch, tenantsForCustomerSwitch });
+        
+        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon });
 
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -184,14 +182,14 @@ class MainMenu extends ConditionalRenderComponent
 
     getNavItems()
     {
-        const { supplierid, customerid, roles } = this.context.userData;
+        const { businessPartner, roles } = this.context.userData;
         const { locale, environment } = this.context;
 
         let items = [ ];
 
-        if(supplierid)
+        if(businessPartner.issupplier)
             items = navItems.supplier[locale] || navItems.supplier['en'];
-        else if(customerid)
+        else if(businessPartner.iscustomer)
             items = navItems.customer[locale] || navItems.customer['en'];
 
         if(roles && roles.indexOf('admin') > -1)
@@ -351,32 +349,6 @@ class MainMenu extends ConditionalRenderComponent
         Promise.all(items.map(item => this.notificationsApi.acknowledgeNotification(item.id)))
             .then(() => this.loadNotifications())
             .catch(e => this.context.showNotification(e.message, 'error', 10));
-    }
-
-    filterCustomerDropdown(value)
-    {
-        if(this.context.userData.roles.includes('admin'))
-            return true;
-
-        const { tenantsForCustomerSwitch } = this.state;
-
-        if(tenantsForCustomerSwitch.includes('*'))
-            return true;
-
-        return tenantsForCustomerSwitch.includes(value);
-    }
-
-    filterSupplierDropdown(value)
-    {
-        if(this.context.userData.roles.includes('admin'))
-            return true;
-
-        const { tenantsForSupplierSwitch } = this.state;
-
-        if(tenantsForSupplierSwitch.includes('*'))
-            return true;
-
-        return tenantsForSupplierSwitch.includes(value);
     }
 
     render()
