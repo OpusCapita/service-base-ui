@@ -1,10 +1,11 @@
-FROM node:8-alpine
+FROM node:8-stretch-slim
 MAINTAINER kwierchris
 
-RUN apk add --no-cache curl
-
 WORKDIR /home/node/service-base-ui
-COPY . .
+
+RUN chown -R node:node /home/node
+
+COPY --chown=node:node . .
 
 ENV NODE_ENV=development NODE_PATH=/home/node/node_modules PATH=${PATH}:${NODE_PATH}/.bin
 RUN npm install && npm cache clean --force
