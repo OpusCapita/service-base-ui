@@ -71,8 +71,9 @@ class MainMenu extends ConditionalRenderComponent
         const displayInvoiceIcon = bouncer.getUserResourceGroups('invoice').length > 0;
         const displayTntIcon = bouncer.getUserResourceGroups('tnt').length > 0;
         const displayArchiveIcon = bouncer.getUserResourceGroups('archive').length > 0;
+        const displayReportingIcon = bouncer.getUserResourceGroups('reporting').length > 0;
         
-        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon });
+        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon, displayReportingIcon });
 
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -354,7 +355,7 @@ class MainMenu extends ConditionalRenderComponent
     render()
     {
         const { i18n, userData, userProfile, router } = this.context;
-        const { activeMenuItem, displayInvoiceIcon, displayTntIcon, displayArchiveIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
+        const { activeMenuItem, displayInvoiceIcon, displayTntIcon, displayArchiveIcon, displayReportingIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
         const tenantId = userData.customerid ? `c_${userData.customerid}` : `s_${userData.supplierid}`;
         const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
         const profileImageLink = userProfile.profileImagePath ? `/blob/public/api/${tenantId}/files/${userProfile.profileImagePath}` : './static/avatar.jpg';
@@ -409,6 +410,16 @@ class MainMenu extends ConditionalRenderComponent
                 icon : this.getIcon('folder_open'),
                 onClick : () => router.push('/archive'),
                 id : '/archive'
+            });
+        }
+
+        if(displayReportingIcon)
+        {
+            applicationItems.push({
+                label : 'Reporting',
+                icon : this.getIcon('show_chart'),
+                onClick : () => router.push('/reporting'),
+                id : '/reporting'
             });
         }
 
