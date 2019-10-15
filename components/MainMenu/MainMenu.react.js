@@ -183,14 +183,14 @@ class MainMenu extends ConditionalRenderComponent
 
     getNavItems()
     {
-        const { businessPartner, roles } = this.context.userData;
+        const { businesspartner, roles } = this.context.userData;
         const { locale, environment } = this.context;
 
         let items = [ ];
 
-        if(businessPartner.issupplier)
+        if(businesspartner.issupplier)
             items = navItems.supplier[locale] || navItems.supplier['en'];
-        else if(businessPartner.iscustomer)
+        else if(businesspartner.iscustomer)
             items = navItems.customer[locale] || navItems.customer['en'];
 
         if(roles && roles.indexOf('admin') > -1)
