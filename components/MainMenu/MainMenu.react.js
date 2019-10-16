@@ -417,7 +417,7 @@ class MainMenu extends ConditionalRenderComponent
         {
             applicationItems.push({
                 label : 'Reporting',
-                icon : this.getIcon('show_chart'),
+                icon : this.getIcon('reporting_service'),
                 onClick : () => router.push('/reporting'),
                 id : '/reporting'
             });
