@@ -183,14 +183,14 @@ class MainMenu extends ConditionalRenderComponent
 
     getNavItems()
     {
-        const { businesspartner, roles } = this.context.userData;
+        const { businesspartner, supplierid, customerid, roles } = this.context.userData;
         const { locale, environment } = this.context;
 
         let items = [ ];
 
-        if(businesspartner.issupplier)
+        if((businesspartner && businesspartner.issupplier) || supplierid)
             items = navItems.supplier[locale] || navItems.supplier['en'];
-        else if(businesspartner.iscustomer)
+        else if((businesspartner && businesspartner.iscustomer) || customerid)
             items = navItems.customer[locale] || navItems.customer['en'];
 
         if(roles && roles.indexOf('admin') > -1)
@@ -251,7 +251,7 @@ class MainMenu extends ConditionalRenderComponent
 
             return true;
         }
-
+        
         const mapItem = (item) =>
         {
             const result = { children : item.label };
@@ -278,7 +278,7 @@ class MainMenu extends ConditionalRenderComponent
 
             return result;
         }
-
+        
         return this.getNavItems().filter(filterItem).map(mapItem).filter(item => item.href || item.onClick || item.target || item.subItems);
     }
 
