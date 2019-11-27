@@ -69,10 +69,14 @@ class ModalDialog extends ContextComponent
 
         const clickResult = this.state.onButtonClick(type);
 
-        if(clickResult && clickResult.then)
-            clickResult.then(result => result !== false && this.hide());
-        else if(clickResult !== false)
-            this.hide();
+        // Workaround for possible race conditions if setState is called inside the callback above.
+        setTimeout(() =>
+        {
+            if(clickResult && clickResult.then)
+                clickResult.then(result => result !== false && this.hide());
+            else if(clickResult !== false)
+                this.hide();
+        }, 100);
     }
 
     show(title, message, onButtonClick, buttons, buttonsDisabled)
@@ -101,12 +105,16 @@ class ModalDialog extends ContextComponent
         {
             const closeResult = this.state.onClose();
 
-            if(closeResult && closeResult.then)
-                closeResult.then(result => result !== false && this.hide());
-            else if(closeResult !== false)
-                this.hide();
-            else
-                this.show();
+            // Workaround for possible race conditions if setState is called inside the callback above.
+            setTimeout(() =>
+            {
+                if(closeResult && closeResult.then)
+                    closeResult.then(result => result !== false && this.hide());
+                else if(closeResult !== false)
+                    this.hide();
+                else
+                    this.show();
+            }, 100);
         });
     }
 
