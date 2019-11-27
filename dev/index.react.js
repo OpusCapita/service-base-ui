@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Route } from 'react-router';
 import { ServiceLayout } from '../containers';
-import { ContextComponent, LogInForm, DatePicker } from '../components';
+import { ContextComponent, LogInForm, DatePicker, ModalDialog } from '../components';
 
 class Test extends ContextComponent
 {
@@ -24,7 +24,11 @@ class Test extends ContextComponent
     {
         return(
             <div>
-                <DatePicker showIcon={false} />
+                <ModalDialog
+                    onClose={() => this.setState()}
+                    ref={ref => this.modal = ref}
+                />
+                <button onClick={() => this.modal.show()}>Open modal</button>
             </div>
         );
     }

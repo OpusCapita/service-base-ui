@@ -48,12 +48,17 @@ class ModalDialog extends ContextComponent
 
     componentWillReceiveProps(nextProps)
     {
-        this.setState(extend(false, { }, nextProps, this.manualProps), () =>
+        const newValues = extend(false, { }, nextProps, this.manualProps);
+
+        this.setState(newValues, () =>
         {
-            if(this.state.visible)
-                this.show();
-            else
-                this.hide();
+            if(this.state.visible !== newValues.visible)
+            {
+                if(this.state.visible)
+                    this.show();
+                else
+                    this.hide();
+            }
         });
     }
 
@@ -63,20 +68,12 @@ class ModalDialog extends ContextComponent
             this.show();
     }
 
-    handleButtonClick = (e, type) =>
+    handleButtonClick = async (e, type) =>
     {
-        e.preventDefault();
+        const clickResult = await this.state.onButtonClick(type);
 
-        const clickResult = this.state.onButtonClick(type);
-
-        // Workaround for possible race conditions if setState is called inside the callback above.
-        setTimeout(() =>
-        {
-            if(clickResult && clickResult.then)
-                clickResult.then(result => result !== false && this.hide());
-            else if(clickResult !== false)
-                this.hide();
-        }, 100);
+        if(clickResult !== false)
+            this.hide();
     }
 
     show(title, message, onButtonClick, buttons, buttonsDisabled)
@@ -101,20 +98,19 @@ class ModalDialog extends ContextComponent
             show: true,
             backdrop: this.props.allowClose ? true : 'static',
         })
-        .on('hidden.bs.modal', () =>
+        .on('hide.bs.modal', async (e) =>
         {
-            const closeResult = this.state.onClose();
+            const closeResult = await this.state.onClose();
 
-            // Workaround for possible race conditions if setState is called inside the callback above.
-            setTimeout(() =>
+            if(closeResult === false)
             {
-                if(closeResult && closeResult.then)
-                    closeResult.then(result => result !== false && this.hide());
-                else if(closeResult !== false)
-                    this.hide();
-                else
-                    this.show();
-            }, 100);
+                e.preventDefault();
+                this.setState({ visible : true });
+            }
+            else
+            {
+                this.setState({ visible : false });
+            }
         });
     }
 
