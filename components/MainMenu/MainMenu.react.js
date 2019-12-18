@@ -53,11 +53,8 @@ class MainMenu extends ConditionalRenderComponent
         this.logoImage = 'data:image/svg+xml,' + encodeURIComponent(require('!!raw-loader!./img/oc-logo-white.svg'));
         this.searchTimer = new ResetTimer();
 
-        this.BusinessPartnerDropdown = context.loadComponent({
-            serviceName: 'business-partner',
-            moduleName: 'business-partner-autocomplete',
-            jsFileName: 'business-partner-autocomplete-bundle'
-        });
+        this.CustomerDropdown = context.loadComponent({ serviceName : 'customer', moduleName : 'customer-autocomplete', jsFileName : 'autocomplete-bundle' });
+        this.SupplierDropdown = context.loadComponent({ serviceName : 'supplier', moduleName : 'supplier-autocomplete', jsFileName : 'autocomplete-bundle' });
     }
 
     componentDidMount()
@@ -352,6 +349,32 @@ class MainMenu extends ConditionalRenderComponent
             .catch(e => this.context.showNotification(e.message, 'error', 10));
     }
 
+    filterCustomerDropdown(value)
+    {
+        if(this.context.userData.roles.includes('admin'))
+            return true;
+
+        const { tenantsForCustomerSwitch } = this.state;
+
+        if(tenantsForCustomerSwitch.includes('*'))
+            return true;
+
+        return tenantsForCustomerSwitch.includes(value);
+    }
+
+    filterSupplierDropdown(value)
+    {
+        if(this.context.userData.roles.includes('admin'))
+            return true;
+
+        const { tenantsForSupplierSwitch } = this.state;
+
+        if(tenantsForSupplierSwitch.includes('*'))
+            return true;
+
+        return tenantsForSupplierSwitch.includes(value);
+    }
+
     render()
     {
         const { i18n, userData, userProfile, router } = this.context;
@@ -531,8 +554,8 @@ class MainMenu extends ConditionalRenderComponent
                         </div>
                         <div className="row">
                             <div className="col-lg-12">
-                                { tenantSwitchMode === 'customer' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isCustomer)} /> }
-                                { tenantSwitchMode === 'supplier' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isSupplier)} /> }
+                            { tenantSwitchMode === 'customer' && <this.CustomerDropdown onFilter={value => this.filterCustomerDropdown(`c_${value.id}`)} onChange={value => this.setState({ tenantSwitchValue : value })} /> }
+                            { tenantSwitchMode === 'supplier' && <this.SupplierDropdown onFilter={value => this.filterSupplierDropdown(`s_${value.id}`)} onChange={value => this.setState({ tenantSwitchValue : value })} /> }
                          </div>
                         </div>
                     </div>
