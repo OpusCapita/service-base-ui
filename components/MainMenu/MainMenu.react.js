@@ -191,7 +191,7 @@ class MainMenu extends ConditionalRenderComponent
             items = navItems.customer[locale] || navItems.customer['en'];
 
         if(roles && roles.indexOf('admin') > -1)
-            items = this.recursiveMergeNavItems(items, navItems.admin[locale] || navItems.admin['en'])
+            items = this.recursiveMergeNavItems(navItems.admin[locale] || navItems.admin['en'], items)
 
         return items.filter(item => !item.environments || item.environments.includes(environment));
     }
