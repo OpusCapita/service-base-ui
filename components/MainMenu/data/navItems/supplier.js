@@ -635,7 +635,7 @@ export default
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Avisos de envío",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
