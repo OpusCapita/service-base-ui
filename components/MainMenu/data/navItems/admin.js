@@ -72,6 +72,16 @@ export default
             "key": "reporting",
             "label": "Reporting",
             "link": "/reporting/config"
+        },
+        {
+            "key": "service-profile",
+            "label": "Service profile",
+            "link": "/routing/service-profile"
+        },
+        {
+            "key": "product-profile",
+            "label": "Product profile",
+            "link": "/routing/product-profile"
         }]
     }],
 
@@ -147,6 +157,16 @@ export default
             "key": "reporting",
             "label": "Reporting",
             "link": "/reporting/config"
+        },
+        {
+            "key": "service-profile",
+            "label": "Service Profile",
+            "link": "/routing/service-profile"
+        },
+        {
+            "key": "product-profile",
+            "label": "Produkt Profile",
+            "link": "/routing/product-profile"
         }]
     }]
 }
