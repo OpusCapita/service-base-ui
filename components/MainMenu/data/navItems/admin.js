@@ -75,12 +75,12 @@ export default
         },
         {
             "key": "service-profile",
-            "label": "Service Profile",
+            "label": "Service profile",
             "link": "/routing/service-profile"
         },
         {
             "key": "product-profile",
-            "label": "Product Profile",
+            "label": "Product profile",
             "link": "/routing/product-profile"
         }]
     }],
@@ -165,7 +165,7 @@ export default
         },
         {
             "key": "product-profile",
-            "label": "Product Profile",
+            "label": "Produkt Profile",
             "link": "/routing/product-profile"
         }]
     }]
