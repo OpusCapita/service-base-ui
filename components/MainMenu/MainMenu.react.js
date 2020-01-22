@@ -69,8 +69,10 @@ class MainMenu extends ConditionalRenderComponent
         const displayTntIcon = bouncer.getUserResourceGroups('tnt').length > 0;
         const displayArchiveIcon = bouncer.getUserResourceGroups('archive').length > 0;
         const displayReportingIcon = bouncer.getUserResourceGroups('reporting').length > 0;
-        
-        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon, displayReportingIcon });
+        const tenantsForSupplierSwitch = bouncer.getUserTenants('supplier', '/api/suppliers');
+        const tenantsForCustomerSwitch = bouncer.getUserTenants('customer', '/api/customers');
+
+        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon, displayReportingIcon, tenantsForSupplierSwitch, tenantsForCustomerSwitch });
 
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -248,7 +250,7 @@ class MainMenu extends ConditionalRenderComponent
 
             return true;
         }
-        
+
         const mapItem = (item) =>
         {
             const result = { children : item.label };
@@ -275,7 +277,7 @@ class MainMenu extends ConditionalRenderComponent
 
             return result;
         }
-        
+
         return this.getNavItems().filter(filterItem).map(mapItem).filter(item => item.href || item.onClick || item.target || item.subItems);
     }
 
