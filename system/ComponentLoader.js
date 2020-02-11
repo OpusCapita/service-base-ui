@@ -124,7 +124,7 @@ class ComponentLoader
                     await ScriptLoader.load(vendorUrl, false);
 
                     if(!window[moduleName])
-                        await new Promise(resolve => setTimeout(resolve, 250));
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                 }
                 catch(e)
                 { }
