@@ -115,8 +115,20 @@ class ComponentLoader
 
         const promise = Promise.resolve((async () =>
         {
-            if(!window[`webpackJsonp${serviceName}__name_`])
-                await ScriptLoader.load(vendorUrl, false).catch(e => null);
+            const moduleName = `webpackJsonp${serviceName}__name_`;
+
+            if(!window[moduleName])
+            {
+                try
+                {
+                    await ScriptLoader.load(vendorUrl, false);
+
+                    if(!window[moduleName])
+                        await new Promise(resolve => setTimeout(resolve, 250));
+                }
+                catch(e)
+                { }
+            }
 
             await ScriptLoader.load(url);
 
