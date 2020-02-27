@@ -71,10 +71,9 @@ class MainMenu extends ConditionalRenderComponent
         const displayInvoiceIcon = bouncer.getUserResourceGroups('invoice').length > 0;
         const displayTntIcon = bouncer.getUserResourceGroups('tnt').length > 0;
         const displayArchiveIcon = bouncer.getUserResourceGroups('archive').length > 0;
-        const tenantsForSupplierSwitch = bouncer.getUserTenants('supplier', '/api/suppliers');
-        const tenantsForCustomerSwitch = bouncer.getUserTenants('customer', '/api/customers');
-
-        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon, tenantsForSupplierSwitch, tenantsForCustomerSwitch });
+        const displayReportingIcon = bouncer.getUserResourceGroups('reporting').length > 0;
+        
+        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon, displayReportingIcon });
 
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -184,14 +183,14 @@ class MainMenu extends ConditionalRenderComponent
 
     getNavItems()
     {
-        const { supplierid, customerid, roles } = this.context.userData;
+        const { businesspartner, supplierid, customerid, roles } = this.context.userData;
         const { locale, environment } = this.context;
 
         let items = [ ];
 
-        if(supplierid)
+        if((businesspartner && businesspartner.issupplier) || supplierid)
             items = navItems.supplier[locale] || navItems.supplier['en'];
-        else if(customerid)
+        else if((businesspartner && businesspartner.iscustomer) || customerid)
             items = navItems.customer[locale] || navItems.customer['en'];
 
         if(roles && roles.indexOf('admin') > -1)
@@ -252,7 +251,7 @@ class MainMenu extends ConditionalRenderComponent
 
             return true;
         }
-
+        
         const mapItem = (item) =>
         {
             const result = { children : item.label };
@@ -279,7 +278,7 @@ class MainMenu extends ConditionalRenderComponent
 
             return result;
         }
-
+        
         return this.getNavItems().filter(filterItem).map(mapItem).filter(item => item.href || item.onClick || item.target || item.subItems);
     }
 
@@ -353,36 +352,10 @@ class MainMenu extends ConditionalRenderComponent
             .catch(e => this.context.showNotification(e.message, 'error', 10));
     }
 
-    filterCustomerDropdown(value)
-    {
-        if(this.context.userData.roles.includes('admin'))
-            return true;
-
-        const { tenantsForCustomerSwitch } = this.state;
-
-        if(tenantsForCustomerSwitch.includes('*'))
-            return true;
-
-        return tenantsForCustomerSwitch.includes(value);
-    }
-
-    filterSupplierDropdown(value)
-    {
-        if(this.context.userData.roles.includes('admin'))
-            return true;
-
-        const { tenantsForSupplierSwitch } = this.state;
-
-        if(tenantsForSupplierSwitch.includes('*'))
-            return true;
-
-        return tenantsForSupplierSwitch.includes(value);
-    }
-
     render()
     {
         const { i18n, userData, userProfile, router } = this.context;
-        const { activeMenuItem, displayInvoiceIcon, displayTntIcon, displayArchiveIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
+        const { activeMenuItem, displayInvoiceIcon, displayTntIcon, displayArchiveIcon, displayReportingIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
         const tenantId = userData.customerid ? `c_${userData.customerid}` : `s_${userData.supplierid}`;
         const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
         const profileImageLink = userProfile.profileImagePath ? `/blob/public/api/${tenantId}/files/${userProfile.profileImagePath}` : './static/avatar.jpg';
@@ -437,6 +410,16 @@ class MainMenu extends ConditionalRenderComponent
                 icon : this.getIcon('folder_open'),
                 onClick : () => router.push('/archive'),
                 id : '/archive'
+            });
+        }
+
+        if(displayReportingIcon)
+        {
+            applicationItems.push({
+                label : 'Reporting',
+                icon : this.getIcon('reporting_service'),
+                onClick : () => router.push('/reporting'),
+                id : '/reporting'
             });
         }
 
