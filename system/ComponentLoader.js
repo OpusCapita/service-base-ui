@@ -24,9 +24,10 @@ class ComponentLoader
      * @param {string?} jsFileName Bundle file name
      * @param {Component?} placeholderComponent Component displayed while external is being loaded
      * @param {function?} onLoaded Called once component was loaded
+     * @param {function?} onError Called once a component could not be loaded
      * @returns {function}
      */
-    load({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded = NOOP })
+    load({ serviceName, moduleName, jsFileName, placeholderComponent, onLoaded = NOOP, onError = NOOP })
     {
         return this.getWrapperComponent(
         {
@@ -35,7 +36,8 @@ class ComponentLoader
             serviceName,
             moduleName,
             placeholderComponent,
-            onLoaded
+            onLoaded,
+            onError
         });
     }
 
@@ -55,9 +57,10 @@ class ComponentLoader
      * @param {string} moduleName Name of module being exported to window object
      * @param {Component?} placeholderComponent Component displayed while external is being loaded
      * @param {function?} onLoaded Called once component was loaded
+     * @param {function?} onError Called once a component could not be loaded
      * @returns {function}
      */
-    getWrapperComponent({ url, vendorUrl, serviceName, moduleName, placeholderComponent, onLoaded })
+    getWrapperComponent({ url, vendorUrl, serviceName, moduleName, placeholderComponent, onLoaded, onError })
     {
         const componentLoader = this;
 
@@ -74,7 +77,7 @@ class ComponentLoader
                 if(component)
                     this.setState({ component });
                 else
-                    componentLoader.fetchScript({ url, vendorUrl, serviceName }).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName) }));
+                    componentLoader.fetchScript({ url, vendorUrl, serviceName }).then(() => this.setState({ component : componentLoader.getLoadedComponent(moduleName) })).catch(onError);
             }
 
             render()
@@ -83,7 +86,6 @@ class ComponentLoader
 
                 if(component)
                 {
-                    const properties = Object.getOwnPropertyNames(component.prototype);
                     const props = Object.assign({ }, this.props, { ref : (node) => onLoaded && onLoaded(node) });
 
                     return React.createElement(component, props);
@@ -130,10 +132,15 @@ class ComponentLoader
                 { }
             }
 
-            await ScriptLoader.load(url);
-
-            this.loading.delete(url);
-            this.loading.size === 0 && this.onLoadingFinished();
+            try
+            {
+                await ScriptLoader.load(url);
+            }
+            finally
+            {
+                this.loading.delete(url);
+                this.loading.size === 0 && this.onLoadingFinished();
+            }
         })());
 
         this.loading.size === 0 && this.onLoadingStarted();
