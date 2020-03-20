@@ -163,14 +163,15 @@ class MainMenu extends ConditionalRenderComponent
         {
             const { tenantSwitchMode, tenantSwitchValue } = this.state;
             const { id } = this.context.userData;
-            const customerId = tenantSwitchMode === 'customer' ? tenantSwitchValue.id : null;
-            const supplierId = tenantSwitchMode === 'supplier' ? tenantSwitchValue.id : null;
+            const businessPartnerId = tenantSwitchValue.id || null;
+            const customerId = tenantSwitchMode === 'customer' ? businessPartnerId : null;
+            const supplierId = tenantSwitchMode === 'supplier' ? businessPartnerId : null;
 
             if(tenantSwitchValue && (customerId || supplierId))
             {
                 this.context.showSpinner();
 
-                this.usersApi.updateUser(id, { customerId, supplierId }).then(() => this.authApi.refreshIdToken())
+                this.usersApi.updateUser(id, { customerId, supplierId, businessPartnerId }).then(() => this.authApi.refreshIdToken())
                     .then(() => document.location.reload(true)).catch(e => this.context.showNotification(e.message, 'error', 10));
             }
             else
