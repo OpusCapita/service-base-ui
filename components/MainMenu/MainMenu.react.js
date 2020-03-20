@@ -56,8 +56,12 @@ class MainMenu extends ConditionalRenderComponent
         this.BusinessPartnerDropdown = context.loadComponent({
             serviceName: 'business-partner',
             moduleName: 'business-partner-autocomplete',
-            jsFileName: 'business-partner-autocomplete-bundle'
+            jsFileName: 'business-partner-autocomplete-bundle',
+            onError : () => this.BusinessPartnerDropdown = null 
         });
+
+        this.CustomerDropdown = context.loadComponent({ serviceName : 'customer', moduleName : 'customer-autocomplete', jsFileName : 'autocomplete-bundle', onError : () => this.CustomerDropdown = null });
+        this.SupplierDropdown = context.loadComponent({ serviceName : 'supplier', moduleName : 'supplier-autocomplete', jsFileName : 'autocomplete-bundle', onError : () => this.SupplierDropdown = null });
     }
 
     componentDidMount()
@@ -71,8 +75,11 @@ class MainMenu extends ConditionalRenderComponent
         const displayInvoiceIcon = bouncer.getUserResourceGroups('invoice').length > 0;
         const displayTntIcon = bouncer.getUserResourceGroups('tnt').length > 0;
         const displayArchiveIcon = bouncer.getUserResourceGroups('archive').length > 0;
-        
-        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon });
+        const displayReportingIcon = bouncer.getUserResourceGroups('reporting').length > 0;
+        const tenantsForSupplierSwitch = bouncer.getUserTenants('supplier', '/api/suppliers');
+        const tenantsForCustomerSwitch = bouncer.getUserTenants('customer', '/api/customers');
+
+        this.setState({ displayInvoiceIcon, displayTntIcon, displayArchiveIcon, displayReportingIcon, tenantsForSupplierSwitch, tenantsForCustomerSwitch });
 
         router.listen(item => this.switchMenuItemByPath(item.basename + item.pathname));
     }
@@ -156,14 +163,15 @@ class MainMenu extends ConditionalRenderComponent
         {
             const { tenantSwitchMode, tenantSwitchValue } = this.state;
             const { id } = this.context.userData;
-            const customerId = tenantSwitchMode === 'customer' ? tenantSwitchValue.id : null;
-            const supplierId = tenantSwitchMode === 'supplier' ? tenantSwitchValue.id : null;
+            const businessPartnerId = tenantSwitchValue.id || null;
+            const customerId = tenantSwitchMode === 'customer' ? businessPartnerId : null;
+            const supplierId = tenantSwitchMode === 'supplier' ? businessPartnerId : null;
 
             if(tenantSwitchValue && (customerId || supplierId))
             {
                 this.context.showSpinner();
 
-                this.usersApi.updateUser(id, { customerId, supplierId }).then(() => this.authApi.refreshIdToken())
+                this.usersApi.updateUser(id, { customerId, supplierId, businessPartnerId }).then(() => this.authApi.refreshIdToken())
                     .then(() => document.location.reload(true)).catch(e => this.context.showNotification(e.message, 'error', 10));
             }
             else
@@ -182,18 +190,18 @@ class MainMenu extends ConditionalRenderComponent
 
     getNavItems()
     {
-        const { businessPartner, roles } = this.context.userData;
+        const { businesspartner, supplierid, customerid, roles } = this.context.userData;
         const { locale, environment } = this.context;
 
         let items = [ ];
 
-        if(businessPartner.issupplier)
+        if((businesspartner && businesspartner.issupplier) || supplierid)
             items = navItems.supplier[locale] || navItems.supplier['en'];
-        else if(businessPartner.iscustomer)
+        else if((businesspartner && businesspartner.iscustomer) || customerid)
             items = navItems.customer[locale] || navItems.customer['en'];
 
         if(roles && roles.indexOf('admin') > -1)
-            items = this.recursiveMergeNavItems(items, navItems.admin[locale] || navItems.admin['en'])
+            items = this.recursiveMergeNavItems(navItems.admin[locale] || navItems.admin['en'], items)
 
         return items.filter(item => !item.environments || item.environments.includes(environment));
     }
@@ -351,10 +359,36 @@ class MainMenu extends ConditionalRenderComponent
             .catch(e => this.context.showNotification(e.message, 'error', 10));
     }
 
+    filterCustomerDropdown(value)
+    {
+        if(this.context.userData.roles.includes('admin'))
+            return true;
+
+        const { tenantsForCustomerSwitch } = this.state;
+
+        if(tenantsForCustomerSwitch.includes('*'))
+            return true;
+
+        return tenantsForCustomerSwitch.includes(value);
+    }
+
+    filterSupplierDropdown(value)
+    {
+        if(this.context.userData.roles.includes('admin'))
+            return true;
+
+        const { tenantsForSupplierSwitch } = this.state;
+
+        if(tenantsForSupplierSwitch.includes('*'))
+            return true;
+
+        return tenantsForSupplierSwitch.includes(value);
+    }
+
     render()
     {
         const { i18n, userData, userProfile, router } = this.context;
-        const { activeMenuItem, displayInvoiceIcon, displayTntIcon, displayArchiveIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
+        const { activeMenuItem, displayInvoiceIcon, displayTntIcon, displayArchiveIcon, displayReportingIcon, tenantSwitchMode, tenantSwitchValue, notifications } = this.state;
         const tenantId = userData.customerid ? `c_${userData.customerid}` : `s_${userData.supplierid}`;
         const tenantProfileLink = userData.customerid ? '/bnp/buyerInformation' : (userData.supplierid ? '/bnp/supplierInformation' : null);
         const profileImageLink = userProfile.profileImagePath ? `/blob/public/api/${tenantId}/files/${userProfile.profileImagePath}` : './static/avatar.jpg';
@@ -409,6 +443,16 @@ class MainMenu extends ConditionalRenderComponent
                 icon : this.getIcon('folder_open'),
                 onClick : () => router.push('/archive'),
                 id : '/archive'
+            });
+        }
+
+        if(displayReportingIcon)
+        {
+            applicationItems.push({
+                label : 'Reporting',
+                icon : this.getIcon('reporting_service'),
+                onClick : () => router.push('/reporting'),
+                id : '/reporting'
             });
         }
 
@@ -520,9 +564,11 @@ class MainMenu extends ConditionalRenderComponent
                         </div>
                         <div className="row">
                             <div className="col-lg-12">
-                                { tenantSwitchMode === 'customer' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isCustomer)} /> }
-                                { tenantSwitchMode === 'supplier' && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isSupplier)} /> }
-                         </div>
+                            { tenantSwitchMode === 'customer' && this.BusinessPartnerDropdown && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isCustomer) && this.filterCustomerDropdown(`c_${bPartner.id}`)} /> }
+                            { tenantSwitchMode === 'supplier' && this.BusinessPartnerDropdown && <this.BusinessPartnerDropdown onChange={value => this.setState({ tenantSwitchValue : value })} onFilter={bPartner => Boolean(bPartner.isSupplier) && this.filterSupplierDropdown(`s_${bPartner.id}`)} /> }
+                            { tenantSwitchMode === 'customer' && this.CustomerDropdown && <this.CustomerDropdown onFilter={value => this.filterCustomerDropdown(`c_${value.id}`)} onChange={value => this.setState({ tenantSwitchValue : value })} /> }
+                            { tenantSwitchMode === 'supplier' && this.SupplierDropdown && <this.SupplierDropdown onFilter={value => this.filterSupplierDropdown(`s_${value.id}`)} onChange={value => this.setState({ tenantSwitchValue : value })} /> }
+                            </div>
                         </div>
                     </div>
                 </ModalDialog>

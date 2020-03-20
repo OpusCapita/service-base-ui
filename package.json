@@ -1,6 +1,6 @@
 {
     "name": "@opuscapita/service-base-ui",
-    "version": "2.0.1",
+    "version": "1.1.145",
     "description": "Basic API for UI services of OpusCapita Business Network.",
     "main": "lib/bundle.js",
     "files": [
@@ -20,19 +20,19 @@
         "prepublishOnly": "npm run build && npm version patch -m 'Version set to %s. [skip ci]'"
     },
     "dependencies": {
-        "react-router": "^3.2.1",
+        "prop-types": "^15.6.2",
         "react": "^15.4.0",
         "react-dom": "^15.6.2",
-        "prop-types": "^15.6.2"
+        "react-router": "^3.2.1"
     },
     "devDependencies": {
-        "@opuscapita/config": "^3.0.16",
-        "@opuscapita/db-init": "^2.0.24",
+        "@opuscapita/config": "^3.0.27",
+        "@opuscapita/db-init": "^2.0.30",
         "@opuscapita/i18n": "1.2.1",
         "@opuscapita/react-buttons": "^4.0.2",
         "@opuscapita/react-svg": "^4.0.0",
-        "@opuscapita/svg-icons": "^1.1.4",
-        "@opuscapita/web-init": "^3.0.81",
+        "@opuscapita/svg-icons": "^1.1.5",
+        "@opuscapita/web-init": "^3.0.100",
         "babel-core": "^6.26.3",
         "babel-loader": "^7.1.5",
         "babel-polyfill": "^6.26.0",

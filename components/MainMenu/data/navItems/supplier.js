@@ -616,7 +616,7 @@ export default
     "es": [
     {
         "key": "home",
-        "label": "Página Principal",
+        "label": "Inicio",
         "link": "/bnp"
     },
     {
@@ -635,7 +635,7 @@ export default
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Avisos de envío",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
@@ -695,12 +695,12 @@ export default
         },
         {
             "key": "substitution-management",
-            "label": "Substitution management",
+            "label": "Gestión de sustitutos",
             "link": "/bnp/substituteUserRelations"
         },
         {
             "key": "absences",
-            "label": "Absences",
+            "label": "Ausencia",
             "link": "/bnp/substitutionPeriods"
         }]
     },

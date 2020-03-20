@@ -1,0 +1,18 @@
+{
+    "System.ok": "OK",
+    "System.cancel": "Cancelar",
+    "System.yes": "Sí",
+    "System.no": "No",
+    "System.save": "Guardar",
+    "System.edit": "Editar",
+    "System.delete": "Borrar",
+    "System.copy": "Copiar",
+    "System.close": "Cerrar",
+    "System.refresh": "Refrescar",
+    "System.reset": "Restablecer",
+    "System.add": "Añadir",
+    "System.update": "Actualizar",
+    "System.create": "Crear",
+    "System.search": "Buscar",
+    "System.upload": "Subir"
+}

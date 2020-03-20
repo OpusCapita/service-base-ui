@@ -1,6 +1,6 @@
 'use strict';
 
-const Logger = require('ocbesbn-logger'); // Logger
+const Logger = require('@opuscapita/logger'); // Logger
 const server = require('@opuscapita/web-init'); // Web server
 const db = require('@opuscapita/db-init');
 const configService = require('@opuscapita/config');
@@ -33,7 +33,7 @@ server.init({
 .then(app => app.get('*', (req, res) => res.sendFile(process.cwd() + '/dev/index.html')))
 .then(() => configService.init())
 .then(config => config.waitForEndpoints([ 'acl', 'user', 'auth' ]))
-.delay(30000)
+.then(() => new Promise(resolve => setTimeout(resolve, 15000)))
 .then(() =>
 {
     return db.init({

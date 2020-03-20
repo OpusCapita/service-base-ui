@@ -11,8 +11,7 @@ services:
         - acl
         - auth
         - api-registry
-        - customer
-        - supplier
+        - business-partner
         - isodata
     labels:
      SERVICE_NAME: 'service-base-ui'
@@ -176,6 +175,7 @@ services:
       SERVICE_3002_CHECK_HTTP: /api/health/check
       SERVICE_3002_CHECK_INTERVAL: 15s
       SERVICE_3002_CHECK_TIMEOUT: 3s
+      ENV_NAME: local
     depends_on:
       - kong
 
@@ -235,50 +235,25 @@ services:
         RABBITMQ_DEFAULT_PASS: $RABBITMQ_PASS
         SERVICE_5672_NAME: 'rabbitmq-amqp'
 
-  supplier:
-    image: opuscapita/supplier:dev
+  business-partner:
+    image: opuscapita/business-partner:dev
     depends_on:
       - mysql
       - consul
       - registrator
-      - redis
     labels:
-      SERVICE_NAME: 'supplier'  # Service name used by Registrator for adding to Consul's service discovery registry.
-      SERVICE_TAGS: 'kong'
-    ports:
-      - "3001:3001"
+      SERVICE_NAME: 'business-partner'
     environment:
+      SERVICE_3046_CHECK_HTTP: /api/health/check
+      SERVICE_3046_CHECK_INTERVAL: 15s
+      SERVICE_3046_CHECK_TIMEOUT: 3s
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      NODE_ENV: 'production'
-      REDIS_AUTH: $REDIS_AUTH
-      RABBITMQ_USER: ${RABBITMQ_USER}
-      RABBITMQ_PASS: ${RABBITMQ_PASS}
-      SERVICE_3001_CHECK_HTTP: /api/health/check
-      SERVICE_3001_CHECK_INTERVAL: 15s
-      SERVICE_3001_CHECK_TIMEOUT: 3s
-    command: 'npm run dev'
-
-  customer:
-    image: opuscapita/customer:dev
-    depends_on:
-      - mysql
-      - consul
-      - registrator
-      - redis
-    labels:
-      SERVICE_NAME: 'customer'
-    environment:
-      SERVICE_3009_CHECK_HTTP: /api/health/check
-      SERVICE_3009_CHECK_INTERVAL: 15s
-      SERVICE_3009_CHECK_TIMEOUT: 3s
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_DATABASE: 'business-partner'
       REDIS_AUTH: ${REDIS_AUTH}
       RABBITMQ_USER: ${RABBITMQ_USER}
       RABBITMQ_PASS: ${RABBITMQ_PASS}
     ports:
-      - '3009:3009'
+      - '3046:3046'
     command: 'npm run dev'
 
   registrator:

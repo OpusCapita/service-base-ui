@@ -67,6 +67,11 @@ export default
             "key": "catalogs",
             "label": "Catalogs",
             "link": "/bnp/catalogs"
+        },
+        {
+            "key": "reporting",
+            "label": "Reporting",
+            "link": "/reporting/config"
         }]
     }],
 
@@ -137,6 +142,11 @@ export default
             "key": "catalogs",
             "label": "Kataloge",
             "link": "/bnp/catalogs"
+        },
+        {
+            "key": "reporting",
+            "label": "Reporting",
+            "link": "/reporting/config"
         }]
     }]
 }
