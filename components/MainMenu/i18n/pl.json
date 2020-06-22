@@ -23,8 +23,9 @@
   "MainMenu.language": "Język",
   "MainMenu.search": "Szukaj",
   "MainMenu.laguage.swedish": "Szwedzki",
-  "MainMenu.switchTenant": "Najemca przełącznika",
-  "MainMenu.tenantSwitch.modal.title": "Najemca przełącznika",
+  "MainMenu.switchTenant": "Zmień kontrahenta",
+  "MainMenu.tenantSwitch.modal.title": "Zmień kontrahenta",
   "MainMenu.support.EmailAddress": "customerservice.de@opuscapita.com",
-  "MainMenu.download": "Pobierz"
+  "MainMenu.download": "Pobierz",
+  "MainMenu.laguage.polish": "Polski"
 }
