@@ -537,10 +537,10 @@ class MainMenu extends ConditionalRenderComponent
                                             <option value="es">Español</option>
                                             <option value="fr">Français</option>
                                             <option value="it">Italiano</option>
+                                            <option value="pl">Polski</option>
                                             <option value="pt">Português</option>
                                             <option value="fi">Suomi</option>
                                             <option value="sv">Svenska</option>
-                                            <option value="pl">Polski</option>
                                         </MenuSelect>
                                     </div>
                                 </div>
