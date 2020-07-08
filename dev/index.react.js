@@ -22,8 +22,17 @@ class Test extends ContextComponent
 
     render()
     {
+        const startDate = "+3d";
+        // const startDate = new Date();
+        // const startDate = undefined;
+
         return(
             <div>
+                <DatePicker
+                    showIcon={false}
+                    startDate={startDate}
+                />
+                <br/>
                 <ModalDialog
                     onClose={() => this.setState()}
                     ref={ref => this.modal = ref}
