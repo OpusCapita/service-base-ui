@@ -1,0 +1,10 @@
+{
+  "Main.systemError.title": "Wystąpił ogólny błąd",
+  "Main.notification.sessionError": "Wystąpił błąd sesji i Twoja sesja może nie być kontynuowana. Proszę się wylogować i ponownie zalogować.",
+  "Main.notification.sessionExpiring": "Twoja sesja logowania zbliża się do końca.",
+  "Main.notification.button.logout": "Logout",
+  "ServiceLayout.LogInDialog.button.signIn": "Login",
+  "Main.notification.button.renewSession": "Odnów teraz",
+  "ServiceLayout.LogInDialog.description": "Ze względów bezpieczeństwa twoja sesja wygasła. Prosimy o ponowne zalogowanie się do systemu, aby kontynuować pracę.",
+  "ServiceLayout.LogInDialog.title": "Proszę się zalogować"
+}

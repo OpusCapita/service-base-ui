@@ -491,5 +491,87 @@ export default
             "label": "Single sign-on",
             "link": "/identity-federation"
         }],
-    }]
+    }],
+
+    "pl": [
+        {
+            "key": "home",
+            "label": "Strona startowa",
+            "link": "/bnp"
+        },
+        {
+            "key": "suppliers",
+            "label": "Dostawcy",
+            "children": [
+                {
+                    "key": "onboarding-dashboard",
+                    "label": "Onboarding Pulpit",
+                    "link": "/onboarding/dashboard"
+                },
+                {
+                    "key": "onboarding-campaigns",
+                    "label": "Lista kampanii",
+                    "link": "/onboarding"
+                },
+                {
+                    "key": "onboarding-create-campaign",
+                    "label": "Stwórz nową kampanię",
+                    "link": "/onboarding/create"
+                },
+                {
+                    "key": "supplier-directory",
+                    "label": "Baza dostawców",
+                    "link": "/bnp/supplierDirectory"
+                },
+                {
+                    "key": "supplier-status",
+                    "label": "Status dostawców",
+                    "link": "/bnp/supplierStatus",
+                    "environments": ["develop"]
+                }]
+        },
+        {
+            "key": "company",
+            "label": "Firma",
+            "children": [
+                {
+                    "key": "profile",
+                    "label": "Profil",
+                    "link": "/bnp/buyerInformation"
+                },
+                {
+                    "key": "users",
+                    "label": "Użytkownicy",
+                    "link": "/bnp/users"
+                },
+                {
+                    "key": "permissions",
+                    "label": "Uprawnienia",
+                    "link": "/bnp/permissions"
+                },
+                {
+                    "key": "connections",
+                    "label": "Powiązania biznesowe",
+                    "link": "/bnp/connections"
+                },
+                {
+                    "key": "substitute-management",
+                    "label": "Zarządzaj zastępstwami",
+                    "link": "/bnp/substituteUserRelations"
+                },
+                {
+                    "key": "absences",
+                    "label": "Nieobecności",
+                    "link": "/bnp/substitutionPeriods"
+                }]
+        },
+        {
+            "key": "admin",
+            "label": "Administrator",
+            "children": [{
+                "key": "sso",
+                "label": "Single sign-on",
+                "link": "/identity-federation"
+            }],
+        }],
 }
