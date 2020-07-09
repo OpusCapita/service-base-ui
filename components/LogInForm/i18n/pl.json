@@ -1,9 +1,9 @@
 {
-  "LogInForm.button.logIn": "Zaloguj się",
-  "LogInForm.label.password": "Hasło",
-  "LogInForm.placeholder.email": "Twoja poczta elektroniczna",
-  "LogInForm.placeholder.password": "Twoje hasło",
-  "LogInForm.error.password.required": "Pole \"Hasło\" nie może być puste.",
-  "LogInForm.label.email": "eMail",
-  "LogInForm.error.email.required": "Pole \"eMail\" nie może być puste."
+    "LogInForm.label.email": "eMail",
+    "LogInForm.label.password": "Hasło",
+    "LogInForm.placeholder.email": "Twoja poczta elektroniczna",
+    "LogInForm.placeholder.password": "Twoje hasło",
+    "LogInForm.button.logIn": "Zaloguj się",
+    "LogInForm.error.email.required": "Pole \"eMail\" nie może być puste.",
+    "LogInForm.error.password.required": "Pole \"Hasło\" nie może być puste."
 }
