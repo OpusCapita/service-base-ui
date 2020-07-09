@@ -11,6 +11,7 @@ class DatePicker extends ContextComponent
 {
     static propTypes = {
         showIcon : PropTypes.bool.isRequired,
+        startDate : PropTypes.any,
         value : PropTypes.any,
         format : PropTypes.string,
         onChange : PropTypes.func.isRequired,
@@ -99,6 +100,7 @@ class DatePicker extends ContextComponent
         const pickerOptions = {
             ...this.defaultOptions,
             showIcon : this.props.showIcon,
+            startDate : this.props.startDate,
             language : this.context.locale,
             format : this.props.format || this.context.i18n.dateFormat.toLowerCase()
         }
