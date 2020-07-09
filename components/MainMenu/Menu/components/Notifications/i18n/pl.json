@@ -1,6 +1,6 @@
 {
-  "Menu.Notifications.noNewNotifications": "Nie ma żadnych nowych zgłoszeń.",
-  "Menu.Notifications.newNotifications": "Nowe powiadomienia",
-  "Menu.Notifications.markAllRead": "Przeczytaj wszystko",
-  "Menu.Notifications.settings": "Ustawienia"
+    "Menu.Notifications.newNotifications": "Nowe powiadomienia",
+    "Menu.Notifications.noNewNotifications": "Nie ma żadnych nowych zgłoszeń.",
+    "Menu.Notifications.settings": "Ustawienia",
+    "Menu.Notifications.markAllRead": "Przeczytaj wszystko"
 }
