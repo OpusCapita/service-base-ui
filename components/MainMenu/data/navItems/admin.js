@@ -13,7 +13,7 @@ export default
         {
             "key": "kibana",
             "label": "Kibana",
-            "link": "/kibana",
+            "link": "/kibana-logs",
             "target": "_blank"
         },
         {
@@ -88,7 +88,7 @@ export default
         {
             "key": "kibana",
             "label": "Kibana",
-            "link": "/kibana",
+            "link": "/kibana-logs",
             "target": "_blank"
         },
         {
