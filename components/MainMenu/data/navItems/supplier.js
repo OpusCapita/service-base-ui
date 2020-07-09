@@ -815,5 +815,106 @@ export default
             "label": "Encaminhamentos",
             "link": "/bnp/routing/routes"
         }]
-    }]
+    }],
+    "pl": [
+        {
+            "key": "home",
+            "label": "Strona startowa",
+            "link": "/bnp"
+        },
+        {
+            "key": "orders",
+            "label": "Zamówienia",
+            "children": [
+                {
+                    "key": "order-overview",
+                    "label": "Zamówienia",
+                    "link": "/sales-order"
+                },
+                {
+                    "key": "receipt-advice-overview",
+                    "label": "Awiza odbioru",
+                    "link": "/sales-order/receipt-advice/overview"
+                },
+                {
+                    "key": "despatch-advice-overview",
+                    "label": "Awiza wysyłki",
+                    "link": "/sales-order/despatch-advices/overview"
+                },
+                {
+                    "key": "orderConfiguration",
+                    "label": "Odbiór zamówień – konfiguracja usługi",
+                    "link": "/sales-order/configuration"
+                }]
+        },
+        {
+            "key": "invoices",
+            "label": "Faktury",
+            "children": [
+                {
+                    "key": "overview",
+                    "label": "Moje faktury Key-in",
+                    "link": "/sales-invoice/search"
+                },
+                {
+                    "key": "key-in",
+                    "label": "Wystaw nową fakturę Key-in",
+                    "link": "/sales-invoice/create"
+                },
+                {
+                    "key": "configuration",
+                    "label": "Wysyłka faktur – konfiguracja usługi",
+                    "link": "/einvoice-send/configuration"
+                }]
+        },
+        {
+            "key": "catalog",
+            "label": "Katalog",
+            "children": [
+                {
+                    "key": "upload",
+                    "label": "Załaduj katalog",
+                    "link": "/bnp/catalog-upload"
+                }]
+        },
+        {
+            "key": "company",
+            "label": "Firma",
+            "children": [
+                {
+                    "key": "profile",
+                    "label": "Profil",
+                    "link": "/bnp/supplierInformation"
+                },
+                {
+                    "key": "users",
+                    "label": "Użytkownicy",
+                    "link": "/bnp/users"
+                },
+                {
+                    "key": "connections",
+                    "label": "Powiązania biznesowe",
+                    "link": "/bnp/connections"
+                },
+                {
+                    "key": "substitution-management",
+                    "label": "Zarządzaj zastępstwami",
+                    "link": "/bnp/substituteUserRelations"
+                },
+                {
+                    "key": "absences",
+                    "label": "Nieobecności",
+                    "link": "/bnp/substitutionPeriods"
+                }]
+        },
+        {
+            "key": "settings",
+            "label": "Ustawienia",
+            "children": [
+                {
+                    "key": "routes",
+                    "label": "Baza routingów",
+                    "link": "/bnp/routing/routes"
+                }]
+        }]
 }
