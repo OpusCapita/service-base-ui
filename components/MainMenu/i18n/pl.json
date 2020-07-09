@@ -14,7 +14,7 @@
     "MainMenu.tenantSwitch.modal.label.placeholder": "Wybierz typ najemcy...",
     "MainMenu.tenantSwitch.modal.label.customer": "Klient",
     "MainMenu.tenantSwitch.modal.label.supplier": "Dostawca",
-    "MainMenu.tenantSwitch.modal.text": "Proszę wybrać typ najemcy, aby otrzymać listę dostępnych najemców. Następnie wybierz lub wyszukaj najemcę, aby kontynuować. Proszę pamiętać, że ten przełącznik najemcy jest stałą zmianą i pozostaje aktywny nawet pomiędzy sesjami logowania. Jesteś obecnie zalogowany jako \"{nazwa dziesiętnastka}\".",
+    "MainMenu.tenantSwitch.modal.text": "Proszę wybrać typ najemcy, aby otrzymać listę dostępnych najemców. Następnie wybierz lub wyszukaj najemcę, aby kontynuować. Proszę pamiętać, że ten przełącznik najemcy jest stałą zmianą i pozostaje aktywny nawet pomiędzy sesjami logowania. Jesteś obecnie zalogowany jako \"{tenantname}\".",
     "MainMenu.tenantSwitch.generalError": "Wystąpił nieoczekiwany błąd. Nie wprowadzono żadnych zmian.",
     "MainMenu.search": "Szukaj",
     "MainMenu.support": "Wsparcie",
