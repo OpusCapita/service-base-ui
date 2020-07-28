@@ -14,7 +14,7 @@
     "MainMenu.tenantSwitch.modal.label.placeholder": "Wybierz typ kontrahenta...",
     "MainMenu.tenantSwitch.modal.label.customer": "Klient",
     "MainMenu.tenantSwitch.modal.label.supplier": "Dostawca",
-    "MainMenu.tenantSwitch.modal.text": "Wybierz typ kontrahenta, aby zobaczyć listę dostępnych kontrahentów. Następnie wybierz lub wyszukaj kontrahenta, aby kontynuować. \r\nNależy pamiętać, że ta zmiana kontrahenta jest zmianą stałą i pozostaje aktywna nawet między sesjami logowania. Jesteś obecnie zalogowany jako „{nazwa kontrahenta}”",
+    "MainMenu.tenantSwitch.modal.text": "Wybierz typ kontrahenta, aby zobaczyć listę dostępnych kontrahentów. Następnie wybierz lub wyszukaj kontrahenta, aby kontynuować. \r\nNależy pamiętać, że ta zmiana kontrahenta jest zmianą stałą i pozostaje aktywna nawet między sesjami logowania. Jesteś obecnie zalogowany jako „{tenantname}”",
     "MainMenu.tenantSwitch.generalError": "Wystąpił nieoczekiwany błąd. Nie wprowadzono żadnych zmian.",
     "MainMenu.search": "Szukaj",
     "MainMenu.support": "Wsparcie",
