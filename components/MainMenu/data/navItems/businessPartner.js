@@ -109,7 +109,7 @@ export default
         {
             "key": "profile",
             "label": "Profile",
-            "link": "/bnp/buyerInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
@@ -256,7 +256,7 @@ export default
         {
             "key": "profile",
             "label": "Profil",
-            "link": "/bnp/buyerInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
@@ -608,7 +608,7 @@ export default
         {
             "key": "profile",
             "label": "Profilo",
-            "link": "/bnp/buyerInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
@@ -755,7 +755,7 @@ export default
         {
             "key": "profile",
             "label": "Profil",
-            "link": "/bnp/buyerInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
@@ -902,7 +902,7 @@ export default
         {
             "key": "profile",
             "label": "Perfil",
-            "link": "/bnp/buyerInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
@@ -1049,7 +1049,7 @@ export default
         {
             "key": "profile",
             "label": "Perfil",
-            "link": "/bnp/buyerInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
