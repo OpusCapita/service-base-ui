@@ -1,6 +1,5 @@
-import customer from './customer';
-import supplier from './supplier';
+import businessPartner from './businessPartner';
 import admin from './admin';
 
-export { customer, supplier, admin };
-export default { customer, supplier, admin };
+export { admin, businessPartner };
+export default { admin, businessPartner };

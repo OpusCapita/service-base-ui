@@ -193,15 +193,10 @@ class MainMenu extends ConditionalRenderComponent
         const { businesspartner, supplierid, customerid, roles } = this.context.userData;
         const { locale, environment } = this.context;
 
-        let items = [ ];
-
-        if((businesspartner && businesspartner.issupplier) || supplierid)
-            items = navItems.supplier[locale] || navItems.supplier['en'];
-        else if((businesspartner && businesspartner.iscustomer) || customerid)
-            items = navItems.customer[locale] || navItems.customer['en'];
+        let items = this.recursiveMergeNavItems(navItems.businessPartner['en'], navItems.businessPartner[locale]);
 
         if(roles && roles.indexOf('admin') > -1)
-            items = this.recursiveMergeNavItems(navItems.admin[locale] || navItems.admin['en'], items)
+            items = this.recursiveMergeNavItems(items, navItems.admin[locale] || navItems.admin['en'])
 
         return items.filter(item => !item.environments || item.environments.includes(environment));
     }
