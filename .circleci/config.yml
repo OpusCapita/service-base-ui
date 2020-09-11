@@ -1,7 +1,11 @@
 version: 2
+workflow:
+  build:
+    jobs:
+      - build:
+        context: andariel
 jobs:
   build:
-    context: andariel
     machine: true
     working_directory: ~/build
     steps:
