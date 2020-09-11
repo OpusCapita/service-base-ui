@@ -3,7 +3,7 @@ workflow:
   build:
     jobs:
       - build:
-        context: andariel
+          context: andariel
 jobs:
   build:
     machine: true
