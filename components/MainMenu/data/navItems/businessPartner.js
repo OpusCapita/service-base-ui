@@ -36,8 +36,8 @@ export default
         "label": "Invoice",
         "children": [
         {
-            "key": "overview",
-            "label": "Overview",
+            "key": "invoice-overview",
+            "label": "Invoices",
             "link": "/sales-invoice/search"
         },
         {
@@ -62,13 +62,54 @@ export default
         }]
     },
     {
+        "key": "settings",
+        "label": "Settings",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Routes",
+            "link": "/bnp/routing/routes"
+        }]
+    },
+    {
+        "key": "campaigns",
+        "label": "Campaigns",
+        "children": [
+        {
+            "key": "onboarding-dashboard",
+            "label": "Onboarding Dashboard",
+            "link": "/onboarding/dashboard"
+        },
+        {
+            "key": "onboarding-campaigns",
+            "label": "Onboarding Campaigns",
+            "link": "/onboarding"
+        },
+        {
+            "key": "onboarding-create-campaign",
+            "label": "Onboarding Create Campaign",
+            "link": "/onboarding/create"
+        },
+        {
+            "key": "supplier-directory",
+            "label": "Supplier Directory",
+            "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Supplier status",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
+        }]
+    },
+    {
         "key": "company",
         "label": "Company",
         "children": [
         {
             "key": "profile",
             "label": "Profile",
-            "link": "/bnp/supplierInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
@@ -76,13 +117,18 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Connections",
             "link": "/bnp/connections"
         },
         {
-            "key": "substitution-management",
-            "label": "Substitution management",
+            "key": "substitute-management",
+            "label": "Substitute management",
             "link": "/bnp/substituteUserRelations"
         },
         {
@@ -92,14 +138,13 @@ export default
         }]
     },
     {
-        "key": "settings",
-        "label": "Settings",
-        "children": [
-        {
-            "key": "routes",
-            "label": "Routes",
-            "link": "/bnp/routing/routes"
-        }]
+        "key": "admin",
+        "label": "Admin",
+        "children": [{
+            "key": "sso",
+            "label": "Single sign-on",
+            "link": "/identity-federation"
+        }],
     }],
 
     "de": [
@@ -138,7 +183,7 @@ export default
         "label": "Rechnungen",
         "children": [
         {
-            "key": "overview",
+            "key": "invoice-overview",
             "label": "Übersicht",
             "link": "/sales-invoice/search"
         },
@@ -164,18 +209,64 @@ export default
         }]
     },
     {
+        "key": "settings",
+        "label": "Einstellungen",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Routen",
+            "link": "/bnp/routing/routes"
+        }]
+    },
+    {
+        "key": "campaigns",
+        "label": "Lieferanten",
+        "children": [
+        {
+            "key": "onboarding-dashboard",
+            "label": "Onboarding Dashboard",
+            "link": "/onboarding/dashboard"
+        },
+        {
+            "key": "onboarding-campaigns",
+            "label": "Onboarding Kampagnen",
+            "link": "/onboarding"
+        },
+        {
+            "key": "onboarding-create-campaign",
+            "label": "Onboarding Kampagne erstellen",
+            "link": "/onboarding/create"
+        },
+        {
+            "key": "supplier-directory",
+            "label": "Lieferantenverzeichnis",
+            "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Lieferantenstatus",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
+        }]
+    },
+    {
         "key": "company",
         "label": "Unternehmen",
         "children": [
         {
             "key": "profile",
             "label": "Profil",
-            "link": "/bnp/supplierInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
             "label": "Benutzer",
             "link": "/bnp/users"
+        },
+        {
+            "key": "permissions",
+            "label": "Berechtigungen",
+            "link": "/bnp/permissions"
         },
         {
             "key": "connections",
@@ -194,14 +285,13 @@ export default
         }]
     },
     {
-        "key": "settings",
-        "label": "Einstellungen",
-        "children": [
-        {
-            "key": "routes",
-            "label": "Routen",
-            "link": "/bnp/routing/routes"
-        }]
+        "key": "admin",
+        "label": "Admin",
+        "children": [{
+            "key": "sso",
+            "label": "Single Sign-on",
+            "link": "/identity-federation"
+        }],
     }],
 
     "sv": [
@@ -215,7 +305,7 @@ export default
         "label": "Ordrar",
         "children": [
         {
-            "key": "overview",
+            "key": "order-overview",
             "label": "Översikt",
             "link": "/sales-order"
         },
@@ -240,7 +330,7 @@ export default
         "label": "Fakturor",
         "children": [
         {
-            "key": "overview",
+            "key": "invoice-overview",
             "label": "Översikt",
             "link": "/sales-invoice/search"
         },
@@ -263,6 +353,16 @@ export default
             "key": "upload",
             "label": "Ladda upp",
             "link": "/bnp/catalog-upload"
+        }]
+    },
+    {
+        "key": "settings",
+        "label": "Inställningar",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Anslutningar",
+            "link": "/bnp/routing/routes"
         }]
     },
     {
@@ -294,16 +394,6 @@ export default
             "label": "Absences",
             "link": "/bnp/substitutionPeriods"
         }]
-    },
-    {
-        "key": "settings",
-        "label": "Inställningar",
-        "children": [
-        {
-            "key": "routes",
-            "label": "Anslutningar",
-            "link": "/bnp/routing/routes"
-        }]
     }],
 
     "fi": [
@@ -317,7 +407,7 @@ export default
         "label": "Tilaukset",
         "children": [
         {
-            "key": "overview",
+            "key": "order-overview",
             "label": "Yhteenveto",
             "link": "/sales-order"
         },
@@ -342,7 +432,7 @@ export default
         "label": "Laskut",
         "children": [
         {
-            "key": "overview",
+            "key": "invoice-overview",
             "label": "Yhteenveto",
             "link": "/sales-invoice/search"
         },
@@ -365,6 +455,47 @@ export default
             "key": "upload",
             "label": "Lataa",
             "link": "/bnp/catalog-upload"
+        }]
+    },
+    {
+        "key": "settings",
+        "label": "Asetukset",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Reititys",
+            "link": "/bnp/routing/routes"
+        }]
+    },
+    {
+        "key": "campaigns",
+        "label": "Kampanjat",
+        "children": [
+        {
+            "key": "onboarding-dashboard",
+            "label": "Kampanjastatistiikka",
+            "link": "/onboarding/dashboard"
+        },
+        {
+            "key": "onboarding-campaigns",
+            "label": "Kaikki kampanjat",
+            "link": "/onboarding"
+        },
+        {
+            "key": "onboarding-create-campaign",
+            "label": "Luo kampanja",
+            "link": "/onboarding/create"
+        },
+        {
+            "key": "supplier-directory",
+            "label": "Toimittajarekisteri",
+            "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Toimittajien status",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
         }]
     },
     {
@@ -395,16 +526,6 @@ export default
             "key": "absences",
             "label": "Absences",
             "link": "/bnp/substitutionPeriods"
-        }]
-    },
-    {
-        "key": "settings",
-        "label": "Asetukset",
-        "children": [
-        {
-            "key": "routes",
-            "label": "Reititys",
-            "link": "/bnp/routing/routes"
         }]
     }],
 
@@ -445,7 +566,7 @@ export default
         "label": "Fattura",
         "children": [
         {
-            "key": "overview",
+            "key": "invoice-overview",
             "label": "Riepilogo",
             "link": "/sales-invoice/search"
         },
@@ -471,13 +592,54 @@ export default
         }]
     },
     {
+        "key": "settings",
+        "label": "Impostazioni",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Route",
+            "link": "/bnp/routing/routes"
+        }]
+    },
+    {
+        "key": "campaigns",
+        "label": "Fornitori",
+        "children": [
+        {
+            "key": "onboarding-dashboard",
+            "label": "Dashboard Onboarding",
+            "link": "/onboarding/dashboard"
+        },
+        {
+            "key": "onboarding-campaigns",
+            "label": "Campagne Onboarding",
+            "link": "/onboarding"
+        },
+        {
+            "key": "onboarding-create-campaign",
+            "label": "Crea Campagna Onboarding",
+            "link": "/onboarding/create"
+        },
+        {
+            "key": "supplier-directory",
+            "label": "Directory Fornitori",
+            "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Stato fornitori",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
+        }]
+    },
+    {
         "key": "company",
         "label": "Impresa",
         "children": [
         {
             "key": "profile",
             "label": "Profilo",
-            "link": "/bnp/supplierInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
@@ -485,13 +647,18 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Collegamenti",
             "link": "/bnp/connections"
         },
         {
-            "key": "substitution-management",
-            "label": "Substitution management",
+            "key": "substitute-management",
+            "label": "Substitute management",
             "link": "/bnp/substituteUserRelations"
         },
         {
@@ -501,14 +668,13 @@ export default
         }]
     },
     {
-        "key": "settings",
-        "label": "Impostazioni",
-        "children": [
-        {
-            "key": "routes",
-            "label": "Route",
-            "link": "/bnp/routing/routes"
-        }]
+        "key": "admin",
+        "label": "Amministratore",
+        "children": [{
+            "key": "sso",
+            "label": "Single sign-on",
+            "link": "/identity-federation"
+        }],
     }],
 
     "fr": [
@@ -547,7 +713,7 @@ export default
         "label": "Facture",
         "children": [
         {
-            "key": "overview",
+            "key": "invoice-overview",
             "label": "Vue d'ensemble",
             "link": "/sales-invoice/search"
         },
@@ -573,13 +739,54 @@ export default
         }]
     },
     {
+        "key": "settings",
+        "label": "Paramètres",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Routes",
+            "link": "/bnp/routing/routes"
+        }]
+    },
+    {
+        "key": "campaigns",
+        "label": "Fournisseurs",
+        "children": [
+        {
+            "key": "onboarding-dashboard",
+            "label": "Tableau de bord d'intégration",
+            "link": "/onboarding/dashboard"
+        },
+        {
+            "key": "onboarding-campaigns",
+            "label": "Campagnes d'intégration",
+            "link": "/onboarding"
+        },
+        {
+            "key": "onboarding-create-campaign",
+            "label": "Créez une campagne d'intégration",
+            "link": "/onboarding/create"
+        },
+        {
+            "key": "supplier-directory",
+            "label": "Répertoire des fournisseurs",
+            "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Etat de la situation du fournisseur",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
+        }]
+    },
+    {
         "key": "company",
         "label": "Société",
         "children": [
         {
             "key": "profile",
             "label": "Profil",
-            "link": "/bnp/supplierInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
@@ -587,13 +794,18 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Connexions",
             "link": "/bnp/connections"
         },
         {
-            "key": "substitution-management",
-            "label": "Substitution management",
+            "key": "substitute-management",
+            "label": "Substitute management",
             "link": "/bnp/substituteUserRelations"
         },
         {
@@ -603,14 +815,13 @@ export default
         }]
     },
     {
-        "key": "settings",
-        "label": "Paramètres",
-        "children": [
-        {
-            "key": "routes",
-            "label": "Routes",
-            "link": "/bnp/routing/routes"
-        }]
+        "key": "admin",
+        "label": "Administrateur",
+        "children": [{
+            "key": "sso",
+            "label": "Single sign-on",
+            "link": "/identity-federation"
+        }],
     }],
 
     "es": [
@@ -649,7 +860,7 @@ export default
         "label": "Factura",
         "children": [
         {
-            "key": "overview",
+            "key": "invoice-overview",
             "label": "Visión general",
             "link": "/sales-invoice/search"
         },
@@ -675,13 +886,54 @@ export default
         }]
     },
     {
+        "key": "settings",
+        "label": "Parámetros",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Rutas",
+            "link": "/bnp/routing/routes"
+        }]
+    },
+    {
+        "key": "campaigns",
+        "label": "Proveedores",
+        "children": [
+        {
+            "key": "onboarding-dashboard",
+            "label": "Panel de control de autoregistro",
+            "link": "/onboarding/dashboard"
+        },
+        {
+            "key": "onboarding-campaigns",
+            "label": "Campañas de autoregistro",
+            "link": "/onboarding"
+        },
+        {
+            "key": "onboarding-create-campaign",
+            "label": "Crear campaña de autoregistro",
+            "link": "/onboarding/create"
+        },
+        {
+            "key": "supplier-directory",
+            "label": "Directorio de proveedores",
+            "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Estatus del proveedor",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
+        }]
+    },
+    {
         "key": "company",
         "label": "Empresa",
         "children": [
         {
             "key": "profile",
             "label": "Perfil",
-            "link": "/bnp/supplierInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
@@ -689,12 +941,17 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Conexiones",
             "link": "/bnp/connections"
         },
         {
-            "key": "substitution-management",
+            "key": "substitute-management",
             "label": "Gestión de sustitutos",
             "link": "/bnp/substituteUserRelations"
         },
@@ -705,14 +962,13 @@ export default
         }]
     },
     {
-        "key": "settings",
-        "label": "Parámetros",
-        "children": [
-        {
-            "key": "routes",
-            "label": "Rutas",
-            "link": "/bnp/routing/routes"
-        }]
+        "key": "admin",
+        "label": "Administración",
+        "children": [{
+            "key": "sso",
+            "label": "Single sign-on",
+            "link": "/identity-federation"
+        }],
     }],
 
     "pt": [
@@ -751,7 +1007,7 @@ export default
         "label": "Fatura",
         "children": [
         {
-            "key": "overview",
+            "key": "invoice-overview",
             "label": "Visão geral",
             "link": "/sales-invoice/search"
         },
@@ -777,13 +1033,54 @@ export default
         }]
     },
     {
+        "key": "settings",
+        "label": "Configurações",
+        "children": [
+        {
+            "key": "routes",
+            "label": "Encaminhamentos",
+            "link": "/bnp/routing/routes"
+        }]
+    },
+    {
+        "key": "campaigns",
+        "label": "Fornecedores",
+        "children": [
+        {
+            "key": "onboarding-dashboard",
+            "label": "Painel de integração",
+            "link": "/onboarding/dashboard"
+        },
+        {
+            "key": "onboarding-campaigns",
+            "label": "Campanhas de integração",
+            "link": "/onboarding"
+        },
+        {
+            "key": "onboarding-create-campaign",
+            "label": "Campanha de criação de integração",
+            "link": "/onboarding/create"
+        },
+        {
+            "key": "supplier-directory",
+            "label": "Diretório do fornecedor",
+            "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Status do fornecedor",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
+        }]
+    },
+    {
         "key": "company",
         "label": "Empresa",
         "children": [
         {
             "key": "profile",
             "label": "Perfil",
-            "link": "/bnp/supplierInformation"
+            "link": "/bnp/businessPartnerInformation"
         },
         {
             "key": "users",
@@ -791,13 +1088,18 @@ export default
             "link": "/bnp/users"
         },
         {
+            "key": "permissions",
+            "label": "Permissions",
+            "link": "/bnp/permissions"
+        },
+        {
             "key": "connections",
             "label": "Conexões",
             "link": "/bnp/connections"
         },
         {
-            "key": "substitution-management",
-            "label": "Substitution management",
+            "key": "substitute-management",
+            "label": "Substitute management",
             "link": "/bnp/substituteUserRelations"
         },
         {
@@ -807,15 +1109,15 @@ export default
         }]
     },
     {
-        "key": "settings",
-        "label": "Configurações",
-        "children": [
-        {
-            "key": "routes",
-            "label": "Encaminhamentos",
-            "link": "/bnp/routing/routes"
-        }]
+        "key": "admin",
+        "label": "Administrador",
+        "children": [{
+            "key": "sso",
+            "label": "Single sign-on",
+            "link": "/identity-federation"
+        }],
     }],
+
     "pl": [
         {
             "key": "home",
@@ -852,7 +1154,7 @@ export default
             "label": "Faktury",
             "children": [
                 {
-                    "key": "overview",
+                    "key": "invoice-overview",
                     "label": "Moje faktury Key-in",
                     "link": "/sales-invoice/search"
                 },
@@ -878,6 +1180,47 @@ export default
                 }]
         },
         {
+            "key": "settings",
+            "label": "Ustawienia",
+            "children": [
+                {
+                    "key": "routes",
+                    "label": "Baza routingów",
+                    "link": "/bnp/routing/routes"
+                }]
+        },
+        {
+            "key": "campaigns",
+            "label": "Dostawcy",
+            "children": [
+                {
+                    "key": "onboarding-dashboard",
+                    "label": "Onboarding Pulpit",
+                    "link": "/onboarding/dashboard"
+                },
+                {
+                    "key": "onboarding-campaigns",
+                    "label": "Lista kampanii",
+                    "link": "/onboarding"
+                },
+                {
+                    "key": "onboarding-create-campaign",
+                    "label": "Stwórz nową kampanię",
+                    "link": "/onboarding/create"
+                },
+                {
+                    "key": "supplier-directory",
+                    "label": "Baza dostawców",
+                    "link": "/bnp/supplierDirectory"
+                },
+                {
+                    "key": "supplier-status",
+                    "label": "Status dostawców",
+                    "link": "/bnp/supplierStatus",
+                    "environments": ["develop"]
+                }]
+        },
+        {
             "key": "company",
             "label": "Firma",
             "children": [
@@ -892,12 +1235,17 @@ export default
                     "link": "/bnp/users"
                 },
                 {
+                    "key": "permissions",
+                    "label": "Uprawnienia",
+                    "link": "/bnp/permissions"
+                },
+                {
                     "key": "connections",
                     "label": "Powiązania biznesowe",
                     "link": "/bnp/connections"
                 },
                 {
-                    "key": "substitution-management",
+                    "key": "substitute-management",
                     "label": "Zarządzaj zastępstwami",
                     "link": "/bnp/substituteUserRelations"
                 },
@@ -908,13 +1256,12 @@ export default
                 }]
         },
         {
-            "key": "settings",
-            "label": "Ustawienia",
-            "children": [
-                {
-                    "key": "routes",
-                    "label": "Baza routingów",
-                    "link": "/bnp/routing/routes"
-                }]
+            "key": "admin",
+            "label": "Administrator",
+            "children": [{
+                "key": "sso",
+                "label": "Single sign-on",
+                "link": "/identity-federation"
+            }],
         }]
 }
