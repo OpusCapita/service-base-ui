@@ -468,6 +468,37 @@ export default
         }]
     },
     {
+        "key": "campaigns",
+        "label": "Kampanjat",
+        "children": [
+        {
+            "key": "onboarding-dashboard",
+            "label": "Kampanjastatistiikka",
+            "link": "/onboarding/dashboard"
+        },
+        {
+            "key": "onboarding-campaigns",
+            "label": "Kaikki kampanjat",
+            "link": "/onboarding"
+        },
+        {
+            "key": "onboarding-create-campaign",
+            "label": "Luo kampanja",
+            "link": "/onboarding/create"
+        },
+        {
+            "key": "supplier-directory",
+            "label": "Toimittajarekisteri",
+            "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Toimittajien status",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
+        }]
+    },
+    {
         "key": "company",
         "label": "Yritys",
         "children": [
@@ -1010,7 +1041,7 @@ export default
             "label": "Encaminhamentos",
             "link": "/bnp/routing/routes"
         }]
-    }, 
+    },
     {
         "key": "campaigns",
         "label": "Fornecedores",
