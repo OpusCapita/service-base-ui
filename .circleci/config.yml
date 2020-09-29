@@ -35,3 +35,9 @@ jobs:
               npm publish --access public
               git push
             fi
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build:
+          context: andariel
