@@ -220,7 +220,7 @@ export default
     },
     {
         "key": "campaigns",
-        "label": "Lieferanten",
+        "label": "Kampagnen",
         "children": [
         {
             "key": "onboarding-dashboard",
@@ -366,6 +366,37 @@ export default
         }]
     },
     {
+        "key": "campaigns",
+        "label": "Kampanjer",
+        "children": [
+        {
+            "key": "onboarding-dashboard",
+            "label": "Kampanjpanel",
+            "link": "/onboarding/dashboard"
+        },
+        {
+            "key": "onboarding-campaigns",
+            "label": "Kampanjöversikt",
+            "link": "/onboarding"
+        },
+        {
+            "key": "onboarding-create-campaign",
+            "label": "Skapa ny kampanj",
+            "link": "/onboarding/create"
+        },
+        {
+            "key": "supplier-directory",
+            "label": "Leverantörsregister",
+            "link": "/bnp/supplierDirectory"
+        },
+        {
+            "key": "supplier-status",
+            "label": "Leverantörsstatus",
+            "link": "/bnp/supplierStatus",
+            "environments": ["develop"]
+        }]
+    },
+    {
         "key": "company",
         "label": "Företag",
         "children": [
@@ -473,7 +504,7 @@ export default
         "children": [
         {
             "key": "onboarding-dashboard",
-            "label": "Kampanjastatistiikka",
+            "label": "Statistiikka",
             "link": "/onboarding/dashboard"
         },
         {
@@ -493,7 +524,7 @@ export default
         },
         {
             "key": "supplier-status",
-            "label": "Toimittajien status",
+            "label": "Toimittajastatus",
             "link": "/bnp/supplierStatus",
             "environments": ["develop"]
         }]
