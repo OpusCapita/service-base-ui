@@ -545,7 +545,7 @@ export default
         },
         {
             "key": "connections",
-            "label": "Connections",
+            "label": "Yhteydet",
             "link": "/bnp/connections"
         },
         {
