@@ -7,7 +7,6 @@ jobs:
       - checkout
       - run:
           name: Preparing
-          context: andariel
           command: |
             mkdir -p lib
             docker login -u $DOCKER_USER -p $DOCKER_PASS
@@ -16,20 +15,16 @@ jobs:
             docker-compose -f docker-compose.yml -f docker-compose.ci.yml build
       - run:
           name: Testing
-          context: andariel
           command: |
             mkdir -p test
             touch test/test-results.xml
       - store_artifacts:
-          context: andariel
           path: ./test/test-results.xml
       - run:
-          context: andariel
           name: Building package
           command: |
             docker-compose -f docker-compose.yml -f docker-compose.ci.yml run main npm run build
       - deploy:
-          context: andariel
           name: Publishing to NPM...
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
