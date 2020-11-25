@@ -57,7 +57,7 @@ class MainMenu extends ConditionalRenderComponent
             serviceName: 'business-partner',
             moduleName: 'business-partner-autocomplete',
             jsFileName: 'business-partner-autocomplete-bundle',
-            onError : () => this.BusinessPartnerDropdown = null 
+            onError : () => this.BusinessPartnerDropdown = null
         });
 
         this.CustomerDropdown = context.loadComponent({ serviceName : 'customer', moduleName : 'customer-autocomplete', jsFileName : 'autocomplete-bundle', onError : () => this.CustomerDropdown = null });
@@ -190,14 +190,15 @@ class MainMenu extends ConditionalRenderComponent
 
     getNavItems()
     {
-        const { businesspartner, supplierid, customerid, roles } = this.context.userData;
-        const { locale, environment } = this.context;
+        const { locale, environment, userData } = this.context;
+        const { roles } = userData;
 
-        let items = navItems.businessPartner[locale] ? this.recursiveMergeNavItems(navItems.businessPartner['en'], navItems.businessPartner[locale]) : navItems.businessPartner['en'];
-
+        const userLocaleItems = navItems.businessPartner[locale] || [];
+        let adminItems = []
         if(roles && roles.indexOf('admin') > -1)
-            items = this.recursiveMergeNavItems(items, navItems.admin[locale] || navItems.admin['en'])
+            adminItems = navItems.admin[locale] || navItems.admin['en'];
 
+        const items = this.recursiveMergeNavItems(navItems.businessPartner['en'], userLocaleItems, adminItems);
         return items.filter(item => !item.environments || item.environments.includes(environment));
     }
 
