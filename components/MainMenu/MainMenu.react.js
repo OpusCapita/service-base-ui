@@ -194,11 +194,12 @@ class MainMenu extends ConditionalRenderComponent
         const { roles } = userData;
 
         const userLocaleItems = navItems.businessPartner[locale] || [];
+        const userItems = this.recursiveMergeNavItems(navItems.businessPartner['en'], userLocaleItems);
         let adminItems = []
         if(roles && roles.indexOf('admin') > -1)
             adminItems = navItems.admin[locale] || navItems.admin['en'];
 
-        const items = this.recursiveMergeNavItems(navItems.businessPartner['en'], userLocaleItems, adminItems);
+        const items = this.recursiveMergeNavItems(userItems, adminItems);
         return items.filter(item => !item.environments || item.environments.includes(environment));
     }
 
