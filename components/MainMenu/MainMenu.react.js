@@ -57,7 +57,7 @@ class MainMenu extends ConditionalRenderComponent
             serviceName: 'business-partner',
             moduleName: 'business-partner-autocomplete',
             jsFileName: 'business-partner-autocomplete-bundle',
-            onError : () => this.BusinessPartnerDropdown = null 
+            onError : () => this.BusinessPartnerDropdown = null
         });
 
         this.CustomerDropdown = context.loadComponent({ serviceName : 'customer', moduleName : 'customer-autocomplete', jsFileName : 'autocomplete-bundle', onError : () => this.CustomerDropdown = null });
@@ -190,45 +190,54 @@ class MainMenu extends ConditionalRenderComponent
 
     getNavItems()
     {
-        const { businesspartner, supplierid, customerid, roles } = this.context.userData;
-        const { locale, environment } = this.context;
+        const { locale, environment, userData } = this.context;
+        const { roles } = userData;
 
-        let items = this.recursiveMergeNavItems(navItems.businessPartner['en'], navItems.businessPartner[locale]);
+        const userLocaleItems = navItems.businessPartner[locale];
+        const userItems = this.recursiveMergeNavItems(navItems.businessPartner['en'], userLocaleItems);
+        let adminItems = [];
+        if(roles && roles.indexOf('admin') > -1) {
+            adminItems = navItems.admin[locale] || navItems.admin['en'];
+        }
 
-        if(roles && roles.indexOf('admin') > -1)
-            items = this.recursiveMergeNavItems(items, navItems.admin[locale] || navItems.admin['en'])
-
+        const items = this.recursiveMergeNavItems(userItems, adminItems);
         return items.filter(item => !item.environments || item.environments.includes(environment));
     }
 
     recursiveMergeNavItems(items, overlays)
     {
         const results = [ ];
+        const hasValues = arr => Array.isArray(arr) && arr.length >= 1;
 
-        items.forEach(item =>
-        {
-            const overlay = overlays.find(overlay => overlay.key === item.key);
-
-            if(overlay)
+        if (hasValues(items)) {
+            items.forEach(item =>
             {
-                const overlayCopy = Object.assign({ }, overlay);
-                overlayCopy.children = this.recursiveMergeNavItems(item.children || [ ], overlay.children || [ ])
+                const overlay = overlays.find(overlay => overlay.key === item.key);
 
-                results.push(overlayCopy);
-            }
-            else
+                if(overlay)
+                {
+                    const overlayCopy = { ...overlay };
+                    overlayCopy.children = this.recursiveMergeNavItems(item.children, overlay.children)
+
+                    results.push(overlayCopy);
+                }
+                else
+                {
+                    results.push(item);
+                }
+            });
+        }
+
+        if (hasValues(overlays)) {
+            overlays.forEach(overlay =>
             {
-                results.push(item);
-            }
-        });
+                const found = items.reduce((all, item) => all || item.key === overlay.key, false);
 
-        overlays.forEach(overlay =>
-        {
-            const found = items.reduce((all, item) => all || item.key === overlay.key, false);
-
-            if(!found)
-                results.push(overlay);
-        });
+                if(!found) {
+                    results.push(overlay);
+                }
+            });
+        }
 
         return results;
     }
