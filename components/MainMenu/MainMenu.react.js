@@ -207,11 +207,10 @@ class MainMenu extends ConditionalRenderComponent
 
     recursiveMergeNavItems(items, overlays)
     {
+        const hasValues = arr => Array.isArray(arr) && arr.length > 0;
         let results = [ ];
 
-        if (overlays) {
-            const hasValues = arr => Array.isArray(arr) && arr.length >= 1;
-
+        if (hasValues(overlays)) {
             if (hasValues(items)) {
                 items.forEach(item =>
                 {
