@@ -195,6 +195,7 @@ class MainMenu extends ConditionalRenderComponent
 
         const userLocaleItems = navItems.businessPartner[locale];
         const userItems = this.recursiveMergeNavItems(navItems.businessPartner['en'], userLocaleItems);
+
         let adminItems = [];
         if(roles && roles.indexOf('admin') > -1) {
             adminItems = navItems.admin[locale] || navItems.admin['en'];
@@ -206,37 +207,41 @@ class MainMenu extends ConditionalRenderComponent
 
     recursiveMergeNavItems(items, overlays)
     {
-        const results = [ ];
-        const hasValues = arr => Array.isArray(arr) && arr.length >= 1;
-
-        if (hasValues(items)) {
-            items.forEach(item =>
-            {
-                const overlay = overlays.find(overlay => overlay.key === item.key);
-
-                if(overlay)
-                {
-                    const overlayCopy = { ...overlay };
-                    overlayCopy.children = this.recursiveMergeNavItems(item.children, overlay.children)
-
-                    results.push(overlayCopy);
-                }
-                else
-                {
-                    results.push(item);
-                }
-            });
-        }
+        const hasValues = arr => Array.isArray(arr) && arr.length > 0;
+        let results = [ ];
 
         if (hasValues(overlays)) {
-            overlays.forEach(overlay =>
-            {
-                const found = items.reduce((all, item) => all || item.key === overlay.key, false);
+            if (hasValues(items)) {
+                items.forEach(item =>
+                {
+                    const overlay = overlays.find(overlay => overlay.key === item.key);
 
-                if(!found) {
-                    results.push(overlay);
-                }
-            });
+                    if(overlay)
+                    {
+                        const overlayCopy = { ...overlay };
+                        overlayCopy.children = this.recursiveMergeNavItems(item.children, overlay.children)
+
+                        results.push(overlayCopy);
+                    }
+                    else
+                    {
+                        results.push(item);
+                    }
+                });
+            }
+
+            if (hasValues(overlays)) {
+                overlays.forEach(overlay =>
+                {
+                    const found = items.reduce((all, item) => all || item.key === overlay.key, false);
+
+                    if(!found) {
+                        results.push(overlay);
+                    }
+                });
+            }
+        } else {
+            results = items;
         }
 
         return results;
