@@ -36,6 +36,7 @@ class Test extends ContextComponent
                 <ModalDialog
                     onClose={() => this.setState()}
                     ref={ref => this.modal = ref}
+                    size='full-width'
                 />
                 <button onClick={() => this.modal.show()}>Open modal</button>
             </div>

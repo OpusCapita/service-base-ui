@@ -10,7 +10,7 @@ class ModalDialog extends ContextComponent
         visible : PropTypes.bool.isRequired,
         title : PropTypes.string.isRequired,
         message : PropTypes.string.isRequired,
-        size : PropTypes.oneOf([null, 'small', 'large']),
+        size : PropTypes.oneOf([null, 'small', 'large', 'fullWidth']),
         buttons : PropTypes.object.isRequired,
         buttonsDisabled : PropTypes.array.isRequired,
         allowClose: PropTypes.bool.isRequired,
@@ -34,7 +34,8 @@ class ModalDialog extends ContextComponent
 
     static sizes = {
         small : 'modal-sm',
-        large : 'modal-lg'
+        large : 'modal-lg',
+        fullWidth: 'full-width'
     }
 
     constructor(props)
@@ -161,7 +162,8 @@ class ModalDialog extends ContextComponent
     {
         const state = this.state;
         const { size, buttons, buttonsDisabled } = state;
-        const modalClasses = 'modal-dialog ' + (size && ModalDialog.sizes[size]) || '';
+        const modalClassesPrefix = size === ModalDialog.sizes.fullWidth ? '' : 'modal-dialog ';
+        const modalClasses = modalClassesPrefix + (size && ModalDialog.sizes[size]) || '';
         const buttonKeys = buttons && Object.keys(buttons);
         const primaryButtonKey = buttons && buttonKeys[0];
         const primaryButton = buttons && buttons[primaryButtonKey];
