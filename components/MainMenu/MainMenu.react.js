@@ -476,7 +476,7 @@ class MainMenu extends ConditionalRenderComponent
                     logoSrc={this.logoImage}
                     logoTitle="OpusCapita"
                     logoHref="/bnp"
-                    showSearch={true}
+                    showSearch={false}
                     searchProps={{
                         placeholder : i18n.getMessage('MainMenu.search'),
                         onChange : (e) => this.handleSearch(e)
