@@ -52,7 +52,7 @@ class Menu extends Component
         navigationItems: [],
         showSearch: false,
         searchProps: {
-            placeholder: 'Search'
+            placeholder: null
         },
         iconsBarItems: []
     }
