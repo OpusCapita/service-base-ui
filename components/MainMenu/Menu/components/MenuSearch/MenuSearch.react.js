@@ -14,7 +14,7 @@ class MenuSearch extends Component
         placeholder: PropTypes.string,
         onChange: PropTypes.func
     }
-    
+
     static defaultProps = {
         isMinimized: false,
         onFocus: () => {},
@@ -41,7 +41,7 @@ class MenuSearch extends Component
     handleSearchIconClick()
     {
         this.showAutocomplete();
-        (this.inputRef && this.inputRef).focus();
+        this.inputRef && this.inputRef.focus();
     }
 
     handleInputFocus(e)
@@ -89,7 +89,7 @@ class MenuSearch extends Component
                     data-test="oc-menu-search">
                     <div
                         className="search-icon"
-                        onClick={this.handleSearchIconClick}>
+                        onClick={this.handleSearchIconClick.bind(this)}>
                         <MenuIcon svg={searchSVG} />
                         {isOpen ? children : null}
                     </div>
@@ -105,14 +105,14 @@ class MenuSearch extends Component
                 <div className="search-container">
                     <div
                         className="search-icon"
-                        onClick={this.handleSearchIconClick}>
+                        onClick={this.handleSearchIconClick.bind(this)}>
                         <SVG svg={searchSVG} />
                     </div>
                     <input
                         ref={ref => this.inputRef = ref}
                         className="input"
                         data-test="input"
-                        onFocus={this.handleInputFocus}
+                        onFocus={this.handleInputFocus.bind(this)}
                         { ...restProps } />
                 </div>
                 {isOpen ? children : null}
