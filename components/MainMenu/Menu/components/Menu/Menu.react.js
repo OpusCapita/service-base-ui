@@ -51,10 +51,8 @@ class Menu extends Component
         noMargin: false,
         navigationItems: [],
         showSearch: false,
-        searchProps: {
-            placeholder: null
-        },
-        iconsBarItems: []
+        searchProps: {},
+        iconsBarItems: [] 
     }
 
     state = {

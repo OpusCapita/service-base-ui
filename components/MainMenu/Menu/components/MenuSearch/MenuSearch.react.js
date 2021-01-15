@@ -10,11 +10,16 @@ class MenuSearch extends Component
 {
     static propPropTypes = {
         isMinimized: PropTypes.bool,
-        onFocus: PropTypes.func
+        onFocus: PropTypes.func,
+        placeholder: PropTypes.string,
+        onChange: PropTypes.func
     }
+    
     static defaultProps = {
         isMinimized: false,
-        onFocus: () => { }
+        onFocus: () => {},
+        placeholder: '',
+        onChange: () => {}
     }
 
     state = {
