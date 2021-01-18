@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import ConditionalRenderComponent from '../ConditionalRenderComponent.react';
 import ModalDialog from '../ModalDialog.react';
 import { ResetTimer } from '../../system';
-import { Menu, MenuIcon, MenuDropdownGrid, Notifications, MenuAccount, MenuSelect } from './Menu';
+import { Menu, MenuIcon, MenuDropdownGrid, Notifications, MenuAccount, MenuSelectLanguage } from './Menu';
 import { Users as UsersApi, Auth as AuthApi, Notifications as NotificationsApi } from '../../api';
 import translations from './i18n';
 import navItems from './data/navItems';
 import './MainMenu.css'
-import supportedLanguages from './data/supportedLanguages.json'
 
 class MainMenu extends ConditionalRenderComponent
 {
@@ -395,14 +394,6 @@ class MainMenu extends ConditionalRenderComponent
         return tenantsForSupplierSwitch.includes(value);
     }
 
-    getDefaultLanguage(lang) {
-        return Object.keys(supportedLanguages).indexOf(lang) > -1 ? lang : 'en';
-    }
-
-    renderLanguageOptions() {
-        return Object.keys(supportedLanguages).map((lang, id) => <option key={id} value={lang}>{supportedLanguages[lang]}</option>);
-    }
-
     render()
     {
         const { i18n, userData, userProfile, router } = this.context;
@@ -544,12 +535,10 @@ class MainMenu extends ConditionalRenderComponent
 
                                     <div className="select-item">
                                         <span className="select-item-label">{i18n.getMessage('MainMenu.language')}</span>
-                                        <MenuSelect className="select-item-select"
-                                            defaultValue={this.getDefaultLanguage(userData.languageid)}
+                                        <MenuSelectLanguage
+                                            userLanguageId={userData.languageid}
                                             onChange={e => this.handleLanguageChange(e)}
-                                        >
-                                            {this.renderLanguageOptions()}
-                                        </MenuSelect>
+                                        />
                                     </div>
                                 </div>
                             )}/>
