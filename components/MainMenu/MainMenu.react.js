@@ -8,6 +8,7 @@ import { Users as UsersApi, Auth as AuthApi, Notifications as NotificationsApi }
 import translations from './i18n';
 import navItems from './data/navItems';
 import './MainMenu.css'
+import supportedLanguages from './data/supportedLanguages.json'
 
 class MainMenu extends ConditionalRenderComponent
 {
@@ -394,6 +395,14 @@ class MainMenu extends ConditionalRenderComponent
         return tenantsForSupplierSwitch.includes(value);
     }
 
+    getDefaultLanguage(lang) {
+        return Object.keys(supportedLanguages).indexOf(lang) > -1 ? lang : 'en';
+    }
+
+    renderLanguageOptions() {
+        return Object.keys(supportedLanguages).map((lang, id) => <option key={id} value={lang}>{supportedLanguages[lang]}</option>);
+    }
+
     render()
     {
         const { i18n, userData, userProfile, router } = this.context;
@@ -535,16 +544,11 @@ class MainMenu extends ConditionalRenderComponent
 
                                     <div className="select-item">
                                         <span className="select-item-label">{i18n.getMessage('MainMenu.language')}</span>
-                                        <MenuSelect className="select-item-select" defaultValue={userData.languageid} onChange={e => this.handleLanguageChange(e)}>
-                                            <option value="de">Deutsch</option>
-                                            <option value="en">English</option>
-                                            <option value="es">Español</option>
-                                            <option value="fr">Français</option>
-                                            <option value="it">Italiano</option>
-                                            <option value="pl">Polski</option>
-                                            <option value="pt">Português</option>
-                                            <option value="fi">Suomi</option>
-                                            <option value="sv">Svenska</option>
+                                        <MenuSelect className="select-item-select"
+                                            defaultValue={this.getDefaultLanguage(userData.languageid)}
+                                            onChange={e => this.handleLanguageChange(e)}
+                                        >
+                                            {this.renderLanguageOptions()}
                                         </MenuSelect>
                                     </div>
                                 </div>
