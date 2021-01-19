@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import Types from 'prop-types';
+import PropTypes from 'prop-types';
 import { MenuSelect } from '../../../Menu'
 import supportedLanguages from '../../../data/supportedLanguages.json'
 
 class MenuSelectLanguage extends Component {
     static propTypes = {
-        userLanguageId: Types.string,
-        onChange: Types.func
+        userLanguageId: PropTypes.string,
+        onChange: PropTypes.func
     }
 
     static defaultProps = {
