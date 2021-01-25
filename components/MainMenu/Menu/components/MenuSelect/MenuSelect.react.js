@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Types from 'prop-types';
+import PropTypes from 'prop-types';
 import { SVG } from '@opuscapita/react-svg';
 import './MenuSelect.less';
 
@@ -8,7 +8,7 @@ const dropdownSVG = require('!!raw-loader!@opuscapita/svg-icons/lib/arrow_drop_d
 class MenuSelect extends Component
 {
     static propTypes = {
-        className: Types.string
+        className: PropTypes.string
     };
 
     static defaultProps = {
