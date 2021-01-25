@@ -153,10 +153,10 @@ export default
             "label": "Reporting",
             "link": "/reporting/config"
         },
-            {
-                "key": "importlogs",
-                "label": "Import Logs",
-                "link": "/bnp/routing/importlogs"
-            }]
+        {
+            "key": "importlogs",
+            "label": "Import Logs",
+            "link": "/bnp/routing/importlogs"
+        }]
     }]
 }
