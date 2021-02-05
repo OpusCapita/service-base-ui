@@ -127,14 +127,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Substitute management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     },
     {
@@ -274,14 +269,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Vertretungsmanager",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Abwesenheiten",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     },
     {
@@ -416,14 +406,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitution-management",
-            "label": "Substitution management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     }],
 
@@ -549,14 +534,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitution-management",
-            "label": "Substitution management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     }],
 
@@ -688,14 +668,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Substitute management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     },
     {
@@ -835,14 +810,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Substitute management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     },
     {
@@ -982,14 +952,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Gestión de sustitutos",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Ausencia",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     },
     {
@@ -1129,14 +1094,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Substitute management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     },
     {
@@ -1276,14 +1236,9 @@ export default
                     "link": "/bnp/connections"
                 },
                 {
-                    "key": "substitute-management",
-                    "label": "Zarządzaj zastępstwami",
-                    "link": "/bnp/substituteUserRelations"
-                },
-                {
                     "key": "absences",
                     "label": "Nieobecności",
-                    "link": "/bnp/substitutionPeriods"
+                    "link": "/absence"
                 }]
         },
         {
