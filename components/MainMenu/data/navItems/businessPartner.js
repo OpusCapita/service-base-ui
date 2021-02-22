@@ -301,12 +301,12 @@ export default
         },
         {
             "key": "receipt-advice-overview",
-            "label": "Receipt advices",
+            "label": "Mottagningsbevis",
             "link": "/sales-order/receipt-advice/overview"
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Leveransaviseringar",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
@@ -429,12 +429,12 @@ export default
         },
         {
             "key": "receipt-advice-overview",
-            "label": "Receipt advices",
+            "label": "Vastaanottovahvistukset",
             "link": "/sales-order/receipt-advice/overview"
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Lähetysilmoitukset",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
@@ -563,7 +563,7 @@ export default
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Avvisi di spedizione",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
@@ -705,7 +705,7 @@ export default
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Avis d'expédition",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
@@ -984,12 +984,12 @@ export default
         },
         {
             "key": "receipt-advice-overview",
-            "label": "Recibos",
+            "label": "Aviso de recebimento",
             "link": "/sales-order/receipt-advice/overview"
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Aviso de despacho",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
