@@ -407,7 +407,7 @@ export default
         },
         {
             "key": "absences",
-            "label": "Absences",
+            "label": "Frånvaron",
             "link": "/absence"
         }]
     }],
@@ -535,7 +535,7 @@ export default
         },
         {
             "key": "absences",
-            "label": "Absences",
+            "label": "Poissaolot",
             "link": "/absence"
         }]
     }],
@@ -669,7 +669,7 @@ export default
         },
         {
             "key": "absences",
-            "label": "Absences",
+            "label": "Assenze",
             "link": "/absence"
         }]
     },
@@ -953,7 +953,7 @@ export default
         },
         {
             "key": "absences",
-            "label": "Ausencia",
+            "label": "Ausencias",
             "link": "/absence"
         }]
     },
@@ -1095,7 +1095,7 @@ export default
         },
         {
             "key": "absences",
-            "label": "Absences",
+            "label": "Ausências",
             "link": "/absence"
         }]
     },
