@@ -50,11 +50,9 @@ class Menu extends Component
         labelLinkHref: '#',
         noMargin: false,
         navigationItems: [],
-        showSearch: true,
-        searchProps: {
-            placeholder: 'Search'
-        },
-        iconsBarItems: []
+        showSearch: false,
+        searchProps: {},
+        iconsBarItems: [] 
     }
 
     state = {

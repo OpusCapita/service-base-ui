@@ -127,14 +127,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Substitute management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     },
     {
@@ -274,14 +269,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Vertretungsmanager",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Abwesenheiten",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     },
     {
@@ -311,12 +301,12 @@ export default
         },
         {
             "key": "receipt-advice-overview",
-            "label": "Receipt advices",
+            "label": "Mottagningsbevis",
             "link": "/sales-order/receipt-advice/overview"
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Leveransaviseringar",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
@@ -416,14 +406,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitution-management",
-            "label": "Substitution management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
-            "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "label": "Frånvaron",
+            "link": "/absence"
         }]
     }],
 
@@ -444,12 +429,12 @@ export default
         },
         {
             "key": "receipt-advice-overview",
-            "label": "Receipt advices",
+            "label": "Vastaanottovahvistukset",
             "link": "/sales-order/receipt-advice/overview"
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Lähetysilmoitukset",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
@@ -549,14 +534,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitution-management",
-            "label": "Substitution management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
-            "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "label": "Poissaolot",
+            "link": "/absence"
         }]
     }],
 
@@ -583,7 +563,7 @@ export default
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Avvisi di spedizione",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
@@ -688,14 +668,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Substitute management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
-            "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "label": "Assenze",
+            "link": "/absence"
         }]
     },
     {
@@ -730,7 +705,7 @@ export default
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Avis d'expédition",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
@@ -835,14 +810,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Substitute management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
             "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "link": "/absence"
         }]
     },
     {
@@ -982,14 +952,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Gestión de sustitutos",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
-            "label": "Ausencia",
-            "link": "/bnp/substitutionPeriods"
+            "label": "Ausencias",
+            "link": "/absence"
         }]
     },
     {
@@ -1019,12 +984,12 @@ export default
         },
         {
             "key": "receipt-advice-overview",
-            "label": "Recibos",
+            "label": "Aviso de recebimento",
             "link": "/sales-order/receipt-advice/overview"
         },
         {
             "key": "despatch-advice-overview",
-            "label": "Despatch advices",
+            "label": "Aviso de despacho",
             "link": "/sales-order/despatch-advices/overview"
         },
         {
@@ -1129,14 +1094,9 @@ export default
             "link": "/bnp/connections"
         },
         {
-            "key": "substitute-management",
-            "label": "Substitute management",
-            "link": "/bnp/substituteUserRelations"
-        },
-        {
             "key": "absences",
-            "label": "Absences",
-            "link": "/bnp/substitutionPeriods"
+            "label": "Ausências",
+            "link": "/absence"
         }]
     },
     {
@@ -1276,14 +1236,9 @@ export default
                     "link": "/bnp/connections"
                 },
                 {
-                    "key": "substitute-management",
-                    "label": "Zarządzaj zastępstwami",
-                    "link": "/bnp/substituteUserRelations"
-                },
-                {
                     "key": "absences",
                     "label": "Nieobecności",
-                    "link": "/bnp/substitutionPeriods"
+                    "link": "/absence"
                 }]
         },
         {
