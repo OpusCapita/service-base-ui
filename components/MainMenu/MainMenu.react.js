@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ConditionalRenderComponent from '../ConditionalRenderComponent.react';
 import ModalDialog from '../ModalDialog.react';
 import { ResetTimer } from '../../system';
-import { Menu, MenuIcon, MenuDropdownGrid, Notifications, MenuAccount, MenuSelect } from './Menu';
+import { Menu, MenuIcon, MenuDropdownGrid, Notifications, MenuAccount, MenuSelectLanguage } from './Menu';
 import { Users as UsersApi, Auth as AuthApi, Notifications as NotificationsApi } from '../../api';
 import translations from './i18n';
 import navItems from './data/navItems';
@@ -473,11 +473,6 @@ class MainMenu extends ConditionalRenderComponent
                     logoSrc={this.logoImage}
                     logoTitle="OpusCapita"
                     logoHref="/bnp"
-                    showSearch={true}
-                    searchProps={{
-                        placeholder : i18n.getMessage('MainMenu.search'),
-                        onChange : (e) => this.handleSearch(e)
-                    }}
                     navigationItems={this.loadNavItems()}
                     iconsBarItems={[(
                         <MenuIcon
@@ -537,17 +532,10 @@ class MainMenu extends ConditionalRenderComponent
 
                                     <div className="select-item">
                                         <span className="select-item-label">{i18n.getMessage('MainMenu.language')}</span>
-                                        <MenuSelect className="select-item-select" defaultValue={userData.languageid} onChange={e => this.handleLanguageChange(e)}>
-                                            <option value="de">Deutsch</option>
-                                            <option value="en">English</option>
-                                            <option value="es">Español</option>
-                                            <option value="fr">Français</option>
-                                            <option value="it">Italiano</option>
-                                            <option value="pl">Polski</option>
-                                            <option value="pt">Português</option>
-                                            <option value="fi">Suomi</option>
-                                            <option value="sv">Svenska</option>
-                                        </MenuSelect>
+                                        <MenuSelectLanguage
+                                            userLanguageId={userData.languageid}
+                                            onChange={e => this.handleLanguageChange(e)}
+                                        />
                                     </div>
                                 </div>
                             )}/>

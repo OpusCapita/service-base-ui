@@ -72,6 +72,16 @@ export default
             "key": "reporting",
             "label": "Reporting",
             "link": "/reporting/config"
+        },
+        {
+            "key": "importlogs",
+            "label": "Import Logs",
+            "link": "/bnp/routing/importlogs"
+        },
+        {
+            "key": "standardimport",
+            "label": "Standard Import",
+            "link": "/bnp/routing/import/standard"
         }]
     }],
 
@@ -147,6 +157,16 @@ export default
             "key": "reporting",
             "label": "Reporting",
             "link": "/reporting/config"
+        },
+        {
+            "key": "importlogs",
+            "label": "Import Logs",
+            "link": "/bnp/routing/importlogs"
+        },
+        {
+            "key": "standardimport",
+            "label": "Standard Import",
+            "link": "/bnp/routing/import/standard"
         }]
     }]
 }
