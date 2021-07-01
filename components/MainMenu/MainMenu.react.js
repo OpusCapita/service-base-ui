@@ -520,15 +520,11 @@ class MainMenu extends ConditionalRenderComponent
                                             {i18n.getMessage('MainMenu.support')}
                                         </div>
                                         <div className="col-xs-9">
-                                            {i18n.getMessage('MainMenu.support.PhoneNumber')}
+                                            <a target='_blank' rel='noopener noreferrer' href='https://www.opuscapita.com/customerservice'>{i18n.getMessage('MainMenu.support.details')}</a>
                                         </div>
                                     </div>
-                                    <div className="row horizontal-gap">
-                                        <div className="col-xs-3"></div>
-                                        <div className="col-xs-9">
-                                            <a href={`mailto:${i18n.getMessage('MainMenu.support.EmailAddress')}`}>{i18n.getMessage('MainMenu.support.EmailAddress')}</a>
-                                        </div>
-                                    </div>
+
+                                    <br />
 
                                     <div className="select-item">
                                         <span className="select-item-label">{i18n.getMessage('MainMenu.language')}</span>
