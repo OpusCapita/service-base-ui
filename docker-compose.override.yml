@@ -8,3 +8,6 @@ services:
         - ./dev:/home/node/service-base-ui/dev
         - ./system:/home/node/service-base-ui/system
         - ./lib:/home/node/service-base-ui/lib
+        - ./node_modules:/home/node/service-base-ui/node_modules
+        - ./package.json:/home/node/service-base-ui/package.json
+        - ./package-lock.json:/home/node/service-base-ui/package-lock.json
