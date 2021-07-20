@@ -1,5 +1,4 @@
-FROM node:8-alpine
-MAINTAINER kwierchris
+FROM node:12-alpine
 
 RUN apk add --no-cache curl
 
